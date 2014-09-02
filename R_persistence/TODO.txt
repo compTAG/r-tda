@@ -9,8 +9,10 @@ TODO
 - (Fabri) add printStatus to kde, kdeDist, etc
 - (Fabri) check the best way to list the contributors (dionysus, phat..)
 
-- (Brit/Dave) Interaction between R and C++: avoid txt files. Study Rcpp
+- (Brit/Dave) Interaction between R and C++: output of diagrams
+- (Brit) compute diagrams for a function defined over a grid (no conf. intervals)
 
+- (all) study Rcpp
 - (all) think about the implementation of filtration proposed in section 3.2 of bobrowski
 - (all) try Gudhi again
 
