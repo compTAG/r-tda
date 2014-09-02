@@ -1,0 +1,17 @@
+Here are the commands to build the R package in UNIX
+
+Suppose you want to build the versionNext. Then in terminal:
+
+cd Dropbox/R_TDA/versionNext
+
+## To build source
+R CMD build TDA
+
+## To build binary
+R CMD INSTALL --build TDA
+
+## to disaply manual
+R CMD Rd2pdf TDA
+
+## to check the source package TDA_1.2.tar.gz
+R CMD check --as-cran TDA_1.2.tar.gz
