@@ -15,7 +15,7 @@ function(Diag1, Diag2, p=1, dimension=1){
 	write.table(Diag1,"inputDionysus.txt", row.names=F, col.names=F, sep=" ")
 	write.table(Diag2,"inputDionysus2.txt", row.names=F, col.names=F, sep=" " )	
 	out=1
-	out1=.C("wasserstein", as.double(p), as.double(out), dup=FALSE, package="persistence")[[2]]
+	out1=.C("wasserstein", as.double(p), as.double(out), dup=FALSE, package="TDA")[[2]]
 	
 	return(out1)
 }

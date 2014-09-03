@@ -6,6 +6,7 @@ TODO
 - (Jisu) give option to use phat (no pressure on this. it's not essential)
 
 - (Fabri) There was a problem at line 62 in gridDiag.R. It should be fixed, but check.
+- (Fabri) in bottleneck and wasserstein add control that diagrams are not empty
 - (Fabri) add printStatus to kde, kdeDist, etc
 - (Fabri) check the best way to list the contributors (dionysus, phat..)
 

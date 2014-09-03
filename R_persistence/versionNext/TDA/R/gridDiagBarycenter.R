@@ -26,7 +26,7 @@ function(X, FUN, lim, by=(lim[2]-lim[1])/20, sublevel=TRUE, printStatus=FALSE, d
   if (ncol(X)<=3)
   {
   	computeGrid=.C("gridMem",extFcnVal=as.double(gridValues),extDim=as.integer(length(dim)),extGridNum=as.integer(dim),input=as.integer(printStatus),
-                   dup=TRUE, package="persistence")
+                   dup=TRUE, package="TDA")
   }
   else
   {
