@@ -39,7 +39,7 @@ function(X, FUN, Xlim, Ylim=NA, Zlim=NA, by=(Xlim[2]-Xlim[1])/20, sublevel=TRUE,
 	
 	#write input.txt and read output.txt
 	write.table(gridValues,"inputDionysus.txt", row.names=F, col.names=F, sep=" " )
-	computeGrid=.C("grid", as.integer(printStatus),dup=FALSE, package="persistence")
+	computeGrid=.C("grid", as.integer(printStatus),dup=FALSE, package="TDA")
 	out=read.table("outputDionysus.txt", sep="\n")
 	
 	##convert output.txt in matrix format

@@ -16,7 +16,7 @@ function(Diag1, Diag2, dimension){
 	write.table(Diag1,"inputDionysus.txt", row.names=F, col.names=F, sep=" ")
 	write.table(Diag2,"inputDionysus2.txt", row.names=F, col.names=F, sep=" " )	
 	out=1
-	out1=.C("bottleneck", as.double(out), dup=FALSE, package="persistence")[[1]]
+	out1=.C("bottleneck", as.double(out), dup=FALSE, package="TDA")[[1]]
 	
 	return(out1)
 }
