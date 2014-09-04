@@ -9,7 +9,6 @@
 
 //for grid
 #include <tdautils/gridUtils.h>
-#include <tdautils/gridHighDim.h>
 
 //for kernel density
 #include <TDAutils/kernelUtils.h>
