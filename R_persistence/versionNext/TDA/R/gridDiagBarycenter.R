@@ -31,7 +31,7 @@ function(X, FUN, lim, by=(lim[2]-lim[1])/20, sublevel=TRUE, printStatus=FALSE, d
   else
   {
     computeGrid=.C("gridBarycenter",extFcnVal=as.double(gridValues),extDim=as.integer(length(dim)),extGridNum=as.integer(dim),input=as.integer(printStatus),
-                   dup=TRUE, package="persistence")    
+                   dup=TRUE, package="TDA")    
   }
 	out=read.table("outputDionysus.txt", sep="\n")
 	
