@@ -366,3 +366,65 @@ int simplicesFromGrid(Fltr& filtr, const std::string& infile)
   
   return 0;
 } // end simplicesFromGrid function
+
+#include <numeric>
+
+
+int simplicesFromGridMem(Fltr & filtr, const double * const extFcnVal, const std::vector< unsigned int > & argGridNum)
+{
+
+    unsigned int idxCur, idxDim;
+    const unsigned int gridNumProd = std::accumulate( argGridNum.begin(), argGridNum.end(), 1, std::multiplies< unsigned int >() );
+
+	int ncols, nrows;
+	ncols = nrows = 1;
+  int i = 0; // indexing the columns
+  int j = 0; // indexing the rows
+  int k = 0; // indexing the z dimension
+  std::vector<double> fcnvalues;
+  int curidx = 0;
+
+	if (argGridNum.size() > 0)
+		ncols = argGridNum[0];
+	if (argGridNum.size() > 1)
+		nrows = argGridNum[1];
+
+  while(curidx+1< gridNumProd )
+  {
+      curidx = i + argGridNum[0]*j + argGridNum[0]*argGridNum[1]*k;
+      fcnvalues.push_back(extFcnVal[curidx]); // at index i + ncols*j    
+
+      // .. add the vertex 
+      std::vector<Vertex> vcont;
+      vcont.push_back((Vertex)(curidx));
+      filtr.push_back(Smplx(vcont, fcnvalues.at(curidx))); 
+
+      // .. NEXT, Add the edges:
+      addAllEdges(filtr, fcnvalues, ncols, nrows, i, j, k);
+      // ... now add the triangles:
+      addTriNTet(filtr, fcnvalues, ncols, nrows, i, j, k);
+
+      ++i; // advance column
+
+     // ... advance row / z value
+     if (i >= argGridNum[0])
+     {
+    	i = 0;
+    	++j;
+     }
+     if (j >= argGridNum[1])
+     {
+	j = 0;
+        ++k;
+     }
+
+  }
+
+  
+  return 0;
+} // end simplicesFromGrid function
+
+inline std::vector< unsigned int > gridNumber(const int * const extDim, const int * const extGridNum)
+{
+    return std::vector< unsigned int >( extGridNum, extGridNum+extDim[0] );
+}

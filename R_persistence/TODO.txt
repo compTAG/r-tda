@@ -1,17 +1,16 @@
 
 TODO
 
-- (Jisu) extend gridDiag.R to any dimension
-- (Jisu) include sphereUnif.R , but leave circleUnif as is.
-- (Jisu) give option to use phat (no pressure on this. it's not essential)
-
 - (Fabri) There was a problem at line 62 in gridDiag.R. It should be fixed, but check.
+- (Fabri) merge gridDiag and GridDiagBarycenter
 - (Fabri) in bottleneck and wasserstein add control that diagrams are not empty
 - (Fabri) add printStatus to kde, kdeDist, etc
 - (Fabri) check the best way to list the contributors (dionysus, phat..)
 
 - (Brit/Dave) Interaction between R and C++: output of diagrams
 - (Brit) compute diagrams for a function defined over a grid (no conf. intervals)
+
+- (Jisu) give option to use phat (no pressure on this. it's not essential)
 
 - (all) study Rcpp
 - (all) think about the implementation of filtration proposed in section 3.2 of bobrowski
