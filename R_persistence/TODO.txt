@@ -15,7 +15,7 @@ TODO
 - (all) study Rcpp
 - (all) think about the implementation of filtration proposed in section 3.2 of bobrowski
 - (all) try Gudhi again
-
+- add more statistcal summaries, eg: distribution of Betti numbers, of birth times, of death times, of persistence values
 
 DONE (wrt current version on CRAN)
 - Fixed bug in plotRule
