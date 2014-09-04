@@ -342,7 +342,7 @@ extern "C" {
 	}
 
 
-	void wasserstein(double* inputP, double* out_name)
+	void wasserstein(int* inputP, double* out_name)
 	{
 		// ... set up the input
 		std::string filename1;
@@ -350,7 +350,7 @@ extern "C" {
 		filename1 = "inputDionysus.txt";
 		filename2 = "inputDionysus2.txt";
 		
-		unsigned p=inputP[0];		
+		int p=inputP[0];		
 
 		PDgmB dgm1, dgm2;
 		read_diagram(dgm1, filename1);
