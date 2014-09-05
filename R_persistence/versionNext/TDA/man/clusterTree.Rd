@@ -9,7 +9,7 @@ Given a point cloud, or a matrix of distances, this function computes a density 
 }
 \usage{
 clusterTree(X, k, h = NULL, density="knn", dist="euclidean", d=NULL, 
-            Nlambda = 100, printStatus = FALSE)
+            Nlambda = 100, printProgress = FALSE)
 }
 \arguments{
   \item{X}{
@@ -36,7 +36,7 @@ string: can be \code{"euclidean"}, when \code{X} is a point cloud or \code{"arbi
   \item{Nlambda}{
     integer: size of the grid of values of the density estimator, used to compute the cluster tree. High \code{Nlambda} (i.e. a fine grid) means a more accurate cluster Tree.
 }
-  \item{printStatus}{
+  \item{printProgress}{
 	logical: if TRUE a progress bar is printed. Default is \code{FALSE}.
 }
 }

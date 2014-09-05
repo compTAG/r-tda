@@ -1,14 +1,14 @@
 ripsArbitDiag <-
-function(distX,maxdimension, maxscale, printStatus=FALSE){
+function(distX,maxdimension, maxscale, printProgress=FALSE){
 	
 	if (!is.numeric(distX) && !is.matrix(distX) && !is.data.frame(distX)) stop("distX should be a matrix of distances")
 	if (!is.vector(maxdimension) || length(maxdimension)!=1) stop("maxdimension should be an integer")
 	if (!is.vector(maxscale) || length(maxscale)!=1) stop("maxscale should be a number")
-	if (!is.logical(printStatus)) stop("printStatus should be logical")
+	if (!is.logical(printProgress)) stop("printProgress should be logical")
 
 		
 	write.table(distX,"inputDionysus.txt", row.names=F, col.names=F, sep=" " )	
-	out1=.C("ripsArbit", as.integer(maxdimension+1), as.double(maxscale), as.integer(printStatus), dup=FALSE, package="TDA")
+	out1=.C("ripsArbit", as.integer(maxdimension+1), as.double(maxscale), as.integer(printProgress), dup=FALSE, package="TDA")
 	Diag=as.matrix(read.table("outputDionysus.txt", sep=""))
 	
 	N=dim(Diag)[1]

@@ -7,7 +7,7 @@ Rips Persistence Diagram
 This function computes the persistence diagram of the Rips filtration built on top of a point cloud.
 }
 \usage{
-ripsDiag(X, maxdimension, maxscale, dist = "euclidean", printStatus = FALSE)
+ripsDiag(X, maxdimension, maxscale, dist = "euclidean", printProgress = FALSE)
 }
 \arguments{
   \item{X}{
@@ -23,7 +23,7 @@ number: maximum value of the rips filtration.
   \item{dist}{
 \code{"euclidean"} for Euclidean distance, \code{"arbitrary"} for an arbitrary distance given in input as a distance matrix.
 }
-  \item{printStatus}{
+  \item{printProgress}{
 logical: if \code{TRUE}, a progress bar is printed. Default is \code{FALSE}.
 }
 }
@@ -53,7 +53,7 @@ XX = circleUnif(30)
 DiagLim=5
 maxdimension=1
 ## note that the input XX is a point cloud
-Diag=ripsDiag(XX,maxdimension,DiagLim, printStatus=TRUE)
+Diag=ripsDiag(XX,maxdimension,DiagLim, printProgress=TRUE)
 
 
 ## EXAMPLE 2: rips diagram with arbitrary distance
@@ -64,7 +64,7 @@ distX=matrix(c(0,1,2,1,0,4,2,4,0), ncol=3)
 DiagLim=5
 maxdimension=1
 ## note that the input distXX is a distance matrix
-DiagTri=ripsDiag(distX,maxdimension,DiagLim, dist="arbitrary", printStatus=TRUE)
+DiagTri=ripsDiag(distX,maxdimension,DiagLim, dist="arbitrary", printProgress=TRUE)
 #points with lifetime=0 are not shown. e.g. the loop of the triangle.
 print(DiagTri)
 }

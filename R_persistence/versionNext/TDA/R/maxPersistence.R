@@ -27,7 +27,14 @@ function(FUN, parameters, X, Xlim, Ylim=NA, Zlim=NA, by, sublevel=TRUE, B=30, al
 	
 	Pers=list()
 	
-	if (printProgress) cat("Progress: ")
+	if (printProgress)
+	{
+		cat("0   10   20   30   40   50   60   70   80   90   100\n")
+		cat("|----|----|----|----|----|----|----|----|----|----|\n")
+		cat("*")		
+	}
+	percentageFloor=0
+
 	for (i in 1:Kseq){
 		
 		Diag= gridDiag(X, FUN, Xlim, Ylim, Zlim, by=by, sublevel=sublevel, printStatus=F, diagLimit=NULL, parameters[i])
@@ -36,14 +43,26 @@ function(FUN, parameters, X, Xlim, Ylim=NA, Zlim=NA, by, sublevel=TRUE, B=30, al
 		colnames(Pers[[i]])=c("dimension", "Persistence")
 			
 		if (B>0){
-		eps[i] = bootstrapBand(X, FUN, Grid, B=B, alpha=alpha, parallel=parallel, printStatus=F, parameters[i])$width
+		eps[i] = bootstrapBand(X, FUN, Grid, B=B, alpha=alpha, parallel=parallel, printProgress=F, parameters[i])$width
 		} else eps[i]=0
 		numberSignificant[i]=sum( Pers[[i]][,2]> (2*eps[i]) )
 		significantPers[i]= sum(pmax(0, Pers[[i]][,2]-(2*eps[i])))
 
-		if (printProgress) cat(round(i/Kseq,2), " ")
+		if (printProgress && floor((100*i/Kseq-percentageFloor)/2)>0)
+		{
+			for (j in 1:(floor((100*i/Kseq-percentageFloor)/2)))
+			{
+				cat("*")
+				percentageFloor=percentageFloor+2
+			}
+
+		}
 	}
-	if (printProgress) cat("\n")
+	if (printProgress)
+	{ 
+		cat("\n")
+	}
+
 
 	# Two criterions
 	Param1=parameters[which(numberSignificant==max(numberSignificant))]

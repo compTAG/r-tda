@@ -8,7 +8,7 @@ Persistence Diagram of a function over a Grid
 }
 \usage{
 gridDiag(X, FUN, Xlim, Ylim = NA, Zlim = NA, by=(Xlim[2]-Xlim[1])/20, 
-         sublevel = TRUE, printStatus = FALSE, diagLimit=NULL, ...)
+         sublevel = TRUE, printProgress = FALSE, diagLimit=NULL, ...)
 }
 \arguments{
   \item{X}{
@@ -36,7 +36,7 @@ gridDiag(X, FUN, Xlim, Ylim = NA, Zlim = NA, by=(Xlim[2]-Xlim[1])/20,
   \item{sublevel}{
 a logical variable indicating if the Persistence Diagram should be computed for sublevel sets (\code{TRUE}) or superlevel sets (\code{FALSE}) of the function. Default is \code{TRUE}.
 }
-  \item{printStatus}{
+  \item{printProgress}{
 	if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
 }
 
@@ -86,10 +86,10 @@ by=0.05
 h = .3  #bandwidth for the function kde
 
 #Distance Function Diagram of the sublevel sets
-Diag1=gridDiag(XX,distFct, Xlim, Ylim, by=by, sublevel=TRUE, printStatus=TRUE) 
+Diag1=gridDiag(XX,distFct, Xlim, Ylim, by=by, sublevel=TRUE, printProgress=TRUE) 
 
 #Kernel Density Diagram of the superlevel sets
-Diag2=gridDiag(XX, kde, Xlim, Ylim, by=by, sublevel=FALSE, printStatus=TRUE, h=h) 
+Diag2=gridDiag(XX, kde, Xlim, Ylim, by=by, sublevel=FALSE, printProgress=TRUE, h=h) 
 
 #plot
 par(mfrow=c(1,3))

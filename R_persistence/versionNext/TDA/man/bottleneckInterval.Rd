@@ -8,7 +8,7 @@ Bootstrapped Confidence Set for a Persistence Diagram, using the Bottleneck Dist
 }
 \usage{
 bottleneckInterval(X, FUN, Xlim, Ylim = NA, Zlim = NA, by=(Xlim[2]-Xlim[1])/20, 
-         sublevel = TRUE, B=30, alpha=0.05, dimension=1, printStatus = FALSE, ...)
+         sublevel = TRUE, B=30, alpha=0.05, dimension=1, printProgress = FALSE, ...)
 }
 \arguments{
 
@@ -50,7 +50,7 @@ a logical variable indicating if the Persistence Diagram should be computed for 
 	an integer specifying the dimension of the features used to compute the bottleneck distance. 0 for connected components, 1 for loops, 2 for voids.
 }
 
-  \item{printStatus}{
+  \item{printProgress}{
 	if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
 }
 
@@ -99,7 +99,7 @@ by=0.05
 h = .3  #bandwidth for the function kde
 
 #Kernel Density Diagram of the superlevel sets
-Diag=gridDiag(XX, kde, Xlim, Ylim, by=by, sublevel=FALSE, printStatus=TRUE, h=h) 
+Diag=gridDiag(XX, kde, Xlim, Ylim, by=by, sublevel=FALSE, printProgress=TRUE, h=h) 
 
 # confidence set
 B=10         ## the number of bootstrap iterations should be higher! 
@@ -107,7 +107,7 @@ B=10         ## the number of bootstrap iterations should be higher!
 alpha=0.05
 
 cc=bottleneckInterval(XX, kde, Xlim, Ylim, by=by, sublevel=FALSE, B=B, alpha=alpha, 
-   dimension=1, printStatus=TRUE, h=h)
+   dimension=1, printProgress=TRUE, h=h)
 
 plot(Diag, band=2*cc)
 }
