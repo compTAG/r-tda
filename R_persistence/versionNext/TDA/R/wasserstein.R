@@ -5,7 +5,7 @@ function(Diag1, Diag2, p=1, dimension=1){
 		stop("Diag1 should be a diagram or a matrix")	
 	if (class(Diag2)!="diagram" && class(Diag2)!="matrix" && !is.data.frame(Diag1) )  
 		stop("Diag2 should be a diagram or a matrix")	
-	if (!is.vector(p) || length(p)!=1) stop("p should be a integer")	
+	if (!is.vector(p) || length(p)!=1 || p < 1) stop("p should be a positive integer")	
 	if (!is.vector(dimension) || length(dimension)!=1) stop("dimension should be a integer")	
 
 	Diag1=Diag1[which(Diag1[,1]==dimension),2:3]
