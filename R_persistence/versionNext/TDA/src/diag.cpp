@@ -365,9 +365,10 @@ extern "C" {
 		double pi=3.141593;
 		double den=0.0;
 
-		int counter=1;
+		int counter=0;
 		int totalCount=pMM[0];
-		int percentage=0;	
+		int percentageFloor=0;	
+		int tmp;
 		
 		den=pow(hh[0], pDD[0]) * pow( 2*pi  , (pDD[0]/2.0));
 		
@@ -387,13 +388,16 @@ extern "C" {
 				out[m-1]=out[m-1]/ den;
 						
 				//printProgress
-				counter=counter+1;
-				if (std::floor(100*counter/totalCount)==(percentage+2))
+				counter++;
+				tmp=std::floor((100*counter/totalCount-percentageFloor)/2);
+				if (tmp>0)
 				{
-					percentage=percentage+2;
-					Rprintf("*");		
-				}
-					   		
+					for (int aa=1; aa<=tmp; aa++)
+					{
+						Rprintf("*");
+						percentageFloor=percentageFloor+2;
+					}							
+				}					   		
 			}
 		} else //no printProgress
 		{
@@ -419,9 +423,10 @@ extern "C" {
 		double second=1.0;
 	    double *third= new double[pMM[0]];
 		
-		int counter=1;
+		int counter=0;
 		int totalCount=pNN[0]+pMM[0];
-		int percentage=0;	
+		int percentageFloor=0;	
+		int tmp;
 		
 		if (printProgress[0])
 		{
@@ -437,13 +442,17 @@ extern "C" {
 				first=first+ oneKernel(pp, XX, pNN, pDD, hh);
 		
 				// printProgress
-				counter=counter+1;
-				if (std::floor(100*counter/totalCount)==(percentage+2))
-				{
-					percentage=percentage+2;
-					Rprintf("*");		
-				}
+				counter++;
+				tmp=std::floor((100*counter/totalCount-percentageFloor)/2);
 				
+				if (tmp>0)
+				{
+					for (int aa=1; aa<=tmp; aa++)
+					{
+						Rprintf("*");
+						percentageFloor=percentageFloor+2;
+					}							
+				}				
 			}
 			first=first/pNN[0];
 		
@@ -456,12 +465,15 @@ extern "C" {
 
 				// printProgress
 				counter++;
-				if (std::floor(100*counter/totalCount)==(percentage+2))
+				tmp=std::floor((100*counter/totalCount-percentageFloor)/2);
+				if (tmp>0)
 				{
-					percentage=percentage+2;
-					Rprintf("*");		
+					for (int aa=1; aa<=tmp; aa++)
+					{
+						Rprintf("*");
+						percentageFloor=percentageFloor+2;
+					}							
 				}
-
 			}   		
 			Rprintf("\n");		
    		} else //no printProgress

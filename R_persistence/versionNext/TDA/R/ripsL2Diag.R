@@ -1,14 +1,14 @@
 ripsL2Diag <-
-function(X,maxdimension, maxscale, printStatus=FALSE){
+function(X,maxdimension, maxscale, printProgress=FALSE){
 
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates") 
 	if (!is.vector(maxdimension) || length(maxdimension)!=1) stop("maxdimension should be an integer")
 	if (!is.vector(maxscale) || length(maxscale)!=1) stop("maxscale should be a number")
-	if (!is.logical(printStatus)) stop("printStatus should be logical")
+	if (!is.logical(printProgress)) stop("printProgress should be logical")
 
 
 	write.table(X,"inputDionysus.txt", row.names=F, col.names=F, sep=" " )	
-	out1=.C("rips", as.integer(maxdimension+1), as.double(maxscale), as.integer(printStatus) ,dup=FALSE, package="TDA")
+	out1=.C("rips", as.integer(maxdimension+1), as.double(maxscale), as.integer(printProgress) ,dup=FALSE, package="TDA")
 	Diag=as.matrix(read.table("outputDionysus.txt", sep=""))
 	
 	N=dim(Diag)[1]

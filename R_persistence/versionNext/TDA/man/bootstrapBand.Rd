@@ -8,7 +8,7 @@
 }
 \usage{
 bootstrapBand(X, FUN, Grid, B = 30, alpha = 0.05, parallel = FALSE, 
-              printStatus=FALSE, ...)
+              printProgress=FALSE, ...)
 }
 \arguments{
   \item{X}{
@@ -29,7 +29,7 @@ an \eqn{m} by \eqn{d} matrix of coordinates, where \eqn{m} is the number of poin
   \item{parallel}{
     logical: if \code{TRUE} the bootstrap iterations are parallelized, using the library \code{parallel}.
 }
-  \item{printStatus}{
+  \item{printProgress}{
 	if TRUE a progress bar is printed. Default is \code{FALSE}.
 }
   \item{...}{

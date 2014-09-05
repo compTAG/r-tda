@@ -1,5 +1,5 @@
 gridDiag <-
-function(X, FUN, Xlim, Ylim=NA, Zlim=NA, by=(Xlim[2]-Xlim[1])/20, sublevel=TRUE, printStatus=FALSE, diagLimit=NULL, ...){
+function(X, FUN, Xlim, Ylim=NA, Zlim=NA, by=(Xlim[2]-Xlim[1])/20, sublevel=TRUE, printProgress=FALSE, diagLimit=NULL, ...){
 
 	if (!is.function(FUN)) stop("FUN should be a function")	
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
@@ -8,7 +8,7 @@ function(X, FUN, Xlim, Ylim=NA, Zlim=NA, by=(Xlim[2]-Xlim[1])/20, sublevel=TRUE,
 	if (!is.na(Zlim) && (!is.vector(Zlim) || length(Zlim)!=2) ) stop("Zlim should be vector of length 2")
 	if (!is.vector(by) || length(by)!=1) stop("by should be a positive number")
 	if (!is.logical(sublevel)) stop("sublevel should be logical")
-	if (!is.logical(printStatus)) stop("printStatus should be logical")
+	if (!is.logical(printProgress)) stop("printProgress should be logical")
 	if (!is.null(diagLimit) && (!is.vector(diagLimit) || length(diagLimit)!=1) ) stop("diagLimit should be a positive number")	
 
 	# in case there is only 1 point
@@ -39,7 +39,7 @@ function(X, FUN, Xlim, Ylim=NA, Zlim=NA, by=(Xlim[2]-Xlim[1])/20, sublevel=TRUE,
 	
 	#write input.txt and read output.txt
 	write.table(gridValues,"inputDionysus.txt", row.names=F, col.names=F, sep=" " )
-	computeGrid=.C("grid", as.integer(printStatus),dup=FALSE, package="TDA")
+	computeGrid=.C("grid", as.integer(printProgress),dup=FALSE, package="TDA")
 	out=read.table("outputDionysus.txt", sep="\n")
 	
 	##convert output.txt in matrix format

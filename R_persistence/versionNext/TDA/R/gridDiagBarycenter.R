@@ -1,12 +1,12 @@
 gridDiagBarycenter <-
-function(X, FUN, lim, by=(lim[2]-lim[1])/20, sublevel=TRUE, printStatus=FALSE, diagLimit=NULL, ...){
+function(X, FUN, lim, by=(lim[2]-lim[1])/20, sublevel=TRUE, printProgress=FALSE, diagLimit=NULL, ...){
 
 	if (!is.function(FUN)) stop("FUN should be a function")	
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
   if (2*ncol(X)!=length(lim)) stop("dimension of X does not match with lim")
 	if (!is.vector(by) || length(by)!=1) stop("by should be a positive number")
 	if (!is.logical(sublevel)) stop("sublevel should be logical")
-	if (!is.logical(printStatus)) stop("printStatus should be logical")
+	if (!is.logical(printProgress)) stop("printProgress should be logical")
 	if (!is.null(diagLimit) && (!is.vector(diagLimit) || length(diagLimit)!=1) ) stop("diagLimit should be a positive number")	
 
 	# in case there is only 1 point
@@ -25,12 +25,12 @@ function(X, FUN, lim, by=(lim[2]-lim[1])/20, sublevel=TRUE, printStatus=FALSE, d
 	#write input.txt and read output.txt
   if (ncol(X)<=3)
   {
-  	computeGrid=.C("gridMem",extFcnVal=as.double(gridValues),extDim=as.integer(length(dim)),extGridNum=as.integer(dim),input=as.integer(printStatus),
+  	computeGrid=.C("gridMem",extFcnVal=as.double(gridValues),extDim=as.integer(length(dim)),extGridNum=as.integer(dim),input=as.integer(printProgress),
                    dup=TRUE, package="TDA")
   }
   else
   {
-    computeGrid=.C("gridBarycenter",extFcnVal=as.double(gridValues),extDim=as.integer(length(dim)),extGridNum=as.integer(dim),input=as.integer(printStatus),
+    computeGrid=.C("gridBarycenter",extFcnVal=as.double(gridValues),extDim=as.integer(length(dim)),extGridNum=as.integer(dim),input=as.integer(printProgress),
                    dup=TRUE, package="TDA")    
   }
 	out=read.table("outputDionysus.txt", sep="\n")

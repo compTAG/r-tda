@@ -7,7 +7,7 @@ Multiplier Bootstrap for Persistence Landscapes and Silhouettes
 This function computes a confidence band for the average landscape (or the average silhouette) using the multiplier bootstrap.
 }
 \usage{
-multipBootstrap(Y, B=30, alpha=0.05, parallel=FALSE, printStatus=FALSE)
+multipBootstrap(Y, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE)
 }
 \arguments{
   \item{Y}{
@@ -22,7 +22,7 @@ multipBootstrap(Y, B=30, alpha=0.05, parallel=FALSE, printStatus=FALSE)
   \item{parallel}{
     logical: if \code{TRUE} the bootstrap iterations are parallelized, using the library \code{parallel}.
 }
-  \item{printStatus}{
+  \item{printProgress}{
 	logical: if TRUE a progress bar is printed. Default is \code{FALSE}.
 }
 }
