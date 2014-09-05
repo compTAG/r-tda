@@ -20,5 +20,5 @@ TODO
 DONE (wrt current version on CRAN)
 - Fixed bug in plotRule
 - cleaned the src folder
-
+- in bottleneck and wasserstein added control for empty diagrams
 
