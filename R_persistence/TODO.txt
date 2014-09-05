@@ -1,10 +1,17 @@
+NOTES:
+- a way to cite Dmitriy is to list him as a contributor in the DESCRIPTION file. 
+(see http://cran.r-project.org/doc/manuals/r-release/R-exts.html#The-DESCRIPTION-file)
+It will look like:
+Author: B.T. Fasy, J. Kim, F. Lecci, with contributions from D. Morozov.
+I am note sure this is the best solution. I would prefer to simply add a note in the description that says that we use Dionysus.
+
+
 
 TODO
 
 - (Fabri) There was a problem at line 62 in gridDiag.R. It should be fixed, but check.
-- (Fabri) remove gridDiag and modify all functions that depend on it.
-- (Fabri) add printStatus to something else?
-- (Fabri) check the best way to list the contributors (dionysus, phat..)
+- (Fabri) unify gridDiag and gridDiagBarycenter. Also modify all functions that depend on gridDiag.
+
 
 - (Brit/Dave) Interaction between R and C++: output of diagrams
 - (Brit) compute diagrams for a function defined over a grid (no conf. intervals)
@@ -14,7 +21,7 @@ TODO
 - (all) study Rcpp
 - (all) think about the implementation of filtration proposed in section 3.2 of bobrowski
 - (all) try Gudhi again
-- add more statistcal summaries, eg: distribution of Betti numbers, of birth times, of death times, of persistence values
+- (all) add more statistcal summaries, eg: distribution of Betti numbers, of birth times, of death times, of persistence values
 
 
 DONE (wrt current version on CRAN)
