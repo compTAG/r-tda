@@ -2,7 +2,6 @@
 #include <R_ext/Print.h>
 
 
-
 //for Rips
 #include <tdautils/ripsL2.h>
 #include <tdautils/ripsArbit.h>
@@ -361,48 +360,128 @@ extern "C" {
 
 
   	// KDE function on a Grid
-	void kde(double *XX, int *pNN, int *pDD, double *Grid, int *pMM, double *hh, double *out){
+	void kde(double *XX, int *pNN, int *pDD, double *Grid, int *pMM, double *hh, int *printProgress, double *out){
 	    double *pp= new double[pDD[0]];
 		double pi=3.141593;
 		double den=0.0;
+
+		int counter=1;
+		int totalCount=pMM[0];
+		int percentage=0;	
 		
 		den=pow(hh[0], pDD[0]) * pow( 2*pi  , (pDD[0]/2.0));
 		
-		for (int m=1; m<=pMM[0]; m++) {
-	 		for (int d=1; d<=pDD[0]; d++) {			
-				pp[d-1]=ReadMat(Grid, pMM, pDD, m, d);
-			}		
-			out[m-1]=oneKernel(pp, XX, pNN, pDD, hh);
-   			out[m-1]=out[m-1]/ den;
-   		}
-				
+		if (printProgress[0])
+		{
+			Rprintf("0   10   20   30   40   50   60   70   80   90   100");
+			Rprintf("\n");
+			Rprintf("|----|----|----|----|----|----|----|----|----|----|\n");
+			Rprintf("*");		
+
+
+			for (int m=1; m<=pMM[0]; m++) {
+				for (int d=1; d<=pDD[0]; d++) {			
+					pp[d-1]=ReadMat(Grid, pMM, pDD, m, d);
+				}		
+				out[m-1]=oneKernel(pp, XX, pNN, pDD, hh);
+				out[m-1]=out[m-1]/ den;
+						
+				//printProgress
+				counter=counter+1;
+				if (std::floor(100*counter/totalCount)==(percentage+2))
+				{
+					percentage=percentage+2;
+					Rprintf("*");		
+				}
+					   		
+			}
+		} else //no printProgress
+		{
+			for (int m=1; m<=pMM[0]; m++) {
+				for (int d=1; d<=pDD[0]; d++) {			
+					pp[d-1]=ReadMat(Grid, pMM, pDD, m, d);
+				}		
+				out[m-1]=oneKernel(pp, XX, pNN, pDD, hh);
+				out[m-1]=out[m-1]/ den;					   		
+			}
+
+		}
+   		
+   		if (printProgress[0]) Rprintf("\n");					
 		delete[] pp;
 	}
 
 
    	// kernel Dist function on a Grid
-	void kdeDist(double *XX, int *pNN, int *pDD, double *Grid, int *pMM, double *hh, double *out){
+	void kdeDist(double *XX, int *pNN, int *pDD, double *Grid, int *pMM, double *hh, int *printProgress, double *out){
 	    double *pp= new double[pDD[0]];
 		double first=0.0;
 		double second=1.0;
 	    double *third= new double[pMM[0]];
 		
-		for (int i=1; i<=pNN[0]; i++) {
-	 		for (int d=1; d<=pDD[0]; d++) {			
-				pp[d-1]=ReadMat(XX, pNN, pDD, i, d);
-			}		
-			first=first+ oneKernel(pp, XX, pNN, pDD, hh);
-		}
-		first=first/pNN[0];
+		int counter=1;
+		int totalCount=pNN[0]+pMM[0];
+		int percentage=0;	
 		
-		for (int m=1; m<=pMM[0]; m++) {
-	 		for (int d=1; d<=pDD[0]; d++) {			
-				pp[d-1]=ReadMat(Grid, pMM, pDD, m, d);
-			}		
-			third[m-1]=oneKernel(pp, XX, pNN, pDD, hh);
-   			out[m-1]= std::sqrt(first+second - 2* third[m-1]  );
+		if (printProgress[0])
+		{
+			Rprintf("0   10   20   30   40   50   60   70   80   90   100");
+			Rprintf("\n");
+			Rprintf("|----|----|----|----|----|----|----|----|----|----|\n");
+			Rprintf("*");		
+					
+			for (int i=1; i<=pNN[0]; i++) {
+				for (int d=1; d<=pDD[0]; d++) {			
+					pp[d-1]=ReadMat(XX, pNN, pDD, i, d);
+				}		
+				first=first+ oneKernel(pp, XX, pNN, pDD, hh);
+		
+				// printProgress
+				counter=counter+1;
+				if (std::floor(100*counter/totalCount)==(percentage+2))
+				{
+					percentage=percentage+2;
+					Rprintf("*");		
+				}
+				
+			}
+			first=first/pNN[0];
+		
+			for (int m=1; m<=pMM[0]; m++) {
+				for (int d=1; d<=pDD[0]; d++) {			
+					pp[d-1]=ReadMat(Grid, pMM, pDD, m, d);
+				}		
+				third[m-1]=oneKernel(pp, XX, pNN, pDD, hh);
+				out[m-1]= std::sqrt(first+second - 2* third[m-1]  );
+
+				// printProgress
+				counter++;
+				if (std::floor(100*counter/totalCount)==(percentage+2))
+				{
+					percentage=percentage+2;
+					Rprintf("*");		
+				}
+
+			}   		
+			Rprintf("\n");		
+   		} else //no printProgress
+		{
+			for (int i=1; i<=pNN[0]; i++) {
+				for (int d=1; d<=pDD[0]; d++) {			
+					pp[d-1]=ReadMat(XX, pNN, pDD, i, d);
+				}		
+				first=first+ oneKernel(pp, XX, pNN, pDD, hh);
+			}
+			first=first/pNN[0];
+		
+			for (int m=1; m<=pMM[0]; m++) {
+				for (int d=1; d<=pDD[0]; d++) {			
+					pp[d-1]=ReadMat(Grid, pMM, pDD, m, d);
+				}		
+				third[m-1]=oneKernel(pp, XX, pNN, pDD, hh);
+				out[m-1]= std::sqrt(first+second - 2* third[m-1]  );
+			}   		
    		}
-   		
 		delete[] pp;
 		delete[] third;
 	}

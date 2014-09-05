@@ -3,7 +3,6 @@ TODO
 
 - (Fabri) There was a problem at line 62 in gridDiag.R. It should be fixed, but check.
 - (Fabri) remove gridDiag and modify all functions that depend on it.
-- (Fabri) in bottleneck and wasserstein add control that diagrams are not empty
 - (Fabri) add printStatus to kde, kdeDist, etc
 - (Fabri) check the best way to list the contributors (dionysus, phat..)
 
