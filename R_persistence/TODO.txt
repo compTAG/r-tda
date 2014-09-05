@@ -3,7 +3,7 @@ TODO
 
 - (Fabri) There was a problem at line 62 in gridDiag.R. It should be fixed, but check.
 - (Fabri) remove gridDiag and modify all functions that depend on it.
-- (Fabri) add printStatus to kde, kdeDist, etc
+- (Fabri) add printStatus to something else?
 - (Fabri) check the best way to list the contributors (dionysus, phat..)
 
 - (Brit/Dave) Interaction between R and C++: output of diagrams
@@ -16,8 +16,9 @@ TODO
 - (all) try Gudhi again
 - add more statistcal summaries, eg: distribution of Betti numbers, of birth times, of death times, of persistence values
 
+
 DONE (wrt current version on CRAN)
 - Fixed bug in plotRule
 - cleaned the src folder
 - in bottleneck and wasserstein added control for empty diagrams
-
+- printProgress added to kde and kernelDist
