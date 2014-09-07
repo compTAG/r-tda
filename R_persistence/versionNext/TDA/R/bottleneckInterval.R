@@ -23,7 +23,7 @@ function(X, FUN, Xlim, Ylim=NA, Zlim=NA, by=(Xlim[2]-Xlim[1])/20, sublevel=TRUE,
      
      parallel=FALSE
      
-     Diag=gridDiag(X, FUN, Xlim=Xlim, Ylim=Ylim, by=by, sublevel=sublevel, printProgress=FALSE, ...)
+     Diag=gridDiag(X, FUN, Xlim=Xlim, Ylim=Ylim, Zlim=Zlim, by=by, sublevel=sublevel, printProgress=FALSE, ...)
 
      if (parallel) {boostLapply=mclapply
      	} else boostLapply=lapply
@@ -32,7 +32,7 @@ function(X, FUN, Xlim, Ylim=NA, Zlim=NA, by=(Xlim[2]-Xlim[1])/20, sublevel=TRUE,
      width=boostLapply(1:B, FUN=function(i){
           I = sample(1:n,replace=TRUE,size=n)
           Y = as.matrix(X[I,])
-          Diag1 = gridDiag(Y, FUN, Xlim=Xlim, Ylim=Ylim, by=by, sublevel=sublevel, printProgress=FALSE, ...)
+          Diag1 = gridDiag(Y, FUN, Xlim=Xlim, Ylim=Ylim, Zlim=Zlim, by=by, sublevel=sublevel, printProgress=FALSE, ...)
           width1 = bottleneck(Diag,Diag1, dimension=dimension)
           if (printProgress) cat(i," ")
      	  return(width1)
