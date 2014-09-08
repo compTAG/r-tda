@@ -37,7 +37,7 @@ function(FUN, parameters, X, Xlim, Ylim=NA, Zlim=NA, by, sublevel=TRUE, B=30, al
 
 	for (i in 1:Kseq){
 		
-		Diag= gridDiag(X, FUN, Xlim, Ylim, Zlim, by=by, sublevel=sublevel, printStatus=F, diagLimit=NULL, parameters[i])
+		Diag= gridDiag(X, FUN, Xlim, Ylim, Zlim, by=by, sublevel=sublevel, printProgress=F, diagLimit=NULL, parameters[i])
 		Diag[1,3]=Diag[1,2] #remove first component with infinite persistence
 		Pers[[i]]=cbind(Diag[,1], Diag[,3]-Diag[,2])
 		colnames(Pers[[i]])=c("dimension", "Persistence")
