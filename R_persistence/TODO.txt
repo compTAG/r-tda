@@ -8,7 +8,6 @@ I am note sure this is the best solution. I would prefer to simply add a note in
 
 
 TODO
-
 - (Fabri) There was a problem at line 62 in gridDiag.R. It should be fixed, but check.
 - (Fabri) unify gridDiag and gridDiagBarycenter. Also modify all functions that depend on gridDiag.
 

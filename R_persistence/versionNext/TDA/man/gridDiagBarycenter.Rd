@@ -33,7 +33,7 @@ a logical variable indicating if the Persistence Diagram should be computed for 
 }
 
   \item{diagLimit}{
-	a number that replaces \code{Inf} (if \code{sublevel} is \code{TRUE}) or \code{-Inf} (if \code{sublevel} is \code{FALSE}) in the Death value of the most persistent connected component. Deafult is \code{NULL} and the min/max of the function is used.
+	a number that replaces \code{Inf} (if \code{sublevel} is \code{TRUE}) or \code{-Inf} (if \code{sublevel} is \code{FALSE}) in the Death value of the most persistent connected component. Deafult is \code{NULL} and the max/min of the function is used.
 }
 
   \item{...}{
