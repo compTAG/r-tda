@@ -78,7 +78,7 @@
 \fvset{listparameters={\setlength{\topsep}{0pt}}}
 \renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
 
-\author{Brittany T. Fasy \and Fabrizio Lecci \\ \small{In collaboration with the CMU TopStat Group}}
+\author{Brittany T. Fasy, Jisu Kim \and Fabrizio Lecci \\ \small{In collaboration with the CMU TopStat Group}}
 \Plainauthor{Brittany Terese Fasy, Jisu Kim, Fabrizio Lecci}
 
 \title{Introduction to the \pkg{TDA} package}
