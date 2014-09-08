@@ -1,12 +1,10 @@
 maxPersistence<-
-function(FUN, parameters, X, Xlim, Ylim=NA, Zlim=NA, by, sublevel=TRUE, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
+function(FUN, parameters, X, lim, by, sublevel=TRUE, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
 
 	if (!is.function(FUN)) stop("FUN should be a function")	
 	if (!is.vector(parameters) || !is.numeric(parameters)) stop("parameters should be a numeric vector")
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
-	if (!is.vector(Xlim) || length(Xlim)!=2) stop("Xlim should be vector of length 2")
-	if (!is.na(Ylim) && (!is.vector(Ylim) || length(Ylim)!=2) ) stop("Ylim should be vector of length 2")
-	if (!is.na(Zlim) && (!is.vector(Zlim) || length(Zlim)!=2) ) stop("Zlim should be vector of length 2")
+	if (2*ncol(X)!=length(lim)) stop("dimension of X does not match with lim")	
 	if (!is.vector(by) || length(by)!=1) stop("by should be a positive number")
 	if (!is.logical(sublevel)) stop("sublevel should be logical")
 	if (!is.vector(B) || length(B)!=1) stop("B should be an integer")
@@ -18,7 +16,7 @@ function(FUN, parameters, X, Xlim, Ylim=NA, Zlim=NA, by, sublevel=TRUE, B=30, al
 	# in case there is only 1 point
 	if (is.vector(X)) X=t(X)
 
-	Grid=gridBy(Xlim,Ylim,Zlim,by)$grid
+	Grid=gridByBarycenter(lim, by=by)$grid
 	
 	Kseq=length(parameters)
 	eps=numeric(Kseq)
@@ -37,7 +35,7 @@ function(FUN, parameters, X, Xlim, Ylim=NA, Zlim=NA, by, sublevel=TRUE, B=30, al
 
 	for (i in 1:Kseq){
 		
-		Diag= gridDiag(X, FUN, Xlim, Ylim, Zlim, by=by, sublevel=sublevel, printProgress=F, diagLimit=NULL, parameters[i])
+		Diag= gridDiag(X, FUN, lim=lim, by=by, sublevel=sublevel, printProgress=F, diagLimit=NULL, parameters[i])
 		Diag[1,3]=Diag[1,2] #remove first component with infinite persistence
 		Pers[[i]]=cbind(Diag[,1], Diag[,3]-Diag[,2])
 		colnames(Pers[[i]])=c("dimension", "Persistence")

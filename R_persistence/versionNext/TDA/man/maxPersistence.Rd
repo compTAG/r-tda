@@ -10,7 +10,7 @@ Maximal Persistence Method
 Given a point cloud and a function built on top of the data, we are interested in studying the evolution of the sublevel sets (or superlevel sets) of the function, using persistent homology. The Maximal Persistence Method selects the optimal smoothing parameter of the function, by maximizing the number of significant topological features, or by maximizing the total significant persistence of the features. For each value of the smoothing parameter, this function computes a persistence diagram using \code{gridDiag} and returns the values of the two criteria, the dimension of detected features, their persistence, and a bootstrapped confidence band. The features that fall outside of the band are statistically significant. See References. 
 }
 \usage{
-maxPersistence(FUN, parameters, X, Xlim, Ylim=NA, Zlim=NA, by, sublevel = TRUE, 
+maxPersistence(FUN, parameters, X, lim, by, sublevel = TRUE, 
              B = 30, alpha = 0.05, parallel = FALSE, printProgress = FALSE)
 }
 \arguments{
@@ -23,16 +23,9 @@ maxPersistence(FUN, parameters, X, Xlim, Ylim=NA, Zlim=NA, by, sublevel = TRUE,
   \item{X}{
     a \eqn{n} by \eqn{d} matrix of coordinates of the input point cloud, where \eqn{d} is the dimension of the space.
 }
-  \item{Xlim}{
-    a numeric vector of length 2, specifying the range of the first dimension of the grid, over which the function \code{FUN} is evaluated.
-
-}
-  \item{Ylim}{
-        a numeric vector of length 2, specifying the range of the second dimension of the grid, over which the function \code{FUN} is evaluated. \code{NA} for a 1 dimensional grid.
-}
-  \item{Zlim}{
-    a numeric vector of length 2, specifying the range of the third dimension of the grid, over which the function \code{FUN} is evaluated. \code{NA} for a 1 dimensional or 2 dimensional grid.
-}
+  \item{lim}{
+    a \eqn{2} by \eqn{d} matrix, where each column specifying the range of each dimension of the grid, over which the function \code{FUN} is evaluated.
+  }
   \item{by}{
     number: space between points of the grid in each dimension.    
 }
@@ -90,6 +83,7 @@ X=rbind(XX1,noise)
 ## limits of the Gird at which the density estimator is evaluated
 Xlim=c(-2,2)
 Ylim=c(-2,2)
+lim=cbind(Xlim,Ylim)
 by=0.2
 
 B=80
@@ -98,7 +92,7 @@ alpha=0.05
 ## candidates
 parametersKDE=seq(0.1,0.5, by=0.2)
 
-maxKDE=maxPersistence(kde, parametersKDE, X, Xlim, Ylim, Zlim=NA, by=by, B=B,
+maxKDE=maxPersistence(kde, parametersKDE, X, lim=lim, by=by, B=B,
                   alpha=alpha, parallel=FALSE, printProgress = TRUE)
 print(summary(maxKDE))
 

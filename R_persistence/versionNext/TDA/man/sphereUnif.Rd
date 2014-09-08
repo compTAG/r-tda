@@ -8,7 +8,7 @@ Uniform Sample From The Sphere \eqn{S^d}
 This function samples \code{n} points from the sphere \eqn{S^d} of radius \code{r} embedded in \eqn{R^{d+1}}, uniformly with respect to the volume measure of the sphere.
 }
 \usage{
-circleUnif(n, d, r = 1)
+sphereUnif(n, d, r = 1)
 }
 \arguments{
   \item{n}{

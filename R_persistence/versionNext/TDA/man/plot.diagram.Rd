@@ -59,7 +59,7 @@ DiagLim=5
 maxdimension=1
 
 ## rips diagram
-Diag=ripsDiag(XX,maxdimension,DiagLim, printStatus=TRUE)
+Diag=ripsDiag(XX,maxdimension,DiagLim, printProgress=TRUE)
 
 #plot
 par(mfrow=c(1,3))

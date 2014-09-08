@@ -356,11 +356,11 @@ The function \code{gridDiag} evaluates a given real valued function over a trian
 The following code computes the persistent homology of the superlevel sets (\code{sublevel=FALSE}) of the kernel density estimator (\code{FUN=kde}, \code{h=0.3}) using the point cloud stored in the matrix~\code{X} from the previous example.
 The same code would work for the other functions defined in Section \ref{sec:distances} (it is sufficient to replace \code{kde} and its smoothing parameter \code{h} with another function and its parameters). 
 The function \code{gridDiag} returns an object of the class \code{"diagram"}.  
-The other inputs are the features of the grid over which the \code{kde} is evaluated (\code{Xlim}, \code{Ylim} and \code{by}), the smoothing parameter \code{h}, and a logical variable that indicates whether a progress bar should be printed (\code{printStatus}).
+The other inputs are the features of the grid over which the \code{kde} is evaluated (\code{Xlim}, \code{Ylim} and \code{by}), the smoothing parameter \code{h}, and a logical variable that indicates whether a progress bar should be printed (\code{printProgress}).
 
 <<eq11, echo=TRUE, eval=TRUE>>=
-Diag = gridDiag( X=X, FUN=kde, h=0.3, Xlim=Xlim, Ylim=Ylim, by=by, 
-                 sublevel=F, printStatus=F ) 
+Diag = gridDiag( X=X, FUN=kde, h=0.3, lim=cbind(Xlim,Ylim), by=by, 
+                 sublevel=F, printProgress=F ) 
 @
 
 
@@ -449,7 +449,7 @@ maxdimension=1       # components and loops
 
 and we generate the persistence diagram:
 <<eq12c, echo=TRUE, eval=TRUE>>=
-Diag=ripsDiag(X=Circles, maxdimension, maxscale, printStatus=F)
+Diag=ripsDiag(X=Circles, maxdimension, maxscale, printProgress=F)
 @
 Alternatively, using the option \code{dist="arbitrary"} in \code{ripsDiag()}, the input \code{X} can be an $n \times n$ matrix of distances.
 This option is useful when the user wants to consider a Rips filtration constructed using an arbitrary distance.\\
@@ -481,8 +481,8 @@ The \pkg{TDA} package includes the functions \code{bottleneck} and \code{wassers
 
 We generate two persistence diagrams of the Rips filtrations built on top of the two (separate) circles of the previous example,
 <<eq13, echo=TRUE, eval=TRUE>>=
-Diag1=ripsDiag(Circle1,maxdimension=1, maxscale=5, printStatus=F)
-Diag2=ripsDiag(Circle2,maxdimension=1, maxscale=5, printStatus=F)
+Diag1=ripsDiag(Circle1,maxdimension=1, maxscale=5, printProgress=F)
+Diag2=ripsDiag(Circle2,maxdimension=1, maxscale=5, printProgress=F)
 @
 and we compute the bottleneck distance and the $2$nd Wasserstein distance between the two diagrams.
 In the following code, the option \code{dimension=1} specifies that the distances between diagrams are computed using only one dimensional features (loops).
@@ -790,7 +790,7 @@ alpha=0.1   # level of the confidence bands
 The function \code{maxPersistence} can be parallelized (\code{parallel=TRUE}) and a progress bar can be printed (\code{printProgress=TRUE}):
 
 <<eq16c, echo=TRUE, eval=TRUE>>=
-maxKDE=maxPersistence(kde, parametersKDE, X, Xlim, Ylim, Zlim=NA, 
+maxKDE=maxPersistence(kde, parametersKDE, X, lim=cbind(Xlim, Ylim), 
                       by=by, sublevel=F, B=B, alpha=alpha, 
                       parallel=TRUE, printProgress=TRUE)
 @
@@ -844,8 +844,8 @@ XX=rbind(X1,X2,X3)
 Then we use the function \code{clusterTree} to compute cluster trees using the k Nearest Neighbors density estimator (\code{k=100} nearest neighbors) and the Gaussian kernel density estimator, with smoothing parameter \code{h}.
 
 <<eq18b, echo=TRUE, eval=TRUE>>=
-Tree=clusterTree(XX, k=100, density="knn", printStatus=F)
-TreeKDE=clusterTree(XX, k=100, h=0.3, density="kde", printStatus=F)
+Tree=clusterTree(XX, k=100, density="knn", printProgress=F)
+TreeKDE=clusterTree(XX, k=100, h=0.3, density="kde", printProgress=F)
 @
 
 Note that, even when \code{kde} is used to estimate the density, we have to provide the option \code{k=100}, so that the algorithm can compute the connected components at each level of the density using a k Nearest Neighbors graph.
