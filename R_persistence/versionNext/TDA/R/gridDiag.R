@@ -1,11 +1,9 @@
 gridDiag <-
-function(X, FUN, Xlim, Ylim=NA, Zlim=NA, by=(Xlim[2]-Xlim[1])/20, sublevel=TRUE, printProgress=FALSE, diagLimit=NULL, ...){
+function(X, FUN, lim, by, sublevel=TRUE, printProgress=FALSE, diagLimit=NULL, ...){
 
 	if (!is.function(FUN)) stop("FUN should be a function")	
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
-	if (!is.vector(Xlim) || length(Xlim)!=2) stop("Xlim should be vector of length 2")
-	if (!is.na(Ylim) && (!is.vector(Ylim) || length(Ylim)!=2) ) stop("Ylim should be vector of length 2")
-	if (!is.na(Zlim) && (!is.vector(Zlim) || length(Zlim)!=2) ) stop("Zlim should be vector of length 2")
+  if (2*ncol(X)!=length(lim)) stop("dimension of X does not match with lim")
 	if (!is.vector(by) || length(by)!=1) stop("by should be a positive number")
 	if (!is.logical(sublevel)) stop("sublevel should be logical")
 	if (!is.logical(printProgress)) stop("printProgress should be logical")
@@ -14,32 +12,27 @@ function(X, FUN, Xlim, Ylim=NA, Zlim=NA, by=(Xlim[2]-Xlim[1])/20, sublevel=TRUE,
 	# in case there is only 1 point
 	if (is.vector(X)) X=t(X)
 	
-	if (ncol(X)>3) stop("gridDiag currently works in dimension 1,2, or 3")
+#	if (ncol(X)>3) 
 
-	Grid=gridBy(Xlim, Ylim, Zlim, by=by)
+	Grid=gridByBarycenter(lim, by=by)
 	p=FUN(X,Grid$grid,...)
 		
 	dim=Grid$dim
-	
-	#convert p into grid format
-	Dim1=dim[1]
-	Dim2=dim[2]
-	Dim3=dim[3]
-	ppp=array(p,dim)   
-	ppp=apply(ppp,2,c)
-	if (Dim2==1 & Dim3==1) {
-		ppp=t(ppp)
-		ppp=rbind(c(dim, rep(NA,Dim1-3)), ppp)
-	} else{
-		ppp=rbind(c(dim,rep(NA,Dim2-3)),ppp)  #add dimension of the grid
-	}
-	gridValues=ppp
-	gridValues[1,]=ppp[1,]	
-	if (sublevel==FALSE) gridValues[-1,]=max(p)-ppp[-1,]	
+
+  gridValues=p
+  if (sublevel==FALSE) gridValues=max(p)-p
 	
 	#write input.txt and read output.txt
-	write.table(gridValues,"inputDionysus.txt", row.names=F, col.names=F, sep=" " )
-	computeGrid=.C("grid", as.integer(printProgress),dup=FALSE, package="TDA")
+  if (ncol(X)<=3)
+  {
+  	computeGrid=.C("gridMem",extFcnVal=as.double(gridValues),extDim=as.integer(length(dim)),extGridNum=as.integer(dim),input=as.integer(printProgress),
+                   dup=TRUE, package="TDA")
+  }
+  else
+  {
+    computeGrid=.C("gridBarycenter",extFcnVal=as.double(gridValues),extDim=as.integer(length(dim)),extGridNum=as.integer(dim),input=as.integer(printProgress),
+                   dup=TRUE, package="TDA")    
+  }
 	out=read.table("outputDionysus.txt", sep="\n")
 	
 	##convert output.txt in matrix format

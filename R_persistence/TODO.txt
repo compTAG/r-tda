@@ -7,13 +7,14 @@ I am note sure this is the best solution. I would prefer to simply add a note in
 
 
 TODO
-- (Fabri) unify gridDiag and gridDiagBarycenter. Also modify all functions that depend on gridDiag.
+- (Fabri) update vignette (eg gridDiag now works in any dimension)
 
 - (Brit/Dave) Interaction between R and C++: output of diagrams
 - (Brit) compute diagrams for a function defined over a grid (no conf. intervals)
 
 - (Jisu) give option to use phat (no pressure on this. it's not essential)
 
+- (all) check the user's manual
 - (all) study Rcpp
 - (all) think about the implementation of filtration proposed in section 3.2 of bobrowski
 - (all) try Gudhi again
@@ -21,7 +22,8 @@ TODO
 
 
 DONE (wrt current version on CRAN)
-- Fixed bug in plotRule and gridDiag
+- gridDiag now works in arbitrary dimension
+- Fixed bugs in plotRule and gridDiag
 - Cleaned the src folder
 - Fixed problem in wasserstain for gcc 4.1.2 (pow function)
 - in bottleneck and wasserstein added control for empty diagrams
