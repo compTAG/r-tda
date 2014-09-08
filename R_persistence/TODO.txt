@@ -6,11 +6,8 @@ Author: B.T. Fasy, J. Kim, F. Lecci, with contributions from D. Morozov.
 I am note sure this is the best solution. I would prefer to simply add a note in the description that says that we use Dionysus.
 
 
-
 TODO
-- (Fabri) There was a problem at line 62 in gridDiag.R. It should be fixed, but check.
 - (Fabri) unify gridDiag and gridDiagBarycenter. Also modify all functions that depend on gridDiag.
-
 
 - (Brit/Dave) Interaction between R and C++: output of diagrams
 - (Brit) compute diagrams for a function defined over a grid (no conf. intervals)
@@ -24,7 +21,8 @@ TODO
 
 
 DONE (wrt current version on CRAN)
-- Fixed bug in plotRule
-- cleaned the src folder
+- Fixed bug in plotRule and gridDiag
+- Cleaned the src folder
+- Fixed problem in wasserstain for gcc 4.1.2 (pow function)
 - in bottleneck and wasserstein added control for empty diagrams
 - printProgress added to kde and kernelDist
