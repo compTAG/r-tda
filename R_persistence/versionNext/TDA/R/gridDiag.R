@@ -59,8 +59,7 @@ function(X, FUN, Xlim, Ylim=NA, Zlim=NA, by=(Xlim[2]-Xlim[1])/20, sublevel=TRUE,
 	if (sublevel==FALSE) {
 		colnames(Diag)=c("dim", "Death", "Birth")
 		Diag[,2:3]=max(p)-Diag[,2:3]
-		Diag[1,3]= min(p) #check
-		Diag[1,2]= ifelse(is.null(diagLimit), Diag[1,2], diagLimit) #check
+		Diag[1,3]= ifelse(is.null(diagLimit), min(p), diagLimit)
 	} else {
 		colnames(Diag)=c("dim", "Birth", "Death")
 		Diag[1,3]=ifelse(is.null(diagLimit), max(p), diagLimit) 
