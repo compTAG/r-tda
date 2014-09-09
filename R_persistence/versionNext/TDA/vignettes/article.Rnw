@@ -351,12 +351,12 @@ We provide an informal description of the implemented methods of persistent homo
 \subsection{Persistent Homology Over a Grid}
 %%%%%%%%%%%%%%%%%%%%%%%
 In this section, we describe how to use the \code{gridDiag} function to compute the persistent homology of sublevel (and superlevel) sets of the functions described in Section \ref{sec:distances}. 
-The function \code{gridDiag} evaluates a given real valued function over a triangulated grid, constructs a filtration of simplices using the values of the function, and computes the persistent homology of the filtration. \code{gridDiag} currently supports grids in dimension 1,2, and 3. Future releases of the \pkg{TDA} package will extend its functionalities.
+The function \code{gridDiag} evaluates a given real valued function over a triangulated grid, constructs a filtration of simplices using the values of the function of dimension up to \code{maxDim+1}, and computes the persistent homology of the filtration of dimension up to \code{maxDim}.
 
 The following code computes the persistent homology of the superlevel sets (\code{sublevel=FALSE}) of the kernel density estimator (\code{FUN=kde}, \code{h=0.3}) using the point cloud stored in the matrix~\code{X} from the previous example.
 The same code would work for the other functions defined in Section \ref{sec:distances} (it is sufficient to replace \code{kde} and its smoothing parameter \code{h} with another function and its parameters). 
 The function \code{gridDiag} returns an object of the class \code{"diagram"}.  
-The other inputs are the features of the grid over which the \code{kde} is evaluated (\code{Xlim}, \code{Ylim} and \code{by}), the smoothing parameter \code{h}, and a logical variable that indicates whether a progress bar should be printed (\code{printProgress}).
+The other inputs are the features of the grid over which the \code{kde} is evaluated (\code{lim} and \code{by}), the smoothing parameter \code{h}, and a logical variable that indicates whether a progress bar should be printed (\code{printProgress}).
 
 <<eq11, echo=TRUE, eval=TRUE>>=
 Diag = gridDiag( X=X, FUN=kde, h=0.3, lim=cbind(Xlim,Ylim), by=by, 

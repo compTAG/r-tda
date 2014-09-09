@@ -7,7 +7,7 @@ Persistence Diagram of a function over a Grid
 \code{gridDiag} computes the Persistence Diagram of a filtration of sublevel sets (or superlevel sets) of a function evaluated over a grid of points in arbitrary dimension.
 }
 \usage{
-gridDiag(X, FUN, lim, by, sublevel = TRUE,
+gridDiag(X, FUN, lim, by, maxDim=ncol(X)-1, sublevel = TRUE,
          printProgress = FALSE, diagLimit=NULL, ...)
 }
 \arguments{
@@ -20,9 +20,11 @@ gridDiag(X, FUN, lim, by, sublevel = TRUE,
   \item{lim}{
     a \eqn{2} by \eqn{d} matrix, where each column specifying the range of each dimension of the grid, over which the function \code{FUN} is evaluated.
   }
-
   \item{by}{
     number: space between points of the grid in each dimension.    
+  }
+  \item{maxDim}{
+    a number that indicates the maximum dimension to compute persistent homology to. Default is \eqn{d-1}, which is (dimension of embedded space - 1).
   }
 
   \item{sublevel}{
@@ -41,7 +43,7 @@ a logical variable indicating if the Persistence Diagram should be computed for 
 
 }
 \details{
-The function evaluates the function \code{FUN} over a grid. Then it constructs a filtration by triangulating the grid and considering the simplices determined by the values of the function.
+The function evaluates the function \code{FUN} over a grid. Then it constructs a filtration by triangulating the grid and considering the simplices determined by the values of the function of dimension up to \code{maxDim+1}.
 }
 \value{
 \code{gridDiag} returns an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc). Second and third columns are Birth and Death of features, in case of a filtration constructed using sublevel sets, or Death and Birth of features, in case of a filtration constructed using superlevel sets.
@@ -56,6 +58,7 @@ Brittany T. Fasy, Jisu Kim, Fabrizio Lecci
 }
 \note{
  This function uses the C++ library Dionysus. See references.
+ Since dimension of simplicial complex from grid points in \eqn{R^d} is up to \eqn{d}, homology of dimension \eqn{>=d} is trivial. Hence setting \code{maxDim} with values \eqn{>=d} is equivalent to \code{maxDim=col(X)-1}.
 }
 
 \seealso{
