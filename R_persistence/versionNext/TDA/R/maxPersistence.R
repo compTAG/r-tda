@@ -16,7 +16,7 @@ function(FUN, parameters, X, lim, by, sublevel=TRUE, B=30, alpha=0.05, parallel=
 	# in case there is only 1 point
 	if (is.vector(X)) X=t(X)
 
-	Grid=gridByBarycenter(lim, by=by)$grid
+	Grid=gridBy(lim, by=by)$grid
 	
 	Kseq=length(parameters)
 	eps=numeric(Kseq)
@@ -35,7 +35,7 @@ function(FUN, parameters, X, lim, by, sublevel=TRUE, B=30, alpha=0.05, parallel=
 
 	for (i in 1:Kseq){
 		
-		Diag= gridDiag(X, FUN, lim=lim, by=by, sublevel=sublevel, printProgress=F, diagLimit=NULL, parameters[i])
+		Diag= gridDiag(X, FUN, lim=lim, by=by, maxDim=ncol(X)-1,sublevel=sublevel, printProgress=F, diagLimit=NULL, parameters[i])
 		Diag[1,3]=Diag[1,2] #remove first component with infinite persistence
 		Pers[[i]]=cbind(Diag[,1], Diag[,3]-Diag[,2])
 		colnames(Pers[[i]])=c("dimension", "Persistence")

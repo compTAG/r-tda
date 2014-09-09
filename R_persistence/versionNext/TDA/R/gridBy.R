@@ -1,4 +1,4 @@
-gridByBarycenter<-
+gridBy<-
   function(lim=c(0,1), by=(lim[2]-lim[1])/10){
     gridlist=list()
     for (idx in 1:(length(lim)/2))
