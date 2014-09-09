@@ -224,7 +224,84 @@ void addOddTets(Fltr& filtr, const std::vector<double> fcnvalues,
      return;
 } // end fcn addEvenTets
 
-void addTriNTet(Fltr& filtr, const std::vector<double> fcnvalues, 
+//void addTriNTet(Fltr& filtr, const std::vector<double> fcnvalues, 
+//                  const int ncols, const int nrows, int i, int j, int k)
+//{
+//     int curidx = i + ncols*j + ncols*nrows*k;
+//     
+//     // ... consider two cases for the cubical decomposition:
+//     if ((i+j+k)%2 == 0)
+//     {
+//	// ... EVEN BOX
+//        if (i > 0 && j > 0) // top
+//        {
+//     
+//           addTri(filtr, fcnvalues, curidx, curidx - ncols - 1, curidx - ncols);
+//           addTri(filtr, fcnvalues, curidx, curidx -1, curidx - ncols -1); 
+//        }
+//        if (i > 0 && k > 0) // back
+//        {
+//           addTri(filtr, fcnvalues, curidx, curidx - nrows*ncols -1, curidx - 1);
+//           addTri(filtr, fcnvalues, curidx, curidx - nrows*ncols, curidx - nrows*ncols -1);
+//        }
+//        
+//        if (j > 0 && k > 0) // right
+//        {
+//           addTri(filtr, fcnvalues, curidx, curidx - nrows*ncols - ncols, curidx - nrows*ncols);
+//           addTri(filtr, fcnvalues, curidx, curidx - ncols, curidx - nrows*ncols - ncols);
+//           
+//           if (i > 0) // middle
+//           {
+//              addTri(filtr, fcnvalues, curidx, curidx - ncols -1, curidx - ncols - nrows*ncols);
+//              addTri(filtr, fcnvalues, curidx, curidx -1 -nrows*ncols, curidx - ncols -1);
+//              addTri(filtr, fcnvalues, curidx -1 - nrows*ncols, curidx - ncols - nrows*ncols, curidx);
+//              addTri(filtr, fcnvalues, curidx -1 - nrows*ncols, curidx - 1 - ncols, curidx - ncols - nrows*ncols);
+//             
+//              // ... add center tets 
+//              addTet(filtr, fcnvalues, curidx -1 - nrows*ncols, curidx - 1 - ncols, curidx - ncols - nrows*ncols, curidx);
+//              // ... add remaining tets 
+//              addEvenTets(filtr, fcnvalues, ncols, nrows, i, j, k);
+//           }
+//        }
+//     } // end if for even case 
+//     else {
+//        // ... ODD CASE
+//        if (i > 0 && j > 0) // top
+//        {
+//           addTri(filtr, fcnvalues, curidx -1, curidx - ncols, curidx);
+//           addTri(filtr, fcnvalues, curidx -1, curidx - ncols -1, curidx - ncols);
+//        }
+//
+//        if (i > 0 && k > 0) // back
+//        {
+//           addTri(filtr, fcnvalues, curidx -1, curidx - nrows*ncols, curidx - nrows*ncols - 1);
+//           addTri(filtr, fcnvalues, curidx -1, curidx, curidx - nrows*ncols);
+//        }  
+//        
+//        if (j > 0 && k > 0) // right
+//        {
+//           addTri(filtr, fcnvalues, curidx - ncols, curidx - nrows*ncols, curidx - ncols - nrows*ncols);
+//           addTri(filtr, fcnvalues, curidx - ncols, curidx, curidx - nrows*ncols);
+//           
+//           if ( i > 0) // middle
+//           { 
+//              addTri(filtr, fcnvalues, curidx -1, curidx - ncols, curidx - nrows*ncols);
+//              addTri(filtr, fcnvalues, curidx -1, curidx - nrows*ncols - ncols - 1, curidx - ncols);
+//              addTri(filtr, fcnvalues, curidx - nrows*ncols, curidx - nrows*ncols - ncols -1, curidx - ncols);
+//              addTri(filtr, fcnvalues, curidx - nrows*ncols, curidx - 1, curidx - nrows*ncols - ncols -1);
+//               
+//              // ... add central tet
+//              addTet(filtr, fcnvalues, curidx -1, curidx - ncols, curidx - nrows*ncols, curidx - nrows*ncols -ncols -1);
+//              // ... add remaining tets
+//              addOddTets(filtr, fcnvalues, ncols, nrows, i, j, k);
+//           }
+//        } // end for through j k positive
+//     } // end else through odd case.
+//
+//    return;
+//} // end function addTriangles
+
+void addAllTriangles(Fltr& filtr, const std::vector<double> fcnvalues, 
                   const int ncols, const int nrows, int i, int j, int k)
 {
      int curidx = i + ncols*j + ncols*nrows*k;
@@ -256,11 +333,6 @@ void addTriNTet(Fltr& filtr, const std::vector<double> fcnvalues,
               addTri(filtr, fcnvalues, curidx, curidx -1 -nrows*ncols, curidx - ncols -1);
               addTri(filtr, fcnvalues, curidx -1 - nrows*ncols, curidx - ncols - nrows*ncols, curidx);
               addTri(filtr, fcnvalues, curidx -1 - nrows*ncols, curidx - 1 - ncols, curidx - ncols - nrows*ncols);
-             
-              // ... add center tets 
-              addTet(filtr, fcnvalues, curidx -1 - nrows*ncols, curidx - 1 - ncols, curidx - ncols - nrows*ncols, curidx);
-              // ... add remaining tets 
-              addEvenTets(filtr, fcnvalues, ncols, nrows, i, j, k);
            }
         }
      } // end if for even case 
@@ -289,18 +361,43 @@ void addTriNTet(Fltr& filtr, const std::vector<double> fcnvalues,
               addTri(filtr, fcnvalues, curidx -1, curidx - nrows*ncols - ncols - 1, curidx - ncols);
               addTri(filtr, fcnvalues, curidx - nrows*ncols, curidx - nrows*ncols - ncols -1, curidx - ncols);
               addTri(filtr, fcnvalues, curidx - nrows*ncols, curidx - 1, curidx - nrows*ncols - ncols -1);
-               
-              // ... add central tet
-              addTet(filtr, fcnvalues, curidx -1, curidx - ncols, curidx - nrows*ncols, curidx - nrows*ncols -ncols -1);
-              // ... add remaining tets
-              addOddTets(filtr, fcnvalues, ncols, nrows, i, j, k);
            }
         } // end for through j k positive
      } // end else through odd case.
 
     return;
-} // end function addTriangles
+} // end function addAllTriangles
 
+void addAllTetrahedra(Fltr& filtr, const std::vector<double> fcnvalues, 
+                  const int ncols, const int nrows, int i, int j, int k)
+{
+     int curidx = i + ncols*j + ncols*nrows*k;
+     
+     // ... consider two cases for the cubical decomposition:
+     if ((i+j+k)%2 == 0)
+     {
+	// ... EVEN BOX
+        if (i > 0 && j > 0 && k > 0) // middle
+        {
+            // ... add center tets 
+			addTet(filtr, fcnvalues, curidx -1 - nrows*ncols, curidx - 1 - ncols, curidx - ncols - nrows*ncols, curidx);
+            // ... add remaining tets 
+			addEvenTets(filtr, fcnvalues, ncols, nrows, i, j, k);
+        }
+     } // end if for even case 
+     else {
+        // ... ODD CASE
+        if (i > 0 && j > 0 && k > 0) // middle
+        {
+			// ... add central tet
+			addTet(filtr, fcnvalues, curidx -1, curidx - ncols, curidx - nrows*ncols, curidx - nrows*ncols -ncols -1);
+			// ... add remaining tets
+			addOddTets(filtr, fcnvalues, ncols, nrows, i, j, k);
+        } // end for through j k positive
+     } // end else through odd case.
+
+    return;
+} // end function addTriangles
 
 //int simplicesFromGrid(Fltr& filtr, const std::string& infile)
 //{
@@ -398,10 +495,18 @@ int simplicesFromGrid(Fltr & filtr, const double * const extFcnVal, const std::v
       vcont.push_back((Vertex)(curidx));
       filtr.push_back(Smplx(vcont, fcnvalues.at(curidx))); 
 
-      // .. NEXT, Add the edges:
-      addAllEdges(filtr, fcnvalues, ncols, nrows, i, j, k);
-      // ... now add the triangles:
-      addTriNTet(filtr, fcnvalues, ncols, nrows, i, j, k);
+		if (argDimMax >= 1)	// If dimension of embedded space >= 1, add the edges:
+		{
+			addAllEdges(filtr, fcnvalues, ncols, nrows, i, j, k);
+		}
+		if (argDimMax >= 2) // If dimension of embedded space >= 2, add the triangles: 
+		{
+			addAllTriangles(filtr, fcnvalues, ncols, nrows, i, j, k);
+		}
+		if (argDimMax >= 3) // If dimension of embedded space >= 3, add the tetrahedra:
+		{
+			addAllTetrahedra(filtr, fcnvalues, ncols, nrows, i, j, k);
+		}
 
       ++i; // advance column
 
