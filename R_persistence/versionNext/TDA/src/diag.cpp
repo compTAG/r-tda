@@ -19,8 +19,52 @@
 
 extern "C" {
 
+	//// grid function by Brittany T. Fasy (max dim 3)
+	//void grid(int* input)
+	//{
+	//#ifdef LOGGING
+	//	//rlog::RLogInit(argc, argv);
+
+	//	stdoutLog.subscribeTo(RLOG_CHANNEL("topology/persistence"));
+	//	//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/chain"));
+	//	//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/vineyard"));
+	//#endif
+
+	//	// ... set up the input
+	//	
+	//	bool printstatus=input[0];
+	//	
+	//	std::string infilename;
+	//	infilename = "inputDionysus.txt";
+
+	//	Fltr f;
+	//	simplicesFromGrid(f, infilename); // fill the simplices
+
+	//	f.sort(Smplx::DataComparison()); // initialize filtration
+	//	Persistence p(f); // initialize persistence
+	//	p.pair_simplices(printstatus); // pair simplices
+	//	// TODO: why doesn't this work? rLog(rlmain, "testing");   
+ //
+	//	Persistence::SimplexMap<Fltr>   m = p.make_simplex_map(f);
+	//	std::map<Dimension, PDgm> dgms;
+	//	init_diagrams(dgms, p.begin(), p.end(), 
+	//				  evaluate_through_map(m, Smplx::DataEvaluator()),
+	//				  evaluate_through_map(m, Smplx::DimensionExtractor()));
+
+	//	std::ofstream outfile;
+	//	outfile.open("outputDionysus.txt");
+	//	outfile << 0 << std::endl << dgms[0] << std::endl; // print 0-dim diagram
+	//	outfile << 1 << std::endl << dgms[1] << std::endl; // print 1-dim diagram
+	//	outfile << 2 << std::endl << dgms[2] << std::endl; // print 1-dim diagram
+	//			
+	//	// TODO: remove this line, this is just for testing
+	//	//outfile << f;  // add the filter
+	//}
+
+
 	// grid function by Brittany T. Fasy (max dim 3)
-	void grid(int* input)
+	// modified by Jisu Kim for using memory as an input & setting maximum dimension
+	void grid(double *extFcnVal, int *extGridDim, int *extGridNum, int *extHomDimMax, int* input)
 	{
 	#ifdef LOGGING
 		//rlog::RLogInit(argc, argv);
@@ -31,14 +75,16 @@ extern "C" {
 	#endif
 
 		// ... set up the input
-		
+
 		bool printstatus=input[0];
-		
-		std::string infilename;
-		infilename = "inputDionysus.txt";
 
 		Fltr f;
-		simplicesFromGrid(f, infilename); // fill the simplices
+		simplicesFromGrid(f, extFcnVal, gridNumber( extGridDim, extGridNum ), (*extHomDimMax)+1 ); // fill the simplices
+
+		if (printstatus){
+			Rprintf("# Generated complex of size: %d \n", f.size());
+
+		}
 
 		f.sort(Smplx::DataComparison()); // initialize filtration
 		Persistence p(f); // initialize persistence
@@ -53,53 +99,10 @@ extern "C" {
 
 		std::ofstream outfile;
 		outfile.open("outputDionysus.txt");
-		outfile << 0 << std::endl << dgms[0] << std::endl; // print 0-dim diagram
-		outfile << 1 << std::endl << dgms[1] << std::endl; // print 1-dim diagram
-		outfile << 2 << std::endl << dgms[2] << std::endl; // print 1-dim diagram
-				
-		// TODO: remove this line, this is just for testing
-		//outfile << f;  // add the filter
-	}
-
-
-	void gridMem(double *extFcnVal, int *extDim, int *extGridNum, int* input)
-	{
-	#ifdef LOGGING
-		//rlog::RLogInit(argc, argv);
-
-		stdoutLog.subscribeTo(RLOG_CHANNEL("topology/persistence"));
-		//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/chain"));
-		//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/vineyard"));
-	#endif
-
-		// ... set up the input
-		
-		bool printstatus=input[0];
-		
-//		std::string infilename;
-//		infilename = "inputDionysus.txt";
-
-		Fltr f;
-//		simplicesFromGrid(f, infilename); // fill the simplices
-		simplicesFromGridMem(f, extFcnVal, gridNumber( extDim, extGridNum ) ); // fill the simplices
-
-
-		f.sort(Smplx::DataComparison()); // initialize filtration
-		Persistence p(f); // initialize persistence
-		p.pair_simplices(printstatus); // pair simplices
-		// TODO: why doesn't this work? rLog(rlmain, "testing");   
- 
-		Persistence::SimplexMap<Fltr>   m = p.make_simplex_map(f);
-		std::map<Dimension, PDgm> dgms;
-		init_diagrams(dgms, p.begin(), p.end(), 
-					  evaluate_through_map(m, Smplx::DataEvaluator()),
-					  evaluate_through_map(m, Smplx::DimensionExtractor()));
-
-		std::ofstream outfile;
-		outfile.open("outputDionysus.txt");
-		outfile << 0 << std::endl << dgms[0] << std::endl; // print 0-dim diagram
-		outfile << 1 << std::endl << dgms[1] << std::endl; // print 1-dim diagram
-		outfile << 2 << std::endl << dgms[2] << std::endl; // print 1-dim diagram
+		for (int i=0; i<= *extHomDimMax; ++i)
+		{
+			outfile << i << std::endl << dgms[i] << std::endl; // print i-dim diagram
+		}
 				
 		// TODO: remove this line, this is just for testing
 		//outfile << f;  // add the filter
@@ -107,19 +110,32 @@ extern "C" {
 
 	
 	// grid function by Jisu Kim (any dimension)
-	void gridBarycenter(double *extFcnVal, int *extDim, int *extGridNum, int *input)
+	void gridBarycenter(double *extFcnVal, int *extGridDim, int *extGridNum, int *extHomDimMax, int *input)
 	{
+	#ifdef LOGGING
+		//rlog::RLogInit(argc, argv);
+
+		stdoutLog.subscribeTo(RLOG_CHANNEL("topology/persistence"));
+		//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/chain"));
+		//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/vineyard"));
+	#endif
+
 		// ... set up the input
-		
+
 		bool printstatus=input[0];	
 
 		Fltr f;
 
-		simplicesFromGridBarycenter(f, extFcnVal, gridNumber( extDim, extGridNum ) ); // fill the simplices
+		simplicesFromGridBarycenter(f, extFcnVal, gridNumber( extGridDim, extGridNum ), (*extHomDimMax)+1 ); // fill the simplices
+
+		if (printstatus){
+			Rprintf("# Generated complex of size: %d \n", f.size());
+
+		}
 
 		f.sort(Smplx::DataComparison()); // initialize filtration
 		Persistence p(f); // initialize persistence
-		p.pair_simplices(); // pair simplices
+		p.pair_simplices(printstatus); // pair simplices
 		// TODO: why doesn't this work? rLog(rlmain, "testing");   
  
 		Persistence::SimplexMap<Fltr>   m = p.make_simplex_map(f);
@@ -130,14 +146,10 @@ extern "C" {
 
 		std::ofstream outfile;
 		outfile.open("outputDionysus.txt");
-	/*
-		outfile << 0 << std::endl << dgms[0] << std::endl; // print 0-dim diagram
-		outfile << 1 << std::endl << dgms[1] << std::endl; // print 1-dim diagram
-		outfile << 2 << std::endl << dgms[2] << std::endl; // print 1-dim diagram
-	*/
-
-		for (int i=0; i< *extDim; ++i)
-			outfile << i << std::endl << dgms[i] << std::endl; // print 0-dim diagram
+		for (int i=0; i<= *extHomDimMax; ++i)
+		{
+			outfile << i << std::endl << dgms[i] << std::endl; // print i-dim diagram
+		}
  
 	
 		// TODO: remove this line, this is just for testing
@@ -369,7 +381,7 @@ extern "C" {
 		int totalCount=pMM[0];
 		int percentageFloor=0;	
 		int tmp;
-		
+
 		den=pow(hh[0], pDD[0]) * pow( 2*pi  , (pDD[0]/2.0));
 		
 		if (printProgress[0])
