@@ -4,24 +4,24 @@
 Persistence Diagram of a function over a Grid
 }
 \description{
-\code{gridDiag} computes the Persistence Diagram of a filtration of sublevel sets (or superlevel sets) of a function evaluated over a grid of points in arbitrary dimension.
+\code{gridDiag} computes the Persistence Diagram of a filtration of sublevel sets (or superlevel sets) of a function evaluated over a grid of points in arbitrary dimension \code{d}.
 }
 \usage{
-gridDiag(X, FUN, lim, by, maxDim=ncol(X)-1, sublevel = TRUE,
+gridDiag(X, FUN, lim, by, maxDim=length(lim)/2-1, sublevel = TRUE,
          printProgress = FALSE, diagLimit=NULL, ...)
 }
 \arguments{
   \item{X}{
-    an \eqn{n} by \eqn{d} matrix of coordinates, used by the function \code{FUN}, where \eqn{n} is the number of points stored in \code{X} and \eqn{d} is the dimension.
+    an \eqn{n} by \eqn{k} matrix of coordinates, used by the function \code{FUN}, where \eqn{n} is the number of points stored in \code{X} and \eqn{k} is the dimension.
   }
   \item{FUN}{
-    a function whose inputs are 1) an \eqn{n} by \eqn{d} matrix of coordinates \code{X}, 2) an \eqn{m} by \eqn{d} matrix of coordinates \code{Grid}, 3) an optional smoothing parameter, and returns a numeric vector of length \eqn{m}. For example see \code{\link{distFct}},  \code{\link{kde}}, and \code{\link{dtm}}  which compute the distance function, the kernel density estimator and the distance to measure, over a grid of points using the input \code{X}. Note that \code{Grid} is not an input of \code{gridDiag}, but is automatically computed by the function using \code{Xlim}, \code{Ylim}, \code{Zlim}, and \code{by}. 
+    a function whose inputs are 1) an \eqn{n} by \eqn{k} matrix of coordinates \code{X}, 2) an \eqn{m} by \eqn{d} matrix of coordinates \code{Grid}, 3) an optional smoothing parameter, and returns a numeric vector of length \eqn{m}. For example see \code{\link{distFct}},  \code{\link{kde}}, and \code{\link{dtm}}  which compute the distance function, the kernel density estimator and the distance to measure, over a grid of points using the input \code{X}. Note that \code{Grid} is not an input of \code{gridDiag}, but is automatically computed by the function using \code{lim}, and \code{by}. 
   }  
   \item{lim}{
     a \eqn{2} by \eqn{d} matrix, where each column specifying the range of each dimension of the grid, over which the function \code{FUN} is evaluated.
   }
   \item{by}{
-    number: space between points of the grid in each dimension.    
+    either a number or a vector of length \eqn{d} specifying space between points of the grid in each dimension. If a number is given, then same space is used in each dimension.
   }
   \item{maxDim}{
     a number that indicates the maximum dimension to compute persistent homology to. Default is \eqn{d-1}, which is (dimension of embedded space - 1).

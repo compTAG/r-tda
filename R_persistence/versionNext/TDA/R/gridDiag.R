@@ -1,10 +1,10 @@
 gridDiag <-
-function(X, FUN, lim, by, maxDim=ncol(X)-1, sublevel=TRUE, printProgress=FALSE, diagLimit=NULL, ...){
+function(X, FUN, lim, by, maxDim=length(lim)/2-1, sublevel=TRUE, printProgress=FALSE, diagLimit=NULL, ...){
 
 	if (!is.function(FUN)) stop("FUN should be a function")	
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
-  if (2*ncol(X)!=length(lim)) stop("dimension of X does not match with lim")
-	if (!is.vector(by) || length(by)!=1 || by<=0) stop("by should be a positive number")
+  if (!is.numeric(lim) || (length(lim) %% 2 != 0)) stop("lim should be either a matrix or a vector of even elements")
+	if (!is.numeric(by) || !is.vector(by) || (length(by)!=1 && length(by)!=length(lim)/2) || !all(by>0) ) stop("by should be either a positive number or a positive vector of length equals dimension of grid")
 	if (!is.vector(maxDim) || length(maxDim)!=1 || maxDim<0) stop("maxDim should be a nonnegative number")  
 	if (!is.logical(sublevel)) stop("sublevel should be logical")
 	if (!is.logical(printProgress)) stop("printProgress should be logical")
@@ -13,9 +13,9 @@ function(X, FUN, lim, by, maxDim=ncol(X)-1, sublevel=TRUE, printProgress=FALSE, 
 	# in case there is only 1 point
 	if (is.vector(X)) X=t(X)
 	
-	if (maxDim >= ncol(X))
+	if (maxDim >= length(lim)/2)
 	{
-	  maxDim = ncol(X)-1
+	  maxDim = length(lim)/2-1
 	}
 
 	Grid=gridBy(lim, by=by)

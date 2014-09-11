@@ -3,7 +3,14 @@ gridBy<-
     gridlist=list()
     for (idx in 1:(length(lim)/2))
     {
-      gridlist[[idx]]=seq(lim[2*idx-1], lim[2*idx], by=by)
+      if (length(by)==1)
+      {
+        gridlist[[idx]]=seq(lim[2*idx-1], lim[2*idx], by=by)
+      }
+      else
+      {
+        gridlist[[idx]]=seq(lim[2*idx-1], lim[2*idx], by=by[idx])
+      }
     }
     grid=expand.grid(gridlist)
     colnames(grid)=NULL
