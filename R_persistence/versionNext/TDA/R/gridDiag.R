@@ -41,27 +41,35 @@ function(X, FUN, lim, by, maxDim=length(lim)/2-1, sublevel=TRUE, printProgress=F
 	
 	##convert output.txt in matrix format
 	vecOut=as.vector(out$V1)
-	whichDimens=c((1:length(vecOut))[-grep(" ",vecOut)], length(vecOut)+1)
+	whichDimens=c((1:length(vecOut))[!grepl(" ",vecOut)], length(vecOut)+1)
 	dim=NULL
-	for (i in 1:(length(whichDimens)-1)){
-		dim=c(dim, rep(i-1, whichDimens[i+1]-whichDimens[i]-1))
-		}
+  if (length(whichDimens)>1)
+  {
+  	for (i in 1:(length(whichDimens)-1)){
+  		dim=c(dim, rep(as.numeric(vecOut[whichDimens[i]]), whichDimens[i+1]-whichDimens[i]-1))
+  		}
+  }
 	out2=data.frame(dim,life=out[grep(" ",vecOut),1])
 	life2=matrix(NA, ncol=2, nrow=length(dim))
-	for (i in 1:length(dim)){
-		life2[i,]=as.numeric(unlist(strsplit(as.character(out2[i,2]), " "))	)
-		}
+  if (length(dim)>0)
+  {
+  	for (i in 1:length(dim)){
+  		life2[i,]=as.numeric(unlist(strsplit(as.character(out2[i,2]), " "))	)
+  		}
+  }
 	
 	Diag=cbind(dim,life2)
-	if (sublevel==FALSE) {
-		colnames(Diag)=c("dim", "Death", "Birth")
-		Diag[,2:3]=max(p)-Diag[,2:3]
-		Diag[1,3]= ifelse(is.null(diagLimit), min(p), diagLimit)
-	} else {
-		colnames(Diag)=c("dim", "Birth", "Death")
-		Diag[1,3]=ifelse(is.null(diagLimit), max(p), diagLimit) 
-	}
-	if (sublevel==FALSE) Diag[,2:3]=Diag[,3:2]
+  if (nrow(Diag)>0) {
+  	if (sublevel==FALSE) {
+  		colnames(Diag)=c("dim", "Death", "Birth")
+  		Diag[,2:3]=max(p)-Diag[,2:3]
+  		Diag[1,3]= ifelse(is.null(diagLimit), min(p), diagLimit)
+  	} else {
+  		colnames(Diag)=c("dim", "Birth", "Death")
+  		Diag[1,3]=ifelse(is.null(diagLimit), max(p), diagLimit) 
+  	}
+  	if (sublevel==FALSE) Diag[,2:3]=Diag[,3:2]
+  }
 
 	if (class(Diag)!="matrix") Diag=t(Diag) #in the case there is only 1 point
 	class(Diag)="diagram"
