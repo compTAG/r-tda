@@ -1,11 +1,11 @@
 gridDiag <-
-function(X, FUN, lim, by, maxDim=length(lim)/2-1, sublevel=TRUE, printProgress=FALSE, diagLimit=NULL, ...){
+function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, printProgress=FALSE, diagLimit=NULL, ...){
 
 	if (!is.function(FUN)) stop("FUN should be a function")	
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
   if (!is.numeric(lim) || (length(lim) %% 2 != 0)) stop("lim should be either a matrix or a vector of even elements")
 	if (!is.numeric(by) || !is.vector(by) || (length(by)!=1 && length(by)!=length(lim)/2) || !all(by>0) ) stop("by should be either a positive number or a positive vector of length equals dimension of grid")
-	if (!is.vector(maxDim) || length(maxDim)!=1 || maxDim<0) stop("maxDim should be a nonnegative number")  
+	if (!is.vector(maxdimension) || length(maxdimension)!=1 || maxdimension<0) stop("maxdimension should be a nonnegative number")  
 	if (!is.logical(sublevel)) stop("sublevel should be logical")
 	if (!is.logical(printProgress)) stop("printProgress should be logical")
 	if (!is.null(diagLimit) && (!is.vector(diagLimit) || length(diagLimit)!=1) ) stop("diagLimit should be a positive number")	
@@ -13,9 +13,9 @@ function(X, FUN, lim, by, maxDim=length(lim)/2-1, sublevel=TRUE, printProgress=F
 	# in case there is only 1 point
 	if (is.vector(X)) X=t(X)
 	
-	if (maxDim >= length(lim)/2)
+	if (maxdimension >= length(lim)/2)
 	{
-	  maxDim = length(lim)/2-1
+	  maxdimension = length(lim)/2-1
 	}
 
 	Grid=gridBy(lim, by=by)
@@ -29,12 +29,12 @@ function(X, FUN, lim, by, maxDim=length(lim)/2-1, sublevel=TRUE, printProgress=F
 	#write input.txt and read output.txt
   if (ncol(X)<=3)
   {
-  	computeGrid=.C("grid",extFcnVal=as.double(gridValues),extGridDim=as.integer(length(dim)),extGridNum=as.integer(dim),extHomDimMax=as.integer(maxDim),input=as.integer(printProgress),
+  	computeGrid=.C("grid",extFcnVal=as.double(gridValues),extGridDim=as.integer(length(dim)),extGridNum=as.integer(dim),extHomDimMax=as.integer(maxdimension),input=as.integer(printProgress),
                    dup=TRUE, package="TDA")
   }
   else
   {
-    computeGrid=.C("gridBarycenter",extFcnVal=as.double(gridValues),extGridDim=as.integer(length(dim)),extGridNum=as.integer(dim),extHomDimMax=as.integer(maxDim),input=as.integer(printProgress),
+    computeGrid=.C("gridBarycenter",extFcnVal=as.double(gridValues),extGridDim=as.integer(length(dim)),extGridNum=as.integer(dim),extHomDimMax=as.integer(maxdimension),input=as.integer(printProgress),
                    dup=TRUE, package="TDA")    
   }
 	out=read.table("outputDionysus.txt", sep="\n")
@@ -73,7 +73,7 @@ function(X, FUN, lim, by, maxDim=length(lim)/2-1, sublevel=TRUE, printProgress=F
 
 	if (class(Diag)!="matrix") Diag=t(Diag) #in the case there is only 1 point
 	class(Diag)="diagram"
-	attributes(Diag)$maxdimension=max(Diag[,1])
+	attributes(Diag)$maxdimensionension=max(Diag[,1])
 	nonInf=which(Diag[,2]!=Inf & Diag[,3]!=Inf)
 	attributes(Diag)$scale=c(min(Diag[nonInf,2:3]), max(Diag[nonInf,2:3]))
 	attributes(Diag)$call=match.call()
