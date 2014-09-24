@@ -10,9 +10,10 @@ Maximal Persistence Method
 Given a point cloud and a function built on top of the data, we are interested in studying the evolution of the sublevel sets (or superlevel sets) of the function, using persistent homology. The Maximal Persistence Method selects the optimal smoothing parameter of the function, by maximizing the number of significant topological features, or by maximizing the total significant persistence of the features. For each value of the smoothing parameter, this function computes a persistence diagram using \code{gridDiag} and returns the values of the two criteria, the dimension of detected features, their persistence, and a bootstrapped confidence band. The features that fall outside of the band are statistically significant. See References. 
 }
 \usage{
-maxPersistence(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE, 
-             bandFUN=bootstrapDiagram, B=30, alpha=0.05, distance="bottleneck", dimension=1, 
-             p=1, parallel=FALSE, printProgress=FALSE)
+maxPersistence(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, 
+             sublevel = TRUE, bandFUN="bootstrapDiagram", B=30, alpha=0.05,
+             distance="bottleneck", dimension=1, p=1, parallel=FALSE,
+             printProgress=FALSE)
 }
 \arguments{
   \item{FUN}{
@@ -109,8 +110,9 @@ alpha=0.05
 ## candidates
 parametersKDE=seq(0.1,0.5, by=0.2)
 
-maxKDE=maxPersistence(kde, parametersKDE, X, lim=lim, by=by, B=B,
-                  alpha=alpha, parallel=FALSE, printProgress = TRUE)
+maxKDE=maxPersistence(kde, parametersKDE, X, lim=lim, by=by, 
+                  bandFUN="bootstrapBand",B=B, alpha=alpha,
+                  parallel=FALSE, printProgress = TRUE)
 print(summary(maxKDE))
 
 par(mfrow=c(1,2))
