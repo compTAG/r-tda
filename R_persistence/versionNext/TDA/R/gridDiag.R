@@ -24,7 +24,7 @@ function(X, FUN, lim, by, maxDim=length(lim)/2-1, sublevel=TRUE, printProgress=F
 	dim=Grid$dim
 
   gridValues=p
-  if (sublevel==FALSE) gridValues=max(p)-p
+  if (sublevel==FALSE) gridValues=-p
 	
 	#write input.txt and read output.txt
   if (ncol(X)<=3)
@@ -62,7 +62,7 @@ function(X, FUN, lim, by, maxDim=length(lim)/2-1, sublevel=TRUE, printProgress=F
   if (nrow(Diag)>0) {
   	if (sublevel==FALSE) {
   		colnames(Diag)=c("dim", "Death", "Birth")
-  		Diag[,2:3]=max(p)-Diag[,2:3]
+  		Diag[,2:3]=-Diag[,2:3]
   		Diag[1,3]= ifelse(is.null(diagLimit), min(p), diagLimit)
   	} else {
   		colnames(Diag)=c("dim", "Birth", "Death")
