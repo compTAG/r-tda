@@ -1,14 +1,14 @@
-\name{bottleneckInterval}
-\alias{bottleneckInterval}
+\name{bootstrapDiagram}
+\alias{bootstrapDiagram}
 \title{
 Bootstrapped Confidence Set for a Persistence Diagram, using the Bottleneck Distance.
 }
 \description{
-\code{bottleneckInterval} computes a \code{(1-alpha)} confidence set for the Persistence Diagram of a filtration of sublevel sets (or superlevel sets) of a function evaluated over a grid of points in dimension \eqn{d=}1, 2 or 3. The function returns the (\code{1-alpha}) quantile of \code{B} bottleneck distances, computed in \code{B} iterations of the bootstrap algorithm. The method is discussed in the 1st reference. 
+\code{bootstrapDiagram} computes a \code{(1-alpha)} confidence set for the Persistence Diagram of a filtration of sublevel sets (or superlevel sets) of a function evaluated over a grid of points in dimension \eqn{d=}1, 2 or 3. The function returns the (\code{1-alpha}) quantile of \code{B} bottleneck distances, computed in \code{B} iterations of the bootstrap algorithm. The method is discussed in the 1st reference. 
 }
 \usage{
-bottleneckInterval(X, FUN, lim, by, sublevel = TRUE, B=30,
-         alpha=0.05, dimension=1, printProgress = FALSE, ...)
+bootstrapDiagram(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE, B=30,
+         alpha=0.05, distance="bottleneck", dimension=1, p=1, printProgress = FALSE, ...)
 }
 \arguments{
 
@@ -17,7 +17,7 @@ bottleneckInterval(X, FUN, lim, by, sublevel = TRUE, B=30,
   }
 
   \item{FUN}{
-    a function whose inputs are 1) an \eqn{n} by \eqn{d} matrix of coordinates \code{X}, 2) an \eqn{m} by \eqn{d} matrix of coordinates \code{Grid}, 3) an optional smoothing parameter, and returns a numeric vector of length \eqn{m}. For example see \code{\link{distFct}},  \code{\link{kde}}, and \code{\link{dtm}}  which compute the distance function, the kernel density estimator and the distance to measure, over a grid of points using the input \code{X}. Note that \code{Grid} is not an input of \code{bottleneckInterval}, but is automatically computed by the function using \code{Xlim}, \code{Ylim}, \code{Zlim}, and \code{by}. 
+    a function whose inputs are 1) an \eqn{n} by \eqn{d} matrix of coordinates \code{X}, 2) an \eqn{m} by \eqn{d} matrix of coordinates \code{Grid}, 3) an optional smoothing parameter, and returns a numeric vector of length \eqn{m}. For example see \code{\link{distFct}},  \code{\link{kde}}, and \code{\link{dtm}}  which compute the distance function, the kernel density estimator and the distance to measure, over a grid of points using the input \code{X}. Note that \code{Grid} is not an input of \code{bootstrapDiagram}, but is automatically computed by the function using \code{Xlim}, \code{Ylim}, \code{Zlim}, and \code{by}. 
   }  
 
   \item{lim}{
@@ -25,7 +25,10 @@ bottleneckInterval(X, FUN, lim, by, sublevel = TRUE, B=30,
   }
 
   \item{by}{
-    number: space between points of the grid in each dimension.    
+    either a number or a vector of length \eqn{d} specifying space between points of the grid in each dimension. If a number is given, then same space is used in each dimension.
+  }
+  \item{maxdimension}{
+    a number that indicates the maximum dimension to compute persistent homology to. Default is \eqn{d-1}, which is (dimension of embedded space - 1).
   }
 
   \item{sublevel}{
@@ -36,12 +39,17 @@ a logical variable indicating if the Persistence Diagram should be computed for 
   the number of bootstrap iterations.
 }
   \item{alpha}{
-  \code{bottleneckInterval} returns a (1-\code{alpha}) quantile.
+  \code{bootstrapDiagram} returns a (1-\code{alpha}) quantile.
+}
+  \item{distance}{
+  a string specifying the distance to be used for persistence diagrams: either 'bottleneck' or 'wasserstein'
 }
   \item{dimension}{
 	an integer specifying the dimension of the features used to compute the bottleneck distance. 0 for connected components, 1 for loops, 2 for voids.
 }
-
+  \item{p}{
+	optional (if distance=='wasserstein'): integer specifying the power to be used in the computation of the Wasserstein distance. Default is 1.
+}
   \item{printProgress}{
 	if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
 }
@@ -52,7 +60,7 @@ a logical variable indicating if the Persistence Diagram should be computed for 
 
 }
 \details{
-\code{bottleneckInterval} uses \code{gridDiag} to compute the persistence diagram of the input function using the entire sample. Then the bootstrap algorithm, for \code{B} times, computes the bottleneck distance between the original persistence diagram and the one computed using a subsample. Finally the (\code{1-alpha}) quantile of these \code{B} values is returned.
+\code{bootstrapDiagram} uses \code{gridDiag} to compute the persistence diagram of the input function using the entire sample. Then the bootstrap algorithm, for \code{B} times, computes the bottleneck distance between the original persistence diagram and the one computed using a subsample. Finally the (\code{1-alpha}) quantile of these \code{B} values is returned.
 }
 \value{
 Returns the (1-\code{alpha}) quantile of the values computed by the bootstrap algorithm. It corresponds to half of width of the confidence set for the persistence diagram.}
@@ -99,7 +107,7 @@ B=10         ## the number of bootstrap iterations should be higher!
              ## this is just an example
 alpha=0.05
 
-cc=bottleneckInterval(XX, kde, lim=lim, by=by, sublevel=FALSE, B=B, alpha=alpha, 
+cc=bootstrapDiagram(XX, kde, lim=lim, by=by, sublevel=FALSE, B=B, alpha=alpha, 
    dimension=1, printProgress=TRUE, h=h)
 
 plot(Diag, band=2*cc)

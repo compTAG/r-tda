@@ -1,7 +1,8 @@
 maxPersistence<-
-function(FUN, parameters, X, lim, by, sublevel=TRUE, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
+function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, bandFUN=bootstrapDiagram, B=30, alpha=0.05, distance="bottleneck", dimension=1, p=1, parallel=FALSE, printProgress=FALSE){
 
 	if (!is.function(FUN)) stop("FUN should be a function")	
+	if (!is.function(bandFUN)) stop("FUN should be a function: either bootstrapBand or bootstrapDiagram")	
 	if (!is.vector(parameters) || !is.numeric(parameters)) stop("parameters should be a numeric vector")
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
 	if (2*ncol(X)!=length(lim)) stop("dimension of X does not match with lim")	
@@ -35,13 +36,15 @@ function(FUN, parameters, X, lim, by, sublevel=TRUE, B=30, alpha=0.05, parallel=
 
 	for (i in 1:Kseq){
 		
-		Diag= gridDiag(X, FUN, lim=lim, by=by, maxDim=ncol(X)-1,sublevel=sublevel, printProgress=F, diagLimit=NULL, parameters[i])
+		Diag= gridDiag(X, FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, printProgress=F, diagLimit=NULL, parameters[i])
 		Diag[1,3]=Diag[1,2] #remove first component with infinite persistence
 		Pers[[i]]=cbind(Diag[,1], Diag[,3]-Diag[,2])
 		colnames(Pers[[i]])=c("dimension", "Persistence")
 			
 		if (B>0){
-		eps[i] = bootstrapBand(X, FUN, Grid, B=B, alpha=alpha, parallel=parallel, printProgress=F, parameters[i])$width
+			if (bandFUN==bootstrapDiagram){
+				eps[i] = bandFUN(X, FUN, lim, by, maxdimension, sublevel, B=B, alpha=alpha, distance=distance, dimension=dimension, p=p, printProgress=FALSE, parameters[i])
+			}else eps[i] = bandFUN(X, FUN, Grid, B=B, alpha=alpha, parallel=parallel, printProgress=F, parameters[i])$width
 		} else eps[i]=0
 		numberSignificant[i]=sum( Pers[[i]][,2]> (2*eps[i]) )
 		significantPers[i]= sum(pmax(0, Pers[[i]][,2]-(2*eps[i])))
