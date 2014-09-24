@@ -8,6 +8,7 @@ I am note sure this is the best solution. I would prefer to simply add a note in
 
 TODO
 - (Fabri) update vignette (eg gridDiag now works in any dimension)
+- (Fabri) try Gudhi again. Clement will send me a new version.
 
 - (Brit/Dave) Interaction between R and C++: output of diagrams
 - (Brit) compute diagrams for a function defined over a grid (no conf. intervals)
@@ -17,7 +18,6 @@ TODO
 - (all) check the user's manual
 - (all) study Rcpp
 - (all) think about the implementation of filtration proposed in section 3.2 of bobrowski
-- (all) try Gudhi again
 - (all) add more statistcal summaries, eg: distribution of Betti numbers, of birth times, of death times, of persistence values
 
 

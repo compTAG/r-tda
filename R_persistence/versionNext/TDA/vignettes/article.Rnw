@@ -791,7 +791,7 @@ The function \code{maxPersistence} can be parallelized (\code{parallel=TRUE}) an
 
 <<eq16c, echo=TRUE, eval=TRUE>>=
 maxKDE=maxPersistence(kde, parametersKDE, X, lim=cbind(Xlim, Ylim), 
-                      by=by, sublevel=F, B=B, alpha=alpha, 
+                      by=by, sublevel=F, B=B, alpha=alpha, bandFUN="bootstrapBand",
                       parallel=TRUE, printProgress=TRUE)
 @
 

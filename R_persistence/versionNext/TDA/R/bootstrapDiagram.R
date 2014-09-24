@@ -14,14 +14,14 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, B=30, alp
      if (!is.logical(printProgress)) stop("printProgress should be logical")
 
 
-	if (distance!="wasserstein" || distance!="bottleneck") stop("distance should be a string: either 'bottleneck' or 'wasserstein'")
+	if (distance!="wasserstein" && distance!="bottleneck") stop("distance should be a string: either 'bottleneck' or 'wasserstein'")
 
      X=as.matrix(X)
      n = nrow(X)
      
      parallel=FALSE
      
-     Diag=gridDiag(X, FUN, lim, by=by, maxdimension=maxdimension, sublevel=sublevel, printProgress=FALSE, ...)
+     Diag=gridDiag(X, FUN, lim, by=by, maxdimension=maxdimension, sublevel=sublevel, printProgress=FALSE, diagLimit=NULL, ...)
 
      if (parallel) {boostLapply=mclapply
      	} else boostLapply=lapply
@@ -30,7 +30,7 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, B=30, alp
      width=boostLapply(1:B, FUN=function(i){
           I = sample(1:n,replace=TRUE,size=n)
           Y = as.matrix(X[I,])
-          Diag1 = gridDiag(Y, FUN, lim, by=by, maxdimension=maxdimension, sublevel=sublevel, printProgress=FALSE, ...)
+          Diag1 = gridDiag(X=Y, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, printProgress=FALSE, diagLimit=NULL, ...)
           if (distance=="wasserstein") {
           	width1 = wasserstein(Diag,Diag1, p=p,dimension=dimension)
           } else width1 = bottleneck(Diag,Diag1, dimension=dimension)
