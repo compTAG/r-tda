@@ -7,7 +7,7 @@ Rips Persistence Diagram
 This function computes the persistence diagram of the Rips filtration built on top of a point cloud.
 }
 \usage{
-ripsDiag(X, maxdimension, maxscale, dist = "euclidean", printProgress = FALSE)
+ripsDiag(X, maxdimension, maxscale, dist = "euclidean", library="GUDHI", printProgress = FALSE)
 }
 \arguments{
   \item{X}{
@@ -23,6 +23,10 @@ number: maximum value of the rips filtration.
   \item{dist}{
 \code{"euclidean"} for Euclidean distance, \code{"arbitrary"} for an arbitrary distance given in input as a distance matrix.
 }
+  \item{library}{
+	if dist=='euclidean', the user can compute the Rips persistence diagram using either the library 'GUDHI', or 'Dionysus'. Default is 'GUDHI'.
+}
+
   \item{printProgress}{
 logical: if \code{TRUE}, a progress bar is printed. Default is \code{FALSE}.
 }

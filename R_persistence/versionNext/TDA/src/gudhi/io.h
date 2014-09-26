@@ -38,7 +38,7 @@
  * etc
  */
 inline void
-read_points ( std::string file_name
+read_pointsG ( std::string file_name
             , std::vector< std::vector< double > > & points)
 {  
   std::ifstream in_file (file_name.c_str(),std::ios::in);

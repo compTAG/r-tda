@@ -540,9 +540,12 @@ extern "C" {
 							, double * rips_threshold
 							, int    * max_complex_dim
 							, double * diagram         //points to some memory space
-							, int    * max_num_bars)
+							, int    * max_num_bars
+							, int    * printInput)
+
 	{
-  
+	  bool printstatus=printInput[0];  
+	  
 	  // Turn the input points into a range of points
 	  typedef std::vector<double> Point_t;
 	  std::vector< Point_t > point_set(*num_points, Point_t(*dim));
@@ -563,7 +566,11 @@ extern "C" {
 	  st.insert_graph(prox_graph); // insert the proximity graph in the simplex tree
 	  st.expansion( *max_complex_dim ); // expand the graph until dimension dim_max
 
-	  std::cout << st.num_simplices() << " simplices \n";
+		if (printstatus){
+			Rprintf("# Generated complex of size: %d \n", st.num_simplices());
+			// std::cout << st.num_simplices() << " simplices \n";
+		}
+
 
 	// Sort the simplices in the order of the filtration
 	  st.initialize_filtration();
