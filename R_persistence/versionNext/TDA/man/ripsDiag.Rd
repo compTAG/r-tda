@@ -7,7 +7,8 @@ Rips Persistence Diagram
 This function computes the persistence diagram of the Rips filtration built on top of a point cloud.
 }
 \usage{
-ripsDiag(X, maxdimension, maxscale, dist = "euclidean", library="GUDHI", printProgress = FALSE)
+ripsDiag(X, maxdimension, maxscale, dist = "euclidean", 
+         library="GUDHI", printProgress = FALSE)
 }
 \arguments{
   \item{X}{
@@ -32,7 +33,9 @@ logical: if \code{TRUE}, a progress bar is printed. Default is \code{FALSE}.
 }
 }
 \details{
-This function is an R wrapper of the function "rips-pairwise" of the C++ library Dionysus. See refereneces.
+For Rips Diagrams based on Euclidean distance of the input point cloud, the user can decide to use either the C++ library GUDHI, or the C++ library Dionysus.
+For Rips Diagrams based on arbitrary distance, the the C++ library Dionysus is used.
+See refereneces.
 }
 \value{
 \code{ripsDiag} returns an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc.). Second and third columns are Birth and Death of the features.
@@ -45,7 +48,7 @@ Herbert Edelsbrunner and John Harer (2010), Computational topology: an introduct
 Brittany Fasy, Fabrizio Lecci, Alessandro Rinaldo, Larry Wasserman, Sivaraman Balakrishnan, and Aarti Singh. (2013), "Statistical Inference For Persistent Homology", (arXiv:1303.7117). To appear, Annals of Statistics.
 }
 \author{
-Brittany T. Fasy and Fabrizio Lecci
+Brittany T. Fasy, Fabrizio Lecci and Clement Maria
 }
 \seealso{
 \code{\link{summary.diagram}}, \code{\link{plot.diagram}},

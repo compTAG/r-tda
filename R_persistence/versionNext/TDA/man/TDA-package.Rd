@@ -14,7 +14,7 @@ Package: \tab TDA\cr
 Type: \tab Package\cr
 Version: \tab 1.2\cr
 Date: \tab 2014-08-29\cr
-License: \tab GPL 3 \cr
+License: \tab GPL-3 \cr
 }
 }
 \author{
