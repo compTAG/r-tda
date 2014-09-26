@@ -78,11 +78,11 @@
 \fvset{listparameters={\setlength{\topsep}{0pt}}}
 \renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
 
-\author{Brittany T. Fasy, Jisu Kim \and Fabrizio Lecci \\ \small{In collaboration with the CMU TopStat Group}}
-\Plainauthor{Brittany Terese Fasy, Jisu Kim, Fabrizio Lecci}
+\author{Brittany T. Fasy, Jisu Kim, Cl\'ement Maria \and Fabrizio Lecci \\ \small{In collaboration with the CMU TopStat Group}}
+\Plainauthor{Brittany Terese Fasy, Jisu Kim, Cl\'ement Maria, Fabrizio Lecci}
 
-\title{Introduction to the \pkg{TDA} package}
-\Plaintitle{Introduction to the TDA package}
+\title{Introduction to the \proglang{R} package \pkg{TDA}}
+\Plaintitle{Introduction to the R package TDA}
 \Abstract{
 We present a short tutorial and introduction to using the \proglang{R} package 
 \pkg{TDA}, which provides some tools for Topological Data Analysis.
@@ -91,7 +91,7 @@ topological information about the underlying space, such as the distance functio
 the kNN density estimator, the kernel density estimator, and the kernel distance.
 The salient topological features of the sublevel sets (or superlevel sets) of these functions
 can be quantified with persistent homology. We provide an \proglang{R} interface
-for the efficient algorithms of the \proglang{Dionysus} C++ library, including a function for 
+for the efficient algorithms of the \proglang{C++} libraries \pkg{GUDHI} and \pkg{Dionysus}, including a function for 
 the persistent homology of the Rips filtration, and for the persistent homology of sublevel
 sets (or superlevel sets) of arbitrary functions evaluated over a grid of points.
 The significance of the features in the resulting persistence diagrams can be 
@@ -113,6 +113,11 @@ a density function and visualize it by means of a dendrogram, the cluster tree.
   Department of Statistics\\
   Carnegie Mellon University\\
   Email: \email{jisuk1@andrew.cmu.edu}\\
+
+  Cl\'ement Maria\\
+  Geometrica Group\\
+  INRIA Sophia Antipolis-M\'editerran\'ee\\
+  Email: \email{clement.maria@inria.fr}\\
 
   Fabrizio Lecci\\
   Department of Statistics\\
@@ -143,7 +148,7 @@ In Section \ref{sec:distances}, we describe how to compute some widely studied f
 
 One approach to TDA is persistent homology \citep{edelsbrunner2010computational}, a method for studying the homology at multiple scales simultaneously. More precisely, it provides a framework and efficient algorithms to quantify the evolution of the topology of a family of nested topological spaces. Given a real-valued function $f$, such as the ones described in Section~\ref{sec:distances}, persistent homology describes how the topology of the lower level sets $\{x: f(x) \leq t \}$ (or superlevel sets $\{x: f(x) \geq t \}$) changes as $t$ increases from $-\infty$ to $\infty$ (or decreases from $\infty$ to $-\infty$). 
 This information is encoded in the persistence diagram, a multiset of points in the plane, each corresponding to the birth and death of a homological feature that existed for some interval of $t$.
-In Section \ref{sec:persistent}, we describe how to compute persistence diagrams of sublevel sets (or superlevel sets) of functions evaluated over a grid of points, using \code{gridDiag}, and how to compute the persistence diagram of the Rips filtration built on top of a point cloud, using \code{ripsDiag}. Our implementation relies on \pkg{Dionysus}, a \proglang{C++} library developed by Dmitriy Morozov and freely available at http://mrzv.org/software/dionysus/ .
+In Section \ref{sec:persistent}, we describe how to compute persistence diagrams of sublevel sets (or superlevel sets) of functions evaluated over a grid of points, using \code{gridDiag}, and how to compute the persistence diagram of the Rips filtration built on top of a point cloud, using \code{ripsDiag}. Our implementation relies on two \proglang{C++} libraries: \pkg{GUDHI}, developed by the Geometrica Group at INRIA and available at http://project.inria.fr/gudhi/software/; \pkg{Dionysus}, developed by Dmitriy Morozov and available at http://mrzv.org/software/dionysus/.
 
 One of the key challenges in persistent homology is to find a way to isolate the points of the persistence diagram representing the topological noise. In \cite{fasy2014statistical}, \cite{chazal2013stochastic}, and \cite{chazal2014robust}, we propose several statistical methods to construct confidence sets for persistence diagrams and other summary functions that allow us to separate topological signal from topological noise.
 Some of these methods are implemented and described in Section \ref{sec:persistent}.
@@ -351,7 +356,8 @@ We provide an informal description of the implemented methods of persistent homo
 \subsection{Persistent Homology Over a Grid}
 %%%%%%%%%%%%%%%%%%%%%%%
 In this section, we describe how to use the \code{gridDiag} function to compute the persistent homology of sublevel (and superlevel) sets of the functions described in Section \ref{sec:distances}. 
-The function \code{gridDiag} evaluates a given real valued function over a triangulated grid, constructs a filtration of simplices using the values of the function of dimension up to \code{maxDim+1}, and computes the persistent homology of the filtration of dimension up to \code{maxDim}.
+The function \code{gridDiag} evaluates a given real valued function over a triangulated grid, constructs a filtration of simplices using the values of the function, and computes the persistent homology of the filtration. From version 1.2, \code{gridDiag} works in arbitrary dimension.
+The core of the function is written in \proglang{C++} and uses the functionalities of the \pkg{Dionysus} library.
 
 The following code computes the persistent homology of the superlevel sets (\code{sublevel=FALSE}) of the kernel density estimator (\code{FUN=kde}, \code{h=0.3}) using the point cloud stored in the matrix~\code{X} from the previous example.
 The same code would work for the other functions defined in Section \ref{sec:distances} (it is sufficient to replace \code{kde} and its smoothing parameter \code{h} with another function and its parameters). 
@@ -431,7 +437,7 @@ The sequence of Rips complexes obtained by gradually
 increasing the radius $\varepsilon$ creates a filtration.
 
 The \code{ripsDiag} function computes the persistence diagram of the Rips filtration built on top of a point cloud.
-This function is an R wrapper of the function ``rips-pairwise" of the \pkg{Dionysus} \proglang{C++}  library.
+The user can choose to compute the Rips persistence diagram using either the \proglang{C++}  library \pkg{GUDHI}, or \pkg{Dionysus}.
 
 The following code generates 60 points from two circles:
 
@@ -449,10 +455,11 @@ maxdimension=1       # components and loops
 
 and we generate the persistence diagram:
 <<eq12c, echo=TRUE, eval=TRUE>>=
-Diag=ripsDiag(X=Circles, maxdimension, maxscale, printProgress=F)
+Diag=ripsDiag(X=Circles, maxdimension, maxscale,
+              library="GUDHI", printProgress=F)
 @
 Alternatively, using the option \code{dist="arbitrary"} in \code{ripsDiag()}, the input \code{X} can be an $n \times n$ matrix of distances.
-This option is useful when the user wants to consider a Rips filtration constructed using an arbitrary distance.\\
+This option is useful when the user wants to consider a Rips filtration constructed using an arbitrary distance and is currently only available for the option \code{library="Dionysus"}.\\
 
 Finally we plot the data and the the diagram:\\
 \phantom{o}
@@ -477,7 +484,7 @@ plot(Diag)
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Standard metrics for measuring the distance between two persistence diagrams are the bottleneck distance and the $p$th Wasserstein distance \citep{edelsbrunner2010computational}. 
-The \pkg{TDA} package includes the functions \code{bottleneck} and \code{wasserstein}, which are R wrappers of the functions ``bottleneck\_distance" and ``wasserstein\_distance" of the \pkg{Dionysus} \proglang{C++}  library .
+The \pkg{TDA} package includes the functions \code{bottleneck} and \code{wasserstein}, which are R wrappers of the functions ``bottleneck\_distance" and ``wasserstein\_distance" of the \proglang{C++}  library \pkg{Dionysus}.
 
 We generate two persistence diagrams of the Rips filtrations built on top of the two (separate) circles of the previous example,
 <<eq13, echo=TRUE, eval=TRUE>>=
@@ -740,7 +747,7 @@ lines(tseq, bootLand$mean, lwd=2, col=2)
 
 An unsolved problem in topological inference is how to
 choose the smoothing parameters, for example $h$ for KDE and 
-$m$ for DTM.
+$m_0$ for DTM.
 
 \cite{chazal2014robust} suggest the following method, that we describe here for the kernel density estimator,
 but works also for the kernel distance and the distance to measure.
@@ -791,8 +798,8 @@ The function \code{maxPersistence} can be parallelized (\code{parallel=TRUE}) an
 
 <<eq16c, echo=TRUE, eval=TRUE>>=
 maxKDE=maxPersistence(kde, parametersKDE, X, lim=cbind(Xlim, Ylim), 
-                      by=by, sublevel=F, B=B, alpha=alpha, bandFUN="bootstrapBand",
-                      parallel=TRUE, printProgress=TRUE)
+                   by=by, sublevel=F, B=B, alpha=alpha, parallel=TRUE, 
+                   printProgress=TRUE, bandFUN="bootstrapBand")
 @
 
 The \code{S3} methods \code{summary} and \code{plot} are implemented for the class \code{"maxPersistence"}.
