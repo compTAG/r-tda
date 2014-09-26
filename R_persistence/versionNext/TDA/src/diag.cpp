@@ -540,12 +540,13 @@ extern "C" {
 							, double * rips_threshold
 							, int    * max_complex_dim
 							, double * diagram         //points to some memory space
-							, int    * max_num_bars
 							, int    * printInput)
 
 	{
 	  bool printstatus=printInput[0];  
-	  
+	  std::string diagram_name="outputDionysus.txt";
+
+
 	  // Turn the input points into a range of points
 	  typedef std::vector<double> Point_t;
 	  std::vector< Point_t > point_set(*num_points, Point_t(*dim));
@@ -571,7 +572,6 @@ extern "C" {
 			// std::cout << st.num_simplices() << " simplices \n";
 		}
 
-
 	// Sort the simplices in the order of the filtration
 	  st.initialize_filtration();
 
@@ -582,8 +582,11 @@ extern "C" {
 	  pcoh.init_coefficients( p ); //initilizes the coefficient field for homology
 	  pcoh.compute_persistent_cohomology( min_persistence ); //compute persistent homology
 
-	// Write the diagram in diagram  
-	  pcoh.most_persistent_bars(diagram, *max_num_bars);
+	// write diagram on the output file
+	  pcoh.write_output_diagram(diagram_name);
+	
+	// or write the most persistent points in diagram (max_num_bars should be an input) 
+	//  pcoh.most_persistent_bars(diagram, *max_num_bars);
 	}
 
 

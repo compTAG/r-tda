@@ -14,11 +14,11 @@ Package: \tab TDA\cr
 Type: \tab Package\cr
 Version: \tab 1.2\cr
 Date: \tab 2014-08-29\cr
-License: \tab GPL (>= 2.0) \cr
+License: \tab GPL 3 \cr
 }
 }
 \author{
-Brittany Terese Fasy and Fabrizio Lecci
+Brittany Terese Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria
 
 Maintainer: Fabrizio Lecci <lecci@cmu.edu>
 }
