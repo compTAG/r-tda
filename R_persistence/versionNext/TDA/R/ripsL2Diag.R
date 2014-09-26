@@ -26,16 +26,9 @@ function(X,maxdimension, maxscale, library="GUDHI", printProgress=FALSE){
 	                                       as.double(maxscale),
 	                                       as.integer(maxdimension+1), #GUDHI needs +1
 	                                       as.double(diagram),
-	                                       as.integer(max_num_pairs),
 	                                       as.integer(printProgress),
 	                                       dup=FALSE, package="TDA")
-	
-		out1=matrix(out[[6]], ncol=3, byrow=T)
-	    toStop=which(out1[,1]==-1)[1]
-	    if (is.na(toStop)) {
-	    		toStop=max_num_pairs+1
-	    	}
-	    Diag=out1[1:(toStop-1),]	
+		Diag=as.matrix(read.table("outputDionysus.txt", sep=""))
 	}
 	
 		N=dim(Diag)[1]

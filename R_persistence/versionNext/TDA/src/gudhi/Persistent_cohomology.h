@@ -715,6 +715,20 @@ void output_diagram(std::ostream& ostream = std::cout)
   }
 }
 
+void write_output_diagram(std::string diagram_name)
+{
+  std::ofstream           diagram_out(diagram_name.c_str());
+  cmp_intervals_by_length cmp( cpx_ );
+  persistent_pairs_.sort( cmp );
+  for(auto pair : persistent_pairs_)
+  {
+	diagram_out << cpx_->dimension(get<0>(pair)) << " " 
+				<< cpx_->filtration(get<0>(pair)) << " "
+				<< cpx_->filtration(get<1>(pair)) << std::endl;
+  }
+}
+
+
 //write in diag_ptr the max_num_bar longest intervals in dim birth death fashion <- R only
 void most_persistent_bars(double *diag_ptr, int max_num_bars) 
 {
