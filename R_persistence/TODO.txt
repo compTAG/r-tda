@@ -7,9 +7,6 @@ I am note sure this is the best solution. I would prefer to simply add a note in
 
 
 TODO
-- (Fabri) update vignette (eg gridDiag now works in any dimension)
-- (Fabri) try Gudhi again. Clement will send me a new version.
-
 - (Brit/Dave) Interaction between R and C++: output of diagrams
 - (Brit) compute diagrams for a function defined over a grid (no conf. intervals)
 
@@ -22,6 +19,7 @@ TODO
 
 
 DONE (wrt current version on CRAN)
+- GUDHI can be used in RipsDiag
 - gridDiag now works in arbitrary dimension
 - Fixed bugs in plotRule and gridDiag
 - Cleaned the src folder
