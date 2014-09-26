@@ -32,7 +32,7 @@ maxPersistence(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1,
     either a number or a vector of length \eqn{d} specifying space between points of the grid in each dimension. If a number is given, then same space is used in each dimension.
   }
   \item{maxdimension}{
-    a number that indicates the maximum dimension to compute persistent homology to. Default is \eqn{d-1}, which is (dimension of embedded space - 1).
+    a number that indicates the maximum dimension to compute persistent homology to. Default is \eqn{d-1}, which is (dimension of embedding space - 1).
   }
   \item{sublevel}{
 a logical variable indicating if the persistent homology should be computed for sublevel sets of \code{FUN} (TRUE) or superlevel sets (FALSE). Default is TRUE.
@@ -65,7 +65,7 @@ a logical variable indicating if the persistent homology should be computed for 
 }
 }
 \details{
-	\code{maxPersistence} calls the \code{\link{gridDiag}} function, which computes the persistence diagram of sublevel (or superlevel) sets of a function, evaluated over a grid of points in dimension 1,2, or 3.
+	\code{maxPersistence} calls the \code{\link{gridDiag}} function, which computes the persistence diagram of sublevel (or superlevel) sets of a function, evaluated over a grid of points.
 }
 \value{
   The function returns an object of the class "maxPersistence", a list with the following components
