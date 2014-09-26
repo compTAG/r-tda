@@ -10,10 +10,13 @@
 #include <tdautils/gridUtils.h>
 
 //for kernel density
-#include <TDAutils/kernelUtils.h>
+#include <tdautils/kernelUtils.h>
 
 //for bottleneck and Wasserstein
-#include <TDAutils/bottleneckUtils.h>
+#include <tdautils/bottleneckUtils.h>
+
+//for GUDHI
+#include <tdautils/gudhiUtils.h>
 
 
 
@@ -508,6 +511,72 @@ extern "C" {
    		}
 		delete[] pp;
 		delete[] third;
+	}
+
+
+
+	// GUDHI RIPS
+	/** \brief Interface for R code, construct the persistence diagram 
+	  * of the Rips complex constructed on the input set of points.
+	  *
+	  * @param[out] void            every function called by R must return void
+	  * @param[in]  point           pointer toward the coordinates of all points. Format 
+	  *                             must be X11 X12 ... X1d X21 X22 ... X2d X31 ...
+	  * @param[in]  dim             embedding dimension 
+	  * @param[in]  num_points      number of points. The input point * must be a 
+	  *                             pointer toward num_points*dim double exactly.
+	  * @param[in]  rips_threshold  threshold for the Rips complex
+	  * @param[in]  max_complex_dim maximal dimension of the Rips complex
+	  * @param[in]  diagram         where to output the diagram. The format must be dimension birth death.
+	  * @param[in]  max_num_bars    write the max_num_pairs most persistent pairs of the
+	  *                             diagram. diagram must point to enough memory space for
+	  *                             3*max_num_pairs double. If there is not enough pairs in the diagram,
+	  *                             write nothing after.
+	  */
+	void 
+	rips_persistence_diagram_GUDHI( double * points          //points to some memory space
+							, int    * dim
+							, int    * num_points
+							, double * rips_threshold
+							, int    * max_complex_dim
+							, double * diagram         //points to some memory space
+							, int    * max_num_bars)
+	{
+  
+	  // Turn the input points into a range of points
+	  typedef std::vector<double> Point_t;
+	  std::vector< Point_t > point_set(*num_points, Point_t(*dim));
+	  double * curr_coordinate = points;
+	  for(int i = 0; i < *num_points; ++i) {
+		for(int j = 0; j < *dim; ++j) {
+		  point_set[i][j] = *curr_coordinate;
+		  ++curr_coordinate;
+		}
+	  }
+	// Compute the proximity graph of the points
+	  Graph_t prox_graph = compute_proximity_graph( point_set, *rips_threshold
+												  , euclidean_distance<Point_t> );
+
+	// Construct the Rips complex in a Simplex Tree
+	// Construct the Rips complex in a Simplex Tree
+	  Simplex_tree<> st;        
+	  st.insert_graph(prox_graph); // insert the proximity graph in the simplex tree
+	  st.expansion( *max_complex_dim ); // expand the graph until dimension dim_max
+
+	  std::cout << st.num_simplices() << " simplices \n";
+
+	// Sort the simplices in the order of the filtration
+	  st.initialize_filtration();
+
+	// Compute the persistence diagram of the complex
+	  int p = 2; //characteristic of the coefficient field for homology
+	  double min_persistence = 0; //minimal length for persistent intervals
+	  Persistent_cohomology< Simplex_tree<>, Field_Zp > pcoh( st );
+	  pcoh.init_coefficients( p ); //initilizes the coefficient field for homology
+	  pcoh.compute_persistent_cohomology( min_persistence ); //compute persistent homology
+
+	// Write the diagram in diagram  
+	  pcoh.most_persistent_bars(diagram, *max_num_bars);
 	}
 
 
