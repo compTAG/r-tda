@@ -27,17 +27,27 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, B=30, alp
      	} else boostLapply=lapply
 
      if (printProgress) cat("Bootstrap: ")
-     width=boostLapply(1:B, FUN=function(i){
+     
+     if (distance=="wasserstein") {
+	     width=boostLapply(1:B, FUN=function(i){
+	          I = sample(1:n,replace=TRUE,size=n)
+	          Y = as.matrix(X[I,])
+	          Diag1 = gridDiag(X=Y, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, printProgress=FALSE, diagLimit=NULL, ...)
+	          	width1 = wasserstein(Diag,Diag1, p=p,dimension=dimension)
+	          if (printProgress) cat(i," ")
+	     	  return(width1)
+	     })
+     } else{
+     	width=boostLapply(1:B, FUN=function(i){
           I = sample(1:n,replace=TRUE,size=n)
           Y = as.matrix(X[I,])
           Diag1 = gridDiag(X=Y, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, printProgress=FALSE, diagLimit=NULL, ...)
-          if (distance=="wasserstein") {
-          	width1 = wasserstein(Diag,Diag1, p=p,dimension=dimension)
-          } else width1 = bottleneck(Diag,Diag1, dimension=dimension)
+          width1 = bottleneck(Diag,Diag1, dimension=dimension)
           if (printProgress) cat(i," ")
      	  return(width1)
-     	}     	
-     	)
+     	})
+     }
+     	     		
      if (printProgress) cat("\n")
      width=unlist(width)
 	 width = quantile(width,1-alpha)

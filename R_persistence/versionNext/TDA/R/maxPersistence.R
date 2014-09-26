@@ -1,5 +1,5 @@
 maxPersistence<-
-function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, bandFUN="bootstrapDiagram", B=30, alpha=0.05, distance="bottleneck", dimension=1, p=1, parallel=FALSE, printProgress=FALSE){
+function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, B=30, alpha=0.05, bandFUN="bootstrapBand", distance="bottleneck", dimension=1, p=1, parallel=FALSE, printProgress=FALSE){
 
 	if (!is.function(FUN)) stop("FUN should be a function")	
 	if (!is.character(bandFUN)) stop("bandFUN should be a string: either 'bootstrapBand' or 'bootstrapDiagram'")	
@@ -44,10 +44,16 @@ function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRU
 		if (B>0){
 			if (bandFUN=="bootstrapDiagram"){
 				eps[i] = bootstrapDiagram(X=X, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, B=B, alpha=alpha, distance=distance, dimension=dimension, p=p, printProgress=FALSE, parameters[i])
-			}else eps[i] = bootstrapBand(X, FUN, Grid, B=B, alpha=alpha, parallel=parallel, printProgress=F, parameters[i])$width
+				selectDimension=which(Pers[[i]][,1]==dimension)
+				numberSignificant[i]=sum( Pers[[i]][selectDimension,2]> (2*eps[i]) )
+				significantPers[i]= sum(pmax(0, Pers[[i]][selectDimension,2]-(2*eps[i])))
+			}else {
+				eps[i] = bootstrapBand(X, FUN, Grid, B=B, alpha=alpha, parallel=parallel, printProgress=F, parameters[i])$width
+				numberSignificant[i]=sum( Pers[[i]][,2]> (2*eps[i]) )
+				significantPers[i]= sum(pmax(0, Pers[[i]][,2]-(2*eps[i])))
+			}
 		} else eps[i]=0
-		numberSignificant[i]=sum( Pers[[i]][,2]> (2*eps[i]) )
-		significantPers[i]= sum(pmax(0, Pers[[i]][,2]-(2*eps[i])))
+		
 
 		if (printProgress && floor((100*i/Kseq-percentageFloor)/2)>0)
 		{
@@ -69,7 +75,7 @@ function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRU
 	Param1=parameters[which(numberSignificant==max(numberSignificant))]
 	Param2=parameters[which(significantPers==max(significantPers))]
 	
-	out=list("parameters"=parameters, "sigNumber"=numberSignificant, "sigPersistence"=significantPers, "bands"=eps, "Persistence"=Pers)
+	out=list("parameters"=parameters, "sigNumber"=numberSignificant, "sigPersistence"=significantPers, "bands"=eps, "Persistence"=Pers, "bandFUN"=bandFUN, "dimension"=dimension)
 	
 	class(out)="maxPersistence"
 	attributes(out)$call=match.call()
