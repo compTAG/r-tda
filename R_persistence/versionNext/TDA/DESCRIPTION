@@ -7,4 +7,4 @@ Author: Brittany T. Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria
 Maintainer: Fabrizio Lecci <lecci@cmu.edu>
 Description: This package provides tools for the statistical analysis of persistent homology and for density clustering.
 Depends: FNN, igraph, parallel, scales
-License: GPL 3
+License: GPL-3
