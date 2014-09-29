@@ -8,7 +8,7 @@ This function plots an object of class \code{maxPersistence}, for the selection 
 For each value of the smoothing parameter, the plot shows the number of detected features, their persistence, and a bootstrap confidence band.
 }
 \usage{
-\method{plot}{maxPersistence}(x, ...)
+\method{plot}{maxPersistence}(x, features="dimension", ...)
 }
 \arguments{
   \item{x}{

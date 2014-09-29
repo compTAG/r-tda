@@ -11,9 +11,9 @@ Given a point cloud and a function built on top of the data, we are interested i
 }
 \usage{
 maxPersistence(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, 
-             sublevel = TRUE, bandFUN="bootstrapDiagram", B=30, alpha=0.05,
-             distance="bottleneck", dimension=1, p=1, parallel=FALSE,
-             printProgress=FALSE)
+             sublevel = TRUE, library="Dionysus", B=30, alpha=0.05, 
+             bandFUN="bootstrapBand", distance="bottleneck", dimension=1, p=1,
+             parallel=FALSE, printProgress=FALSE)
 }
 \arguments{
   \item{FUN}{
@@ -36,7 +36,9 @@ maxPersistence(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1,
   }
   \item{sublevel}{
 a logical variable indicating if the persistent homology should be computed for sublevel sets of \code{FUN} (TRUE) or superlevel sets (FALSE). Default is TRUE.
-
+}
+  \item{library}{
+  User can compute the persistence diagram using either the library 'Dionysus', or 'phat'. Default is 'Dionysus'.
 }
   \item{bandFUN}{
   the function to be used in the computation of the confidence band. Either 'bootstrapDiagram' or 'bootstrapBand'.
