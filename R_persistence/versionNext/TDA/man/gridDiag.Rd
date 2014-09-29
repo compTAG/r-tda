@@ -7,7 +7,7 @@ Persistence Diagram of a function over a Grid
 \code{gridDiag} computes the Persistence Diagram of a filtration of sublevel sets (or superlevel sets) of a function evaluated over a grid of points in arbitrary dimension \code{d}.
 }
 \usage{
-gridDiag(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE,
+gridDiag(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE, library="Dionysus",
          printProgress = FALSE, diagLimit=NULL, ...)
 }
 \arguments{
@@ -29,6 +29,9 @@ gridDiag(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE,
 
   \item{sublevel}{
 a logical variable indicating if the Persistence Diagram should be computed for sublevel sets (\code{TRUE}) or superlevel sets (\code{FALSE}) of the function. Default is \code{TRUE}.
+}
+  \item{library}{
+  User can compute the persistence diagram using either the library 'Dionysus', or 'phat'. Default is 'Dionysus'.
 }
   \item{printProgress}{
 	if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.

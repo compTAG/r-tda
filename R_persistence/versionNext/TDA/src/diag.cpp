@@ -18,56 +18,18 @@
 //for GUDHI
 #include <tdautils/gudhiUtils.h>
 
+// for phat
+#include <tdautils/phatUtils.h>
+
 
 
 extern "C" {
 
-	//// grid function by Brittany T. Fasy (max dim 3)
-	//void grid(int* input)
-	//{
-	//#ifdef LOGGING
-	//	//rlog::RLogInit(argc, argv);
-
-	//	stdoutLog.subscribeTo(RLOG_CHANNEL("topology/persistence"));
-	//	//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/chain"));
-	//	//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/vineyard"));
-	//#endif
-
-	//	// ... set up the input
-	//	
-	//	bool printstatus=input[0];
-	//	
-	//	std::string infilename;
-	//	infilename = "inputDionysus.txt";
-
-	//	Fltr f;
-	//	simplicesFromGrid(f, infilename); // fill the simplices
-
-	//	f.sort(Smplx::DataComparison()); // initialize filtration
-	//	Persistence p(f); // initialize persistence
-	//	p.pair_simplices(printstatus); // pair simplices
-	//	// TODO: why doesn't this work? rLog(rlmain, "testing");   
- //
-	//	Persistence::SimplexMap<Fltr>   m = p.make_simplex_map(f);
-	//	std::map<Dimension, PDgm> dgms;
-	//	init_diagrams(dgms, p.begin(), p.end(), 
-	//				  evaluate_through_map(m, Smplx::DataEvaluator()),
-	//				  evaluate_through_map(m, Smplx::DimensionExtractor()));
-
-	//	std::ofstream outfile;
-	//	outfile.open("outputDionysus.txt");
-	//	outfile << 0 << std::endl << dgms[0] << std::endl; // print 0-dim diagram
-	//	outfile << 1 << std::endl << dgms[1] << std::endl; // print 1-dim diagram
-	//	outfile << 2 << std::endl << dgms[2] << std::endl; // print 1-dim diagram
-	//			
-	//	// TODO: remove this line, this is just for testing
-	//	//outfile << f;  // add the filter
-	//}
 
 
-	// grid function by Brittany T. Fasy (max dim 3)
-	// modified by Jisu Kim for using memory as an input & setting maximum dimension
-	void grid(double *extFcnVal, int *extGridDim, int *extGridNum, int *extHomDimMax, int* input)
+	// grid function by Brittany T. Fasy
+	// modified by Jisu Kim for arbitrary dimension & using memory as an input & setting maximum dimension
+	void grid(double *FUNvaluesInput, int *gridDimensionInput, int *gridNumberInput, int *maxdimensionInput, char** decompositionInput, char** libraryInput, int* printInput)
 	{
 	#ifdef LOGGING
 		//rlog::RLogInit(argc, argv);
@@ -77,88 +39,74 @@ extern "C" {
 		//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/vineyard"));
 	#endif
 
-		// ... set up the input
-
-		bool printstatus=input[0];
-
-		Fltr f;
-		simplicesFromGrid(f, extFcnVal, gridNumber( extGridDim, extGridNum ), (*extHomDimMax)+1 ); // fill the simplices
-
-		if (printstatus){
-			Rprintf("# Generated complex of size: %d \n", f.size());
-
-		}
-
-		f.sort(Smplx::DataComparison()); // initialize filtration
-		Persistence p(f); // initialize persistence
-		p.pair_simplices(printstatus); // pair simplices
-		// TODO: why doesn't this work? rLog(rlmain, "testing");   
- 
-		Persistence::SimplexMap<Fltr>   m = p.make_simplex_map(f);
-		std::map<Dimension, PDgm> dgms;
-		init_diagrams(dgms, p.begin(), p.end(), 
-					  evaluate_through_map(m, Smplx::DataEvaluator()),
-					  evaluate_through_map(m, Smplx::DimensionExtractor()));
-
-		std::ofstream outfile;
-		outfile.open("outputDionysus.txt");
-		for (int i=0; i<= *extHomDimMax; ++i)
-		{
-			outfile << i << std::endl << dgms[i] << std::endl; // print i-dim diagram
-		}
-				
-		// TODO: remove this line, this is just for testing
-		//outfile << f;  // add the filter
-	}
-
-	
-	// grid function by Jisu Kim (any dimension)
-	void gridBarycenter(double *extFcnVal, int *extGridDim, int *extGridNum, int *extHomDimMax, int *input)
-	{
-	#ifdef LOGGING
-		//rlog::RLogInit(argc, argv);
-
-		stdoutLog.subscribeTo(RLOG_CHANNEL("topology/persistence"));
-		//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/chain"));
-		//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/vineyard"));
-	#endif
-
-		// ... set up the input
-
-		bool printstatus=input[0];	
-
+		bool printstatus=printInput[0];
 		Fltr f;
 
-		simplicesFromGridBarycenter(f, extFcnVal, gridNumber( extGridDim, extGridNum ), (*extHomDimMax)+1 ); // fill the simplices
-
+		// Generate simplicial complex from function values and grid
+		if (decompositionInput[0][0] == '5')
+		{
+			simplicesFromGrid(f, FUNvaluesInput, gridNumber( gridDimensionInput, gridNumberInput ), (*maxdimensionInput)+1 ); // fill the simplices
+		}
+		if (decompositionInput[0][0] == 'b')
+		{
+			simplicesFromGridBarycenter(f, FUNvaluesInput, gridNumber( gridDimensionInput, gridNumberInput ), (*maxdimensionInput)+1 ); // fill the simplices
+		}
 		if (printstatus){
 			Rprintf("# Generated complex of size: %d \n", f.size());
-
 		}
 
-		f.sort(Smplx::DataComparison()); // initialize filtration
-		Persistence p(f); // initialize persistence
-		p.pair_simplices(printstatus); // pair simplices
-		// TODO: why doesn't this work? rLog(rlmain, "testing");   
- 
-		Persistence::SimplexMap<Fltr>   m = p.make_simplex_map(f);
-		std::map<Dimension, PDgm> dgms;
-		init_diagrams(dgms, p.begin(), p.end(), 
-					  evaluate_through_map(m, Smplx::DataEvaluator()),
-					  evaluate_through_map(m, Smplx::DimensionExtractor()));
 
+		// Sort simplicial complex
+		f.sort(Smplx::DataComparison()); // initialize filtration
+
+
+		// Compute persistent homology from sorted simplicial complex
+		std::vector< std::vector< double > > persDgm;
+		if (libraryInput[0][0] == 'D')
+		{
+			std::map<Dimension, PDgm> dgms;
+
+			Persistence p(f); // initialize persistence
+			p.pair_simplices(printstatus); // pair simplices
+			// TODO: why doesn't this work? rLog(rlmain, "testing");   
+	 
+			Persistence::SimplexMap<Fltr> m = p.make_simplex_map(f);
+			init_diagrams(dgms, p.begin(), p.end(), 
+						  evaluate_through_map(m, Smplx::DataEvaluator()),
+						  evaluate_through_map(m, Smplx::DimensionExtractor()));
+
+			std::vector< double > persDgmPoint(3);
+			std::map<Dimension, PDgm>::const_iterator dgmItr;
+			for (dgmItr = dgms.begin(); dgmItr->first <= *maxdimensionInput; ++dgmItr)
+			{
+				PDgm::const_iterator dgmPtItr;
+				for (dgmPtItr = (dgmItr->second).begin(); dgmPtItr != (dgmItr->second).end(); ++dgmPtItr)
+				{
+					persDgmPoint[0] = dgmItr->first;
+					persDgmPoint[1] = dgmPtItr->x();
+					persDgmPoint[2] = dgmPtItr->y();
+					persDgm.push_back( persDgmPoint );
+				}
+			}
+
+		}
+		if (libraryInput[0][0] == 'p')
+		{
+			persDgm = computePersistentPairsPhat(f);
+		}
+
+
+		// Output persistent diagram
 		std::ofstream outfile;
 		outfile.open("outputDionysus.txt");
-		for (int i=0; i<= *extHomDimMax; ++i)
+		std::vector< std::vector< double > >::const_iterator dgmIdx;
+		for (dgmIdx = persDgm.begin(); dgmIdx != persDgm.end(); ++dgmIdx)
 		{
-			outfile << i << std::endl << dgms[i] << std::endl; // print i-dim diagram
+			outfile << (*dgmIdx)[0] << " " << (*dgmIdx)[1] << " " << (*dgmIdx)[2] << std::endl;
 		}
- 
-	
-		// TODO: remove this line, this is just for testing
-		//outfile << f;  // add the filter
-
+		outfile.close();
 	}
+
 
 
 	void rips(int* dimInput, double* maxInput, int* printInput)
@@ -339,36 +287,25 @@ extern "C" {
 
 
 
-	void bottleneck(double* out_name)
+	void bottleneck(double* points1Input, int* points1NumberInput, double* points2Input, int* points2NumberInput, double* out_name)
 	{
 		// ... set up the input
-		std::string filename1;
-		std::string filename2;
-		filename1 = "inputDionysus.txt";
-		filename2 = "inputDionysus2.txt";
-				
-
 		PDgmB dgm1, dgm2;
-		read_diagram(dgm1, filename1);
-		read_diagram(dgm2, filename2);
-		
+		read_diagram(dgm1, points1Input, points1NumberInput);
+		read_diagram(dgm2, points2Input, points2NumberInput);
+
 		out_name[0]=bottleneck_distance(dgm1, dgm2);
 	}
 
 
-	void wasserstein(int* inputP, double* out_name)
+	void wasserstein(double* points1Input, int* points1NumberInput, double* points2Input, int* points2NumberInput, int* inputP, double* out_name)
 	{
 		// ... set up the input
-		std::string filename1;
-		std::string filename2;
-		filename1 = "inputDionysus.txt";
-		filename2 = "inputDionysus2.txt";
-		
 		int p=inputP[0];		
 
 		PDgmB dgm1, dgm2;
-		read_diagram(dgm1, filename1);
-		read_diagram(dgm2, filename2);
+		read_diagram(dgm1, points1Input, points1NumberInput);
+		read_diagram(dgm2, points2Input, points2NumberInput);
 	
 		out_name[0]=wasserstein_distance(dgm1, dgm2, p);
 	}

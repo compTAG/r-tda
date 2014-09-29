@@ -1,6 +1,7 @@
 gridDiag <-
-function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, printProgress=FALSE, diagLimit=NULL, ...){
+function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="Dionysus", printProgress=FALSE, diagLimit=NULL, ...){
 
+  if (library!="Dionysus" && library!="phat") stop("library should be either 'Dionysus' or 'phat'")   
 	if (!is.function(FUN)) stop("FUN should be a function")	
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
   if (!is.numeric(lim) || (length(lim) %% 2 != 0)) stop("lim should be either a matrix or a vector of even elements")
@@ -29,36 +30,44 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, printProg
 	#write input.txt and read output.txt
   if (ncol(X)<=3)
   {
-  	computeGrid=.C("grid",extFcnVal=as.double(gridValues),extGridDim=as.integer(length(dim)),extGridNum=as.integer(dim),extHomDimMax=as.integer(maxdimension),input=as.integer(printProgress),
+  	computeGrid=.C("grid",FUNvaluesInput=as.double(gridValues),gridDimensionInput=as.integer(length(dim)),gridNumberInput=as.integer(dim),maxdimensionInput=as.integer(maxdimension),decompositionInput=as.character("5tetrahedra"),libraryInput=as.character(library),printInput=as.integer(printProgress),
                    dup=TRUE, package="TDA")
   }
   else
   {
-    computeGrid=.C("gridBarycenter",extFcnVal=as.double(gridValues),extGridDim=as.integer(length(dim)),extGridNum=as.integer(dim),extHomDimMax=as.integer(maxdimension),input=as.integer(printProgress),
-                   dup=TRUE, package="TDA")    
-  }
-	out=read.table("outputDionysus.txt", sep="\n")
-	
-	##convert output.txt in matrix format
-	vecOut=as.vector(out$V1)
-	whichDimens=c((1:length(vecOut))[!grepl(" ",vecOut)], length(vecOut)+1)
-	dim=NULL
-  if (length(whichDimens)>1)
-  {
-  	for (i in 1:(length(whichDimens)-1)){
-  		dim=c(dim, rep(as.numeric(vecOut[whichDimens[i]]), whichDimens[i+1]-whichDimens[i]-1))
-  		}
-  }
-	out2=data.frame(dim,life=out[grep(" ",vecOut),1])
-	life2=matrix(NA, ncol=2, nrow=length(dim))
-  if (length(dim)>0)
-  {
-  	for (i in 1:length(dim)){
-  		life2[i,]=as.numeric(unlist(strsplit(as.character(out2[i,2]), " "))	)
-  		}
+    computeGrid=.C("grid",FUNvaluesInput=as.double(gridValues),gridDimensionInput=as.integer(length(dim)),gridNumberInput=as.integer(dim),maxdimensionInput=as.integer(maxdimension),decompositionInput=as.character("barycenter"),libraryInput=as.character(library),printInput=as.integer(printProgress),
+                   dup=TRUE, package="TDA")
   }
 	
-	Diag=cbind(dim,life2)
+#  if (library=="Dionysus")
+#  {
+#    out=read.table("outputDionysus.txt", sep="\n")
+#
+#   ##convert outputDionysus.txt in matrix format
+# 	vecOut=as.vector(out$V1)
+# 	whichDimens=c((1:length(vecOut))[!grepl(" ",vecOut)], length(vecOut)+1)
+# 	dim=NULL
+#   if (length(whichDimens)>1)
+#   {
+#   	for (i in 1:(length(whichDimens)-1)){
+#   		dim=c(dim, rep(as.numeric(vecOut[whichDimens[i]]), whichDimens[i+1]-whichDimens[i]-1))
+#   		}
+#   }
+# 	out2=data.frame(dim,life=out[grep(" ",vecOut),1])
+# 	life2=matrix(NA, ncol=2, nrow=length(dim))
+#   if (length(dim)>0)
+#   {
+#   	for (i in 1:length(dim)){
+#   		life2[i,]=as.numeric(unlist(strsplit(as.character(out2[i,2]), " "))	)
+#   		}
+#   }	
+# 	Diag=cbind(dim,life2)
+# }
+#	if (library=="phat")
+#	{
+    Diag=as.matrix(read.table("outputDionysus.txt"))
+#	}
+	  
   if (nrow(Diag)>0) {
   	if (sublevel==FALSE) {
   		colnames(Diag)=c("dim", "Death", "Birth")

@@ -1,5 +1,5 @@
 maxPersistence<-
-function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, B=30, alpha=0.05, bandFUN="bootstrapBand", distance="bottleneck", dimension=1, p=1, parallel=FALSE, printProgress=FALSE){
+function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="Dionysus", B=30, alpha=0.05, bandFUN="bootstrapBand", distance="bottleneck", dimension=1, p=1, parallel=FALSE, printProgress=FALSE){
 
 	if (!is.function(FUN)) stop("FUN should be a function")	
 	if (!is.character(bandFUN)) stop("bandFUN should be a string: either 'bootstrapBand' or 'bootstrapDiagram'")	
@@ -36,7 +36,7 @@ function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRU
 
 	for (i in 1:Kseq){
 		
-		Diag= gridDiag(X=X, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, printProgress=F, diagLimit=NULL, parameters[i])
+		Diag= gridDiag(X=X, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, printProgress=F, diagLimit=NULL, parameters[i])
 		Diag[1,3]=Diag[1,2] #remove first component with infinite persistence
 		Pers[[i]]=cbind(Diag[,1], Diag[,3]-Diag[,2])
 		colnames(Pers[[i]])=c("dimension", "Persistence")
