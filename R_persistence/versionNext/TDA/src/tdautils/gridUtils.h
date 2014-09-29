@@ -224,83 +224,6 @@ void addOddTets(Fltr& filtr, const std::vector<double> fcnvalues,
      return;
 } // end fcn addEvenTets
 
-//void addTriNTet(Fltr& filtr, const std::vector<double> fcnvalues, 
-//                  const int ncols, const int nrows, int i, int j, int k)
-//{
-//     int curidx = i + ncols*j + ncols*nrows*k;
-//     
-//     // ... consider two cases for the cubical decomposition:
-//     if ((i+j+k)%2 == 0)
-//     {
-//	// ... EVEN BOX
-//        if (i > 0 && j > 0) // top
-//        {
-//     
-//           addTri(filtr, fcnvalues, curidx, curidx - ncols - 1, curidx - ncols);
-//           addTri(filtr, fcnvalues, curidx, curidx -1, curidx - ncols -1); 
-//        }
-//        if (i > 0 && k > 0) // back
-//        {
-//           addTri(filtr, fcnvalues, curidx, curidx - nrows*ncols -1, curidx - 1);
-//           addTri(filtr, fcnvalues, curidx, curidx - nrows*ncols, curidx - nrows*ncols -1);
-//        }
-//        
-//        if (j > 0 && k > 0) // right
-//        {
-//           addTri(filtr, fcnvalues, curidx, curidx - nrows*ncols - ncols, curidx - nrows*ncols);
-//           addTri(filtr, fcnvalues, curidx, curidx - ncols, curidx - nrows*ncols - ncols);
-//           
-//           if (i > 0) // middle
-//           {
-//              addTri(filtr, fcnvalues, curidx, curidx - ncols -1, curidx - ncols - nrows*ncols);
-//              addTri(filtr, fcnvalues, curidx, curidx -1 -nrows*ncols, curidx - ncols -1);
-//              addTri(filtr, fcnvalues, curidx -1 - nrows*ncols, curidx - ncols - nrows*ncols, curidx);
-//              addTri(filtr, fcnvalues, curidx -1 - nrows*ncols, curidx - 1 - ncols, curidx - ncols - nrows*ncols);
-//             
-//              // ... add center tets 
-//              addTet(filtr, fcnvalues, curidx -1 - nrows*ncols, curidx - 1 - ncols, curidx - ncols - nrows*ncols, curidx);
-//              // ... add remaining tets 
-//              addEvenTets(filtr, fcnvalues, ncols, nrows, i, j, k);
-//           }
-//        }
-//     } // end if for even case 
-//     else {
-//        // ... ODD CASE
-//        if (i > 0 && j > 0) // top
-//        {
-//           addTri(filtr, fcnvalues, curidx -1, curidx - ncols, curidx);
-//           addTri(filtr, fcnvalues, curidx -1, curidx - ncols -1, curidx - ncols);
-//        }
-//
-//        if (i > 0 && k > 0) // back
-//        {
-//           addTri(filtr, fcnvalues, curidx -1, curidx - nrows*ncols, curidx - nrows*ncols - 1);
-//           addTri(filtr, fcnvalues, curidx -1, curidx, curidx - nrows*ncols);
-//        }  
-//        
-//        if (j > 0 && k > 0) // right
-//        {
-//           addTri(filtr, fcnvalues, curidx - ncols, curidx - nrows*ncols, curidx - ncols - nrows*ncols);
-//           addTri(filtr, fcnvalues, curidx - ncols, curidx, curidx - nrows*ncols);
-//           
-//           if ( i > 0) // middle
-//           { 
-//              addTri(filtr, fcnvalues, curidx -1, curidx - ncols, curidx - nrows*ncols);
-//              addTri(filtr, fcnvalues, curidx -1, curidx - nrows*ncols - ncols - 1, curidx - ncols);
-//              addTri(filtr, fcnvalues, curidx - nrows*ncols, curidx - nrows*ncols - ncols -1, curidx - ncols);
-//              addTri(filtr, fcnvalues, curidx - nrows*ncols, curidx - 1, curidx - nrows*ncols - ncols -1);
-//               
-//              // ... add central tet
-//              addTet(filtr, fcnvalues, curidx -1, curidx - ncols, curidx - nrows*ncols, curidx - nrows*ncols -ncols -1);
-//              // ... add remaining tets
-//              addOddTets(filtr, fcnvalues, ncols, nrows, i, j, k);
-//           }
-//        } // end for through j k positive
-//     } // end else through odd case.
-//
-//    return;
-//} // end function addTriangles
-
 void addAllTriangles(Fltr& filtr, const std::vector<double> fcnvalues, 
                   const int ncols, const int nrows, int i, int j, int k)
 {
@@ -399,71 +322,6 @@ void addAllTetrahedra(Fltr& filtr, const std::vector<double> fcnvalues,
     return;
 } // end function addTriangles
 
-//int simplicesFromGrid(Fltr& filtr, const std::string& infile)
-//{
-//  std::ifstream in(infile.c_str());
-//  std::string	line;
-//  int nrows, ncols, ndimz;
-//  if (std::getline(in,line))
-//  {
-//    std::stringstream linestream(line);
-//    if (linestream >> nrows)
-//    {  if (linestream >> ncols)
-//       { if (linestream >> ndimz)
-//         {; //std::cout << nrows << " rows and " << ncols << " columns." << std::endl;
-//         }
-//          else
-//            ndimz = 1;  // to make backwards compatible with 2d grid
-//       }
-//    }
-//    else
-//      return 1;
-//  }
-//  
-//  int i = 0; // indexing the columns
-//  int j = 0; // indexing the rows
-//  int k = 0; // indexing the z dimension
-//  std::vector<double> fcnvalues;
-//  //double fcnvalues [i*j]; 
-//
-//  while(std::getline(in, line))
-//  {
-//    //std::vector<Vertex> currow[ncols];
-//    if(line[0] == '#') continue;	// comment line
-//    std::stringstream	linestream(line);
-//    double x;
-//    while (linestream >> x) // each line corresponds to changing i
-//    {
-//      int curidx = i + ncols*j + ncols*nrows*k;
-//      fcnvalues.push_back(x); // at index i + ncols*j    
-//      assert(fcnvalues.at(curidx) == x);
-//		
-//      // .. add the vertex 
-//      std::vector<Vertex> vcont;
-//      vcont.push_back((Vertex)(curidx));
-//      filtr.push_back(Smplx(vcont, fcnvalues.at(curidx))); 
-//
-//      // .. NEXT, Add the edges:
-//      addAllEdges(filtr, fcnvalues, ncols, nrows, i, j, k);
-//      // ... now add the triangles:
-//      addTriNTet(filtr, fcnvalues, ncols, nrows, i, j, k);
-//
-//      ++i; // advance column
-//    } // end inner while loop, which iterates through i (a row / line)
-//
-//    // ... advance row / z value
-//    i = 0;
-//    ++j;
-//    if (j > nrows -1)
-//    {
-//	j = 0;
-//        ++k;
-//    }
-//  } // end while 
-//  in.close();
-//  
-//  return 0;
-//} // end simplicesFromGrid function
 
 int simplicesFromGrid(Fltr & filtr, const double * const extFcnVal, const std::vector< unsigned int > & argGridNum, const int argDimMax)
 {
@@ -689,4 +547,4 @@ int simplicesFromGridBarycenter( Fltr & argFltr, const double * const extFcnVal,
     }
   
   return 0;
-} // end simplicesFromGrid function
+} // end simplicesFromGridBarycenter function

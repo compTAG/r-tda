@@ -302,7 +302,7 @@ The following code computes a 90\% confidence band for $\mathbb{E}[\hat p_h]$, s
 
 <<eq9, echo=TRUE, eval=TRUE>>=
 band=bootstrapBand(X=X, FUN=kde, Grid=Grid, B=100, 
-                   parallel=F, alpha=0.1, h=h)
+                   parallel=FALSE, alpha=0.1, h=h)
 @
 
 % PLOT START
@@ -366,7 +366,7 @@ The other inputs are the features of the grid over which the \code{kde} is evalu
 
 <<eq11, echo=TRUE, eval=TRUE>>=
 Diag = gridDiag( X=X, FUN=kde, h=0.3, lim=cbind(Xlim,Ylim), by=by, 
-                 sublevel=F, printProgress=F ) 
+                 sublevel=FALSE, printProgress=FALSE ) 
 @
 
 
@@ -411,8 +411,8 @@ The function \code{plot} for the class \code{"diagram"} provide the options of r
 \begin{center}
 <<eq11c, echo=TRUE, eval=TRUE,  fig=TRUE, width=6, height=3>>=
 par(mfrow=c(1,2), mai=c(0.8,0.8,0.3,0.1))
-plot(Diag, rotated=T, band=band$width, main="Rotated Diagram")
-plot(Diag, barcode=T,  main="Barcode")
+plot(Diag, rotated=TRUE, band=band$width, main="Rotated Diagram")
+plot(Diag, barcode=TRUE,  main="Barcode")
 @
 \end{center}
 \caption{Rotated Persistence Diagram and Barcode}
@@ -456,7 +456,7 @@ maxdimension=1       # components and loops
 and we generate the persistence diagram:
 <<eq12c, echo=TRUE, eval=TRUE>>=
 Diag=ripsDiag(X=Circles, maxdimension, maxscale,
-              library="GUDHI", printProgress=F)
+              library="GUDHI", printProgress=FALSE)
 @
 Alternatively, using the option \code{dist="arbitrary"} in \code{ripsDiag()}, the input \code{X} can be an $n \times n$ matrix of distances.
 This option is useful when the user wants to consider a Rips filtration constructed using an arbitrary distance and is currently only available for the option \code{library="Dionysus"}.\\
@@ -488,8 +488,8 @@ The \pkg{TDA} package includes the functions \code{bottleneck} and \code{wassers
 
 We generate two persistence diagrams of the Rips filtrations built on top of the two (separate) circles of the previous example,
 <<eq13, echo=TRUE, eval=TRUE>>=
-Diag1=ripsDiag(Circle1,maxdimension=1, maxscale=5, printProgress=F)
-Diag2=ripsDiag(Circle2,maxdimension=1, maxscale=5, printProgress=F)
+Diag1=ripsDiag(Circle1,maxdimension=1, maxscale=5, printProgress=FALSE)
+Diag2=ripsDiag(Circle2,maxdimension=1, maxscale=5, printProgress=FALSE)
 @
 and we compute the bottleneck distance and the $2$nd Wasserstein distance between the two diagrams.
 In the following code, the option \code{dimension=1} specifies that the distances between diagrams are computed using only one dimensional features (loops).
@@ -570,7 +570,7 @@ PlotTriangles = function(left,right){
    Y = (right-left)/2
    xlimit=c( 0, max(X+Y)*1.2 )
    ylimit=c(0, max(Y)*1.2)
-   plot(X,Y,type="n",xlab="",ylab="",xaxt="n",yaxt="n", xlim=xlimit, ylim=ylimit, frame.plot=F, main="Triangles")
+   plot(X,Y,type="n",xlab="",ylab="",xaxt="n",yaxt="n", xlim=xlimit, ylim=ylimit, frame.plot=FALSE, main="Triangles")
 	axis(1)
 	axis(2)
 	mtext("(Birth+Death)/2", side=1, line=2.5, cex=1)
@@ -611,11 +611,11 @@ Sil1=silhouette(Diag1, p=1, dimension=0, tseq )
    xlimit=c( 0, max(X+Y)*1.2 )
    ylimit=c(0, max(Y)*1.2)
 
-plot(tseq, Land1, col=4, type="l", lwd=2, xlim=xlimit, ylim=ylimit, axes=F, main="1st Landscape", xlab="", ylab="")
+plot(tseq, Land1, col=4, type="l", lwd=2, xlim=xlimit, ylim=ylimit, axes=FALSE, main="1st Landscape", xlab="", ylab="")
 axis(1)
 axis(2)
 
-plot(tseq, Sil1, col=4, type="l", lwd=2, xlim=xlimit, ylim=ylimit, axes=F, main="Silhouette p=1", xlab="", ylab="")
+plot(tseq, Sil1, col=4, type="l", lwd=2, xlim=xlimit, ylim=ylimit, axes=FALSE, main="Silhouette p=1", xlab="", ylab="")
 axis(1)
 axis(2)
 @
@@ -707,7 +707,7 @@ for (i in 1:n){
 Finally we use the $n$ landscapes to construct a 95\% confidence band for the mean landscape
 
 <<eq15d, echo=TRUE, eval=TRUE>>=
-bootLand=multipBootstrap(Lands,B=100,alpha=0.05, parallel=F)
+bootLand=multipBootstrap(Lands,B=100,alpha=0.05, parallel=FALSE)
 @
 
 which is plotted by the following code. See Figure \ref{fig:eq15f}.
@@ -798,7 +798,7 @@ The function \code{maxPersistence} can be parallelized (\code{parallel=TRUE}) an
 
 <<eq16c, echo=TRUE, eval=TRUE>>=
 maxKDE=maxPersistence(kde, parametersKDE, X, lim=cbind(Xlim, Ylim), 
-                   by=by, sublevel=F, B=B, alpha=alpha, parallel=TRUE, 
+                   by=by, sublevel=FALSE, B=B, alpha=alpha, parallel=TRUE, 
                    printProgress=TRUE, bandFUN="bootstrapBand")
 @
 
@@ -851,8 +851,8 @@ XX=rbind(X1,X2,X3)
 Then we use the function \code{clusterTree} to compute cluster trees using the k Nearest Neighbors density estimator (\code{k=100} nearest neighbors) and the Gaussian kernel density estimator, with smoothing parameter \code{h}.
 
 <<eq18b, echo=TRUE, eval=TRUE>>=
-Tree=clusterTree(XX, k=100, density="knn", printProgress=F)
-TreeKDE=clusterTree(XX, k=100, h=0.3, density="kde", printProgress=F)
+Tree=clusterTree(XX, k=100, density="knn", printProgress=FALSE)
+TreeKDE=clusterTree(XX, k=100, h=0.3, density="kde", printProgress=FALSE)
 @
 
 Note that, even when \code{kde} is used to estimate the density, we have to provide the option \code{k=100}, so that the algorithm can compute the connected components at each level of the density using a k Nearest Neighbors graph.
