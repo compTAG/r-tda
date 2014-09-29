@@ -31,12 +31,12 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
   if (ncol(X)<=3)
   {
   	computeGrid=.C("grid",FUNvaluesInput=as.double(gridValues),gridDimensionInput=as.integer(length(dim)),gridNumberInput=as.integer(dim),maxdimensionInput=as.integer(maxdimension),decompositionInput=as.character("5tetrahedra"),libraryInput=as.character(library),printInput=as.integer(printProgress),
-                   dup=TRUE, package="TDA")
+                   dup=FALSE, package="TDA")
   }
   else
   {
     computeGrid=.C("grid",FUNvaluesInput=as.double(gridValues),gridDimensionInput=as.integer(length(dim)),gridNumberInput=as.integer(dim),maxdimensionInput=as.integer(maxdimension),decompositionInput=as.character("barycenter"),libraryInput=as.character(library),printInput=as.integer(printProgress),
-                   dup=TRUE, package="TDA")
+                   dup=FALSE, package="TDA")
   }
 	
 #  if (library=="Dionysus")
