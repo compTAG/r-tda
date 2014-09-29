@@ -1,7 +1,7 @@
 gridDiag <-
 function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="Dionysus", printProgress=FALSE, diagLimit=NULL, ...){
 
-  if (library!="Dionysus" && library!="phat") stop("library should be either 'Dionysus' or 'phat'")   
+  if (library!="Dionysus" && library!="PHAT") stop("library should be either 'Dionysus' or 'PHAT'")   
 	if (!is.function(FUN)) stop("FUN should be a function")	
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
   if (!is.numeric(lim) || (length(lim) %% 2 != 0)) stop("lim should be either a matrix or a vector of even elements")
@@ -63,7 +63,7 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
 #   }	
 # 	Diag=cbind(dim,life2)
 # }
-#	if (library=="phat")
+#	if (library=="PHAT")
 #	{
     Diag=as.matrix(read.table("outputDionysus.txt"))
 #	}
