@@ -77,18 +77,20 @@ extern "C" {
 
 			std::vector< double > persDgmPoint(3);
 			std::map<Dimension, PDgm>::const_iterator dgmItr;
-			for (dgmItr = dgms.begin(); dgmItr->first <= *maxdimensionInput; ++dgmItr)
+			for (dgmItr = dgms.begin(); dgmItr != dgms.end(); ++dgmItr)
 			{
-				PDgm::const_iterator dgmPtItr;
-				for (dgmPtItr = (dgmItr->second).begin(); dgmPtItr != (dgmItr->second).end(); ++dgmPtItr)
-				{
-					persDgmPoint[0] = dgmItr->first;
-					persDgmPoint[1] = dgmPtItr->x();
-					persDgmPoint[2] = dgmPtItr->y();
-					persDgm.push_back( persDgmPoint );
-				}
+					if (dgmItr->first > *maxdimensionInput)
+							break;
+					PDgm::const_iterator dgmPtItr;
+					for (dgmPtItr = (dgmItr->second).begin(); dgmPtItr !=
+(dgmItr->second).end(); ++dgmPtItr)
+					{
+							persDgmPoint[0] = dgmItr->first;
+							persDgmPoint[1] = dgmPtItr->x();
+							persDgmPoint[2] = dgmPtItr->y();
+							persDgm.push_back( persDgmPoint );
+					}
 			}
-
 		}
 		if (libraryInput[0][0] == 'P')
 		{
