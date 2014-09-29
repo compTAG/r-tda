@@ -90,7 +90,7 @@ extern "C" {
 			}
 
 		}
-		if (libraryInput[0][0] == 'p')
+		if (libraryInput[0][0] == 'P')
 		{
 			persDgm = computePersistentPairsPhat(f);
 		}
