@@ -31,7 +31,7 @@ gridDiag(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE,
 a logical variable indicating if the Persistence Diagram should be computed for sublevel sets (\code{TRUE}) or superlevel sets (\code{FALSE}) of the function. Default is \code{TRUE}.
 }
   \item{library}{
-  User can compute the persistence diagram using either the library 'Dionysus', or 'phat'. Default is 'Dionysus'.
+  User can compute the persistence diagram using either the library 'Dionysus', or 'PHAT'. Default is 'Dionysus'.
 }
   \item{printProgress}{
 	if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
