@@ -12,10 +12,10 @@ gridDiag(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE,
 }
 \arguments{
   \item{X}{
-    an \eqn{n} by \eqn{k} matrix of coordinates, used by the function \code{FUN}, where \eqn{n} is the number of points stored in \code{X} and \eqn{k} is the dimension.
+    an \eqn{n} by \eqn{d} matrix of coordinates, used by the function \code{FUN}, where \eqn{n} is the number of points stored in \code{X} and \eqn{d} is the dimension of the space.
   }
   \item{FUN}{
-    a function whose inputs are 1) an \eqn{n} by \eqn{k} matrix of coordinates \code{X}, 2) an \eqn{m} by \eqn{d} matrix of coordinates \code{Grid}, 3) an optional smoothing parameter, and returns a numeric vector of length \eqn{m}. For example see \code{\link{distFct}},  \code{\link{kde}}, and \code{\link{dtm}}  which compute the distance function, the kernel density estimator and the distance to measure, over a grid of points using the input \code{X}. Note that \code{Grid} is not an input of \code{gridDiag}, but is automatically computed by the function using \code{lim}, and \code{by}. 
+    a function whose inputs are 1) an \eqn{n} by \eqn{d} matrix of coordinates \code{X}, 2) an \eqn{m} by \eqn{d} matrix of coordinates \code{Grid}, 3) an optional smoothing parameter, and returns a numeric vector of length \eqn{m}. For example see \code{\link{distFct}},  \code{\link{kde}}, and \code{\link{dtm}}  which compute the distance function, the kernel density estimator and the distance to measure, over a grid of points using the input \code{X}. Note that \code{Grid} is not an input of \code{gridDiag}, but is automatically computed by the function using \code{lim}, and \code{by}. 
   }  
   \item{lim}{
     a \eqn{2} by \eqn{d} matrix, where each column specifying the range of each dimension of the grid, over which the function \code{FUN} is evaluated.
@@ -24,14 +24,14 @@ gridDiag(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE,
     either a number or a vector of length \eqn{d} specifying space between points of the grid in each dimension. If a number is given, then same space is used in each dimension.
   }
   \item{maxdimension}{
-    a number that indicates the maximum dimension to compute persistent homology to. Default is \eqn{d-1}, which is (dimension of embedded space - 1).
+    a number that indicates the maximum dimension of the homological features to compute: 0 for connected components, 1 for loops, 2 for voids and so on. Default is \eqn{d-1}, which is (dimension of embedding space - 1).
   }
 
   \item{sublevel}{
 a logical variable indicating if the Persistence Diagram should be computed for sublevel sets (\code{TRUE}) or superlevel sets (\code{FALSE}) of the function. Default is \code{TRUE}.
 }
   \item{library}{
-  User can compute the persistence diagram using either the library 'Dionysus', or 'PHAT'. Default is 'Dionysus'.
+  The user can compute the persistence diagram using either the library 'Dionysus', or 'PHAT'. Default is 'Dionysus'.
 }
   \item{printProgress}{
 	if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
@@ -54,13 +54,15 @@ The function evaluates the function \code{FUN} over a grid. Then it constructs a
 \references{
 Brittany Fasy, Fabrizio Lecci, Alessandro Rinaldo, Larry Wasserman, Sivaraman Balakrishnan, and Aarti Singh. (2013), "Statistical Inference For Persistent Homology", (arXiv:1303.7117). To appear, Annals of Statistics.
 
-http://www.mrzv.org/software/dionysus/
+Dmitriy Morozov, "Dionysus, a C++ library for computing persistent homology". http://www.mrzv.org/software/dionysus/
+
+Ulrich Bauer, Michael Kerber, Jan Reininghaus, "PHAT, a software library for persistent homology". https://code.google.com/p/phat/
 }
 \author{
 Brittany T. Fasy, Jisu Kim, Fabrizio Lecci
 }
 \note{
- This function uses the C++ library Dionysus. See references.
+  The user can decide to use either the C++ library Dionysus or the C++ library PHAT. See references.
  Since dimension of simplicial complex from grid points in \eqn{R^d} is up to \eqn{d}, homology of dimension \eqn{>=d} is trivial. Hence setting \code{maxdimension} with values \eqn{>=d} is equivalent to \code{maxdimension=col(X)-1}.
 }
 

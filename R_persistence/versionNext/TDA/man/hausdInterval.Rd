@@ -46,7 +46,9 @@ Fabrizio Lecci
 \code{\link{bootstrapBand}}
 }
 \examples{
-print(0)
+X= circleUnif(1000)
+interval= hausdInterval(X, m=800)
+print(interval)
 }
 \keyword{nonparametric}
 \keyword{htest}

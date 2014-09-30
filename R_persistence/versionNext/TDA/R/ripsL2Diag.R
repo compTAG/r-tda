@@ -1,7 +1,10 @@
 ripsL2Diag <-
 function(X,maxdimension, maxscale, library="GUDHI", printProgress=FALSE){
 
-	if (library!="GUDHI" && library!="Dionysus") stop("library should be either 'Dionysus' or 'GUDHI'") 
+	if (library=="dionysus" || library=="DIONYSUS") library="Dionysus"
+	if (library=="gudhi" || library=="Gudhi") library="GUDHI"
+	if (library!="Dionysus" && library!="GUDHI") stop("library should be either 'Dionysus' or 'GUDHI'")   
+
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates") 
 	if (!is.vector(maxdimension) || length(maxdimension)!=1) stop("maxdimension should be an integer")
 	if (!is.vector(maxscale) || length(maxscale)!=1) stop("maxscale should be a number")

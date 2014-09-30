@@ -23,7 +23,7 @@ multipBootstrap(Y, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE)
     logical: if \code{TRUE} the bootstrap iterations are parallelized, using the library \code{parallel}.
 }
   \item{printProgress}{
-	logical: if TRUE a progress bar is printed. Default is \code{FALSE}.
+	logical: if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
 }
 }
 \details{

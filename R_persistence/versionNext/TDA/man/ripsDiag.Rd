@@ -41,7 +41,9 @@ See refereneces.
 \code{ripsDiag} returns an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc.). Second and third columns are Birth and Death of the features.
 }
 \references{
-http://www.mrzv.org/software/dionysus/
+Clement Maria, "GUDHI, Simplicial Complexes and Persistent Homology Packages". https://project.inria.fr/gudhi/software/}{\url{https://project.inria.fr/gudhi/software/.
+
+Dmitriy Morozov, "Dionysus, a C++ library for computing persistent homology". http://www.mrzv.org/software/dionysus/
 
 Herbert Edelsbrunner and John Harer (2010), Computational topology: an introduction. American Mathematical Society.
 
@@ -57,21 +59,19 @@ Brittany T. Fasy, Fabrizio Lecci and Clement Maria
 \examples{
 ## EXAMPLE 1: rips diagram for circles (euclidean distance)
 XX = circleUnif(30)
-DiagLim=5
+maxscale=5
 maxdimension=1
 ## note that the input XX is a point cloud
-Diag=ripsDiag(XX,maxdimension,DiagLim, printProgress=TRUE)
+Diag=ripsDiag(XX,maxdimension,maxscale, printProgress=TRUE)
 
 
 ## EXAMPLE 2: rips diagram with arbitrary distance
 ## distance matrix for triangle with edges of length: 1,2,4
 distX=matrix(c(0,1,2,1,0,4,2,4,0), ncol=3)
-
-#rips diagram using the distance matrix as input
-DiagLim=5
+maxscale=5
 maxdimension=1
 ## note that the input distXX is a distance matrix
-DiagTri=ripsDiag(distX,maxdimension,DiagLim, dist="arbitrary", printProgress=TRUE)
+DiagTri=ripsDiag(distX,maxdimension,maxscale, dist="arbitrary", printProgress=TRUE)
 #points with lifetime=0 are not shown. e.g. the loop of the triangle.
 print(DiagTri)
 }
