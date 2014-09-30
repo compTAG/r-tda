@@ -148,7 +148,7 @@ In Section \ref{sec:distances}, we describe how to compute some widely studied f
 
 One approach to TDA is persistent homology \citep{edelsbrunner2010computational}, a method for studying the homology at multiple scales simultaneously. More precisely, it provides a framework and efficient algorithms to quantify the evolution of the topology of a family of nested topological spaces. Given a real-valued function $f$, such as the ones described in Section~\ref{sec:distances}, persistent homology describes how the topology of the lower level sets $\{x: f(x) \leq t \}$ (or superlevel sets $\{x: f(x) \geq t \}$) changes as $t$ increases from $-\infty$ to $\infty$ (or decreases from $\infty$ to $-\infty$). 
 This information is encoded in the persistence diagram, a multiset of points in the plane, each corresponding to the birth and death of a homological feature that existed for some interval of $t$.
-In Section \ref{sec:persistent}, we describe how to compute persistence diagrams of sublevel sets (or superlevel sets) of functions evaluated over a grid of points, using \code{gridDiag}, and how to compute the persistence diagram of the Rips filtration built on top of a point cloud, using \code{ripsDiag}. Our implementation relies on two \proglang{C++} libraries: \pkg{GUDHI}, developed by the Geometrica Group at INRIA and available at http://project.inria.fr/gudhi/software/; \pkg{Dionysus}, developed by Dmitriy Morozov and available at http://mrzv.org/software/dionysus/.
+In Section \ref{sec:persistent}, we describe how to compute persistence diagrams of sublevel sets (or superlevel sets) of functions evaluated over a grid of points, using \code{gridDiag}, and how to compute the persistence diagram of the Rips filtration built on top of a point cloud, using \code{ripsDiag}. Our implementation relies on three \proglang{C++} libraries: \pkg{GUDHI} \citep{gudhi_stpcoh}, \pkg{Dionysus} \citep{dionysus_C}, and \pkg{PHAT} \cite{phat_C}.
 
 One of the key challenges in persistent homology is to find a way to isolate the points of the persistence diagram representing the topological noise. In \cite{fasy2014statistical}, \cite{chazal2013stochastic}, and \cite{chazal2014robust}, we propose several statistical methods to construct confidence sets for persistence diagrams and other summary functions that allow us to separate topological signal from topological noise.
 Some of these methods are implemented and described in Section \ref{sec:persistent}.
@@ -302,7 +302,7 @@ The following code computes a 90\% confidence band for $\mathbb{E}[\hat p_h]$, s
 
 <<eq9, echo=TRUE, eval=TRUE>>=
 band=bootstrapBand(X=X, FUN=kde, Grid=Grid, B=100, 
-                   parallel=FALSE, alpha=0.1, h=h)
+                   parallel=F, alpha=0.1, h=h)
 @
 
 % PLOT START
@@ -366,7 +366,7 @@ The other inputs are the features of the grid over which the \code{kde} is evalu
 
 <<eq11, echo=TRUE, eval=TRUE>>=
 Diag = gridDiag( X=X, FUN=kde, h=0.3, lim=cbind(Xlim,Ylim), by=by, 
-                 sublevel=FALSE, printProgress=FALSE ) 
+                 sublevel=F, printProgress=F ) 
 @
 
 
@@ -411,8 +411,8 @@ The function \code{plot} for the class \code{"diagram"} provide the options of r
 \begin{center}
 <<eq11c, echo=TRUE, eval=TRUE,  fig=TRUE, width=6, height=3>>=
 par(mfrow=c(1,2), mai=c(0.8,0.8,0.3,0.1))
-plot(Diag, rotated=TRUE, band=band$width, main="Rotated Diagram")
-plot(Diag, barcode=TRUE,  main="Barcode")
+plot(Diag, rotated=T, band=band$width, main="Rotated Diagram")
+plot(Diag, barcode=T,  main="Barcode")
 @
 \end{center}
 \caption{Rotated Persistence Diagram and Barcode}
@@ -456,7 +456,7 @@ maxdimension=1       # components and loops
 and we generate the persistence diagram:
 <<eq12c, echo=TRUE, eval=TRUE>>=
 Diag=ripsDiag(X=Circles, maxdimension, maxscale,
-              library="GUDHI", printProgress=FALSE)
+              library="GUDHI", printProgress=F)
 @
 Alternatively, using the option \code{dist="arbitrary"} in \code{ripsDiag()}, the input \code{X} can be an $n \times n$ matrix of distances.
 This option is useful when the user wants to consider a Rips filtration constructed using an arbitrary distance and is currently only available for the option \code{library="Dionysus"}.\\
@@ -488,8 +488,8 @@ The \pkg{TDA} package includes the functions \code{bottleneck} and \code{wassers
 
 We generate two persistence diagrams of the Rips filtrations built on top of the two (separate) circles of the previous example,
 <<eq13, echo=TRUE, eval=TRUE>>=
-Diag1=ripsDiag(Circle1,maxdimension=1, maxscale=5, printProgress=FALSE)
-Diag2=ripsDiag(Circle2,maxdimension=1, maxscale=5, printProgress=FALSE)
+Diag1=ripsDiag(Circle1,maxdimension=1, maxscale=5, printProgress=F)
+Diag2=ripsDiag(Circle2,maxdimension=1, maxscale=5, printProgress=F)
 @
 and we compute the bottleneck distance and the $2$nd Wasserstein distance between the two diagrams.
 In the following code, the option \code{dimension=1} specifies that the distances between diagrams are computed using only one dimensional features (loops).
@@ -570,7 +570,7 @@ PlotTriangles = function(left,right){
    Y = (right-left)/2
    xlimit=c( 0, max(X+Y)*1.2 )
    ylimit=c(0, max(Y)*1.2)
-   plot(X,Y,type="n",xlab="",ylab="",xaxt="n",yaxt="n", xlim=xlimit, ylim=ylimit, frame.plot=FALSE, main="Triangles")
+   plot(X,Y,type="n",xlab="",ylab="",xaxt="n",yaxt="n", xlim=xlimit, ylim=ylimit, frame.plot=F, main="Triangles")
 	axis(1)
 	axis(2)
 	mtext("(Birth+Death)/2", side=1, line=2.5, cex=1)
@@ -611,11 +611,11 @@ Sil1=silhouette(Diag1, p=1, dimension=0, tseq )
    xlimit=c( 0, max(X+Y)*1.2 )
    ylimit=c(0, max(Y)*1.2)
 
-plot(tseq, Land1, col=4, type="l", lwd=2, xlim=xlimit, ylim=ylimit, axes=FALSE, main="1st Landscape", xlab="", ylab="")
+plot(tseq, Land1, col=4, type="l", lwd=2, xlim=xlimit, ylim=ylimit, axes=F, main="1st Landscape", xlab="", ylab="")
 axis(1)
 axis(2)
 
-plot(tseq, Sil1, col=4, type="l", lwd=2, xlim=xlimit, ylim=ylimit, axes=FALSE, main="Silhouette p=1", xlab="", ylab="")
+plot(tseq, Sil1, col=4, type="l", lwd=2, xlim=xlimit, ylim=ylimit, axes=F, main="Silhouette p=1", xlab="", ylab="")
 axis(1)
 axis(2)
 @
@@ -707,7 +707,7 @@ for (i in 1:n){
 Finally we use the $n$ landscapes to construct a 95\% confidence band for the mean landscape
 
 <<eq15d, echo=TRUE, eval=TRUE>>=
-bootLand=multipBootstrap(Lands,B=100,alpha=0.05, parallel=FALSE)
+bootLand=multipBootstrap(Lands,B=100,alpha=0.05, parallel=F)
 @
 
 which is plotted by the following code. See Figure \ref{fig:eq15f}.
@@ -798,7 +798,7 @@ The function \code{maxPersistence} can be parallelized (\code{parallel=TRUE}) an
 
 <<eq16c, echo=TRUE, eval=TRUE>>=
 maxKDE=maxPersistence(kde, parametersKDE, X, lim=cbind(Xlim, Ylim), 
-                   by=by, sublevel=FALSE, B=B, alpha=alpha, parallel=TRUE, 
+                   by=by, sublevel=F, B=B, alpha=alpha, parallel=TRUE, 
                    printProgress=TRUE, bandFUN="bootstrapBand")
 @
 
@@ -851,8 +851,8 @@ XX=rbind(X1,X2,X3)
 Then we use the function \code{clusterTree} to compute cluster trees using the k Nearest Neighbors density estimator (\code{k=100} nearest neighbors) and the Gaussian kernel density estimator, with smoothing parameter \code{h}.
 
 <<eq18b, echo=TRUE, eval=TRUE>>=
-Tree=clusterTree(XX, k=100, density="knn", printProgress=FALSE)
-TreeKDE=clusterTree(XX, k=100, h=0.3, density="kde", printProgress=FALSE)
+Tree=clusterTree(XX, k=100, density="knn", printProgress=F)
+TreeKDE=clusterTree(XX, k=100, h=0.3, density="kde", printProgress=F)
 @
 
 Note that, even when \code{kde} is used to estimate the density, we have to provide the option \code{k=100}, so that the algorithm can compute the connected components at each level of the density using a k Nearest Neighbors graph.
