@@ -18,7 +18,7 @@ bootstrapBand(X, FUN, Grid, B = 30, alpha = 0.05, parallel = FALSE,
     a function whose inputs are an \eqn{n} by \eqn{d} matrix of coordinates \code{X}, an \eqn{m} by \eqn{d} matrix of coordinates \code{Grid} and returns a numeric vector of length \eqn{m}. For example see \code{\link{distFct}},  \code{\link{kde}}, and \code{\link{dtm}}  which compute the distance function, the kernel density estimator and the distance to measure over a grid of points, using the input \code{X}.
 }
   \item{Grid}{
-an \eqn{m} by \eqn{d} matrix of coordinates, where \eqn{m} is the number of points in the grid.
+an \eqn{m} by \eqn{d} matrix of coordinates, where \eqn{m} is the number of points in the grid, at which \code{FUN} is evaluated.
 }
   \item{B}{
   the number of bootstrap iterations.
