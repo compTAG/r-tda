@@ -63,6 +63,7 @@ a logical variable indicating if the Persistence Diagram should be computed for 
 }
 \value{
 Returns the (1-\code{alpha}) quantile of the values computed by the bootstrap algorithm. 
+}
 
 \references{
 Chazal F, Fasy BT, Lecci F, Michel B, Rinaldo A, Wasserman L (2014). "Robust Topological Inference: Distance-To-a-Measure and Kernel Distance." Technical Report.	
