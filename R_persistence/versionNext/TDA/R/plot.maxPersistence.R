@@ -1,5 +1,5 @@
 plot.maxPersistence<-
-function(x, features="dimension",...){
+function(x, features="dimension", colorBand=alpha(2,0.1), colorBorder=NULL , ...){
 	
 	parameter=x$parameters
 	Pers=x$Persistence
@@ -21,6 +21,8 @@ function(x, features="dimension",...){
 	axis(1)
 	axis(2)
 	
+	eps=pmin(eps, rep(1.1*maxPers/2, length(eps)) )
+	polygon(c(parameter, parameter[Kseq:1]), c(2*eps, rep(0,Kseq)), col=colorBand, border=colorBorder)
 	
 	for (i in 1:Kseq){	
 		
@@ -48,8 +50,6 @@ function(x, features="dimension",...){
 		if (x$bandFUN=="bootstrapBand" || x$dimension==0) points(parameter[i], 1.2*maxPers, col=1, pch=16, lwd=2)	
 	}
 	
-	eps=pmin(eps, rep(1.1*maxPers/2, length(eps)) )
-	polygon(c(parameter, parameter[Kseq:1]), c(2*eps, rep(0,Kseq)), col=alpha(2,0.1))
 	
 	if (x$bandFUN=="bootstrapBand" || x$dimension==0) abline(h=1.18*maxPers, lty=2)
 	

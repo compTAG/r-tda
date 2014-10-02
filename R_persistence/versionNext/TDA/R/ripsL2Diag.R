@@ -13,9 +13,9 @@ function(X,maxdimension, maxscale, library="GUDHI", printProgress=FALSE){
 
 	if (library=="Dionysus")
 	{
-		write.table(X,"inputDionysus.txt", row.names=F, col.names=F, sep=" " )	
+		write.table(X,"inputTDA.txt", row.names=F, col.names=F, sep=" " )	
 		out1=.C("rips", as.integer(maxdimension+1), as.double(maxscale), as.integer(printProgress) ,dup=FALSE, package="TDA")
-		Diag=as.matrix(read.table("outputDionysus.txt", sep=""))		
+		Diag=as.matrix(read.table("outputTDA.txt", sep=""))		
 	} else{
 		max_num_pairs=5000  # to be added as an option
 		points=as.vector(t(X))
@@ -31,7 +31,7 @@ function(X,maxdimension, maxscale, library="GUDHI", printProgress=FALSE){
 	                                       as.double(diagram),
 	                                       as.integer(printProgress),
 	                                       dup=FALSE, package="TDA")
-		Diag=as.matrix(read.table("outputDionysus.txt", sep=""))
+		Diag=as.matrix(read.table("outputTDA.txt", sep=""))
 	}
 	
 		N=dim(Diag)[1]
