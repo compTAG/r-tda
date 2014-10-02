@@ -43,7 +43,7 @@ function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRU
 			
 		if (B>0){
 			if (bandFUN=="bootstrapDiagram"){
-				eps[i] = bootstrapDiagram(X=X, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, B=B, alpha=alpha, distance=distance, dimension=dimension, p=p, printProgress=FALSE, parameters[i])
+				eps[i] = bootstrapDiagram(X=X, FUN=FUN, lim=lim, by=by, sublevel=sublevel, library=library, B=B, alpha=alpha, distance=distance, dimension=dimension, p=p, printProgress=FALSE, parameters[i])
 				selectDimension=which(Pers[[i]][,1]==dimension)
 				numberSignificant[i]=sum( Pers[[i]][selectDimension,2]> (2*eps[i]) )
 				significantPers[i]= sum(pmax(0, Pers[[i]][selectDimension,2]-(2*eps[i])))
