@@ -1,5 +1,5 @@
 plot.maxPersistence<-
-function(x, features="dimension", colorBand=alpha(2,0.1), colorBorder=NULL , ...){
+function(x, features="dimension", colorBand="pink", colorBorder=NA , ...){
 	
 	parameter=x$parameters
 	Pers=x$Persistence
@@ -22,7 +22,7 @@ function(x, features="dimension", colorBand=alpha(2,0.1), colorBorder=NULL , ...
 	axis(2)
 	
 	eps=pmin(eps, rep(1.1*maxPers/2, length(eps)) )
-	polygon(c(parameter, parameter[Kseq:1]), c(2*eps, rep(0,Kseq)), col=colorBand, border=colorBorder)
+	polygon(c(parameter, parameter[Kseq:1]), c(2*eps, rep(0,Kseq)), col=colorBand, border=colorBorder, lwd=1.5)
 	
 	for (i in 1:Kseq){	
 		

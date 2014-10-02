@@ -1,5 +1,5 @@
 bootstrapDiagram <- 
-function(X, FUN, lim, by, maxdimension=dimension, sublevel=TRUE, library="Dionysus", B=30, alpha=0.05, distance="bottleneck", dimension=1, p=1, printProgress=FALSE, ...){
+function(X, FUN, lim, by, sublevel=TRUE, library="Dionysus", B=30, alpha=0.05, distance="bottleneck", dimension=1, p=1, printProgress=FALSE, ...){
      
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
 	if (class(FUN)!="function") stop("FUN should be function")
@@ -18,7 +18,8 @@ function(X, FUN, lim, by, maxdimension=dimension, sublevel=TRUE, library="Dionys
 
      X=as.matrix(X)
      n = nrow(X)
-     
+
+	maxdimension=dimension
      parallel=FALSE
      
      Diag=gridDiag(X=X, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, printProgress=FALSE, diagLimit=NULL, ...)
