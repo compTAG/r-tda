@@ -100,7 +100,7 @@ extern "C" {
 
 		// Output persistent diagram
 		std::ofstream outfile;
-		outfile.open("outputDionysus.txt");
+		outfile.open("outputTDA.txt");
 		std::vector< std::vector< double > >::const_iterator dgmIdx;
 		for (dgmIdx = persDgm.begin(); dgmIdx != persDgm.end(); ++dgmIdx)
 		{
@@ -118,8 +118,8 @@ extern "C" {
 		DistanceType            max_distance;
 		std::string             infilename, diagram_name;
 		
-		infilename = "inputDionysus.txt";
-		diagram_name="outputDionysus.txt";
+		infilename = "inputTDA.txt";
+		diagram_name="outputTDA.txt";
 		skeleton= dimInput[0];
 		max_distance= maxInput[0];
 		
@@ -209,8 +209,8 @@ extern "C" {
 		DistanceTypeA            max_distance;
 		std::string             infilename, diagram_name;
 
-		infilename = "inputDionysus.txt";
-		diagram_name="outputDionysus.txt";
+		infilename = "inputTDA.txt";
+		diagram_name="outputTDA.txt";
 		skeleton= dimInput[0];
 		max_distance= maxInput[0];
 		
@@ -483,7 +483,7 @@ extern "C" {
 
 	{
 	  bool printstatus=printInput[0];  
-	  std::string diagram_name="outputDionysus.txt";
+	  std::string diagram_name="outputTDA.txt";
 
 
 	  // Turn the input points into a range of points

@@ -7,8 +7,9 @@ Bootstrapped Confidence Set for a Persistence Diagram, using the Bottleneck Dist
 \code{bootstrapDiagram} computes a \code{(1-alpha)} confidence set for the Persistence Diagram of a filtration of sublevel sets (or superlevel sets) of a function evaluated over a grid of points. The function returns the (\code{1-alpha}) quantile of \code{B} bottleneck distances (or Wasserstein distances), computed in \code{B} iterations of the bootstrap algorithm. The method is discussed in the 1st reference. 
 }
 \usage{
-bootstrapDiagram(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE, B=30,
-         alpha=0.05, distance="bottleneck", dimension=1, p=1, printProgress = FALSE, ...)
+bootstrapDiagram(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE, 
+         library="Dionysus", B=30, alpha=0.05, distance="bottleneck", dimension=1,
+         p=1, printProgress = FALSE, ...)
 }
 \arguments{
 
@@ -33,7 +34,9 @@ bootstrapDiagram(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE,
   \item{sublevel}{
 a logical variable indicating if the Persistence Diagram should be computed for sublevel sets (\code{TRUE}) or superlevel sets (\code{FALSE}) of the function. Default is \code{TRUE}.
 }
-
+  \item{library}{
+  The user can compute the persistence diagram using either the library 'Dionysus', or 'PHAT'. Default is 'Dionysus'.
+}
   \item{B}{
   the number of bootstrap iterations.
 }

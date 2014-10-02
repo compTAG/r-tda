@@ -45,9 +45,9 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
 	
 #  if (library=="Dionysus")
 #  {
-#    out=read.table("outputDionysus.txt", sep="\n")
+#    out=read.table("outputTDA.txt", sep="\n")
 #
-#   ##convert outputDionysus.txt in matrix format
+#   ##convert outputTDA.txt in matrix format
 # 	vecOut=as.vector(out$V1)
 # 	whichDimens=c((1:length(vecOut))[!grepl(" ",vecOut)], length(vecOut)+1)
 # 	dim=NULL
@@ -69,7 +69,7 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
 # }
 #	if (library=="PHAT")
 #	{
-    Diag=as.matrix(read.table("outputDionysus.txt"))
+    Diag=as.matrix(read.table("outputTDA.txt"))
 #	}
 	  
   if (nrow(Diag)>0) {

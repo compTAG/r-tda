@@ -7,9 +7,9 @@ function(distX,maxdimension, maxscale, printProgress=FALSE){
 	if (!is.logical(printProgress)) stop("printProgress should be logical")
 
 		
-	write.table(distX,"inputDionysus.txt", row.names=F, col.names=F, sep=" " )	
+	write.table(distX,"inputTDA.txt", row.names=F, col.names=F, sep=" " )	
 	out1=.C("ripsArbit", as.integer(maxdimension+1), as.double(maxscale), as.integer(printProgress), dup=FALSE, package="TDA")
-	Diag=as.matrix(read.table("outputDionysus.txt", sep=""))
+	Diag=as.matrix(read.table("outputTDA.txt", sep=""))
 	
 	N=dim(Diag)[1]
 	remove=NULL  # we remove points with lifetime=0
