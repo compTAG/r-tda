@@ -101,7 +101,7 @@ function(x, diagLim=NULL, dimension=NULL, col=NULL, rotated=FALSE, barcode=FALSE
 		} else{
 
 			if (add==FALSE) plot(0, 0,type="n", axes=F, xlim=diagLim, ylim=diagLim, xlab=" ", ylab=" ", ...)
-			if (!is.null(band)) 	polygon(c(0,diagLim[2]+1,diagLim[2]+1,0),c(0,diagLim[2]+1, diagLim[2]+1+band,band),col=colorBand, lwd=1.5, border=colorBorder)
+			if (!is.null(band)) 	polygon(c(diagLim[1]-1,diagLim[2]+1,diagLim[2]+1,diagLim[1]-1),c(diagLim[1]-1,diagLim[2]+1, diagLim[2]+1+band,diagLim[1]-1+band),col=colorBand, lwd=1.5, border=colorBorder)
 
 
 			points(x[,2],x[,3],pch=symb,lwd=2, cex=1, col=col)
