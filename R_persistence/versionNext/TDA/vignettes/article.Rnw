@@ -78,8 +78,8 @@
 \fvset{listparameters={\setlength{\topsep}{0pt}}}
 \renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
 
-\author{Brittany T. Fasy, Jisu Kim, Cl\'ement Maria \and Fabrizio Lecci \\ \small{In collaboration with the CMU TopStat Group}}
-\Plainauthor{Brittany Terese Fasy, Jisu Kim, Cl\'ement Maria, Fabrizio Lecci}
+\author{Brittany T. Fasy, Jisu Kim, Fabrizio Lecci \and Cl\'ement Maria \\ \small{In collaboration with the CMU TopStat Group}}
+\Plainauthor{Brittany Terese Fasy, Jisu Kim, Fabrizio Lecci, Cl\'ement Maria}
 
 \title{Introduction to the \proglang{R} package \pkg{TDA}}
 \Plaintitle{Introduction to the R package TDA}
