@@ -91,8 +91,9 @@ topological information about the underlying space, such as the distance functio
 the kNN density estimator, the kernel density estimator, and the kernel distance.
 The salient topological features of the sublevel sets (or superlevel sets) of these functions
 can be quantified with persistent homology. We provide an \proglang{R} interface
-for the efficient algorithms of the \proglang{C++} libraries \pkg{GUDHI} and \pkg{Dionysus}, including a function for 
-the persistent homology of the Rips filtration, and for the persistent homology of sublevel
+for the efficient algorithms of the \proglang{C++} libraries \pkg{GUDHI}, \pkg{Dionysus} and \pkg{PHAT}, 
+including a function for the persistent homology of the Rips filtration, 
+and one for the persistent homology of sublevel
 sets (or superlevel sets) of arbitrary functions evaluated over a grid of points.
 The significance of the features in the resulting persistence diagrams can be 
 analyzed with functions that implement the methods discussed in \cite{fasy2014statistical},
@@ -357,7 +358,7 @@ We provide an informal description of the implemented methods of persistent homo
 %%%%%%%%%%%%%%%%%%%%%%%
 In this section, we describe how to use the \code{gridDiag} function to compute the persistent homology of sublevel (and superlevel) sets of the functions described in Section \ref{sec:distances}. 
 The function \code{gridDiag} evaluates a given real valued function over a triangulated grid, constructs a filtration of simplices using the values of the function, and computes the persistent homology of the filtration. From version 1.2, \code{gridDiag} works in arbitrary dimension.
-The core of the function is written in \proglang{C++} and uses the functionalities of the \pkg{Dionysus} library.
+The core of the function is written in \proglang{C++} and the user can choose to compute persistence diagram using either the \pkg{Dionysus} library or the \pkg{PHAT} library.
 
 The following code computes the persistent homology of the superlevel sets (\code{sublevel=FALSE}) of the kernel density estimator (\code{FUN=kde}, \code{h=0.3}) using the point cloud stored in the matrix~\code{X} from the previous example.
 The same code would work for the other functions defined in Section \ref{sec:distances} (it is sufficient to replace \code{kde} and its smoothing parameter \code{h} with another function and its parameters). 
@@ -366,7 +367,7 @@ The other inputs are the features of the grid over which the \code{kde} is evalu
 
 <<eq11, echo=TRUE, eval=TRUE>>=
 Diag = gridDiag( X=X, FUN=kde, h=0.3, lim=cbind(Xlim,Ylim), by=by, 
-                 sublevel=F, printProgress=F ) 
+                 sublevel=F, library="Dionysus", printProgress=FALSE ) 
 @
 
 
