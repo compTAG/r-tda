@@ -8,11 +8,20 @@ This function plots an object of class \code{maxPersistence}, for the selection 
 For each value of the smoothing parameter, the plot shows the number of detected features, their persistence, and a bootstrap confidence band.
 }
 \usage{
-\method{plot}{maxPersistence}(x, features="dimension", ...)
+\method{plot}{maxPersistence}(x, features="dimension", colorBand="pink", colorBorder=NA, ...)
 }
 \arguments{
   \item{x}{
     an object of class \code{maxPersistence}, as returned by the functions \code{\link{maxPersistence}}
+}
+ \item{features}{
+    string: if "all" then all the features are plotted; if "dimension" then only the features of the dimension used to compute the confidence band are plotted.
+}
+\item{colorBand}{
+    the color for filling the confidence band. The default is "pink". (NA leaves the band unfilled)
+}
+  \item{colorBorder}{
+    the color to draw the border of the confidence band. The default is NA and omits the border.
 }
   \item{\dots}{
     additional graphical parameters.

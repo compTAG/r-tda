@@ -7,9 +7,9 @@ Bootstrapped Confidence Set for a Persistence Diagram, using the Bottleneck Dist
 \code{bootstrapDiagram} computes a \code{(1-alpha)} confidence set for the Persistence Diagram of a filtration of sublevel sets (or superlevel sets) of a function evaluated over a grid of points. The function returns the (\code{1-alpha}) quantile of \code{B} bottleneck distances (or Wasserstein distances), computed in \code{B} iterations of the bootstrap algorithm. The method is discussed in the 1st reference. 
 }
 \usage{
-bootstrapDiagram(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE, 
-         library="Dionysus", B=30, alpha=0.05, distance="bottleneck", dimension=1,
-         p=1, printProgress = FALSE, ...)
+bootstrapDiagram(X, FUN, lim, by, sublevel = TRUE, library="Dionysus",
+                 B=30, alpha=0.05, distance="bottleneck", dimension=1,
+                 p=1, printProgress = FALSE, ...)
 }
 \arguments{
 
@@ -27,9 +27,6 @@ bootstrapDiagram(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE,
 
   \item{by}{
     either a number or a vector of length \eqn{d} specifying space between points of the grid in each dimension. If a number is given, then same space is used in each dimension.
-  }
-  \item{maxdimension}{
-    a number that indicates the maximum dimension of the homological features to compute: 0 for connected components, 1 for loops, 2 for voids and so on. Default is \eqn{d-1}, which is (dimension of embedding space - 1).
   }
   \item{sublevel}{
 a logical variable indicating if the Persistence Diagram should be computed for sublevel sets (\code{TRUE}) or superlevel sets (\code{FALSE}) of the function. Default is \code{TRUE}.
@@ -55,7 +52,6 @@ a logical variable indicating if the Persistence Diagram should be computed for 
   \item{printProgress}{
 	if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
 }
-
   \item{...}{
 	additional parameters for the function \code{FUN}.
 }
