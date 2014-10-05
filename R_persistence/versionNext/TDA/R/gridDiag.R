@@ -45,31 +45,31 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
 	
 #  if (library=="Dionysus")
 #  {
-#    out=read.table("outputTDA.txt", sep="\n")
-#
-#   ##convert outputTDA.txt in matrix format
-# 	vecOut=as.vector(out$V1)
-# 	whichDimens=c((1:length(vecOut))[!grepl(" ",vecOut)], length(vecOut)+1)
-# 	dim=NULL
-#   if (length(whichDimens)>1)
-#   {
-#   	for (i in 1:(length(whichDimens)-1)){
-#   		dim=c(dim, rep(as.numeric(vecOut[whichDimens[i]]), whichDimens[i+1]-whichDimens[i]-1))
-#   		}
-#   }
-# 	out2=data.frame(dim,life=out[grep(" ",vecOut),1])
-# 	life2=matrix(NA, ncol=2, nrow=length(dim))
-#   if (length(dim)>0)
-#   {
-#   	for (i in 1:length(dim)){
-#   		life2[i,]=as.numeric(unlist(strsplit(as.character(out2[i,2]), " "))	)
-#   		}
-#   }	
-# 	Diag=cbind(dim,life2)
+    out=read.table("outputTDA.txt", sep="\n")
+
+   ##convert outputTDA.txt in matrix format
+ 	vecOut=as.vector(out$V1)
+ 	whichDimens=c((1:length(vecOut))[!grepl(" ",vecOut)], length(vecOut)+1)
+ 	dim=NULL
+   if (length(whichDimens)>1)
+   {
+   	for (i in 1:(length(whichDimens)-1)){
+   		dim=c(dim, rep(as.numeric(vecOut[whichDimens[i]]), whichDimens[i+1]-whichDimens[i]-1))
+   		}
+   }
+ 	out2=data.frame(dim,life=out[grep(" ",vecOut),1])
+ 	life2=matrix(NA, ncol=2, nrow=length(dim))
+   if (length(dim)>0)
+   {
+   	for (i in 1:length(dim)){
+   		life2[i,]=as.numeric(unlist(strsplit(as.character(out2[i,2]), " "))	)
+   		}
+   }	
+ 	Diag=cbind(dim,life2)
 # }
 #	if (library=="PHAT")
 #	{
-    Diag=as.matrix(read.table("outputTDA.txt"))
+#    Diag=as.matrix(read.table("outputTDA.txt"))
 #	}
 	  
   if (nrow(Diag)>0) {

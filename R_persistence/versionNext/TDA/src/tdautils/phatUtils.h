@@ -13,7 +13,7 @@
 #include <phat/boundary_matrix.h>
 
 template<typename Flt>
-std::vector< std::vector< double > > computePersistentPairsPhat(Flt f)
+std::vector< std::vector< std::vector< double > > > computePersistentPairsPhat(Flt f, int maxDimension)
 {
 
 	// If phat is used, convert from Dionysus to phat
@@ -51,16 +51,17 @@ std::vector< std::vector< double > > computePersistentPairsPhat(Flt f)
 
 
 	// Save persistent diagram
-	std::vector< std::vector< double > > persDgm;
-	std::vector< double > persDgmPoint(3);
+	std::vector< std::vector< std::vector< double > > > persDgm(maxDimension+1);
+	std::vector< double > persDgmPoint(2);
+	unsigned int persDim;
 	for( phat::index idx = 0; idx < pairs.get_num_pairs(); idx++ )
 	{
-		persDgmPoint[1] = simplex_map_inv.at(pairs.get_pair( idx ).first).data();
-		persDgmPoint[2] = simplex_map_inv.at(pairs.get_pair( idx ).second).data();
-		if (persDgmPoint[1] < persDgmPoint[2])
+		persDim = simplex_map_inv.at(pairs.get_pair( idx ).first).dimension();
+		persDgmPoint[0] = simplex_map_inv.at(pairs.get_pair( idx ).first).data();
+		persDgmPoint[1] = simplex_map_inv.at(pairs.get_pair( idx ).second).data();
+		if (persDgmPoint[0] < persDgmPoint[1] && persDim <= maxDimension )
 		{
-			persDgmPoint[0] = simplex_map_inv.at(pairs.get_pair( idx ).first).dimension();
-			persDgm.push_back( persDgmPoint );
+			persDgm[ persDim ].push_back( persDgmPoint );
 		}
 	}
 	return persDgm;
