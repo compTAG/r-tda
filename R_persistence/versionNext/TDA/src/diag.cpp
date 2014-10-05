@@ -61,10 +61,10 @@ extern "C" {
 
 
 		// Compute persistent homology from sorted simplicial complex
-		std::vector< std::vector< double > > persDgm;
+		std::map<Dimension, PDgm> dgms;
+		std::vector< std::vector< std::vector< double > > > persDgm;
 		if (libraryInput[0][0] == 'D')
 		{
-			std::map<Dimension, PDgm> dgms;
 
 			Persistence p(f); // initialize persistence
 			p.pair_simplices(printstatus); // pair simplices
@@ -75,36 +75,46 @@ extern "C" {
 						  evaluate_through_map(m, Smplx::DataEvaluator()),
 						  evaluate_through_map(m, Smplx::DimensionExtractor()));
 
-			std::vector< double > persDgmPoint(3);
-			std::map<Dimension, PDgm>::const_iterator dgmItr;
-			for (dgmItr = dgms.begin(); dgmItr != dgms.end(); ++dgmItr)
-			{
-					if (dgmItr->first > *maxdimensionInput)
-							break;
-					PDgm::const_iterator dgmPtItr;
-					for (dgmPtItr = (dgmItr->second).begin(); dgmPtItr !=
-(dgmItr->second).end(); ++dgmPtItr)
-					{
-							persDgmPoint[0] = dgmItr->first;
-							persDgmPoint[1] = dgmPtItr->x();
-							persDgmPoint[2] = dgmPtItr->y();
-							persDgm.push_back( persDgmPoint );
-					}
-			}
+			//std::vector< double > persDgmPoint(3);
+			//std::map<Dimension, PDgm>::const_iterator dgmItr;
+			//for (dgmItr = dgms.begin(); dgmItr != dgms.end(); ++dgmItr)
+			//{
+			//		if (dgmItr->first > *maxdimensionInput)
+			//				break;
+			//		PDgm::const_iterator dgmPtItr;
+			//		for (dgmPtItr = (dgmItr->second).begin(); dgmPtItr != (dgmItr->second).end(); ++dgmPtItr)
+			//		{
+			//				persDgmPoint[0] = dgmItr->first;
+			//				persDgmPoint[1] = dgmPtItr->x();
+			//				persDgmPoint[2] = dgmPtItr->y();
+			//				persDgm.push_back( persDgmPoint );
+			//		}
+			//}
 		}
 		if (libraryInput[0][0] == 'P')
 		{
-			persDgm = computePersistentPairsPhat(f);
+			persDgm = computePersistentPairsPhat(f, *maxdimensionInput);
 		}
 
 
 		// Output persistent diagram
 		std::ofstream outfile;
 		outfile.open("outputTDA.txt");
-		std::vector< std::vector< double > >::const_iterator dgmIdx;
-		for (dgmIdx = persDgm.begin(); dgmIdx != persDgm.end(); ++dgmIdx)
+		for (int dgmsIdx=0; dgmsIdx<= *maxdimensionInput; ++dgmsIdx)
 		{
-			outfile << (*dgmIdx)[0] << " " << (*dgmIdx)[1] << " " << (*dgmIdx)[2] << std::endl;
+			outfile << dgmsIdx << std::endl;
+			if (libraryInput[0][0] == 'D')
+			{
+				outfile << dgms[dgmsIdx] << std::endl; // print i-dim diagram
+			}
+			if (libraryInput[0][0] == 'P')
+			{
+				std::vector< std::vector< double > >::const_iterator persdgmIdx;
+				for (persdgmIdx = persDgm[ dgmsIdx ].begin(); persdgmIdx != persDgm[ dgmsIdx ].end(); ++persdgmIdx)
+				{
+					outfile << (*persdgmIdx)[0] << " " << (*persdgmIdx)[1] << std::endl;
+				}
+			}
 		}
 		outfile.close();
 	}
