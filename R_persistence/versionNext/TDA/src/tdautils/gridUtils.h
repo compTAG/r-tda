@@ -37,7 +37,7 @@ typedef         OffsetBeginMap<Fltr, Persistence,
 
 
 // add a single edge to the filtration
-void addEdge(Fltr& filtr, const std::vector<double> fcnvalues, 
+void addEdge(Fltr& filtr, const double * const fcnvalues, 
             int vert01, int vert02)
 {
      VertexVector vertices(3);
@@ -45,13 +45,13 @@ void addEdge(Fltr& filtr, const std::vector<double> fcnvalues,
      vertices[1] = vert02;
      VertexVector::const_iterator bg = vertices.begin();
 
-     double value = std::max(fcnvalues.at(vert01), fcnvalues.at(vert02));
+     double value = std::max(fcnvalues[vert01], fcnvalues[vert02]);
      filtr.push_back(Smplx(bg, bg + 2, value)); 
          // std::max(fcnvalues.at(vert03),fcnvalues.at(vert04))),
 } // end function to add a single edge
 
 // add a single triangle to the filtration
-void addTri(Fltr& filtr, const std::vector<double> fcnvalues, 
+void addTri(Fltr& filtr, const double * const fcnvalues, 
             int vert01, int vert02, int vert03)
 {
      VertexVector vertices(3);
@@ -60,14 +60,14 @@ void addTri(Fltr& filtr, const std::vector<double> fcnvalues,
      vertices[2] = vert03;
      VertexVector::const_iterator bg = vertices.begin();
 
-     double value = std::max(std::max(fcnvalues.at(vert01), fcnvalues.at(vert02)),
-                    fcnvalues.at(vert03));
+     double value = std::max(std::max(fcnvalues[vert01], fcnvalues[vert02]),
+                    fcnvalues[vert03]);
      filtr.push_back(Smplx(bg, bg + 3, value)); 
          // std::max(fcnvalues.at(vert03),fcnvalues.at(vert04))),
 } // end function to add a single triangle
 
 // add a single tet to the filtration
-void addTet(Fltr& filtr, const std::vector<double> fcnvalues, 
+void addTet(Fltr& filtr, const double * const fcnvalues, 
             int vert01, int vert02, int vert03, int vert04)
 {
      VertexVector vertices(3);
@@ -77,13 +77,13 @@ void addTet(Fltr& filtr, const std::vector<double> fcnvalues,
      vertices[3] = vert04;
      VertexVector::const_iterator bg = vertices.begin();
 
-     double value = std::max(std::max(fcnvalues.at(vert01), fcnvalues.at(vert02)),
-                    std::max(fcnvalues.at(vert03), fcnvalues.at(vert04)));
+     double value = std::max(std::max(fcnvalues[vert01], fcnvalues[vert02]),
+                    std::max(fcnvalues[vert03], fcnvalues[vert04]));
      filtr.push_back(Smplx(bg, bg + 4, value)); 
          // std::max(fcnvalues.at(vert03),fcnvalues.at(vert04))),
 } // end function to add a single tet
 
-void addAllEdges(Fltr& filtr, const std::vector<double> fcnvalues, 
+void addAllEdges(Fltr& filtr, const double * const fcnvalues, 
               const int ncols, const int nrows, int i, int j, int k)
 {     
      int curidx = i + ncols*j + ncols*nrows*k;
@@ -148,7 +148,7 @@ void addAllEdges(Fltr& filtr, const std::vector<double> fcnvalues,
      return;
 } // end function addEdges
 
-void addEvenTets(Fltr& filtr, const std::vector<double> fcnvalues, 
+void addEvenTets(Fltr& filtr, const double * const fcnvalues, 
                   const int ncols, const int nrows, int i, int j, int k)
 {
      assert(i > 0 && j > 0 && k > 0);
@@ -169,7 +169,7 @@ void addEvenTets(Fltr& filtr, const std::vector<double> fcnvalues,
      return;
 } // end fcn to add four EVEN tets
 
-void addOddTets(Fltr& filtr, const std::vector<double> fcnvalues, 
+void addOddTets(Fltr& filtr, const double * const fcnvalues, 
                   const int ncols, const int nrows, int i, int j, int k)
 {
      assert(i > 0 && j > 0 && k > 0);
@@ -187,36 +187,36 @@ void addOddTets(Fltr& filtr, const std::vector<double> fcnvalues,
      // top vertex (i, j, k)
      v1 = curidx -1;   vertices[0] = v1;
      v2 = curidx - ncols;  vertices[1] = v2;  
-     value = std::max(fcnvalues.at(v1),fcnvalues.at(v2));
+     value = std::max(fcnvalues[v1],fcnvalues[v2]);
      
      v3 = curidx - nrows*ncols;  vertices[2] = v3;
      v4 = curidx; vertices[3] = v4;
-     value2 = std::max(fcnvalues.at(v3),fcnvalues.at(v4));
+     value2 = std::max(fcnvalues[v3],fcnvalues[v4]);
      
      filtr.push_back(Smplx(bg, bg + 4, std::max(value,value2)));
      
      // top vertex (i-1, j-1, k)
      v3 = curidx - 1 - ncols - nrows*ncols;  vertices[2] = v3;
      v4 = curidx - 1 -ncols; vertices[3] = v4;
-     value2 = std::max(fcnvalues.at(v3),fcnvalues.at(v4));
+     value2 = std::max(fcnvalues[v3],fcnvalues[v4]);
      
      filtr.push_back(Smplx(bg, bg + 4, std::max(value,value2)));
 
      // top vertex (i, j-1, k-1)
      v1 = curidx - nrows*ncols;   vertices[0] = v1;
      v2 = curidx - 1 - ncols - nrows*ncols;  vertices[1] = v2;  
-     value = std::max(fcnvalues.at(v1),fcnvalues.at(v2));
+     value = std::max(fcnvalues[v1],fcnvalues[v2]);
      
      v3 = curidx - ncols;  vertices[2] = v3;
      v4 = curidx -ncols - nrows*ncols; vertices[3] = v4;
-     value2 = std::max(fcnvalues.at(v3),fcnvalues.at(v4));
+     value2 = std::max(fcnvalues[v3],fcnvalues[v4]);
      
      filtr.push_back(Smplx(bg, bg + 4, std::max(value,value2)));
 
      // top vertex (i-1, j, k-1)
      v3 = curidx - 1;  vertices[2] = v3;
      v4 = curidx -1 - nrows * ncols; vertices[3] = v4;
-     value2 = std::max(fcnvalues.at(v3),fcnvalues.at(v4));
+     value2 = std::max(fcnvalues[v3],fcnvalues[v4]);
     
      filtr.push_back(Smplx(bg, bg + 4, std::max(value,value2)));
       
@@ -224,7 +224,7 @@ void addOddTets(Fltr& filtr, const std::vector<double> fcnvalues,
      return;
 } // end fcn addEvenTets
 
-void addAllTriangles(Fltr& filtr, const std::vector<double> fcnvalues, 
+void addAllTriangles(Fltr& filtr, const double * const fcnvalues, 
                   const int ncols, const int nrows, int i, int j, int k)
 {
      int curidx = i + ncols*j + ncols*nrows*k;
@@ -291,7 +291,7 @@ void addAllTriangles(Fltr& filtr, const std::vector<double> fcnvalues,
     return;
 } // end function addAllTriangles
 
-void addAllTetrahedra(Fltr& filtr, const std::vector<double> fcnvalues, 
+void addAllTetrahedra(Fltr& filtr, const double * const fcnvalues, 
                   const int ncols, const int nrows, int i, int j, int k)
 {
      int curidx = i + ncols*j + ncols*nrows*k;
@@ -335,7 +335,6 @@ int simplicesFromGrid(Fltr & filtr, const double * const extFcnVal, const std::v
   int i = 0; // indexing the columns
   int j = 0; // indexing the rows
   int k = 0; // indexing the z dimension
-  std::vector<double> fcnvalues;
   int curidx = 0;
 
 	if (argGridNum.size() > 0)
@@ -346,24 +345,23 @@ int simplicesFromGrid(Fltr & filtr, const double * const extFcnVal, const std::v
   while(curidx+1< gridNumProd )
   {
       curidx = i + argGridNum[0]*j + argGridNum[0]*argGridNum[1]*k;
-      fcnvalues.push_back(extFcnVal[curidx]); // at index i + ncols*j    
 
       // .. add the vertex 
       std::vector<Vertex> vcont;
       vcont.push_back((Vertex)(curidx));
-      filtr.push_back(Smplx(vcont, fcnvalues.at(curidx))); 
+      filtr.push_back(Smplx(vcont, extFcnVal[curidx])); 
 
 		if (argDimMax >= 1)	// If dimension of embedded space >= 1, add the edges:
 		{
-			addAllEdges(filtr, fcnvalues, ncols, nrows, i, j, k);
+			addAllEdges(filtr, extFcnVal, ncols, nrows, i, j, k);
 		}
 		if (argDimMax >= 2) // If dimension of embedded space >= 2, add the triangles: 
 		{
-			addAllTriangles(filtr, fcnvalues, ncols, nrows, i, j, k);
+			addAllTriangles(filtr, extFcnVal, ncols, nrows, i, j, k);
 		}
 		if (argDimMax >= 3) // If dimension of embedded space >= 3, add the tetrahedra:
 		{
-			addAllTetrahedra(filtr, fcnvalues, ncols, nrows, i, j, k);
+			addAllTetrahedra(filtr, extFcnVal, ncols, nrows, i, j, k);
 		}
 
       ++i; // advance column
