@@ -12,6 +12,8 @@
 
 #include <phat/boundary_matrix.h>
 
+#include <limits>
+
 template<typename Flt>
 std::vector< std::vector< std::vector< double > > > computePersistentPairsPhat(Flt f, int maxDimension)
 {
@@ -54,6 +56,12 @@ std::vector< std::vector< std::vector< double > > > computePersistentPairsPhat(F
 	std::vector< std::vector< std::vector< double > > > persDgm(maxDimension+1);
 	std::vector< double > persDgmPoint(2);
 	unsigned int persDim;
+
+	// Manually add 0th homology for minimum to infinity
+	persDgmPoint[0] = simplex_map_inv.at(0).data();
+	persDgmPoint[1] = std::numeric_limits< double >::infinity();
+	persDgm[0].push_back(persDgmPoint );
+
 	for( phat::index idx = 0; idx < pairs.get_num_pairs(); idx++ )
 	{
 		persDim = simplex_map_inv.at(pairs.get_pair( idx ).first).dimension();
