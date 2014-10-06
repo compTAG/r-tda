@@ -367,12 +367,12 @@ int simplicesFromGrid(Fltr & filtr, const double * const extFcnVal, const std::v
       ++i; // advance column
 
      // ... advance row / z value
-     if (i >= argGridNum[0])
+     if (i >= ncols)
      {
     	i = 0;
     	++j;
      }
-     if (j >= argGridNum[1])
+     if (j >= nrows)
      {
 	j = 0;
         ++k;
