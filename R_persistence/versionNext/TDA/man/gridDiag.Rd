@@ -8,7 +8,7 @@ Persistence Diagram of a function over a Grid
 }
 \usage{
 gridDiag(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel = TRUE,
-         library="Dionysus", printProgress = FALSE, diagLimit=NULL, ...)
+         library="Dionysus", location = FALSE, printProgress = FALSE, diagLimit=NULL, ...)
 }
 \arguments{
   \item{X}{
@@ -33,6 +33,9 @@ a logical variable indicating if the Persistence Diagram should be computed for 
   \item{library}{
   The user can compute the persistence diagram using either the library 'Dionysus', or 'PHAT'. Default is 'Dionysus'.
 }
+  \item{location}{
+  if \code{TRUE} location of birth point and death point of each homological features is returned.
+}
   \item{printProgress}{
 	if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
 }
@@ -49,13 +52,15 @@ a logical variable indicating if the Persistence Diagram should be computed for 
 The function evaluates the function \code{FUN} over a grid. Then it constructs a filtration by triangulating the grid and considering the simplices determined by the values of the function of dimension up to \code{maxdimension+1}.
 }
 \value{
-\code{gridDiag} returns an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc). Second and third columns are Birth and Death of features, in case of a filtration constructed using sublevel sets, or Death and Birth of features, in case of a filtration constructed using superlevel sets.
+\code{gridDiag} returns a list with the following components
+  \item{Diag}{an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc). Second and third columns are Birth and Death of features, in case of a filtration constructed using sublevel sets, or Death and Birth of features, in case of a filtration constructed using superlevel sets.}
+  \item{BirthLocation}{a \eqn{P} by \eqn{d} matrix, where where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents location of birth point of each homological features.}
+  \item{DeathLocation}{a \eqn{P} by \eqn{d} matrix, where where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents location of death point of each homological features.}
 }
 \references{
 Brittany Fasy, Fabrizio Lecci, Alessandro Rinaldo, Larry Wasserman, Sivaraman Balakrishnan, and Aarti Singh. (2013), "Statistical Inference For Persistent Homology", (arXiv:1303.7117). To appear, Annals of Statistics.
 
 Dmitriy Morozov, "Dionysus, a C++ library for computing persistent homology". http://www.mrzv.org/software/dionysus/
-
 Ulrich Bauer, Michael Kerber, Jan Reininghaus, "PHAT, a software library for persistent homology". https://code.google.com/p/phat/
 }
 \author{
@@ -95,9 +100,9 @@ Diag2=gridDiag(XX, kde, lim=lim, by=by, sublevel=FALSE, printProgress=TRUE, h=h)
 par(mfrow=c(1,3))
 plot(XX,cex=0.5, pch=19)
 title(main="Data")
-plot(Diag1)
+plot(Diag1[["Diag"]])
 title(main="Distance Function Diagram")
-plot(Diag2)
+plot(Diag2[["Diag"]])
 title(main="Density Persistence Diagram")
 }
 \keyword{methods}
