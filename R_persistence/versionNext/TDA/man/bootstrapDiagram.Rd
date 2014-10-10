@@ -109,7 +109,7 @@ alpha=0.05
 cc=bootstrapDiagram(XX, kde, lim=lim, by=by, sublevel=FALSE, B=B, alpha=alpha, 
    dimension=1, printProgress=TRUE, h=h)
 
-plot(Diag[["Diag"]], band=2*cc)
+plot(Diag$diagram, band=2*cc)
 }
 \keyword{nonparametric}
 \keyword{htest}

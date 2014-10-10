@@ -73,7 +73,7 @@ maxdimension=1
 ## note that the input distXX is a distance matrix
 DiagTri=ripsDiag(distX,maxdimension,maxscale, dist="arbitrary", printProgress=TRUE)
 #points with lifetime=0 are not shown. e.g. the loop of the triangle.
-print(DiagTri)
+print(DiagTri$diagram)
 }
 \keyword{methods}
 
