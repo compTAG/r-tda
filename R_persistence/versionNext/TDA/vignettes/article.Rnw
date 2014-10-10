@@ -374,7 +374,7 @@ Diag = gridDiag( X=X, FUN=kde, h=0.3, lim=cbind(Xlim,Ylim), by=by,
 We plot the data and the the diagram, using the function \code{plot}, implemented as a standard \code{S3} method for objects of the class \code{"diagram"}. The following command produces the third plot in Figure \ref{fig:eq11b}.
 
 <<eq11b, echo=TRUE, eval=FALSE>>=
-plot(Diag, band=2*band$width, main="KDE Diagram")
+plot(Diag[["Diag"]], band=2*band$width, main="KDE Diagram")
 @
 
 % PLOT STARTS
@@ -391,7 +391,7 @@ persp(Xseq,Yseq,matrix(KDE,ncol=length(Yseq), nrow=length(Xseq)), xlab="",ylab="
 
 par(mai=c(0.55,0.6,0.3,0.1))
 
-plot(Diag, band=2*band$width, main="KDE Diagram")
+plot(Diag[["Diag"]], band=2*band$width, main="KDE Diagram")
 @
 \end{center}
 \caption{The plot on the right shows the persistence diagram of the superlevel sets of the KDE. Black points represent connected components and red triangles represent loops. 
@@ -412,8 +412,8 @@ The function \code{plot} for the class \code{"diagram"} provide the options of r
 \begin{center}
 <<eq11c, echo=TRUE, eval=TRUE,  fig=TRUE, width=6, height=3>>=
 par(mfrow=c(1,2), mai=c(0.8,0.8,0.3,0.1))
-plot(Diag, rotated=T, band=band$width, main="Rotated Diagram")
-plot(Diag, barcode=T,  main="Barcode")
+plot(Diag[["Diag"]], rotated=TRUE, band=band$width, main="Rotated Diagram")
+plot(Diag[["Diag"]], barcode=TRUE,  main="Barcode")
 @
 \end{center}
 \caption{Rotated Persistence Diagram and Barcode}
