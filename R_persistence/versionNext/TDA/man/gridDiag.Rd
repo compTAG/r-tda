@@ -100,9 +100,9 @@ Diag2=gridDiag(XX, kde, lim=lim, by=by, sublevel=FALSE, printProgress=TRUE, h=h)
 par(mfrow=c(1,3))
 plot(XX,cex=0.5, pch=19)
 title(main="Data")
-plot(Diag1[["Diag"]])
+plot(Diag1$diagram)
 title(main="Distance Function Diagram")
-plot(Diag2[["Diag"]])
+plot(Diag2$diagram)
 title(main="Density Persistence Diagram")
 }
 \keyword{methods}

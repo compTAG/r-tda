@@ -52,6 +52,6 @@ function(X,maxdimension, maxscale, library="GUDHI", printProgress=FALSE){
 		attributes(Diag)$call=match.call()
 		Diag[1,3]=maxscale
 			
-		return(Diag)
+		return(list("diagram"=Diag))
 	
 }

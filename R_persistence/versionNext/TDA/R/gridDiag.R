@@ -101,7 +101,7 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
     out=list("Diag"=Diag)
   } else
   {
-    out=list("Diag"=Diag,"BirthLocation"=BirthLocation,"DeathLocation"=DeathLocation)
+    out=list("diagram"=Diag,"birthLocation"=BirthLocation,"deathLocation"=DeathLocation)
   }
 	return(out)
 }

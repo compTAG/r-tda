@@ -67,7 +67,7 @@ Lands=matrix(0,nrow=NN, ncol=length(tseq))  #here we'll store the landscapes
 
 for (i in 1:NN){
 	subXX=XX[sample(1:nn,mm),]
-	Diags[[i]]=ripsDiag(subXX,maxdimension,DiagLim)
+	Diags[[i]]=ripsDiag(subXX,maxdimension,DiagLim)$diagram
 	Lands[i,]=landscape(Diags[[i]], dimension=1, KK=1, tseq )
 }
 

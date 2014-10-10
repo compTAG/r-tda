@@ -46,8 +46,8 @@ XX2 = circleUnif(20, r=0.2)
 DiagLim=5
 maxdimension=1
 
-Diag1=ripsDiag(XX1,maxdimension,DiagLim, printProgress=FALSE)
-Diag2=ripsDiag(XX2,maxdimension,DiagLim, printProgress=FALSE)
+Diag1=ripsDiag(XX1,maxdimension,DiagLim, printProgress=FALSE)$diagram
+Diag2=ripsDiag(XX2,maxdimension,DiagLim, printProgress=FALSE)$diagram
 
 bottleneckDist=bottleneck(Diag1, Diag2, dimension=1)
 print(bottleneckDist)
