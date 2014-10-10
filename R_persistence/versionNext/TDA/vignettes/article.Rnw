@@ -367,7 +367,7 @@ The other inputs are the features of the grid over which the \code{kde} is evalu
 
 <<eq11, echo=TRUE, eval=TRUE>>=
 Diag = gridDiag( X=X, FUN=kde, h=0.3, lim=cbind(Xlim,Ylim), by=by, 
-                 sublevel=F, library="Dionysus", printProgress=FALSE ) 
+          sublevel=F, library="Dionysus", printProgress=FALSE )$diagram
 @
 
 
@@ -457,7 +457,7 @@ maxdimension=1       # components and loops
 and we generate the persistence diagram:
 <<eq12c, echo=TRUE, eval=TRUE>>=
 Diag=ripsDiag(X=Circles, maxdimension, maxscale,
-              library="GUDHI", printProgress=F)
+              library="GUDHI", printProgress=F)$diagram
 @
 Alternatively, using the option \code{dist="arbitrary"} in \code{ripsDiag()}, the input \code{X} can be an $n \times n$ matrix of distances.
 This option is useful when the user wants to consider a Rips filtration constructed using an arbitrary distance and is currently only available for the option \code{library="Dionysus"}.\\
@@ -489,8 +489,8 @@ The \pkg{TDA} package includes the functions \code{bottleneck} and \code{wassers
 
 We generate two persistence diagrams of the Rips filtrations built on top of the two (separate) circles of the previous example,
 <<eq13, echo=TRUE, eval=TRUE>>=
-Diag1=ripsDiag(Circle1,maxdimension=1, maxscale=5, printProgress=F)
-Diag2=ripsDiag(Circle2,maxdimension=1, maxscale=5, printProgress=F)
+Diag1=ripsDiag(Circle1,maxdimension=1, maxscale=5)$diagram
+Diag2=ripsDiag(Circle2,maxdimension=1, maxscale=5)$diagram
 @
 and we compute the bottleneck distance and the $2$nd Wasserstein distance between the two diagrams.
 In the following code, the option \code{dimension=1} specifies that the distances between diagrams are computed using only one dimensional features (loops).
@@ -700,7 +700,7 @@ For $n$ times, we subsample from the large point cloud, compute $n$ Rips diagram
 <<eq15c, echo=TRUE, eval=TRUE>>=
 for (i in 1:n){
 	subX=X[sample(1:N,m),]
-	Diags[[i]]=ripsDiag(subX,maxdimension=1, maxscale=5)
+	Diags[[i]]=ripsDiag(subX,maxdimension=1, maxscale=5)$diagram
 	Lands[i,]=landscape(Diags[[i]], dimension=1, KK=1, tseq )
 }
 @
