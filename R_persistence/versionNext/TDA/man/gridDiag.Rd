@@ -49,7 +49,11 @@ a logical variable indicating if the Persistence Diagram should be computed for 
 The function evaluates the function \code{FUN} over a grid. Then it constructs a filtration by triangulating the grid and considering the simplices determined by the values of the function of dimension up to \code{maxdimension+1}.
 }
 \value{
-\code{gridDiag} returns an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc). Second and third columns are Birth and Death of features, in case of a filtration constructed using sublevel sets, or Death and Birth of features, in case of a filtration constructed using superlevel sets.
+\code{gridDiag} returns a list with the following elements:
+
+\item{diagram}{
+an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc). Second and third columns are Birth and Death of features, in case of a filtration constructed using sublevel sets, or Death and Birth of features, in case of a filtration constructed using superlevel sets.
+}
 }
 \references{
 Brittany Fasy, Fabrizio Lecci, Alessandro Rinaldo, Larry Wasserman, Sivaraman Balakrishnan, and Aarti Singh. (2013), "Statistical Inference For Persistent Homology", (arXiv:1303.7117). To appear, Annals of Statistics.
@@ -95,9 +99,9 @@ Diag2=gridDiag(XX, kde, lim=lim, by=by, sublevel=FALSE, printProgress=TRUE, h=h)
 par(mfrow=c(1,3))
 plot(XX,cex=0.5, pch=19)
 title(main="Data")
-plot(Diag1)
+plot(Diag1$diagram)
 title(main="Distance Function Diagram")
-plot(Diag2)
+plot(Diag2$diagram)
 title(main="Density Persistence Diagram")
 }
 \keyword{methods}

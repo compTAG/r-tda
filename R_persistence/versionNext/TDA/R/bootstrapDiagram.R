@@ -22,7 +22,7 @@ function(X, FUN, lim, by, sublevel=TRUE, library="Dionysus", B=30, alpha=0.05, d
 	maxdimension=dimension
      parallel=FALSE
      
-     Diag=gridDiag(X=X, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, printProgress=FALSE, diagLimit=NULL, ...)
+     Diag=gridDiag(X=X, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, printProgress=FALSE, diagLimit=NULL, ...)$diagram
 
      if (parallel) {boostLapply=mclapply
      	} else boostLapply=lapply
@@ -33,7 +33,7 @@ function(X, FUN, lim, by, sublevel=TRUE, library="Dionysus", B=30, alpha=0.05, d
 	     width=boostLapply(1:B, FUN=function(i){
 	          I = sample(1:n,replace=TRUE,size=n)
 	          Y = as.matrix(X[I,])
-	          Diag1 = gridDiag(X=Y, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, printProgress=FALSE, diagLimit=NULL, ...)
+	          Diag1 = gridDiag(X=Y, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, printProgress=FALSE, diagLimit=NULL, ...)$diagram
 	          	width1 = wasserstein(Diag,Diag1, p=p,dimension=dimension)
 	          if (printProgress) cat(i," ")
 	     	  return(width1)
@@ -42,7 +42,7 @@ function(X, FUN, lim, by, sublevel=TRUE, library="Dionysus", B=30, alpha=0.05, d
      	width=boostLapply(1:B, FUN=function(i){
           I = sample(1:n,replace=TRUE,size=n)
           Y = as.matrix(X[I,])
-          Diag1 = gridDiag(X=Y, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, printProgress=FALSE, diagLimit=NULL, ...)
+          Diag1 = gridDiag(X=Y, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, printProgress=FALSE, diagLimit=NULL, ...)$diagram
           width1 = bottleneck(Diag,Diag1, dimension=dimension)
           if (printProgress) cat(i," ")
      	  return(width1)

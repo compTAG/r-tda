@@ -69,9 +69,9 @@ Diag=ripsDiag(XX,maxdimension,DiagLim, printProgress=TRUE)
 
 #plot
 par(mfrow=c(1,3))
-plot(Diag)
-plot(Diag, rotated=TRUE)
-plot(Diag, barcode=TRUE)
+plot(Diag$diagram)
+plot(Diag$diagram, rotated=TRUE)
+plot(Diag$diagram, barcode=TRUE)
 
 }
 \keyword{hplot}

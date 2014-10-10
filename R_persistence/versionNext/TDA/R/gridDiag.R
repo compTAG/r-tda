@@ -90,5 +90,5 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
 	nonInf=which(Diag[,2]!=Inf & Diag[,3]!=Inf)
 	attributes(Diag)$scale=c(min(Diag[nonInf,2:3]), max(Diag[nonInf,2:3]))
 	attributes(Diag)$call=match.call()
-	return(Diag)
+	return(list("diagram"=Diag))
 }

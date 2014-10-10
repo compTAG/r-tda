@@ -38,7 +38,10 @@ For Rips Diagrams based on arbitrary distance, the the C++ library Dionysus is u
 See refereneces.
 }
 \value{
-\code{ripsDiag} returns an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc.). Second and third columns are Birth and Death of the features.
+\code{ripsDiag} returns a list with the following elements:
+\item{diagram}{
+an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc.). Second and third columns are Birth and Death of the features.
+}
 }
 \references{
 Clement Maria, "GUDHI, Simplicial Complexes and Persistent Homology Packages". https://project.inria.fr/gudhi/software/.
@@ -73,7 +76,7 @@ maxdimension=1
 ## note that the input distXX is a distance matrix
 DiagTri=ripsDiag(distX,maxdimension,maxscale, dist="arbitrary", printProgress=TRUE)
 #points with lifetime=0 are not shown. e.g. the loop of the triangle.
-print(DiagTri)
+print(DiagTri$diagram)
 }
 \keyword{methods}
 
