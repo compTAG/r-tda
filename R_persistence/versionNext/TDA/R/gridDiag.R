@@ -98,7 +98,7 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
 	attributes(Diag)$call=match.call()
   if (location==FALSE)
   {
-    out=list("Diag"=Diag)
+    out=list("diagram"=Diag)
   } else
   {
     out=list("diagram"=Diag,"birthLocation"=BirthLocation,"deathLocation"=DeathLocation)
