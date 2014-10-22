@@ -18,10 +18,10 @@ function(x, type="lambda",color=NULL, add=FALSE, ...){
 
 	sons=x$sons
 	
-	Ylim=max(top[which(!is.na(top))])
+	Ylim=range(top[which(!is.na(top))])
 	
 	if (!add)
-	plot(c(0,0),c(0,Ylim), type="n", xlim=c(0,1), ylab=type, xlab="", ...)
+	plot(c(0,0),c(Ylm[1],Ylim[2]), type="n", xlim=c(0,1), ylab=type, xlab="", ...)
 	
 	#vertical lines
 	if (is.null(color)) color=id
