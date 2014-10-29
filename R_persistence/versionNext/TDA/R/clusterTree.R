@@ -229,7 +229,8 @@ function(X, k, h=NULL, density="knn", dist="euclidean", d=NULL, Nlambda=100, pri
 		
 		for (i in 1:bb)
 		{
-			if (parent[i]==0) rBottom[i]=max(r.k)	
+			if (bottom[i]==0) rBottom[i]=max(r.k)	
+			if (top[i]==0) rTop[i]=max(r.k)			
 		}
 		
 		out=list("density"=hat.f, "DataPoints"=compBranch, 
