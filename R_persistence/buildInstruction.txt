@@ -14,4 +14,4 @@ R CMD INSTALL --build TDA
 R CMD Rd2pdf TDA
 
 ## to check the source package TDA_1.2.tar.gz
-R CMD check --as-cran TDA_1.2.tar.gz
+R CMD check --as-cran TDA_1.3.tar.gz
