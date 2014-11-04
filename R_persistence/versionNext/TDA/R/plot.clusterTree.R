@@ -2,7 +2,6 @@ plot.clusterTree <-
 function(x, type="lambda",color=NULL, add=FALSE, ...){
 	
 	if (class(x)!="clusterTree") stop("Tree should be an object of class clusterTree")
-	if (!is.null(color) && (!is.vector(color) || length(color)!=1) ) stop("color should have length 1")
      if (!is.logical(add)) stop("add should be logical")
 	
 	id=x$id
