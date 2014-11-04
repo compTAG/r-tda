@@ -33,10 +33,11 @@ function(x, type="lambda",color=NULL, add=FALSE, ...){
 	
 	Ylim=c(min(bottom[which(!is.na(bottom))]), max(top[which(!is.na(top))]))
 	
-	if (!add)
-	plot(c(0,0),c(Ylim[1],Ylim[2]), type="n", xlim=c(0,1), ylab=type, xlab="", axes=F, ...)
-	axis(1)
-	axis(2, at=AT, labels=labels)
+	if (!add){
+		plot(c(0,0),c(Ylim[1],Ylim[2]), type="n", xlim=c(0,1), ylab=type, xlab="", axes=F, ...)
+		axis(1)
+		axis(2, at=AT, labels=labels)
+	}
 	#vertical lines
 	if (is.null(color)) color=id
 	segments(base,bottom,base,top, col=color, lwd=3)
