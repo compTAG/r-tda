@@ -1,7 +1,7 @@
 clusterTree <-
 function(X, k, h=NULL, density="knn", dist="euclidean", d=NULL, Nlambda=100, printProgress=FALSE){
 	
-	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
+	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be an n by d matrix of coordinates")
 	if (!is.vector(k) || length(k)!=1) stop("k should be an number")
 	if (!is.null(h) && (!is.vector(h) || length(h)!=1)) stop("h should be a real value")
 	if (!is.null(Nlambda) && (!is.vector(Nlambda) || length(Nlambda)!=1)) stop("Nlambda should be a number")
@@ -23,7 +23,7 @@ function(X, k, h=NULL, density="knn", dist="euclidean", d=NULL, Nlambda=100, pri
 	
 	## start adjacency matrix
 	adjMat=diag(n)
-
+	
 	## Compute density estimator: knn or kde
 	if (density=="knn" && dist=="euclidean"){
 		knnInfo=get.knn(X, k=k, algorithm="kd_tree")
