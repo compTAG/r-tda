@@ -52,7 +52,7 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
  	  whichDimens=c((1:length(vecOut))[!grepl(" ",vecOut)], length(vecOut)+1)
   } else
   {
-    whichDimens=(1:length(vecOut))[!grepl(" ",vecOut)]
+    whichDimens=(1:length(vecOut))[!grepl("[ C]",vecOut)]
   }
  	dim=NULL
    if (length(whichDimens)>1)
@@ -72,10 +72,16 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
 	Diag=cbind(dim,life2)
   if (location==TRUE)
   {
-    loc=out[(grep("L",vecOut)+1):length(vecOut),1]
+    loc=out[(grep("L",vecOut)+1):(grep("C",vecOut)-1),1]
     loc2=matrix(as.numeric(unlist(strsplit(as.character(loc)," "))),ncol=2, nrow=length(loc), byrow=TRUE)
     BirthLocation=Grid$grid[loc2[,1],]
     DeathLocation=Grid$grid[loc2[,2],]
+    
+    if (library=="Dionysus")
+    {
+      cycle=c("",as.character(out[(grep("C",vecOut)+1):nrow(out),1]))
+      CycleLocation = lapply(strsplit(as.character(cycle)," "),function(c){Grid$grid[as.numeric(c),]})
+    }
   }
 	  
   if (nrow(Diag)>0) {
@@ -99,9 +105,12 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
   if (location==FALSE)
   {
     out=list("diagram"=Diag)
-  } else
+  } else if (library=="PHAT")
   {
     out=list("diagram"=Diag,"birthLocation"=BirthLocation,"deathLocation"=DeathLocation)
+  } else
+  {
+    out=list("diagram"=Diag,"birthLocation"=BirthLocation,"deathLocation"=DeathLocation,"cycleLocation"=CycleLocation)
   }
 	return(out)
 }

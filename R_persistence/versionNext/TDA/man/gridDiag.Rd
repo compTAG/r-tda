@@ -34,7 +34,7 @@ a logical variable indicating if the Persistence Diagram should be computed for 
   The user can compute the persistence diagram using either the library 'Dionysus', or 'PHAT'. Default is 'Dionysus'.
 }
   \item{location}{
-  if \code{TRUE} location of birth point and death point of each homological features is returned.
+  if \code{TRUE}, location of birth point(\code{birthLocation}) and death point(\code{birthLocation}) of each homological features is returned. if library were 'Dionysus', location of representative cycles(\code{cycleLocation}) of each homological features is also returned.
 }
   \item{printProgress}{
 	if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
@@ -54,8 +54,9 @@ The function evaluates the function \code{FUN} over a grid. Then it constructs a
 \value{
 \code{gridDiag} returns a list with the following components
   \item{diagram}{an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc). Second and third columns are Birth and Death of features, in case of a filtration constructed using sublevel sets, or Death and Birth of features, in case of a filtration constructed using superlevel sets.}
-  \item{birthLocation}{a \eqn{P} by \eqn{d} matrix, where where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents location of birth point of each homological features.}
-  \item{deathLocation}{a \eqn{P} by \eqn{d} matrix, where where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents location of death point of each homological features.}
+  \item{birthLocation}{a \eqn{P} by \eqn{d} matrix, where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents location of birth point of each homological features.}
+  \item{deathLocation}{a \eqn{P} by \eqn{d} matrix, where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents location of death point of each homological features.}
+  \item{cycleLocation}{a list of length \eqn{P}, where \eqn{P} is the number of points in the resulting persistence diagram. Each element is a \eqn{P_i} by \eqn{d} matrix and represents location of \eqn{P_i} points on the representative cycle of each homological features.}
 }
 \references{
 Brittany Fasy, Fabrizio Lecci, Alessandro Rinaldo, Larry Wasserman, Sivaraman Balakrishnan, and Aarti Singh. (2013), "Statistical Inference For Persistent Homology", (arXiv:1303.7117). To appear, Annals of Statistics.
