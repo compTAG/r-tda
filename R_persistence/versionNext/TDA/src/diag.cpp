@@ -69,15 +69,29 @@ extern "C" {
 		std::map<Dimension, PDgm> dgms;
 		std::vector< std::vector< std::vector< double > > > persDgm(*maxdimensionInput+1);
 		std::vector< std::vector< std::vector< unsigned int > > > persLoc;
+		std::vector< std::vector< std::set< unsigned int > > > persCycle;
 		if (locationInput[0] == 1)
 		{
 			persLoc.resize(*maxdimensionInput+1);
+			persCycle.resize(*maxdimensionInput+1);
 		}
 		if (libraryInput[0][0] == 'D')
 		{
 
 			Persistence p(f); // initialize persistence
-			p.pair_simplices(printstatus); // pair simplices
+			if (locationInput[0] != 1)
+			{
+				p.pair_simplices(printstatus); // pair simplices
+			} else
+			{
+				if (printstatus)
+				{
+					p.pair_simplices(p.begin(), p.end(), true, Persistence::PairVisitor(p.size()));
+				} else
+				{
+					p.pair_simplices(p.begin(), p.end(), true, Persistence::PairVisitorNoProgress());
+				}
+			}
 			// TODO: why doesn't this work? rLog(rlmain, "testing");   
 	 
 			Persistence::SimplexMap<Fltr> m = p.make_simplex_map(f);
@@ -104,26 +118,49 @@ extern "C" {
 			if (locationInput[0] == 1)
 			{
 				std::vector< unsigned int > persLocPoint(2);
+				std::set< unsigned int > persCyclePoint;
 				for (Persistence::iterator cur = p.begin(); cur != p.end(); ++cur)
 				{
-					if (!cur->sign())        // only negative simplices have non-empty cycles
+					if (cur->sign())        // positive simplices corresponds to negative simplices having non-empty cycles
 					{
-						Persistence::OrderIndex birth = cur->pair;      // the cycle that cur killed was born when we added birth (another simplex)
-
-						const Smplx& b = m[birth];
-						const Smplx& d = m[cur];
-						if (b.data() < d.data() && b.dimension() <= *maxdimensionInput)
+						if (!cur->unpaired())	// first consider that cycle is paired
 						{
+							Persistence::OrderIndex death = cur->pair;      // the cycle that was born at cur is killed when we added death (another simplex)
+
+							const Smplx& b = m[cur];
+							const Smplx& d = m[death];
+							if (b.data() < d.data() && b.dimension() <= *maxdimensionInput)
+							{
+								persLocPoint[0] = getLocation(b, FUNvaluesInput);
+								persLocPoint[1] = getLocation(d, FUNvaluesInput);
+								persLoc[ b.dimension() ].push_back( persLocPoint );
+
+								// Iterate over the cycle
+								persCyclePoint.clear();
+								const Persistence::Cycle& cycle = death->cycle;
+								for (Persistence::Cycle::const_iterator si =  cycle.begin(); si != cycle.end(); ++si)
+								{
+									const Smplx& s = m[*si];
+									const Smplx::VertexContainer& vertices = s.vertices();          // std::vector<Vertex> where Vertex = Distances::IndexType
+									Smplx::VertexContainer::const_iterator vtxItr;
+									for (vtxItr = vertices.begin(); vtxItr != vertices.end(); ++vtxItr)
+									{
+										persCyclePoint.insert( *vtxItr + 1 );
+									}
+								}
+								persCycle[ b.dimension() ].push_back( persCyclePoint );
+							}
+						} else	// cycles can be unpaired
+						{
+							const Smplx& b = m[cur];
 							persLocPoint[0] = getLocation(b, FUNvaluesInput);
-							persLocPoint[1] = getLocation(d, FUNvaluesInput);
+							persLocPoint[1] = (unsigned int)(std::max_element(FUNvaluesInput, FUNvaluesInput+gridNumProd)-FUNvaluesInput+1);
 							persLoc[ b.dimension() ].push_back( persLocPoint );
+
+							// Iterate over the cycle
+							persCyclePoint.clear();
+							persCycle[ b.dimension() ].push_back( persCyclePoint );
 						}
-					} else if (cur->unpaired())    // positive could be unpaired
-					{
-						const Smplx& b = m[cur];
-						persLocPoint[0] = getLocation(b, FUNvaluesInput);
-						persLocPoint[1] = (unsigned int)(std::max_element(FUNvaluesInput, FUNvaluesInput+gridNumProd)-FUNvaluesInput+1);
-						persLoc[ b.dimension() ].push_back( persLocPoint );
 					}
 				}
 			}
@@ -163,6 +200,21 @@ extern "C" {
 				for (persLocIdx = persLoc[ dgmsIdx ].begin(); persLocIdx != persLoc[ dgmsIdx ].end(); ++persLocIdx)
 				{
 					outfile << (*persLocIdx)[0] << " " << (*persLocIdx)[1] << std::endl;
+				}
+			}
+
+			outfile << std::endl << "Cycle" << std::endl;
+			for (int dgmsIdx=0; dgmsIdx<= *maxdimensionInput; ++dgmsIdx)
+			{
+				std::vector< std::set< unsigned int > >::const_iterator persCycleIdx;
+				std::set< unsigned int >::const_iterator persCyclePointIdx;
+				for (persCycleIdx = persCycle[ dgmsIdx ].begin(); persCycleIdx != persCycle[ dgmsIdx ].end(); ++persCycleIdx)
+				{
+					for (persCyclePointIdx = persCycleIdx->begin(); persCyclePointIdx != persCycleIdx->end(); ++persCyclePointIdx)
+					{
+						outfile << (*persCyclePointIdx) << " ";
+					}
+					outfile << std::endl;
 				}
 			}
 		}
