@@ -55,10 +55,10 @@ This function returns an object of class \code{clusterTree}, a list with the fol
 \item{Xbase}{Vector: the horiontal coordinates of the branches of the cluster tree, in the same order of \code{id}}
 \item{lambdaBottom}{Vector: the vertical bottom coordinates of the branches of the lambda tree, in the same order of \code{id}}
 \item{lambdaTop}{Vector: the vertical top coordinates of the branches of the lambda tree, in the same order of \code{id}}
-\item{rBottom}{Vector: the vertical bottom coordinates of the branches of the r tree, in the same order of \code{id}}
-\item{rTop}{Vector: the vertical top coordinates of the branches of the r tree, in the same order of \code{id}}
-\item{alphaBottom}{Vector: the vertical bottom coordinates of the branches of the lambda tree, in the same order of \code{id}}
-\item{alphaTop}{Vector: the vertical top coordinates of the branches of the lambda tree, in the same order of \code{id}}
+\item{rBottom}{(only if \code{density="knn"}) Vector: the vertical bottom coordinates of the branches of the r tree, in the same order of \code{id}}
+\item{rTop}{(only if \code{density="knn"}) Vector: the vertical top coordinates of the branches of the r tree, in the same order of \code{id}}
+\item{alphaBottom}{Vector: the vertical bottom coordinates of the branches of the alpha tree, in the same order of \code{id}}
+\item{alphaTop}{Vector: the vertical top coordinates of the branches of the alpha tree, in the same order of \code{id}}
 \item{Kbottom}{Vector: the vertical bottom coordinates of the branches of the kappa tree, in the same order of \code{id}}
 \item{Ktop}{Vector: the vertical top coordinates of the branches of the kappa tree, in the same order of \code{id}}
 }

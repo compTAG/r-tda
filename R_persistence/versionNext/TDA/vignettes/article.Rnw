@@ -888,7 +888,7 @@ The last example of this vignette illustrates the use of the function \code{clus
 First, we briefly describe the task of density clustering; we defer the reader to \cite{kent2013} for a more rigorous and complete description.
 Let $f$ be the density of the probability distribution~$P$ generating the observed sample $X=\{x_1, \dots, x_n\} \subset \mathbb{R}^d$. For a threshold value $\lambda >0$, the corresponding super level set of $f$ is $L_f (\lambda) := \text{cl} (\{x \in \mathbb{R}^s : f(x) > \lambda\})$, and its $d$-dimensional subsets are called high-density regions. The high-density clusters of $P$ are the maximal connected subsets of $L_f (\lambda)$.
 By considering all the level sets simultaneously (from $\lambda=0$ to $\lambda=\infty$), we can record the evolution and the hierarchy of the high-density clusters of $P$.
-This naturally leads to the notion of the cluster density tree of $P$ (see, e.g., \cite{hartigan1981consistency}), defined as the collection of sets $T := \{L_f (\lambda), \lambda \geq 0\}$, which satisfies the tree property: $A,B \in T$ implies that $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. We will refer to this construction as the $\lambda$-tree. Alternatively, \cite{kent2013debacl} introduced the $\kappa$-tree, which facilitates the interpretation of the tree by precisely encoding the probability content of each tree branch rather than the density level. Cluster trees are particularly useful for high dimensional data, whose spatial organization is difficult to represent.
+This naturally leads to the notion of the cluster density tree of $P$ (see, e.g., \cite{hartigan1981consistency}), defined as the collection of sets $T := \{L_f (\lambda), \lambda \geq 0\}$, which satisfies the tree property: $A,B \in T$ implies that $A \subset B$ or $B \subset A$ or $A \cap B = \emptyset$. We will refer to this construction as the $\lambda$-tree. Alternatively, \cite{kent2013debacl} introduced the $\alpha$-tree and $\kappa$-tree, which facilitate the interpretation of the tree by precisely encoding the probability content of each tree branch rather than the density level. Cluster trees are particularly useful for high dimensional data, whose spatial organization is difficult to represent.
 
 We illustrate the strategy with a simple example.
 First we generate a 2D point cloud from three (not so well) separated clusters (see top left plot of Figure \ref{fig:eq18d}):
@@ -909,7 +909,7 @@ TreeKDE=clusterTree(XX, k=100, h=0.3, density="kde", printProgress=F)
 
 Note that, even when \code{kde} is used to estimate the density, we have to provide the option \code{k=100}, so that the algorithm can compute the connected components at each level of the density using a k Nearest Neighbors graph.
 
-The \code{"clusterTree"} objects \code{Tree} and \code{TreeKDE} contain information about both the $\lambda$-tree and the $\kappa$-tree. The function \code{plot} for objects of the class \code{"clusterTree"} produces the plots in Figure \ref{fig:eq18d}.
+The \code{"clusterTree"} objects \code{Tree} and \code{TreeKDE} contain information about the $\lambda$-tree, $\alpha$-tree and $\kappa$-tree. The function \code{plot} for objects of the class \code{"clusterTree"} produces the plots in Figure \ref{fig:eq18d}.
 
 <<eq18c, echo=TRUE, eval=FALSE>>=
 plot(Tree, type="lambda", main="lambda Tree (knn)")

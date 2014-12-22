@@ -1,18 +1,4 @@
 TODO
-- (Brit/Dave) Interaction between R and C++: output of diagrams
-- (Brit) compute diagrams for a function defined over a grid (no conf. intervals)
-
-- (all) study Rcpp
+- (all) study .Call() and Rcpp
 - (all) think about the implementation of filtration proposed in section 3.2 of bobrowski
 - (all) add more statistcal summaries, eg: distribution of Betti numbers, of birth times, of death times, of persistence values
-
-
-DONE (wrt current version on CRAN)
-- PHAT can be used in gridDiag
-- GUDHI can be used in ripsDiag
-- gridDiag now works in arbitrary dimension
-- Fixed bugs in plotRule and gridDiag
-- Cleaned the src folder
-- Fixed problem in wasserstain for gcc 4.1.2 (pow function)
-- in bottleneck and wasserstein added control for empty diagrams
-- printProgress added to kde and kernelDist
