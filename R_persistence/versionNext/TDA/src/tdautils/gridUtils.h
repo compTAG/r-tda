@@ -396,7 +396,7 @@ inline std::vector< unsigned char > isInternal( unsigned int argIdx, const std::
     std::vector< unsigned int >::const_iterator itrDim;
     for (itrDim = argGridNum.begin(); itrDim != argGridNum.end(); itrDim++)
     {
-        resIsInt.push_back( static_cast<unsigned char>( argIdx % (*itrDim) > 0 ) );
+        resIsInt.push_back( reinterpret_cast<unsigned char>( argIdx % (*itrDim) > 0 ) );
         argIdx /= (*itrDim);
     }
     return resIsInt;
@@ -411,7 +411,7 @@ inline std::vector< std::vector< unsigned char > > verticesLessVertex( const std
 	std::vector< unsigned char >::const_iterator itrVtx;
 	for (itrVtx = argVtx.begin(); itrVtx != argVtx.end(); ++itrVtx)
 	{
-		oneTwoVec.push_back( 1+static_cast<unsigned int>(*itrVtx) );
+		oneTwoVec.push_back( 1+reinterpret_cast<unsigned int>(*itrVtx) );
 	}
 	
     vtxNum = std::accumulate( oneTwoVec.begin(), oneTwoVec.end(), 1, std::multiplies< unsigned int >() );
