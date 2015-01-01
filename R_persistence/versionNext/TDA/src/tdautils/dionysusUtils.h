@@ -14,7 +14,7 @@ std::vector<unsigned int> getVertices(const Simplex<unsigned, double> &smp)
 	std::string vtxStr;
 	std::getline(sstr,vtxStr,'<');
 	unsigned int vtxIdx;
-	for (vtxIdx=0; vtxIdx<smp.dimension();++vtxIdx)
+	for ( vtxIdx=0 ; vtxIdx < (unsigned int)smp.dimension() ; ++vtxIdx )
 	{
 		std::getline(sstr,vtxStr,',');
 		vertices[vtxIdx] = (unsigned)std::atoi(vtxStr.c_str());
