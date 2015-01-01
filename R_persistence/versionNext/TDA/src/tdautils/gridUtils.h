@@ -179,7 +179,7 @@ void addOddTets(Fltr& filtr, const double * const fcnvalues,
      vertices[0] = curidx;  vertices[3] = curidx;
      vertices[1] = -1; vertices[2] = -1; 
      VertexVector::const_iterator bg = vertices.begin();
-     VertexVector::const_iterator end = vertices.end();
+//   VertexVector::const_iterator end = vertices.end();
     
      int v1, v2, v3, v4;
      double value, value2;  // max of value and value 2 is the fcn value. 
@@ -325,16 +325,12 @@ void addAllTetrahedra(Fltr& filtr, const double * const fcnvalues,
 
 int simplicesFromGrid(Fltr & filtr, const double * const extFcnVal, const std::vector< unsigned int > & argGridNum, const unsigned int & gridNumProd, const int argDimMax)
 {
-
-    unsigned int idxCur, idxDim;
-
-
 	int ncols, nrows;
 	ncols = nrows = 1;
-  int i = 0; // indexing the columns
-  int j = 0; // indexing the rows
-  int k = 0; // indexing the z dimension
-  int curidx = 0;
+	int i = 0; // indexing the columns
+	int j = 0; // indexing the rows
+	int k = 0; // indexing the z dimension
+	unsigned int curidx = 0;
 
 	if (argGridNum.size() > 0)
 		ncols = argGridNum[0];
@@ -427,7 +423,7 @@ inline std::vector< std::vector< unsigned char > > verticesLessVertex( const std
 	return resCubeVertices;
 }
 
-std::vector< std::map< std::vector< unsigned char >, std::vector< std::vector< std::vector< unsigned char > > > > > triangulateHypercube( const int argDimEmbed, const int argDimMax )
+std::vector< std::map< std::vector< unsigned char >, std::vector< std::vector< std::vector< unsigned char > > > > > triangulateHypercube( const int argDimEmbed, const unsigned char argDimMax )
 {
     std::vector< std::map< std::vector< unsigned char >, std::vector< std::vector< std::vector< unsigned char > > > > > resTriedCube;
     resTriedCube.reserve( argDimMax+1 );
@@ -453,7 +449,7 @@ std::vector< std::map< std::vector< unsigned char >, std::vector< std::vector< s
 	}
 	resTriedCube.push_back( mapDirSmpxVec );
 
-	unsigned int idxDim;
+	unsigned char idxDim;
 	std::vector< std::vector< unsigned char > > vtxLessVtx;
 	std::vector< std::vector< unsigned char > >::const_iterator itrLessVtx;
 	std::vector< std::vector< std::vector< unsigned char > > > dirSmpxVecPrev;
@@ -498,7 +494,7 @@ inline void addSimplex( Fltr & argFltr, const double * const extFcnVal, VertexVe
 }
 
 
-void addSimplices( Fltr & argFltr, const double * const extFcnVal, const int argIdxCur, const std::vector< unsigned int > & argGridNum, const unsigned int argIdxDim, std::vector< std::map< std::vector< unsigned char >, std::vector< std::vector< std::vector< unsigned char > > > > > & argTriedCube )
+void addSimplices( Fltr & argFltr, const double * const extFcnVal, const int argIdxCur, const std::vector< unsigned int > & argGridNum, const unsigned char argIdxDim, std::vector< std::map< std::vector< unsigned char >, std::vector< std::vector< std::vector< unsigned char > > > > > & argTriedCube )
 {
     std::vector< unsigned char > isInt = isInternal( argIdxCur, argGridNum );
     std::vector< std::vector< std::vector< unsigned char > > > dirSmpxVec = (argTriedCube.at( argIdxDim )).at( isInt );
@@ -527,10 +523,10 @@ void addSimplices( Fltr & argFltr, const double * const extFcnVal, const int arg
 }
 
 
-int simplicesFromGridBarycenter( Fltr & argFltr, const double * const extFcnVal, const std::vector< unsigned int > & argGridNum, const unsigned int & gridNumProd, const int argDimMax )
+int simplicesFromGridBarycenter( Fltr & argFltr, const double * const extFcnVal, const std::vector< unsigned int > & argGridNum, const unsigned int & gridNumProd, const unsigned char argDimMax )
 {
 
-    unsigned int idxCur, idxDim;
+	unsigned int idxCur; unsigned char idxDim;
 
    std::vector< std::map< std::vector< unsigned char >, std::vector< std::vector< std::vector< unsigned char > > > > >  triedCube = triangulateHypercube( argGridNum.size(), argDimMax );
   

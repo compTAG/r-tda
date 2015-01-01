@@ -79,7 +79,7 @@ void computePersistentPairsPhat(Flt f, int maxDimension, const double * const FU
 		persDim = simplex_map_inv.at(pairs.get_pair( idx ).first).dimension();
 		persDgmPoint[0] = simplex_map_inv.at(pairs.get_pair( idx ).first).data();
 		persDgmPoint[1] = simplex_map_inv.at(pairs.get_pair( idx ).second).data();
-		if (persDgmPoint[0] < persDgmPoint[1] && persDim <= maxDimension )
+		if (persDgmPoint[0] < persDgmPoint[1] && persDim <= (unsigned int)maxDimension )
 		{
 			persDgm[ persDim ].push_back( persDgmPoint );
 

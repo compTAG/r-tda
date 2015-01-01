@@ -268,7 +268,7 @@ extern "C" {
 		PersistenceR::SimplexMap<FltrR>   m = p.make_simplex_map(f);
 		for (PersistenceR::iterator cur = p.begin(); cur != p.end(); ++cur)
 		{
-			const PersistenceR::Cycle& cycle = cur->cycle;
+//			const PersistenceR::Cycle& cycle = cur->cycle;
 
 			if (!cur->sign())        // only negative simplices have non-empty cycles
 			{
@@ -358,7 +358,7 @@ extern "C" {
 		PersistenceR::SimplexMap<FltrRA>   m = p.make_simplex_map(f);
 		for (PersistenceR::iterator cur = p.begin(); cur != p.end(); ++cur)
 		{
-			const PersistenceR::Cycle& cycle = cur->cycle;
+//			const PersistenceR::Cycle& cycle = cur->cycle;
 
 			if (!cur->sign())        // only negative simplices have non-empty cycles
 			{
