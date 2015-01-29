@@ -24,15 +24,16 @@
 // for phat
 #include <tdautils/phatUtils.h>
 
+#include <Rcpp.h>
 
 
-extern "C" {
 
 
 
 	// grid function by Brittany T. Fasy
 	// modified by Jisu Kim for arbitrary dimension & using memory as an input & setting maximum dimension
-	void grid(double *FUNvaluesInput, int *gridDimensionInput, int *gridNumberInput, int *maxdimensionInput, char** decompositionInput, char** libraryInput, int* locationInput, int* printInput)
+	// [[Rcpp::export]]
+	void GridDiag(Rcpp::NumericVector FUNvaluesInput, int gridDimensionInput, Rcpp::NumericVector gridNumberInput, int maxdimensionInput, std::string decompositionInput, std::string libraryInput, int locationInput, int printInput)
 	{
 	#ifdef LOGGING
 		//rlog::RLogInit(argc, argv);
@@ -42,19 +43,19 @@ extern "C" {
 		//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/vineyard"));
 	#endif
 
-		bool printstatus=printInput[0];
+		bool printstatus=printInput;
 		Fltr f;
 
-		const unsigned int gridNumProd = std::accumulate( gridNumberInput, gridNumberInput+gridDimensionInput[0], 1, std::multiplies< unsigned int >() );
+		const unsigned int gridNumProd = std::accumulate( gridNumberInput.begin(), gridNumberInput.end(), 1, std::multiplies< int >() );
 
 		// Generate simplicial complex from function values and grid
-		if (decompositionInput[0][0] == '5')
+		if (decompositionInput[0] == '5')
 		{
-			simplicesFromGrid(f, FUNvaluesInput, gridNumber( gridDimensionInput, gridNumberInput ), gridNumProd, (*maxdimensionInput)+1 ); // fill the simplices
+			simplicesFromGrid(f, FUNvaluesInput, gridNumber( gridDimensionInput, gridNumberInput ), gridNumProd, (maxdimensionInput)+1 ); // fill the simplices
 		}
-		if (decompositionInput[0][0] == 'b')
+		if (decompositionInput[0] == 'b')
 		{
-			simplicesFromGridBarycenter(f, FUNvaluesInput, gridNumber( gridDimensionInput, gridNumberInput ), gridNumProd, (*maxdimensionInput)+1 ); // fill the simplices
+			simplicesFromGridBarycenter(f, FUNvaluesInput, gridNumber( gridDimensionInput, gridNumberInput ), gridNumProd, (maxdimensionInput)+1 ); // fill the simplices
 		}
 		if (printstatus){
 			Rprintf("# Generated complex of size: %d \n", f.size());
@@ -67,19 +68,19 @@ extern "C" {
 
 		// Compute persistent homology from sorted simplicial complex
 		std::map<Dimension, PDgm> dgms;
-		std::vector< std::vector< std::vector< double > > > persDgm(*maxdimensionInput+1);
+		std::vector< std::vector< std::vector< double > > > persDgm(maxdimensionInput+1);
 		std::vector< std::vector< std::vector< unsigned int > > > persLoc;
 		std::vector< std::vector< std::set< unsigned int > > > persCycle;
-		if (locationInput[0] == 1)
+		if (locationInput == 1)
 		{
-			persLoc.resize(*maxdimensionInput+1);
-			persCycle.resize(*maxdimensionInput+1);
+			persLoc.resize(maxdimensionInput+1);
+			persCycle.resize(maxdimensionInput+1);
 		}
-		if (libraryInput[0][0] == 'D')
+		if (libraryInput[0] == 'D')
 		{
 
 			Persistence p(f); // initialize persistence
-			if (locationInput[0] != 1)
+			if (locationInput != 1)
 			{
 				p.pair_simplices(printstatus); // pair simplices
 			} else
@@ -115,7 +116,7 @@ extern "C" {
 			//		}
 			//}
 
-			if (locationInput[0] == 1)
+			if (locationInput == 1)
 			{
 				std::vector< unsigned int > persLocPoint(2);
 				std::set< unsigned int > persCyclePoint;
@@ -129,7 +130,7 @@ extern "C" {
 
 							const Smplx& b = m[cur];
 							const Smplx& d = m[death];
-							if (b.data() < d.data() && b.dimension() <= *maxdimensionInput)
+							if (b.data() < d.data() && b.dimension() <= maxdimensionInput)
 							{
 								persLocPoint[0] = getLocation(b, FUNvaluesInput);
 								persLocPoint[1] = getLocation(d, FUNvaluesInput);
@@ -154,7 +155,7 @@ extern "C" {
 						{
 							const Smplx& b = m[cur];
 							persLocPoint[0] = getLocation(b, FUNvaluesInput);
-							persLocPoint[1] = (unsigned int)(std::max_element(FUNvaluesInput, FUNvaluesInput+gridNumProd)-FUNvaluesInput+1);
+							persLocPoint[1] = (unsigned int)(std::max_element(FUNvaluesInput.begin(), FUNvaluesInput.end())-FUNvaluesInput.begin()+1);
 							persLoc[ b.dimension() ].push_back( persLocPoint );
 
 							// Iterate over the cycle
@@ -165,23 +166,23 @@ extern "C" {
 				}
 			}
 		}
-		if (libraryInput[0][0] == 'P')
+		if (libraryInput[0] == 'P')
 		{
-			 computePersistentPairsPhat(f, *maxdimensionInput, FUNvaluesInput, gridNumProd, (bool)locationInput[0], persDgm, persLoc);
+			 computePersistentPairsPhat(f, maxdimensionInput, FUNvaluesInput, gridNumProd, (bool)locationInput, persDgm, persLoc);
 		}
 
 
 		// Output persistent diagram
 		std::ofstream outfile;
 		outfile.open("outputTDA.txt");
-		for (int dgmsIdx=0; dgmsIdx<= *maxdimensionInput; ++dgmsIdx)
+		for (int dgmsIdx=0; dgmsIdx<= maxdimensionInput; ++dgmsIdx)
 		{
 			outfile << dgmsIdx << std::endl;
-			if (libraryInput[0][0] == 'D')
+			if (libraryInput[0] == 'D')
 			{
 				outfile << dgms[dgmsIdx] << std::endl; // print i-dim diagram
 			}
-			if (libraryInput[0][0] == 'P')
+			if (libraryInput[0] == 'P')
 			{
 				std::vector< std::vector< double > >::const_iterator persdgmIdx;
 				for (persdgmIdx = persDgm[ dgmsIdx ].begin(); persdgmIdx != persDgm[ dgmsIdx ].end(); ++persdgmIdx)
@@ -191,10 +192,10 @@ extern "C" {
 				outfile << std::endl;
 			}
 		}
-		if (locationInput[0] == 1)
+		if (locationInput == 1)
 		{
 			outfile << "Location" << std::endl;
-			for (int dgmsIdx=0; dgmsIdx<= *maxdimensionInput; ++dgmsIdx)
+			for (int dgmsIdx=0; dgmsIdx<= maxdimensionInput; ++dgmsIdx)
 			{
 				std::vector< std::vector< unsigned int > >::const_iterator persLocIdx;
 				for (persLocIdx = persLoc[ dgmsIdx ].begin(); persLocIdx != persLoc[ dgmsIdx ].end(); ++persLocIdx)
@@ -204,7 +205,7 @@ extern "C" {
 			}
 
 			outfile << std::endl << "Cycle" << std::endl;
-			for (int dgmsIdx=0; dgmsIdx<= *maxdimensionInput; ++dgmsIdx)
+			for (int dgmsIdx=0; dgmsIdx<= maxdimensionInput; ++dgmsIdx)
 			{
 				std::vector< std::set< unsigned int > >::const_iterator persCycleIdx;
 				std::set< unsigned int >::const_iterator persCyclePointIdx;
@@ -222,6 +223,7 @@ extern "C" {
 	}
 
 
+extern "C" {
 
 	void rips(int* dimInput, double* maxInput, int* printInput)
 	{

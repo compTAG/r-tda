@@ -30,17 +30,12 @@ function(X, FUN, lim, by, maxdimension=length(lim)/2-1, sublevel=TRUE, library="
 
   gridValues=p
   if (sublevel==FALSE) gridValues=-p
-	
+
 	#write input.txt and read output.txt
-  if (ncol(X)<=3)
-  {
-  	computeGrid=.C("grid",FUNvaluesInput=as.double(gridValues),gridDimensionInput=as.integer(length(dim)),gridNumberInput=as.integer(dim),maxdimensionInput=as.integer(maxdimension),decompositionInput=as.character("5tetrahedra"),libraryInput=as.character(library),locationInput=as.integer(location),printInput=as.integer(printProgress),
-                   dup=FALSE, package="TDA")
-  }
-  else
-  {
-    computeGrid=.C("grid",FUNvaluesInput=as.double(gridValues),gridDimensionInput=as.integer(length(dim)),gridNumberInput=as.integer(dim),maxdimensionInput=as.integer(maxdimension),decompositionInput=as.character("barycenter"),libraryInput=as.character(library),locationInput=as.integer(location),printInput=as.integer(printProgress),
-                   dup=FALSE, package="TDA")
+  if (ncol(X)<=3) {
+    GridDiag(FUNvaluesInput=as.double(gridValues),gridDimensionInput=as.integer(length(dim)),gridNumberInput=as.integer(dim),maxdimensionInput=as.integer(maxdimension),decompositionInput=as.character("5tetrahedra"),libraryInput=as.character(library),locationInput=as.integer(location),printInput=as.integer(printProgress))
+  } else {
+    GridDiag(FUNvaluesInput=as.double(gridValues),gridDimensionInput=as.integer(length(dim)),gridNumberInput=as.integer(dim),maxdimensionInput=as.integer(maxdimension),decompositionInput=as.character("barycenter"),libraryInput=as.character(library),locationInput=as.integer(location),printInput=as.integer(printProgress))
   }
 	
   out=read.table("outputTDA.txt", sep="\n")
