@@ -37,7 +37,8 @@ typedef         OffsetBeginMap<Fltr, Persistence,
 
 
 // add a single edge to the filtration
-void addEdge(Fltr& filtr, const double * const fcnvalues, 
+template <typename RealVec>
+void addEdge(Fltr& filtr, const RealVec & fcnvalues, 
             int vert01, int vert02)
 {
      VertexVector vertices(3);
@@ -51,7 +52,8 @@ void addEdge(Fltr& filtr, const double * const fcnvalues,
 } // end function to add a single edge
 
 // add a single triangle to the filtration
-void addTri(Fltr& filtr, const double * const fcnvalues, 
+template <typename RealVec>
+void addTri(Fltr& filtr, const RealVec & fcnvalues, 
             int vert01, int vert02, int vert03)
 {
      VertexVector vertices(3);
@@ -67,7 +69,8 @@ void addTri(Fltr& filtr, const double * const fcnvalues,
 } // end function to add a single triangle
 
 // add a single tet to the filtration
-void addTet(Fltr& filtr, const double * const fcnvalues, 
+template <typename RealVec>
+void addTet(Fltr& filtr, const RealVec & fcnvalues, 
             int vert01, int vert02, int vert03, int vert04)
 {
      VertexVector vertices(3);
@@ -83,7 +86,8 @@ void addTet(Fltr& filtr, const double * const fcnvalues,
          // std::max(fcnvalues.at(vert03),fcnvalues.at(vert04))),
 } // end function to add a single tet
 
-void addAllEdges(Fltr& filtr, const double * const fcnvalues, 
+template <typename RealVec>
+void addAllEdges(Fltr& filtr, const RealVec & fcnvalues, 
               const int ncols, const int nrows, int i, int j, int k)
 {     
      int curidx = i + ncols*j + ncols*nrows*k;
@@ -148,7 +152,8 @@ void addAllEdges(Fltr& filtr, const double * const fcnvalues,
      return;
 } // end function addEdges
 
-void addEvenTets(Fltr& filtr, const double * const fcnvalues, 
+template <typename RealVec>
+void addEvenTets(Fltr& filtr, const RealVec & fcnvalues, 
                   const int ncols, const int nrows, int i, int j, int k)
 {
      assert(i > 0 && j > 0 && k > 0);
@@ -169,7 +174,8 @@ void addEvenTets(Fltr& filtr, const double * const fcnvalues,
      return;
 } // end fcn to add four EVEN tets
 
-void addOddTets(Fltr& filtr, const double * const fcnvalues, 
+template <typename RealVec>
+void addOddTets(Fltr& filtr, const RealVec & fcnvalues, 
                   const int ncols, const int nrows, int i, int j, int k)
 {
      assert(i > 0 && j > 0 && k > 0);
@@ -224,7 +230,8 @@ void addOddTets(Fltr& filtr, const double * const fcnvalues,
      return;
 } // end fcn addEvenTets
 
-void addAllTriangles(Fltr& filtr, const double * const fcnvalues, 
+template <typename RealVec>
+void addAllTriangles(Fltr& filtr, const RealVec & fcnvalues, 
                   const int ncols, const int nrows, int i, int j, int k)
 {
      int curidx = i + ncols*j + ncols*nrows*k;
@@ -291,7 +298,8 @@ void addAllTriangles(Fltr& filtr, const double * const fcnvalues,
     return;
 } // end function addAllTriangles
 
-void addAllTetrahedra(Fltr& filtr, const double * const fcnvalues, 
+template <typename RealVec>
+void addAllTetrahedra(Fltr& filtr, const RealVec & fcnvalues, 
                   const int ncols, const int nrows, int i, int j, int k)
 {
      int curidx = i + ncols*j + ncols*nrows*k;
@@ -323,7 +331,8 @@ void addAllTetrahedra(Fltr& filtr, const double * const fcnvalues,
 } // end function addTriangles
 
 
-int simplicesFromGrid(Fltr & filtr, const double * const extFcnVal, const std::vector< unsigned int > & argGridNum, const unsigned int & gridNumProd, const int argDimMax)
+template<typename RealVec>
+int simplicesFromGrid(Fltr & filtr, const RealVec & extFcnVal, const std::vector< unsigned int > & argGridNum, const unsigned int & gridNumProd, const int argDimMax)
 {
 	int ncols, nrows;
 	ncols = nrows = 1;
@@ -379,9 +388,10 @@ int simplicesFromGrid(Fltr & filtr, const double * const extFcnVal, const std::v
   return 0;
 } // end simplicesFromGrid function
 
-inline std::vector< unsigned int > gridNumber(const int * const extDim, const int * const extGridNum)
+template <typename IntegerVec>
+inline std::vector< unsigned int > gridNumber(const int extDim, const IntegerVec extGridNum)
 {
-    return std::vector< unsigned int >( extGridNum, extGridNum+extDim[0] );
+    return std::vector< unsigned int >( extGridNum.begin(), extGridNum.end() );
 }
 
 
@@ -482,7 +492,8 @@ std::vector< std::map< std::vector< unsigned char >, std::vector< std::vector< s
 
 
 // add a single simplex to the filtration
-inline void addSimplex( Fltr & argFltr, const double * const extFcnVal, VertexVector & argVtx )
+template<typename RealVec>
+inline void addSimplex( Fltr & argFltr, const RealVec & extFcnVal, VertexVector & argVtx )
 {
     VertexVector::const_iterator itrVtx = argVtx.begin();
     double maxFcnVal = extFcnVal[ *itrVtx ];
@@ -494,7 +505,8 @@ inline void addSimplex( Fltr & argFltr, const double * const extFcnVal, VertexVe
 }
 
 
-void addSimplices( Fltr & argFltr, const double * const extFcnVal, const int argIdxCur, const std::vector< unsigned int > & argGridNum, const unsigned char argIdxDim, std::vector< std::map< std::vector< unsigned char >, std::vector< std::vector< std::vector< unsigned char > > > > > & argTriedCube )
+template<typename RealVec>
+void addSimplices( Fltr & argFltr, const RealVec & extFcnVal, const int argIdxCur, const std::vector< unsigned int > & argGridNum, const unsigned char argIdxDim, std::vector< std::map< std::vector< unsigned char >, std::vector< std::vector< std::vector< unsigned char > > > > > & argTriedCube )
 {
     std::vector< unsigned char > isInt = isInternal( argIdxCur, argGridNum );
     std::vector< std::vector< std::vector< unsigned char > > > dirSmpxVec = (argTriedCube.at( argIdxDim )).at( isInt );
@@ -523,7 +535,8 @@ void addSimplices( Fltr & argFltr, const double * const extFcnVal, const int arg
 }
 
 
-int simplicesFromGridBarycenter( Fltr & argFltr, const double * const extFcnVal, const std::vector< unsigned int > & argGridNum, const unsigned int & gridNumProd, const unsigned char argDimMax )
+template<typename RealVec>
+int simplicesFromGridBarycenter( Fltr & argFltr, const RealVec & extFcnVal, const std::vector< unsigned int > & argGridNum, const unsigned int & gridNumProd, const unsigned char argDimMax )
 {
 
 	unsigned int idxCur; unsigned char idxDim;

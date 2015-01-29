@@ -1,4 +1,5 @@
 import(FNN, igraph, parallel, scales)
+importFrom(Rcpp, evalCpp)
 
 export(	bootstrapBand,
 	bootstrapDiagram,
@@ -43,3 +44,4 @@ S3method(print, summary.diagram)
 S3method(print, summary.maxPersistence)
 
 useDynLib(TDA)
+exportPattern("^[[:alpha:]]+")

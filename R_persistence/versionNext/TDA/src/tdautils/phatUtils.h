@@ -18,8 +18,8 @@
 #include <tdautils/dionysusUtils.h>
 
 
-template<typename Flt>
-void computePersistentPairsPhat(Flt f, int maxDimension, const double * const FUNvaluesInput, const unsigned int & gridNumProd, bool isLocation, std::vector< std::vector< std::vector< double > > > &persDgm, std::vector< std::vector< std::vector< unsigned int > > > &persLoc)
+template<typename Flt, typename RealVec>
+void computePersistentPairsPhat(Flt f, int maxDimension, const RealVec & FUNvaluesInput, const unsigned int & gridNumProd, bool isLocation, std::vector< std::vector< std::vector< double > > > &persDgm, std::vector< std::vector< std::vector< unsigned int > > > &persLoc)
 {
 
 	// If phat is used, convert from Dionysus to phat
@@ -70,7 +70,7 @@ void computePersistentPairsPhat(Flt f, int maxDimension, const double * const FU
 	if (isLocation)
 	{
 		persLocPoint[0] = getLocation(simplex_map_inv.at(0), FUNvaluesInput);
-		persLocPoint[1] = (unsigned int)(std::max_element(FUNvaluesInput, FUNvaluesInput+gridNumProd)-FUNvaluesInput+1);
+		persLocPoint[1] = (unsigned int)(std::max_element(FUNvaluesInput.begin(), FUNvaluesInput.end())-FUNvaluesInput.begin()+1);
 		persLoc[ 0 ].push_back( persLocPoint );
 	}
 

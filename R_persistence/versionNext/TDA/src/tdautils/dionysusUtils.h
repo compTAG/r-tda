@@ -24,7 +24,8 @@ std::vector<unsigned int> getVertices(const Simplex<unsigned, double> &smp)
 	return vertices;
 }
 
-unsigned int getLocation(const Simplex<unsigned, double> &smp, const double * const FUNvaluesInput)
+template<typename RealVec>
+unsigned int getLocation(const Simplex<unsigned, double> &smp, const RealVec & FUNvaluesInput)
 {
 	std::vector< unsigned > vertices;
 	std::vector< unsigned >::const_iterator vertexItr;

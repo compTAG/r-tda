@@ -9,3 +9,5 @@ Description: This package provides tools for the statistical analysis of persist
 Depends: R (>= 3.1.0), FNN, igraph, parallel, scales
 Repository: CRAN
 License: GPL-3
+Imports: Rcpp (>= 0.11.3)
+LinkingTo: Rcpp
