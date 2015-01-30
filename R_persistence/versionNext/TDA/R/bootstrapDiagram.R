@@ -4,7 +4,7 @@ function(X, FUN, lim, by, sublevel=TRUE, library="Dionysus", B=30, alpha=0.05, d
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
 	if (class(FUN)!="function") stop("FUN should be function")
 	if (2*ncol(X)!=length(lim)) stop("dimension of X does not match with lim")
-	if (!is.vector(by) || length(by)!=1) stop("by should be a positive number")
+	if (!is.numeric(by) || !is.vector(by) || (length(by)!=1 && length(by)!=length(lim)/2) || !all(by>0) ) stop("by should be either a positive number or a positive vector of length equals dimension of grid")
 	if (!is.logical(sublevel)) stop("sublevel should be logical")
 	if (!is.numeric(B) || length(B)!=1 || B<1) stop("B should be a positive number")
 	if (!is.numeric(alpha)) stop("alpha should be a number")

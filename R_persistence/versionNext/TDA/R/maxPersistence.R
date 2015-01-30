@@ -6,7 +6,7 @@ function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRU
 	if (!is.vector(parameters) || !is.numeric(parameters)) stop("parameters should be a numeric vector")
 	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
 	if (2*ncol(X)!=length(lim)) stop("dimension of X does not match with lim")	
-	if (!is.vector(by) || length(by)!=1) stop("by should be a positive number")
+	if (!is.numeric(by) || !is.vector(by) || (length(by)!=1 && length(by)!=length(lim)/2) || !all(by>0) ) stop("by should be either a positive number or a positive vector of length equals dimension of grid")
 	if (!is.logical(sublevel)) stop("sublevel should be logical")
 	if (!is.vector(B) || length(B)!=1) stop("B should be an integer")
 	if (!is.vector(alpha) || length(alpha)!=1) stop("alpha should be a number between 0 and 1")
