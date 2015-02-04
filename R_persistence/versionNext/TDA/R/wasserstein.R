@@ -17,7 +17,7 @@ function(Diag1, Diag2, p=1, dimension=1){
 	if (class(Diag1)!="matrix") Diag1=t(Diag1) #in case there is only 1 point
 	if (class(Diag2)!="matrix") Diag2=t(Diag2) #in case there is only 1 point			
 	out=1
-	out1=.C("wasserstein", as.double(t(Diag1)), as.integer(nrow(Diag1)), as.double(t(Diag2)), as.integer(nrow(Diag2)), as.integer(p), as.double(out), dup=TRUE, package="TDA")[[6]]
+	out1=Wasserstein(as.double(t(Diag1)), as.integer(nrow(Diag1)), as.double(t(Diag2)), as.integer(nrow(Diag2)), as.integer(p))
 	
 	return(out1)
 }

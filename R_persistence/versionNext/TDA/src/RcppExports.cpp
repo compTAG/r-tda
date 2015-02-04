@@ -24,3 +24,40 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// Bottleneck
+double Bottleneck(Rcpp::NumericVector points1Input, int points1NumberInput, Rcpp::NumericVector points2Input, int points2NumberInput);
+RcppExport SEXP TDA_Bottleneck(SEXP points1InputSEXP, SEXP points1NumberInputSEXP, SEXP points2InputSEXP, SEXP points2NumberInputSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type points1Input(points1InputSEXP );
+        Rcpp::traits::input_parameter< int >::type points1NumberInput(points1NumberInputSEXP );
+        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type points2Input(points2InputSEXP );
+        Rcpp::traits::input_parameter< int >::type points2NumberInput(points2NumberInputSEXP );
+        double __result = Bottleneck(points1Input, points1NumberInput, points2Input, points2NumberInput);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// Wasserstein
+double Wasserstein(Rcpp::NumericVector points1Input, int points1NumberInput, Rcpp::NumericVector points2Input, int points2NumberInput, int inputP);
+RcppExport SEXP TDA_Wasserstein(SEXP points1InputSEXP, SEXP points1NumberInputSEXP, SEXP points2InputSEXP, SEXP points2NumberInputSEXP, SEXP inputPSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type points1Input(points1InputSEXP );
+        Rcpp::traits::input_parameter< int >::type points1NumberInput(points1NumberInputSEXP );
+        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type points2Input(points2InputSEXP );
+        Rcpp::traits::input_parameter< int >::type points2NumberInput(points2NumberInputSEXP );
+        Rcpp::traits::input_parameter< int >::type inputP(inputPSEXP );
+        double __result = Wasserstein(points1Input, points1NumberInput, points2Input, points2NumberInput, inputP);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
