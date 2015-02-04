@@ -33,7 +33,7 @@
 	// grid function by Brittany T. Fasy
 	// modified by Jisu Kim for arbitrary dimension & using memory as an input & setting maximum dimension
 	// [[Rcpp::export]]
-	void GridDiag(Rcpp::NumericVector FUNvaluesInput, int gridDimensionInput, Rcpp::NumericVector gridNumberInput, int maxdimensionInput, std::string decompositionInput, std::string libraryInput, int locationInput, int printInput)
+	void GridDiag(Rcpp::NumericVector FUNvaluesInput, int gridDimensionInput, Rcpp::IntegerVector gridNumberInput, int maxdimensionInput, std::string decompositionInput, std::string libraryInput, int locationInput, int printInput)
 	{
 	#ifdef LOGGING
 		//rlog::RLogInit(argc, argv);

@@ -6,14 +6,14 @@
 using namespace Rcpp;
 
 // GridDiag
-void GridDiag(Rcpp::NumericVector FUNvaluesInput, int gridDimensionInput, Rcpp::NumericVector gridNumberInput, int maxdimensionInput, std::string decompositionInput, std::string libraryInput, int locationInput, int printInput);
+void GridDiag(Rcpp::NumericVector FUNvaluesInput, int gridDimensionInput, Rcpp::IntegerVector gridNumberInput, int maxdimensionInput, std::string decompositionInput, std::string libraryInput, int locationInput, int printInput);
 RcppExport SEXP TDA_GridDiag(SEXP FUNvaluesInputSEXP, SEXP gridDimensionInputSEXP, SEXP gridNumberInputSEXP, SEXP maxdimensionInputSEXP, SEXP decompositionInputSEXP, SEXP libraryInputSEXP, SEXP locationInputSEXP, SEXP printInputSEXP) {
 BEGIN_RCPP
     {
         Rcpp::RNGScope __rngScope;
         Rcpp::traits::input_parameter< Rcpp::NumericVector >::type FUNvaluesInput(FUNvaluesInputSEXP );
         Rcpp::traits::input_parameter< int >::type gridDimensionInput(gridDimensionInputSEXP );
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type gridNumberInput(gridNumberInputSEXP );
+        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type gridNumberInput(gridNumberInputSEXP );
         Rcpp::traits::input_parameter< int >::type maxdimensionInput(maxdimensionInputSEXP );
         Rcpp::traits::input_parameter< std::string >::type decompositionInput(decompositionInputSEXP );
         Rcpp::traits::input_parameter< std::string >::type libraryInput(libraryInputSEXP );
