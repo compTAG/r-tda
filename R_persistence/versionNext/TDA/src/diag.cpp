@@ -401,31 +401,35 @@ extern "C" {
 		}
 	}
 
+}
 
 
-	void bottleneck(double* points1Input, int* points1NumberInput, double* points2Input, int* points2NumberInput, double* out_name)
+	// [[Rcpp::export]]
+	double Bottleneck(Rcpp::NumericVector points1Input, int points1NumberInput, Rcpp::NumericVector points2Input, int points2NumberInput)
 	{
 		// ... set up the input
 		PDgmB dgm1, dgm2;
 		read_diagram(dgm1, points1Input, points1NumberInput);
 		read_diagram(dgm2, points2Input, points2NumberInput);
 
-		out_name[0]=bottleneck_distance(dgm1, dgm2);
+		return (bottleneck_distance(dgm1, dgm2));
 	}
 
 
-	void wasserstein(double* points1Input, int* points1NumberInput, double* points2Input, int* points2NumberInput, int* inputP, double* out_name)
+	// [[Rcpp::export]]
+	double Wasserstein(Rcpp::NumericVector points1Input, int points1NumberInput, Rcpp::NumericVector points2Input, int points2NumberInput, int inputP)
 	{
 		// ... set up the input
-		int p=inputP[0];		
+		int p=inputP;		
 
 		PDgmB dgm1, dgm2;
 		read_diagram(dgm1, points1Input, points1NumberInput);
 		read_diagram(dgm2, points2Input, points2NumberInput);
 	
-		out_name[0]=wasserstein_distance(dgm1, dgm2, p);
+		return (wasserstein_distance(dgm1, dgm2, p));
 	}
 
+extern "C" {
 
   	// KDE function on a Grid
 	void kde(double *XX, int *pNN, int *pDD, double *Grid, int *pMM, double *hh, int *printProgress, double *out){

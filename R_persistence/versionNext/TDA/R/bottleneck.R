@@ -17,7 +17,7 @@ function(Diag1, Diag2, dimension){
 	if (class(Diag2)!="matrix") Diag2=t(Diag2) #in case there is only 1 point		
 
 	out=1
-	out1=.C("bottleneck", as.double(t(Diag1)), as.integer(nrow(Diag1)), as.double(t(Diag2)), as.integer(nrow(Diag2)), as.double(out), dup=TRUE, package="TDA")[[5]]
+	out1=Bottleneck(as.double(t(Diag1)), as.integer(nrow(Diag1)), as.double(t(Diag2)), as.integer(nrow(Diag2)))
 	
 	return(out1)
 }

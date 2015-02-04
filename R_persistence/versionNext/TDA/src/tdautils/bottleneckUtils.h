@@ -5,10 +5,11 @@
 
 typedef PersistenceDiagram<>                    PDgmB;
 
-void read_diagram(PDgmB& dgm, const double* pointsInput, const int* pointsNumberInput)
+template <typename RealVec>
+void read_diagram(PDgmB& dgm, const RealVec & pointsInput, int pointsNumberInput)
 {
 	int idx;
-	for (idx = 0; idx < *pointsNumberInput ; ++idx)
+	for (idx = 0; idx < pointsNumberInput ; ++idx)
 	{
 		dgm.push_back(PDgmB::Point(pointsInput[2*idx],pointsInput[2*idx+1]));
 	}
