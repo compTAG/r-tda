@@ -9,55 +9,41 @@ using namespace Rcpp;
 void GridDiag(Rcpp::NumericVector FUNvaluesInput, int gridDimensionInput, Rcpp::IntegerVector gridNumberInput, int maxdimensionInput, std::string decompositionInput, std::string libraryInput, int locationInput, int printInput);
 RcppExport SEXP TDA_GridDiag(SEXP FUNvaluesInputSEXP, SEXP gridDimensionInputSEXP, SEXP gridNumberInputSEXP, SEXP maxdimensionInputSEXP, SEXP decompositionInputSEXP, SEXP libraryInputSEXP, SEXP locationInputSEXP, SEXP printInputSEXP) {
 BEGIN_RCPP
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type FUNvaluesInput(FUNvaluesInputSEXP );
-        Rcpp::traits::input_parameter< int >::type gridDimensionInput(gridDimensionInputSEXP );
-        Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type gridNumberInput(gridNumberInputSEXP );
-        Rcpp::traits::input_parameter< int >::type maxdimensionInput(maxdimensionInputSEXP );
-        Rcpp::traits::input_parameter< std::string >::type decompositionInput(decompositionInputSEXP );
-        Rcpp::traits::input_parameter< std::string >::type libraryInput(libraryInputSEXP );
-        Rcpp::traits::input_parameter< int >::type locationInput(locationInputSEXP );
-        Rcpp::traits::input_parameter< int >::type printInput(printInputSEXP );
-        GridDiag(FUNvaluesInput, gridDimensionInput, gridNumberInput, maxdimensionInput, decompositionInput, libraryInput, locationInput, printInput);
-    }
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type FUNvaluesInput(FUNvaluesInputSEXP);
+    Rcpp::traits::input_parameter< int >::type gridDimensionInput(gridDimensionInputSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type gridNumberInput(gridNumberInputSEXP);
+    Rcpp::traits::input_parameter< int >::type maxdimensionInput(maxdimensionInputSEXP);
+    Rcpp::traits::input_parameter< std::string >::type decompositionInput(decompositionInputSEXP);
+    Rcpp::traits::input_parameter< std::string >::type libraryInput(libraryInputSEXP);
+    Rcpp::traits::input_parameter< int >::type locationInput(locationInputSEXP);
+    Rcpp::traits::input_parameter< int >::type printInput(printInputSEXP);
+    GridDiag(FUNvaluesInput, gridDimensionInput, gridNumberInput, maxdimensionInput, decompositionInput, libraryInput, locationInput, printInput);
     return R_NilValue;
 END_RCPP
 }
 // Bottleneck
-double Bottleneck(Rcpp::NumericVector points1Input, int points1NumberInput, Rcpp::NumericVector points2Input, int points2NumberInput);
-RcppExport SEXP TDA_Bottleneck(SEXP points1InputSEXP, SEXP points1NumberInputSEXP, SEXP points2InputSEXP, SEXP points2NumberInputSEXP) {
+double Bottleneck(const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2);
+RcppExport SEXP TDA_Bottleneck(SEXP Diag1SEXP, SEXP Diag2SEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type points1Input(points1InputSEXP );
-        Rcpp::traits::input_parameter< int >::type points1NumberInput(points1NumberInputSEXP );
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type points2Input(points2InputSEXP );
-        Rcpp::traits::input_parameter< int >::type points2NumberInput(points2NumberInputSEXP );
-        double __result = Bottleneck(points1Input, points1NumberInput, points2Input, points2NumberInput);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type Diag1(Diag1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type Diag2(Diag2SEXP);
+    __result = Rcpp::wrap(Bottleneck(Diag1, Diag2));
+    return __result;
 END_RCPP
 }
 // Wasserstein
-double Wasserstein(Rcpp::NumericVector points1Input, int points1NumberInput, Rcpp::NumericVector points2Input, int points2NumberInput, int inputP);
-RcppExport SEXP TDA_Wasserstein(SEXP points1InputSEXP, SEXP points1NumberInputSEXP, SEXP points2InputSEXP, SEXP points2NumberInputSEXP, SEXP inputPSEXP) {
+double Wasserstein(const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2, const int p);
+RcppExport SEXP TDA_Wasserstein(SEXP Diag1SEXP, SEXP Diag2SEXP, SEXP pSEXP) {
 BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type points1Input(points1InputSEXP );
-        Rcpp::traits::input_parameter< int >::type points1NumberInput(points1NumberInputSEXP );
-        Rcpp::traits::input_parameter< Rcpp::NumericVector >::type points2Input(points2InputSEXP );
-        Rcpp::traits::input_parameter< int >::type points2NumberInput(points2NumberInputSEXP );
-        Rcpp::traits::input_parameter< int >::type inputP(inputPSEXP );
-        double __result = Wasserstein(points1Input, points1NumberInput, points2Input, points2NumberInput, inputP);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type Diag1(Diag1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type Diag2(Diag2SEXP);
+    Rcpp::traits::input_parameter< const int >::type p(pSEXP);
+    __result = Rcpp::wrap(Wasserstein(Diag1, Diag2, p));
+    return __result;
 END_RCPP
 }

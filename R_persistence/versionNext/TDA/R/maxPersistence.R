@@ -10,6 +10,12 @@ function(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, sublevel=TRU
 	if (!is.logical(sublevel)) stop("sublevel should be logical")
 	if (!is.vector(B) || length(B)!=1) stop("B should be an integer")
 	if (!is.vector(alpha) || length(alpha)!=1) stop("alpha should be a number between 0 and 1")
+  if (!is.vector(dimension) || !all(dimension >= 0)) {
+    stop("dimension should be a nonnegative integer or a vector of nonnegative integer")
+  }
+  if (!is.vector(p) || length(p) != 1 || p < 1) {
+    stop("p should be a positive integer")
+  }
      if (!is.logical(parallel)) stop("parallel should be logical")
      if (!is.logical(printProgress)) stop("printProgress should be logical")
 
