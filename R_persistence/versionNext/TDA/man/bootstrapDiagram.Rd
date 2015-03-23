@@ -44,7 +44,7 @@ a logical variable indicating if the Persistence Diagram should be computed for 
   a string specifying the distance to be used for persistence diagrams: either 'bottleneck' or 'wasserstein'
 }
   \item{dimension}{
-	if \code{distance=="wasserstein"}, then \code{dimension} an integer specifying the dimension of the features used to compute the bottleneck distance. 0 for connected components, 1 for loops, 2 for voids and so on.
+	\code{dimension} is an integer or a vector specifying the dimension of the features used to compute the bottleneck distance. 0 for connected components, 1 for loops, 2 for voids and so on.
 }
   \item{p}{
 		if \code{distance=="wasserstein"}, then \code{p} is an integer specifying the power to be used in the computation of the Wasserstein distance. Default is 1.
