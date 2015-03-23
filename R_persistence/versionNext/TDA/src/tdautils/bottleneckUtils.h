@@ -5,12 +5,12 @@
 
 typedef PersistenceDiagram<>                    PDgmB;
 
-template <typename RealVec>
-void read_diagram(PDgmB& dgm, const RealVec & pointsInput, int pointsNumberInput)
+template <typename RealMatrix>
+void read_diagram(PDgmB& dgm, const RealMatrix& Diag)
 {
 	int idx;
-	for (idx = 0; idx < pointsNumberInput ; ++idx)
+	for (idx = 0; idx < Diag.nrow(); ++idx)
 	{
-		dgm.push_back(PDgmB::Point(pointsInput[2*idx],pointsInput[2*idx+1]));
+		dgm.push_back(PDgmB::Point(Diag(idx, 0), Diag(idx, 1)));
 	}
 }

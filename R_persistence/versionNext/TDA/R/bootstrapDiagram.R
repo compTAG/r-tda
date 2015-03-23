@@ -8,8 +8,12 @@ function(X, FUN, lim, by, sublevel=TRUE, library="Dionysus", B=30, alpha=0.05, d
 	if (!is.logical(sublevel)) stop("sublevel should be logical")
 	if (!is.numeric(B) || length(B)!=1 || B<1) stop("B should be a positive number")
 	if (!is.numeric(alpha)) stop("alpha should be a number")
-	if (!is.numeric(dimension) || length(dimension)!=1) stop("dimension should be a positive integer")
-	if (!is.vector(p) || length(p)!=1 || p < 1) stop("p should be a positive integer")	
+  if (!is.vector(dimension) || !all(dimension >= 0)) {
+    stop("dimension should be a nonnegative integer or a vector of nonnegative integer")
+  }
+  if (!is.vector(p) || length(p) != 1 || p < 1) {
+    stop("p should be a positive integer")
+  }
      # if (!is.logical(parallel)) stop("parallel should be logical")
      if (!is.logical(printProgress)) stop("printProgress should be logical")
 

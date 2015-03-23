@@ -5,11 +5,11 @@ GridDiag <- function(FUNvaluesInput, gridDimensionInput, gridNumberInput, maxdim
     invisible(.Call('TDA_GridDiag', PACKAGE = 'TDA', FUNvaluesInput, gridDimensionInput, gridNumberInput, maxdimensionInput, decompositionInput, libraryInput, locationInput, printInput))
 }
 
-Bottleneck <- function(points1Input, points1NumberInput, points2Input, points2NumberInput) {
-    .Call('TDA_Bottleneck', PACKAGE = 'TDA', points1Input, points1NumberInput, points2Input, points2NumberInput)
+Bottleneck <- function(Diag1, Diag2) {
+    .Call('TDA_Bottleneck', PACKAGE = 'TDA', Diag1, Diag2)
 }
 
-Wasserstein <- function(points1Input, points1NumberInput, points2Input, points2NumberInput, inputP) {
-    .Call('TDA_Wasserstein', PACKAGE = 'TDA', points1Input, points1NumberInput, points2Input, points2NumberInput, inputP)
+Wasserstein <- function(Diag1, Diag2, p) {
+    .Call('TDA_Wasserstein', PACKAGE = 'TDA', Diag1, Diag2, p)
 }
 

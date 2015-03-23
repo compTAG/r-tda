@@ -405,26 +405,24 @@ extern "C" {
 
 
 	// [[Rcpp::export]]
-	double Bottleneck(Rcpp::NumericVector points1Input, int points1NumberInput, Rcpp::NumericVector points2Input, int points2NumberInput)
+	double Bottleneck(const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2)
 	{
 		// ... set up the input
 		PDgmB dgm1, dgm2;
-		read_diagram(dgm1, points1Input, points1NumberInput);
-		read_diagram(dgm2, points2Input, points2NumberInput);
+		read_diagram(dgm1, Diag1);
+		read_diagram(dgm2, Diag2);
 
 		return (bottleneck_distance(dgm1, dgm2));
 	}
 
 
 	// [[Rcpp::export]]
-	double Wasserstein(Rcpp::NumericVector points1Input, int points1NumberInput, Rcpp::NumericVector points2Input, int points2NumberInput, int inputP)
+	double Wasserstein(const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2, const int p)
 	{
 		// ... set up the input
-		int p=inputP;		
-
 		PDgmB dgm1, dgm2;
-		read_diagram(dgm1, points1Input, points1NumberInput);
-		read_diagram(dgm2, points2Input, points2NumberInput);
+		read_diagram(dgm1, Diag1);
+		read_diagram(dgm2, Diag2);
 	
 		return (wasserstein_distance(dgm1, dgm2, p));
 	}
