@@ -54,7 +54,7 @@ a logical variable indicating if the persistent homology should be computed for 
   optional (if bandFUN==bootstrapDiagram): a string specifying the distance to be used for persistence diagrams: either 'bottleneck' or 'wasserstein'
 }
   \item{dimension}{
-	optional (if bandFUN==bootstrapDiagram): an integer specifying the dimension of the features used to compute the bottleneck distance. 0 for connected components, 1 for loops, 2 for voids. Deafault is 1.
+	optional (if bandFUN==bootstrapDiagram): an integer or a vector specifying the dimension of the features used to compute the bottleneck distance. 0 for connected components, 1 for loops, 2 for voids. Deafault is 1.
 }
   \item{p}{
   	optional (if bandFUN==bootstrapDiagram AND distance=='wasserstein'): integer specifying the power to be used in the computation of the Wasserstein distance. Default is 1.
