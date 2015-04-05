@@ -1,8 +1,5 @@
 #include <cmath>
 
-
-using namespace std;
-
 // read element of matrix
 double ReadMat(double*XX, int *pNN, int *pDD, int i, int d){
 	double out=0.0;
@@ -15,23 +12,55 @@ void WriteMat(double*XX, int *pNN, int *pDD, int i, int d, double input){
 	XX[(d-1)*(pNN[0])+i-1]=input;
 }
 
+// get row of matrix
+template <typename RealVector, typename RealMatrix>
+inline RealVector matrixRow(const RealMatrix& X, const unsigned rowIdx) {
+	const unsigned colNum = X.ncol();
+	const unsigned rowNum = X.nrow();
+	RealVector rowVector(colNum);
+	for (unsigned colIdx = 0; colIdx < colNum; ++colIdx) {
+		rowVector[colIdx] = X[rowIdx + colIdx * rowNum];
+	}
+	return rowVector;
+}
 
 // oneKernel
-double oneKernel(double *pp, double* XX, int *pNN, int *pDD, double *hh){
-	double sum=0.0;
-	double tmp=0.0;	
-	double out=0.0;	
-	
-	for (int i=1; i<=pNN[0]; i++){
-		sum=0.0;
-		for (int d=1; d<=pDD[0]; d++){
-			tmp= pp[d-1] - ReadMat(XX, pNN, pDD, i, d);
-			sum=sum+ tmp*tmp;		
+template <typename RealVector, typename RealMatrix>
+inline double oneKernel(const RealVector& point, const RealMatrix& X, const double h) {
+	const unsigned dimension = X.ncol();
+	const unsigned sampleNum = X.nrow();
+	double sum, tmp;
+	double oneKernelValue = 0.0;
+
+	for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
+		sum = 0.0;
+		for (unsigned dimIdx = 0; dimIdx < dimension; ++dimIdx) {
+			tmp = point[dimIdx] - X[sampleIdx + dimIdx * sampleNum];
+			sum += tmp * tmp;
 		}
-		sum= exp( - sum/ (2*hh[0]*hh[0]));
-	out=out+sum;
+		oneKernelValue += exp(-sum / (2 * h * h));
 	}
-	out=out/pNN[0];
-	return out;
+	return (oneKernelValue / sampleNum);
+}
+
+// print frame of progress
+template <typename Print>
+inline void printProgressFrame(Print print) {
+	print("0   10   20   30   40   50   60   70   80   90   100");
+	print("\n");
+	print("|----|----|----|----|----|----|----|----|----|----|\n");
+	print("*");
+}
+
+// print progress amount
+template <typename Print>
+inline void printProgressAmount(Print print, int& counter, const int totalCount, int& percentageFloor) {
+	int progressAmount = std::floor((100 * (++counter) / totalCount - percentageFloor) / 2);
+	if (progressAmount > 0) {
+		for (int progressIdx = 1; progressIdx <= progressAmount; ++progressIdx) {
+			print("*");
+			percentageFloor += 2;
+		}
+	}
 }
 
