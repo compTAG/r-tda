@@ -13,3 +13,11 @@ Wasserstein <- function(Diag1, Diag2, p) {
     .Call('TDA_Wasserstein', PACKAGE = 'TDA', Diag1, Diag2, p)
 }
 
+Kde <- function(X, Grid, h, printProgress) {
+    .Call('TDA_Kde', PACKAGE = 'TDA', X, Grid, h, printProgress)
+}
+
+KdeDist <- function(X, Grid, h, printProgress) {
+    .Call('TDA_KdeDist', PACKAGE = 'TDA', X, Grid, h, printProgress)
+}
+

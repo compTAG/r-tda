@@ -427,148 +427,96 @@ extern "C" {
 		return (wasserstein_distance(dgm1, dgm2, p));
 	}
 
-extern "C" {
 
-  	// KDE function on a Grid
-	void kde(double *XX, int *pNN, int *pDD, double *Grid, int *pMM, double *hh, int *printProgress, double *out){
-	    double *pp= new double[pDD[0]];
-		double pi=3.141593;
-		double den=0.0;
+	// KDE function on a Grid
+	// [[Rcpp::export]]
+	Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const bool printProgress){
+		const double pi = 3.141592653589793;
+		const unsigned dimension = Grid.ncol();
+		const unsigned gridNum = Grid.nrow();
+		const double den = pow(h, (int)dimension) * pow(2 * pi, dimension / 2.0);
+		Rcpp::NumericVector kdeValue(gridNum);
 
-		int counter=0;
-		int totalCount=pMM[0];
-		int percentageFloor=0;	
-		int tmp;
+		int counter = 0;
+		const int totalCount = gridNum;
+		int percentageFloor = 0;
 
-		den=pow(hh[0], pDD[0]) * pow( 2*pi  , (pDD[0]/2.0));
-		
-		if (printProgress[0])
-		{
-			Rprintf("0   10   20   30   40   50   60   70   80   90   100");
-			Rprintf("\n");
-			Rprintf("|----|----|----|----|----|----|----|----|----|----|\n");
-			Rprintf("*");		
+		if (printProgress) {
+			printProgressFrame(Rprintf);
 
-
-			for (int m=1; m<=pMM[0]; m++) {
-				for (int d=1; d<=pDD[0]; d++) {			
-					pp[d-1]=ReadMat(Grid, pMM, pDD, m, d);
-				}		
-				out[m-1]=oneKernel(pp, XX, pNN, pDD, hh);
-				out[m-1]=out[m-1]/ den;
+			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+				kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h) / den;
 						
 				//printProgress
-				counter++;
-				tmp=std::floor((100*counter/totalCount-percentageFloor)/2);
-				if (tmp>0)
-				{
-					for (int aa=1; aa<=tmp; aa++)
-					{
-						Rprintf("*");
-						percentageFloor=percentageFloor+2;
-					}							
-				}					   		
+				printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
 			}
-		} else //no printProgress
-		{
-			for (int m=1; m<=pMM[0]; m++) {
-				for (int d=1; d<=pDD[0]; d++) {			
-					pp[d-1]=ReadMat(Grid, pMM, pDD, m, d);
-				}		
-				out[m-1]=oneKernel(pp, XX, pNN, pDD, hh);
-				out[m-1]=out[m-1]/ den;					   		
-			}
+			Rprintf("\n");
 
+		} else { //no printProgress
+			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+				kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h) / den;
+			}
 		}
-   		
-   		if (printProgress[0]) Rprintf("\n");					
-		delete[] pp;
+
+		return (kdeValue);
 	}
 
 
    	// kernel Dist function on a Grid
-	void kdeDist(double *XX, int *pNN, int *pDD, double *Grid, int *pMM, double *hh, int *printProgress, double *out){
-	    double *pp= new double[pDD[0]];
-		double first=0.0;
-		double second=1.0;
-	    double *third= new double[pMM[0]];
-		
-		int counter=0;
-		int totalCount=pNN[0]+pMM[0];
-		int percentageFloor=0;	
-		int tmp;
-		
-		if (printProgress[0])
+	// [[Rcpp::export]]
+	Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const bool printProgress){
+		const unsigned sampleNum = X.nrow();
+		const unsigned gridNum = Grid.nrow();
+		// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
+		double first = 0.0;
+		const double second = 1.0;
+		double third;
+		Rcpp::NumericVector kdeDistValue(gridNum);
+
+		int counter = 0;
+		const int totalCount = sampleNum + gridNum;
+		int percentageFloor = 0;
+		int progressAmount;
+
+		if (printProgress)
 		{
-			Rprintf("0   10   20   30   40   50   60   70   80   90   100");
-			Rprintf("\n");
-			Rprintf("|----|----|----|----|----|----|----|----|----|----|\n");
-			Rprintf("*");		
-					
-			for (int i=1; i<=pNN[0]; i++) {
-				for (int d=1; d<=pDD[0]; d++) {			
-					pp[d-1]=ReadMat(XX, pNN, pDD, i, d);
-				}		
-				first=first+ oneKernel(pp, XX, pNN, pDD, hh);
-		
-				// printProgress
-				counter++;
-				tmp=std::floor((100*counter/totalCount-percentageFloor)/2);
-				
-				if (tmp>0)
-				{
-					for (int aa=1; aa<=tmp; aa++)
-					{
-						Rprintf("*");
-						percentageFloor=percentageFloor+2;
-					}							
-				}				
-			}
-			first=first/pNN[0];
-		
-			for (int m=1; m<=pMM[0]; m++) {
-				for (int d=1; d<=pDD[0]; d++) {			
-					pp[d-1]=ReadMat(Grid, pMM, pDD, m, d);
-				}		
-				third[m-1]=oneKernel(pp, XX, pNN, pDD, hh);
-				out[m-1]= std::sqrt(first+second - 2* third[m-1]  );
+			printProgressFrame(Rprintf);
+
+			for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
+				first += oneKernel(matrixRow< std::vector< double > >(X, sampleIdx), X, h);
 
 				// printProgress
-				counter++;
-				tmp=std::floor((100*counter/totalCount-percentageFloor)/2);
-				if (tmp>0)
-				{
-					for (int aa=1; aa<=tmp; aa++)
-					{
-						Rprintf("*");
-						percentageFloor=percentageFloor+2;
-					}							
-				}
-			}   		
-			Rprintf("\n");		
-   		} else //no printProgress
-		{
-			for (int i=1; i<=pNN[0]; i++) {
-				for (int d=1; d<=pDD[0]; d++) {			
-					pp[d-1]=ReadMat(XX, pNN, pDD, i, d);
-				}		
-				first=first+ oneKernel(pp, XX, pNN, pDD, hh);
+				printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
 			}
-			first=first/pNN[0];
-		
-			for (int m=1; m<=pMM[0]; m++) {
-				for (int d=1; d<=pDD[0]; d++) {			
-					pp[d-1]=ReadMat(Grid, pMM, pDD, m, d);
-				}		
-				third[m-1]=oneKernel(pp, XX, pNN, pDD, hh);
-				out[m-1]= std::sqrt(first+second - 2* third[m-1]  );
-			}   		
+			first /= sampleNum;
+
+			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+				third = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h);
+				kdeDistValue[gridIdx] = std::sqrt(first + second - 2 * third);
+
+				// printProgress
+				printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
+			}
+			Rprintf("\n");		
+
+		} else { //no printProgress
+			for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
+				first += oneKernel(matrixRow< std::vector< double > >(X, sampleIdx), X, h);
+			}
+			first /= sampleNum;
+
+			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+				third = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h);
+				// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
+				kdeDistValue[gridIdx] = std::sqrt(first + second - 2 * third);
+			}
    		}
-		delete[] pp;
-		delete[] third;
+
+		return (kdeDistValue);
 	}
 
 
+	extern "C" {
 
 	// GUDHI RIPS
 	/** \brief Interface for R code, construct the persistence diagram 
