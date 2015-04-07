@@ -21,3 +21,7 @@ KdeDist <- function(X, Grid, h, printProgress) {
     .Call('TDA_KdeDist', PACKAGE = 'TDA', X, Grid, h, printProgress)
 }
 
+Dtm <- function(knnIndex, knnDistance, weight, weightBound) {
+    .Call('TDA_Dtm', PACKAGE = 'TDA', knnIndex, knnDistance, weight, weightBound)
+}
+

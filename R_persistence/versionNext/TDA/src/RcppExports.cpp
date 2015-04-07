@@ -75,3 +75,17 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// Dtm
+Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex, const Rcpp::NumericMatrix& knnDistance, const Rcpp::NumericVector& weight, const double weightBound);
+RcppExport SEXP TDA_Dtm(SEXP knnIndexSEXP, SEXP knnDistanceSEXP, SEXP weightSEXP, SEXP weightBoundSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type knnIndex(knnIndexSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type knnDistance(knnDistanceSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
+    Rcpp::traits::input_parameter< const double >::type weightBound(weightBoundSEXP);
+    __result = Rcpp::wrap(Dtm(knnIndex, knnDistance, weight, weightBound));
+    return __result;
+END_RCPP
+}
