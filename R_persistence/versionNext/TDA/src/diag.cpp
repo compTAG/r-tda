@@ -516,6 +516,28 @@ extern "C" {
 	}
 
 
+	// distance to measure function on a Grid
+	// [[Rcpp::export]]
+	Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex, const Rcpp::NumericMatrix& knnDistance, const Rcpp::NumericVector& weight, const double weightBound) {
+		const unsigned k0 = knnIndex.ncol();
+		const unsigned gridNum = knnIndex.nrow();
+		double distanceTemp, weightTemp, weightSumTemp;
+		Rcpp::NumericVector dtmValue(gridNum, 0.0);
+
+		for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+			weightSumTemp = 0.0;
+			for (unsigned kIdx = 0; weightSumTemp < weightBound; ++kIdx) {
+				distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
+				weightTemp = weight[knnIndex[gridIdx + kIdx * gridNum] - 1];
+				weightSumTemp += weightTemp;
+				dtmValue[gridIdx] += distanceTemp * distanceTemp * weightTemp;
+			}
+			dtmValue[gridIdx] = std::sqrt(dtmValue[gridIdx] / weightBound);
+		}
+		return (dtmValue);
+	}
+
+
 	extern "C" {
 
 	// GUDHI RIPS
