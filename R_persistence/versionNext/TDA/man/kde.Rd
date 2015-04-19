@@ -38,7 +38,7 @@ Larry Wasserman (2004), "All of statistics: a concise course in statistical infe
 Brittany T. Fasy, Fabrizio Lecci, Alessandro Rinaldo, Larry Wasserman, Sivaraman Balakrishnan, and Aarti Singh. (2013), "Statistical Inference For Persistent Homology: Confidence Sets for Persistence Diagrams", (arXiv:1303.7117). To appear, Annals of Statistics.
 }
 \author{
-Fabrizio Lecci
+Jisu Kim, Fabrizio Lecci
 }
 \seealso{
 \code{\link{kernelDist}}, \code{\link{distFct}}, \code{\link{dtm}}

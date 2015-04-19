@@ -42,7 +42,7 @@ Jeff M. Phillips, Bei Wang, and Yan Zheng (2013), "Geometric Inference on Kernel
 Chazal F, Fasy BT, Lecci F, Michel B, Rinaldo A, Wasserman L (2014). "Robust Topological Inference: Distance-To-a-Measure and Kernel Distance." Technical Report.	
 }
 \author{
-Fabrizio Lecci
+Jisu Kim, Fabrizio Lecci
 }
 \seealso{
 \code{\link{kde}}, \code{\link{dtm}}, \code{\link{distFct}}
