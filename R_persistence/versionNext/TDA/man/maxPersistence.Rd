@@ -10,10 +10,11 @@ Maximal Persistence Method
 Given a point cloud and a function built on top of the data, we are interested in studying the evolution of the sublevel sets (or superlevel sets) of the function, using persistent homology. The Maximal Persistence Method selects the optimal smoothing parameter of the function, by maximizing the number of significant topological features, or by maximizing the total significant persistence of the features. For each value of the smoothing parameter, this function computes a persistence diagram using \code{gridDiag} and returns the values of the two criteria, the dimension of detected features, their persistence, and a bootstrapped confidence band. The features that fall outside of the band are statistically significant. See References. 
 }
 \usage{
-maxPersistence(FUN, parameters, X, lim, by, maxdimension=length(lim)/2-1, 
-             sublevel = TRUE, library="Dionysus", B=30, alpha=0.05, 
-             bandFUN="bootstrapBand", distance="bottleneck", dimension=1, p=1,
-             parallel=FALSE, printProgress=FALSE)
+maxPersistence(FUN, parameters, X, lim, by, maxdimension = length(lim) / 2 - 1,
+               sublevel = TRUE, library = "Dionysus", B = 30, alpha = 0.05,
+               bandFUN = "bootstrapBand", distance = "bottleneck",
+               dimension = min(1, maxdimension), p = 1, parallel = FALSE,
+               printProgress = FALSE, weight = NULL)
 }
 \arguments{
   \item{FUN}{
@@ -64,6 +65,9 @@ a logical variable indicating if the persistent homology should be computed for 
 }
   \item{printProgress}{
 	if TRUE a progress bar is printed. Default is \code{FALSE}.
+}
+  \item{weight}{
+  either NULL, a number, or a vector of length \eqn{n}. If it is NULL, weight is not used. If it is a number, then same weight is applied to each points of \code{X}. If it is a vector, \code{weight} represents weights of each points of \code{X}.
 }
 }
 \details{

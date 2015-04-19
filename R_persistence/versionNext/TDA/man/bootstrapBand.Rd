@@ -7,8 +7,8 @@
 \code{bootstrapBand} computes a uniform symmetric confidence band around a function of the data \code{X}, evaluated on a \code{Grid}, using the bootstrap algorithm. See Details and References.
 }
 \usage{
-bootstrapBand(X, FUN, Grid, B = 30, alpha = 0.05, parallel = FALSE, 
-              printProgress=FALSE, ...)
+bootstrapBand(X, FUN, Grid, B = 30, alpha = 0.05, parallel = FALSE,
+              printProgress = FALSE, weight = NULL, ...)
 }
 \arguments{
   \item{X}{
@@ -31,6 +31,9 @@ an \eqn{m} by \eqn{d} matrix of coordinates, where \eqn{m} is the number of poin
 }
   \item{printProgress}{
 	if TRUE a progress bar is printed. Default is \code{FALSE}.
+}
+  \item{weight}{
+  either NULL, a number, or a vector of length \eqn{n}. If it is NULL, weight is not used. If it is a number, then same weight is applied to each points of \code{X}. If it is a vector, \code{weight} represents weights of each points of \code{X}.
 }
   \item{...}{
 	additional parameters for the function \code{FUN}.
