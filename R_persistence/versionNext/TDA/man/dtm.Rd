@@ -21,7 +21,7 @@ set containing the \eqn{k} nearest neighbors
 of \eqn{y} among \eqn{x_1, \ldots, x_n}.
 }
 \usage{
-dtm(X, Grid, m0)
+dtm(X, Grid, m0, weight = 1)
 }
 \arguments{
   \item{X}{
@@ -32,6 +32,9 @@ an \eqn{m} by \eqn{d} matrix of coordinates, where \eqn{m} is the number of poin
 }
   \item{m0}{
 a numeric variable for the smoothing parameter of the distance to measure. Roughly, \code{m0} is the the percentage of points of \code{X} that are considered when the distance to measure is computed for each point of \code{Grid}.
+}
+  \item{weight}{
+  either a number, or a vector of length \eqn{n}. If it is a number, then same weight is applied to each points of \code{X}. If it is a vector, \code{weight} represents weights of each points of \code{X}.
 }
 }
 \details{

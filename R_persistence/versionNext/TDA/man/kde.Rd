@@ -10,7 +10,7 @@ Given a point cloud \code{X} (\eqn{n} points), this function computes the Kernel
 	}		
 }
 \usage{
-kde(X, Grid, h, printProgress=FALSE)
+kde(X, Grid, h, weight = 1, printProgress = FALSE)
 }
 \arguments{
   \item{X}{
@@ -21,6 +21,9 @@ an \eqn{m} by \eqn{d} matrix of coordinates, where \eqn{m} is the number of poin
 }
   \item{h}{
 number: the smoothing paramter of the Gaussian Kernel.
+}
+  \item{weight}{
+  either a number, or a vector of length \eqn{n}. If it is a number, then same weight is applied to each points of \code{X}. If it is a vector, \code{weight} represents weights of each points of \code{X}.
 }
   \item{printProgress}{
 	if TRUE a progress bar is printed. Default is \code{FALSE}.
