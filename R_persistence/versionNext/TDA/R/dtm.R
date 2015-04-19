@@ -1,5 +1,5 @@
 dtm <-
-function(X, Grid, m0, weight = 1){
+function(X, Grid, m0, weight = 1) {
 
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
@@ -10,23 +10,27 @@ function(X, Grid, m0, weight = 1){
   if (NCOL(X) != NCOL(Grid)) {
     stop("dimensions of X and Grid do not match")
   }
-  if (!is.numeric(m0) || !is.vector(m0) || length(m0) != 1) {
+  tryCatch(m0 <- as.double(m0), error = function(e) {
+      stop("m0 should be numeric")})
+  if (length(m0) != 1 || m0 < 0 || m0 > 1) {
     stop("m0 should be a number between 0 and 1")
   }
-  if (!is.numeric(weight) || !is.vector(weight) || (length(weight) != 1 && length(weight) != NROW(X)) ) {
+  if ((length(weight) != 1 && length(weight) != NROW(X)) ||
+      !is.numeric(weight)) {
     stop("weight should be either a number or a vector of length equals the number of sample")
   }
 
   # without weight
   if (length(weight) == 1) {
     X <- as.matrix(X) 
-    k0 <- ceiling(m0*dim(X)[1])
-    distances <- knnx.dist(X, as.matrix(Grid), k = k0, algorithm = c("kd_tree"))  
+    k0 <- ceiling(m0 * NROW(X))
+    distances <- knnx.dist(X, as.matrix(Grid), k = k0,
+        algorithm = c("kd_tree"))
     return (sqrt(apply(distances^2, 1, sum)/k0))
 
   # with weight
   } else {
-    X0 <- as.matrix(X[weight != 0,]) 
+    X0 <- as.matrix(X[weight != 0, , drop = FALSE]) 
     weight0 <- weight[weight != 0]
     weight0sort <- sort(weight0)
     weightBound <- m0 * sum(weight0)
@@ -37,7 +41,10 @@ function(X, Grid, m0, weight = 1){
         break
       }
     }
-    indexDistance <- get.knnx(X0, as.matrix(Grid), k = k0, algorithm = c("kd_tree"))
-    return (Dtm(knnIndex = indexDistance[["nn.index"]], knnDistance = indexDistance[["nn.dist"]], weight = weight0, weightBound = weightBound))
+    indexDistance <- get.knnx(X0, as.matrix(Grid), k = k0,
+        algorithm = c("kd_tree"))
+    return (Dtm(knnIndex = indexDistance[["nn.index"]],
+        knnDistance = indexDistance[["nn.dist"]], weight = weight0,
+        weightBound = weightBound))
   }
 }
