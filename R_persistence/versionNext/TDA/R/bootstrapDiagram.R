@@ -1,61 +1,161 @@
 bootstrapDiagram <- 
-function(X, FUN, lim, by, sublevel=TRUE, library="Dionysus", B=30, alpha=0.05, distance="bottleneck", dimension=1, p=1, printProgress=FALSE, ...){
-     
-	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates")
-	if (class(FUN)!="function") stop("FUN should be function")
-	if (2*ncol(X)!=length(lim)) stop("dimension of X does not match with lim")
-	if (!is.numeric(by) || !is.vector(by) || (length(by)!=1 && length(by)!=length(lim)/2) || !all(by>0) ) stop("by should be either a positive number or a positive vector of length equals dimension of grid")
-	if (!is.logical(sublevel)) stop("sublevel should be logical")
-	if (!is.numeric(B) || length(B)!=1 || B<1) stop("B should be a positive number")
-	if (!is.numeric(alpha)) stop("alpha should be a number")
-  if (!is.vector(dimension) || !all(dimension >= 0)) {
-    stop("dimension should be a nonnegative integer or a vector of nonnegative integer")
+function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
+         sublevel = TRUE, library = "Dionysus", B = 30, alpha = 0.05,
+         distance = "bottleneck", dimension = min(1, maxdimension), p = 1,
+         printProgress = FALSE, weight = NULL, ...) {
+
+  if (!is.numeric(X) && !is.data.frame(X)) {
+    stop("X should be a matrix of coordinates")
   }
-  if (!is.vector(p) || length(p) != 1 || p < 1) {
+  if (class(FUN) != "function") {
+    stop("FUN should be function")
+  }
+  tryCatch(lim <- as.double(lim), error = function(e) {
+      stop("lim should be numeric")})
+  if (length(lim) %% 2 != 0) {
+    stop("lim should be either a matrix or a vector of even elements")
+  }
+  if (2 * NCOL(X) != length(lim)) {
+    stop("dimension of X does not match with lim")
+  }
+  tryCatch(by <- as.double(by), error = function(e) {
+      stop("by should be numeric")})
+  if ((length(by) != 1 && length(by) != NCOL(X)) || min(by) <= 0) {
+    stop("by should be either a positive number or a positive vector of length equals dimension of grid")
+  }
+  tryCatch(maxdimension <- as.double(maxdimension), error = function(e) {
+      stop("maxdimension should be numeric")})
+  if (length(maxdimension) != 1 || maxdimension < 0) {
+    stop("maxdimnsion should be a nonnegative integer")
+  }
+  if (!is.logical(sublevel)) {
+    stop("sublevel should be logical")
+  }
+  if (library == "dionysus" || library == "DIONYSUS") {
+    library = "Dionysus"
+  }
+  if (library == "phat" || library == "Phat") {
+    library = "PHAT"
+  }
+  if (library != "Dionysus" && library != "PHAT") {
+    stop("library should be a string: either 'Dionysus' or 'PHAT'")
+  }
+  tryCatch(B <- as.double(B), error = function(e) {
+      stop("B should be numeric")})
+  if (length(B) != 1 || B < 1) {
+    stop("B should be a positive integer")
+  }
+  tryCatch(alpha <- as.double(alpha), error = function(e) {
+      stop("alpha should be numeric")})
+  if (alpha < 0 || alpha > 1) {
+    stop("alpha should be a number between 0 and 1")
+  }
+  if (distance != "wasserstein" && distance != "bottleneck") {
+    stop("distance should be a string: either 'bottleneck' or 'wasserstein'")
+  }
+  tryCatch(dimension <- as.double(dimension), error = function(e) {
+      stop("dimension should be numeric")})
+  if (min(dimension) < 0 || max(dimension) > maxdimension) {
+    stop("dimension should be a integer or a vector of integer, with the range between 0 and maxdimension")
+  }
+  tryCatch(p <- as.double(p), error = function(e) {
+      stop("p should be numeric")})
+  if (length(p) != 1 || p < 1) {
     stop("p should be a positive integer")
   }
      # if (!is.logical(parallel)) stop("parallel should be logical")
-     if (!is.logical(printProgress)) stop("printProgress should be logical")
+  if (!is.logical(printProgress)) {
+    stop("printProgress should be logical")
+  }
+  if (((length(weight) != 1 && length(weight) != NROW(X)) ||
+      !is.numeric(weight)) && !is.null(weight)) {
+    stop("weight should be either NULL, a number, or a vector of length equals the number of sample")
+  }
 
+  X <- as.matrix(X)
+  parallel <- FALSE
 
-	if (distance!="wasserstein" && distance!="bottleneck") stop("distance should be a string: either 'bottleneck' or 'wasserstein'")
+  if (is.null(weight)) {
+    Diag <- gridDiag(X = X, FUN = FUN, lim = lim, by = by,
+        maxdimension = maxdimension, sublevel = sublevel, library = library,
+        location = FALSE, printProgress = FALSE, diagLimit = NULL, ...
+      )[["diagram"]]
+    if (distance=="wasserstein") {
+      boostFUN <- function(i) {
+        I <- sample(NROW(X), replace = TRUE, size = NROW(X))
+        Diag1 <- gridDiag(X = X[I, , drop = FALSE], FUN = FUN, lim = lim,
+            by = by, maxdimension = maxdimension, sublevel = sublevel,
+            library = library, location = FALSE, printProgress = FALSE,
+            diagLimit = NULL, ...)[["diagram"]]
+        width1 <- wasserstein(Diag, Diag1, p = p, dimension = dimension)
+        if (printProgress) {
+          cat(i," ")
+        }
+        return(width1)
+      }
+    } else {
+      boostFUN <- function(i) {
+        I <- sample(NROW(X), replace = TRUE, size = NROW(X))
+        Diag1 <- gridDiag(X = X[I, , drop = FALSE], FUN = FUN, lim = lim,
+            by = by, maxdimension = maxdimension, sublevel = sublevel,
+            library = library, location = FALSE, printProgress = FALSE,
+            diagLimit = NULL, ...)[["diagram"]]
+        width1 <- bottleneck(Diag, Diag1, dimension = dimension)
+        if (printProgress) {
+          cat(i," ")
+        }
+        return(width1)
+      }
+    }
 
-     X=as.matrix(X)
-     n = nrow(X)
+  } else {
+    Diag <- gridDiag(X = X, FUN = FUN, lim = lim, by = by,
+        maxdimension = maxdimension, sublevel = sublevel, library = library,
+        location = FALSE, printProgress = FALSE, diagLimit = NULL,
+        weight = weight, ...)[["diagram"]]
+    if (distance=="wasserstein") {
+      boostFUN <- function(i) {
+        weightBoost <- rMultinom(size = sum(weight), prob = weight)
+        Diag1 <- gridDiag(X = X, FUN = FUN, lim = lim, by = by,
+            maxdimension = maxdimension, sublevel = sublevel,
+            library = library, location = FALSE, printProgress = FALSE,
+            diagLimit = NULL, weight = weightBoost, ...)[["diagram"]]
+        width1 <- wasserstein(Diag, Diag1, p = p, dimension = dimension)
+        if (printProgress) {
+          cat(i," ")
+        }
+        return(width1)
+      }
+    } else {
+      boostFUN <- function(i) {
+        weightBoost <- rMultinom(size = sum(weight), prob = weight)
+        Diag1 <- gridDiag(X = X, FUN = FUN, lim = lim, by = by, 
+            maxdimension = maxdimension, sublevel = sublevel,
+            library = library, location = FALSE, printProgress = FALSE,
+            diagLimit = NULL, weight = weightBoost, ...)[["diagram"]]
+        width1 <- bottleneck(Diag, Diag1, dimension = dimension)
+        if (printProgress) {
+          cat(i," ")
+        }
+        return(width1)
+      }
+    }
+  }
 
-	maxdimension=dimension
-     parallel=FALSE
-     
-     Diag=gridDiag(X=X, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, location=FALSE, printProgress=FALSE, diagLimit=NULL, ...)$diagram
+  if (parallel) {
+    boostLapply = mclapply
+  } else {
+    boostLapply = lapply
+  }
 
-     if (parallel) {boostLapply=mclapply
-     	} else boostLapply=lapply
+  if (printProgress) {
+    cat("Bootstrap: ")
+  }
+  width <- boostLapply(seq_len(B), FUN = boostFUN)
+  if (printProgress) {
+    cat("\n")
+  }
+  width <- quantile(unlist(width), 1 - alpha)
 
-     if (printProgress) cat("Bootstrap: ")
-     
-     if (distance=="wasserstein") {
-	     width=boostLapply(1:B, FUN=function(i){
-	          I = sample(1:n,replace=TRUE,size=n)
-	          Y = as.matrix(X[I,])
-	          Diag1 = gridDiag(X=Y, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, location=FALSE, printProgress=FALSE, diagLimit=NULL, ...)$diagram
-	          	width1 = wasserstein(Diag,Diag1, p=p,dimension=dimension)
-	          if (printProgress) cat(i," ")
-	     	  return(width1)
-	     })
-     } else{
-     	width=boostLapply(1:B, FUN=function(i){
-          I = sample(1:n,replace=TRUE,size=n)
-          Y = as.matrix(X[I,])
-          Diag1 = gridDiag(X=Y, FUN=FUN, lim=lim, by=by, maxdimension=maxdimension, sublevel=sublevel, library=library, location=FALSE, printProgress=FALSE, diagLimit=NULL, ...)$diagram
-          width1 = bottleneck(Diag,Diag1, dimension=dimension)
-          if (printProgress) cat(i," ")
-     	  return(width1)
-     	})
-     }
-     	     		
-     if (printProgress) cat("\n")
-     width=unlist(width)
-	 width = quantile(width,1-alpha)
-     
-     return(width)
+  return (width)
 }
