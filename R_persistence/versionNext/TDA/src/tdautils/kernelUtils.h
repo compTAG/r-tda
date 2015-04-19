@@ -25,22 +25,35 @@ inline RealVector matrixRow(const RealMatrix& X, const unsigned rowIdx) {
 }
 
 // oneKernel
-template <typename RealVector, typename RealMatrix>
-inline double oneKernel(const RealVector& point, const RealMatrix& X, const double h) {
+template <typename RealVector1, typename RealVector2, typename RealMatrix>
+inline double oneKernel(const RealVector1& point, const RealMatrix& X, const double h, const RealVector2& weight) {
 	const unsigned dimension = X.ncol();
 	const unsigned sampleNum = X.nrow();
 	double sum, tmp;
 	double oneKernelValue = 0.0;
 
-	for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
-		sum = 0.0;
-		for (unsigned dimIdx = 0; dimIdx < dimension; ++dimIdx) {
-			tmp = point[dimIdx] - X[sampleIdx + dimIdx * sampleNum];
-			sum += tmp * tmp;
+	if (weight.size() == 1) {
+		for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
+			sum = 0.0;
+			for (unsigned dimIdx = 0; dimIdx < dimension; ++dimIdx) {
+				tmp = point[dimIdx] - X[sampleIdx + dimIdx * sampleNum];
+				sum += tmp * tmp;
+			}
+			oneKernelValue += exp(-sum / (2 * h * h));
 		}
-		oneKernelValue += exp(-sum / (2 * h * h));
+		return (oneKernelValue / sampleNum);
+
+	} else {
+		for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
+			sum = 0.0;
+			for (unsigned dimIdx = 0; dimIdx < dimension; ++dimIdx) {
+				tmp = point[dimIdx] - X[sampleIdx + dimIdx * sampleNum];
+				sum += tmp * tmp;
+			}
+			oneKernelValue += exp(-sum / (2 * h * h)) * weight[sampleIdx];
+		}
+		return (oneKernelValue / std::accumulate(weight.begin(), weight.end(), 0.0));
 	}
-	return (oneKernelValue / sampleNum);
 }
 
 // print frame of progress
