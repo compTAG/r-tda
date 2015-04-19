@@ -405,26 +405,14 @@ extern "C" {
 
 
 	// [[Rcpp::export]]
-	double Bottleneck(const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2)
-	{
-		// ... set up the input
-		PDgmB dgm1, dgm2;
-		read_diagram(dgm1, Diag1);
-		read_diagram(dgm2, Diag2);
-
-		return (bottleneck_distance(dgm1, dgm2));
+	double Bottleneck(const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2) {
+		return bottleneck_distance(read_diagram(Diag1), read_diagram(Diag2)); return bottleneck_distance(read_diagram(Diag1), read_diagram(Diag2));
 	}
 
 
 	// [[Rcpp::export]]
-	double Wasserstein(const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2, const int p)
-	{
-		// ... set up the input
-		PDgmB dgm1, dgm2;
-		read_diagram(dgm1, Diag1);
-		read_diagram(dgm2, Diag2);
-	
-		return (wasserstein_distance(dgm1, dgm2, p));
+	double Wasserstein(const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2, const int p) {
+		return wasserstein_distance(read_diagram(Diag1), read_diagram(Diag2), p);
 	}
 
 
