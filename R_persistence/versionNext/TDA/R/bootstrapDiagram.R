@@ -1,8 +1,8 @@
 bootstrapDiagram <- 
 function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
          sublevel = TRUE, library = "Dionysus", B = 30, alpha = 0.05,
-         distance = "bottleneck", dimension = min(1, maxdimension), p = 1,
-         printProgress = FALSE, weight = NULL, ...) {
+         distance = "bottleneck", dimension = min(1, maxdimension),
+         p = 1, printProgress = FALSE, weight = NULL, ...) {
 
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
