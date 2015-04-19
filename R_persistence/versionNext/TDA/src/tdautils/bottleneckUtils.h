@@ -6,11 +6,13 @@
 typedef PersistenceDiagram<>                    PDgmB;
 
 template <typename RealMatrix>
-void read_diagram(PDgmB& dgm, const RealMatrix& Diag)
+inline PDgmB read_diagram(const RealMatrix& Diag)
 {
-	int idx;
-	for (idx = 0; idx < Diag.nrow(); ++idx)
+	const unsigned diagNum = Diag.nrow();
+	PDgmB dgm;
+	for (unsigned diagIdx = 0; diagIdx < diagNum; ++diagIdx)
 	{
-		dgm.push_back(PDgmB::Point(Diag(idx, 0), Diag(idx, 1)));
+		dgm.push_back(PDgmB::Point(Diag[diagIdx + 0 * diagNum], Diag[diagIdx + 1 * diagNum]));
 	}
+	return dgm;
 }
