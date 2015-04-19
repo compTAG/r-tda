@@ -430,7 +430,7 @@ extern "C" {
 
 	// KDE function on a Grid
 	// [[Rcpp::export]]
-	Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const bool printProgress){
+	Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const Rcpp::NumericVector& weight, const bool printProgress){
 		const double pi = 3.141592653589793;
 		const unsigned dimension = Grid.ncol();
 		const unsigned gridNum = Grid.nrow();
@@ -445,7 +445,7 @@ extern "C" {
 			printProgressFrame(Rprintf);
 
 			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-				kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h) / den;
+				kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight) / den;
 						
 				//printProgress
 				printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
@@ -454,7 +454,7 @@ extern "C" {
 
 		} else { //no printProgress
 			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-				kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h) / den;
+				kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight) / den;
 			}
 		}
 
@@ -464,7 +464,7 @@ extern "C" {
 
    	// kernel Dist function on a Grid
 	// [[Rcpp::export]]
-	Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const bool printProgress){
+	Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const Rcpp::NumericVector& weight, const bool printProgress){
 		const unsigned sampleNum = X.nrow();
 		const unsigned gridNum = Grid.nrow();
 		// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
@@ -476,14 +476,13 @@ extern "C" {
 		int counter = 0;
 		const int totalCount = sampleNum + gridNum;
 		int percentageFloor = 0;
-		int progressAmount;
 
 		if (printProgress)
 		{
 			printProgressFrame(Rprintf);
 
 			for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
-				first += oneKernel(matrixRow< std::vector< double > >(X, sampleIdx), X, h);
+				first += oneKernel(matrixRow< std::vector< double > >(X, sampleIdx), X, h, weight);
 
 				// printProgress
 				printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
@@ -491,7 +490,7 @@ extern "C" {
 			first /= sampleNum;
 
 			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-				third = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h);
+				third = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight);
 				kdeDistValue[gridIdx] = std::sqrt(first + second - 2 * third);
 
 				// printProgress
@@ -501,12 +500,12 @@ extern "C" {
 
 		} else { //no printProgress
 			for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
-				first += oneKernel(matrixRow< std::vector< double > >(X, sampleIdx), X, h);
+				first += oneKernel(matrixRow< std::vector< double > >(X, sampleIdx), X, h, weight);
 			}
 			first /= sampleNum;
 
 			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-				third = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h);
+				third = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight);
 				// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
 				kdeDistValue[gridIdx] = std::sqrt(first + second - 2 * third);
 			}
@@ -519,7 +518,6 @@ extern "C" {
 	// distance to measure function on a Grid
 	// [[Rcpp::export]]
 	Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex, const Rcpp::NumericMatrix& knnDistance, const Rcpp::NumericVector& weight, const double weightBound) {
-		const unsigned k0 = knnIndex.ncol();
 		const unsigned gridNum = knnIndex.nrow();
 		double distanceTemp, weightTemp, weightSumTemp;
 		Rcpp::NumericVector dtmValue(gridNum, 0.0);
@@ -528,7 +526,7 @@ extern "C" {
 			weightSumTemp = 0.0;
 			for (unsigned kIdx = 0; weightSumTemp < weightBound; ++kIdx) {
 				distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
-				weightTemp = weight[knnIndex[gridIdx + kIdx * gridNum] - 1];
+				weightTemp = std::min(weight[knnIndex[gridIdx + kIdx * gridNum] - 1], weightBound - weightSumTemp);
 				weightSumTemp += weightTemp;
 				dtmValue[gridIdx] += distanceTemp * distanceTemp * weightTemp;
 			}

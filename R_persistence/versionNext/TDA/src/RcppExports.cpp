@@ -48,30 +48,32 @@ BEGIN_RCPP
 END_RCPP
 }
 // Kde
-Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const bool printProgress);
-RcppExport SEXP TDA_Kde(SEXP XSEXP, SEXP GridSEXP, SEXP hSEXP, SEXP printProgressSEXP) {
+Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const Rcpp::NumericVector& weight, const bool printProgress);
+RcppExport SEXP TDA_Kde(SEXP XSEXP, SEXP GridSEXP, SEXP hSEXP, SEXP weightSEXP, SEXP printProgressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type Grid(GridSEXP);
     Rcpp::traits::input_parameter< const double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
     Rcpp::traits::input_parameter< const bool >::type printProgress(printProgressSEXP);
-    __result = Rcpp::wrap(Kde(X, Grid, h, printProgress));
+    __result = Rcpp::wrap(Kde(X, Grid, h, weight, printProgress));
     return __result;
 END_RCPP
 }
 // KdeDist
-Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const bool printProgress);
-RcppExport SEXP TDA_KdeDist(SEXP XSEXP, SEXP GridSEXP, SEXP hSEXP, SEXP printProgressSEXP) {
+Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const Rcpp::NumericVector& weight, const bool printProgress);
+RcppExport SEXP TDA_KdeDist(SEXP XSEXP, SEXP GridSEXP, SEXP hSEXP, SEXP weightSEXP, SEXP printProgressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type Grid(GridSEXP);
     Rcpp::traits::input_parameter< const double >::type h(hSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
     Rcpp::traits::input_parameter< const bool >::type printProgress(printProgressSEXP);
-    __result = Rcpp::wrap(KdeDist(X, Grid, h, printProgress));
+    __result = Rcpp::wrap(KdeDist(X, Grid, h, weight, printProgress));
     return __result;
 END_RCPP
 }
