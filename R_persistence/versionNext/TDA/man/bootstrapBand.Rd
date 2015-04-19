@@ -63,7 +63,7 @@ Chazal F, Fasy BT, Lecci F, Michel B, Rinaldo A, Wasserman L (2014). "Robust Top
 
 }
 \author{
-Fabrizio Lecci
+Jisu Kim, Fabrizio Lecci
 }
 \seealso{
 \code{\link{kde}}, \code{\link{dtm}}

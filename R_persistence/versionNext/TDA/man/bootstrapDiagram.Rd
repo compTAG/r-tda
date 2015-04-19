@@ -79,7 +79,7 @@ Larry Wasserman (2004), "All of statistics: a concise course in statistical infe
 Dmitriy Morozov, "Dionysus, a C++ library for computing persistent homology". http://www.mrzv.org/software/dionysus/
 }
 \author{
-Fabrizio Lecci
+Jisu Kim, Fabrizio Lecci
 }
 \note{
  This function uses the C++ library Dionysus for the computation of bottleneck and Wasserstein distances. See references.

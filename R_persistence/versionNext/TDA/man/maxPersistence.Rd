@@ -91,7 +91,7 @@ Frederic Chazal,  Jessi Cisewski, Brittany T. Fasy, Fabrizio Lecci, Bertrand Mic
 Brittany T. Fasy, Fabrizio Lecci, Alessandro Rinaldo, Larry Wasserman, Sivaraman Balakrishnan, and Aarti Singh. (2013), "Statistical Inference For Persistent Homology", (arXiv:1303.7117). To appear, Annals of Statistics.
 }
 \author{
-Fabrizio Lecci
+Jisu Kim, Fabrizio Lecci
 }
 \seealso{
 \code{\link{gridDiag}}, \code{\link{kde}}, \code{\link{kernelDist}}, \code{\link{dtm}}, \code{\link{bootstrapBand}}
