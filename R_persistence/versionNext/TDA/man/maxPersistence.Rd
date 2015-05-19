@@ -61,7 +61,7 @@ a logical variable indicating if the persistent homology should be computed for 
   	optional (if bandFUN==bootstrapDiagram AND distance=='wasserstein'): integer specifying the power to be used in the computation of the Wasserstein distance. Default is 1.
 }
   \item{parallel}{
-    logical: if \code{TRUE} the bootstrap iterations are parallelized, using the library \code{parallel}. (only if bandFUN=="bootstrapBand")
+    logical: if \code{TRUE} the bootstrap iterations are parallelized, using the library \code{parallel}.
 }
   \item{printProgress}{
 	if TRUE a progress bar is printed. Default is \code{FALSE}.

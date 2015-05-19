@@ -10,7 +10,7 @@ Bootstrapped Confidence Set for a Persistence Diagram, using the Bottleneck Dist
 bootstrapDiagram(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
                  sublevel = TRUE, library = "Dionysus", B = 30, alpha = 0.05,
                  distance = "bottleneck", dimension = min(1, maxdimension),
-                 p = 1, printProgress = FALSE, weight = NULL, ...)
+                 p = 1, parallel = FALSE, printProgress = FALSE, weight = NULL, ...)
 }
 \arguments{
 
@@ -52,6 +52,9 @@ a logical variable indicating if the Persistence Diagram should be computed for 
 }
   \item{p}{
 		if \code{distance=="wasserstein"}, then \code{p} is an integer specifying the power to be used in the computation of the Wasserstein distance. Default is 1.
+}
+  \item{parallel}{
+    logical: if \code{TRUE} the bootstrap iterations are parallelized, using the library \code{parallel}.
 }
   \item{printProgress}{
 	if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
