@@ -81,6 +81,7 @@ function(FUN, parameters, X, lim, by, maxdimension = length(lim) / 2 - 1,
   }
 
   X <- as.matrix(X)
+  maxdimension <- min(maxdimension, NCOL(X) - 1)
   Grid <- gridBy(lim = lim, by = by)[["grid"]]
   
   Kseq <- length(parameters)
@@ -117,7 +118,8 @@ function(FUN, parameters, X, lim, by, maxdimension = length(lim) / 2 - 1,
       eps[i] <- bootstrapDiagram(X = X, FUN = FUN, lim = lim, by = by,
           maxdimension = maxdimension, sublevel = sublevel, library = library,
           B = B, alpha = alpha, distance = distance, dimension = dimension,
-          p = p, printProgress = FALSE, weight = weight, parameters[i])
+          p = p, parallel = parallel, printProgress = FALSE, weight = weight,
+          parameters[i])
       selctDim <- rep(FALSE, NROW(Pers[[i]]))
       for (dim in dimension) {
         selctDim <- selctDim | (Pers[[i]][,1] == dim)
