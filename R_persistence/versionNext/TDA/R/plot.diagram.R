@@ -22,7 +22,7 @@ function(x, diagLim=NULL, dimension=NULL, col=NULL, rotated=FALSE, barcode=FALSE
 		sublevel=TRUE	
 	}
 	
-	if (!is.null(dimension)) x=x[which(x[,1]==dimension),]
+	if (!is.null(dimension)) x=x[which(x[,1]==dimension), , drop = FALSE]
 	
 	symb=x[,1]
 	for (i in 1:length(symb)){
