@@ -1,226 +1,126 @@
+// for R
 #include <R.h>
 #include <R_ext/Print.h>
 
+// for Rcpp
+#include <Rcpp.h>
 
-//for Rips
+// for Rips
 #include <tdautils/ripsL2.h>
 #include <tdautils/ripsArbit.h>
 
-//for grid
+// for grid
 #include <tdautils/gridUtils.h>
 
-//for kernel density
+// for kernel density
 #include <tdautils/kernelUtils.h>
 
-//for bottleneck and Wasserstein
-#include <tdautils/bottleneckUtils.h>
+// for changing formats and typecasting
+#include <tdautils/typecastUtils.h>
 
-//for GUDHI
+// for GUDHI
 #include <tdautils/gudhiUtils.h>
 
-//for Dionysus
+// for Dionysus
 #include <tdautils/dionysusUtils.h>
 
 // for phat
 #include <tdautils/phatUtils.h>
 
-#include <Rcpp.h>
 
 
+/**
+ * grid function by Brittany T. Fasy
+ * modified by Jisu Kim for
+ * arbitrary dimension & using memory as an input & setting maximum dimension.
+ */
+// [[Rcpp::export]]
+Rcpp::List GridDiag(const Rcpp::NumericVector& FUNvalues,
+		const Rcpp::IntegerVector& gridDim, const int maxdimension,
+		const std::string& decomposition, const std::string& library,
+		const bool location, const bool printProgress) {
+#ifdef LOGGING
+	//rlog::RLogInit(argc, argv);
 
+	stdoutLog.subscribeTo(RLOG_CHANNEL("topology/persistence"));
+	//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/chain"));
+	//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/vineyard"));
+#endif
 
+	Fltr f;
 
-	// grid function by Brittany T. Fasy
-	// modified by Jisu Kim for arbitrary dimension & using memory as an input & setting maximum dimension
-	// [[Rcpp::export]]
-	void GridDiag(Rcpp::NumericVector FUNvaluesInput, int gridDimensionInput, Rcpp::IntegerVector gridNumberInput, int maxdimensionInput, std::string decompositionInput, std::string libraryInput, int locationInput, int printInput)
-	{
-	#ifdef LOGGING
-		//rlog::RLogInit(argc, argv);
-
-		stdoutLog.subscribeTo(RLOG_CHANNEL("topology/persistence"));
-		//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/chain"));
-		//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/vineyard"));
-	#endif
-
-		bool printstatus=printInput;
-		Fltr f;
-
-		const unsigned int gridNumProd = std::accumulate( gridNumberInput.begin(), gridNumberInput.end(), 1, std::multiplies< int >() );
-
-		// Generate simplicial complex from function values and grid
-		if (decompositionInput[0] == '5')
-		{
-			simplicesFromGrid(f, FUNvaluesInput, gridNumber( gridDimensionInput, gridNumberInput ), gridNumProd, (maxdimensionInput)+1 ); // fill the simplices
-		}
-		if (decompositionInput[0] == 'b')
-		{
-			simplicesFromGridBarycenter(f, FUNvaluesInput, gridNumber( gridDimensionInput, gridNumberInput ), gridNumProd, (maxdimensionInput)+1 ); // fill the simplices
-		}
-		if (printstatus){
-			Rprintf("# Generated complex of size: %d \n", f.size());
-		}
-
-
-		// Sort simplicial complex
-		f.sort(Smplx::DataComparison()); // initialize filtration
-
-
-		// Compute persistent homology from sorted simplicial complex
-		std::map<Dimension, PDgm> dgms;
-		std::vector< std::vector< std::vector< double > > > persDgm(maxdimensionInput+1);
-		std::vector< std::vector< std::vector< unsigned int > > > persLoc;
-		std::vector< std::vector< std::set< unsigned int > > > persCycle;
-		if (locationInput == 1)
-		{
-			persLoc.resize(maxdimensionInput+1);
-			persCycle.resize(maxdimensionInput+1);
-		}
-		if (libraryInput[0] == 'D')
-		{
-
-			Persistence p(f); // initialize persistence
-			if (locationInput != 1)
-			{
-				p.pair_simplices(printstatus); // pair simplices
-			} else
-			{
-				if (printstatus)
-				{
-					p.pair_simplices(p.begin(), p.end(), true, Persistence::PairVisitor(p.size()));
-				} else
-				{
-					p.pair_simplices(p.begin(), p.end(), true, Persistence::PairVisitorNoProgress());
-				}
-			}
-			// TODO: why doesn't this work? rLog(rlmain, "testing");   
-	 
-			Persistence::SimplexMap<Fltr> m = p.make_simplex_map(f);
-			init_diagrams(dgms, p.begin(), p.end(), 
-						  evaluate_through_map(m, Smplx::DataEvaluator()),
-						  evaluate_through_map(m, Smplx::DimensionExtractor()));
-
-			//std::vector< double > persDgmPoint(3);
-			//std::map<Dimension, PDgm>::const_iterator dgmItr;
-			//for (dgmItr = dgms.begin(); dgmItr != dgms.end(); ++dgmItr)
-			//{
-			//		if (dgmItr->first > *maxdimensionInput)
-			//				break;
-			//		PDgm::const_iterator dgmPtItr;
-			//		for (dgmPtItr = (dgmItr->second).begin(); dgmPtItr != (dgmItr->second).end(); ++dgmPtItr)
-			//		{
-			//				persDgmPoint[0] = dgmItr->first;
-			//				persDgmPoint[1] = dgmPtItr->x();
-			//				persDgmPoint[2] = dgmPtItr->y();
-			//				persDgm.push_back( persDgmPoint );
-			//		}
-			//}
-
-			if (locationInput == 1)
-			{
-				std::vector< unsigned int > persLocPoint(2);
-				std::set< unsigned int > persCyclePoint;
-				for (Persistence::iterator cur = p.begin(); cur != p.end(); ++cur)
-				{
-					if (cur->sign())        // positive simplices corresponds to negative simplices having non-empty cycles
-					{
-						if (!cur->unpaired())	// first consider that cycle is paired
-						{
-							Persistence::OrderIndex death = cur->pair;      // the cycle that was born at cur is killed when we added death (another simplex)
-
-							const Smplx& b = m[cur];
-							const Smplx& d = m[death];
-							if (b.data() < d.data() && b.dimension() <= maxdimensionInput)
-							{
-								persLocPoint[0] = getLocation(b, FUNvaluesInput);
-								persLocPoint[1] = getLocation(d, FUNvaluesInput);
-								persLoc[ b.dimension() ].push_back( persLocPoint );
-
-								// Iterate over the cycle
-								persCyclePoint.clear();
-								const Persistence::Cycle& cycle = death->cycle;
-								for (Persistence::Cycle::const_iterator si =  cycle.begin(); si != cycle.end(); ++si)
-								{
-									const Smplx& s = m[*si];
-									const Smplx::VertexContainer& vertices = s.vertices();          // std::vector<Vertex> where Vertex = Distances::IndexType
-									Smplx::VertexContainer::const_iterator vtxItr;
-									for (vtxItr = vertices.begin(); vtxItr != vertices.end(); ++vtxItr)
-									{
-										persCyclePoint.insert( *vtxItr + 1 );
-									}
-								}
-								persCycle[ b.dimension() ].push_back( persCyclePoint );
-							}
-						} else	// cycles can be unpaired
-						{
-							const Smplx& b = m[cur];
-							persLocPoint[0] = getLocation(b, FUNvaluesInput);
-							persLocPoint[1] = (unsigned int)(std::max_element(FUNvaluesInput.begin(), FUNvaluesInput.end())-FUNvaluesInput.begin()+1);
-							persLoc[ b.dimension() ].push_back( persLocPoint );
-
-							// Iterate over the cycle
-							persCyclePoint.clear();
-							persCycle[ b.dimension() ].push_back( persCyclePoint );
-						}
-					}
-				}
-			}
-		}
-		if (libraryInput[0] == 'P')
-		{
-			 computePersistentPairsPhat(f, maxdimensionInput, FUNvaluesInput, gridNumProd, (bool)locationInput, persDgm, persLoc);
-		}
-
-
-		// Output persistent diagram
-		std::ofstream outfile;
-		outfile.open("outputTDA.txt");
-		for (int dgmsIdx=0; dgmsIdx<= maxdimensionInput; ++dgmsIdx)
-		{
-			outfile << dgmsIdx << std::endl;
-			if (libraryInput[0] == 'D')
-			{
-				outfile << dgms[dgmsIdx] << std::endl; // print i-dim diagram
-			}
-			if (libraryInput[0] == 'P')
-			{
-				std::vector< std::vector< double > >::const_iterator persdgmIdx;
-				for (persdgmIdx = persDgm[ dgmsIdx ].begin(); persdgmIdx != persDgm[ dgmsIdx ].end(); ++persdgmIdx)
-				{
-					outfile << (*persdgmIdx)[0] << " " << (*persdgmIdx)[1] << std::endl;
-				}
-				outfile << std::endl;
-			}
-		}
-		if (locationInput == 1)
-		{
-			outfile << "Location" << std::endl;
-			for (int dgmsIdx=0; dgmsIdx<= maxdimensionInput; ++dgmsIdx)
-			{
-				std::vector< std::vector< unsigned int > >::const_iterator persLocIdx;
-				for (persLocIdx = persLoc[ dgmsIdx ].begin(); persLocIdx != persLoc[ dgmsIdx ].end(); ++persLocIdx)
-				{
-					outfile << (*persLocIdx)[0] << " " << (*persLocIdx)[1] << std::endl;
-				}
-			}
-
-			outfile << std::endl << "Cycle" << std::endl;
-			for (int dgmsIdx=0; dgmsIdx<= maxdimensionInput; ++dgmsIdx)
-			{
-				std::vector< std::set< unsigned int > >::const_iterator persCycleIdx;
-				std::set< unsigned int >::const_iterator persCyclePointIdx;
-				for (persCycleIdx = persCycle[ dgmsIdx ].begin(); persCycleIdx != persCycle[ dgmsIdx ].end(); ++persCycleIdx)
-				{
-					for (persCyclePointIdx = persCycleIdx->begin(); persCyclePointIdx != persCycleIdx->end(); ++persCyclePointIdx)
-					{
-						outfile << (*persCyclePointIdx) << " ";
-					}
-					outfile << std::endl;
-				}
-			}
-		}
-		outfile.close();
+	// Generate simplicial complex from function values and grid
+	if (decomposition[0] == '5') {
+		simplicesFromGrid(f, FUNvalues, gridDim, maxdimension + 1);
 	}
+	if (decomposition[0] == 'b') {
+		simplicesFromGridBarycenter(f, FUNvalues, gridDim, maxdimension + 1);
+	}
+	if (printProgress) {
+		Rprintf("# Generated complex of size: %d \n", f.size());
+	}
+
+	// Sort simplicial complex
+	f.sort(Smplx::DataComparison());
+
+	// Compute persistent homology from sorted simplicial complex
+	std::vector< std::vector< std::vector< double > > > persDgm;
+	std::vector< std::vector< std::vector< unsigned > > > persLoc;
+	std::vector< std::vector< std::set< unsigned > > > persCycle;
+
+	if (library[0] == 'D') {
+		persistentPairsDionysus(f, maxdimension, FUNvalues, location,
+				printProgress, persDgm, persLoc, persCycle);
+	}
+	if (library[0] == 'P') {
+		 persistentPairsPhat(f, maxdimension, FUNvalues, location,
+			 printProgress, persDgm, persLoc);
+	}
+
+	// Output persistent diagram
+	return Rcpp::List::create(
+		concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
+		concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
+		StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
+
+
+	//// Output persistent diagram
+	//std::ofstream outfile;
+	//outfile.open("outputTDA.txt");
+	//for (int dgmsIdx = 0; dgmsIdx <= maxdimension; ++dgmsIdx)
+	//{
+	//	outfile << dgmsIdx << std::endl;
+	//	std::vector< std::vector< double > >::const_iterator persdgmIdx;
+	//	for (persdgmIdx = persDgm[dgmsIdx].begin(); persdgmIdx != persDgm[dgmsIdx].end(); ++persdgmIdx) {
+	//		outfile << (*persdgmIdx)[0] << " " << (*persdgmIdx)[1] << std::endl;
+	//	}
+	//	outfile << std::endl;
+	//}
+	//if (location)
+	//{
+	//	outfile << "Location" << std::endl;
+	//	for (int dgmsIdx = 0; dgmsIdx <= maxdimension; ++dgmsIdx) {
+	//		std::vector< std::vector< unsigned int > >::const_iterator persLocIdx;
+	//		for (persLocIdx = persLoc[dgmsIdx].begin(); persLocIdx != persLoc[dgmsIdx].end(); ++persLocIdx) {
+	//			outfile << (*persLocIdx)[0] << " " << (*persLocIdx)[1] << std::endl;
+	//		}
+	//	}
+
+	//	outfile << std::endl << "Cycle" << std::endl;
+	//	for (int dgmsIdx = 0; dgmsIdx <= maxdimension; ++dgmsIdx) {
+	//		std::vector< std::set< unsigned int > >::const_iterator persCycleIdx;
+	//		std::set< unsigned int >::const_iterator persCyclePointIdx;
+	//		for (persCycleIdx = persCycle[dgmsIdx].begin(); persCycleIdx != persCycle[dgmsIdx].end(); ++persCycleIdx) {
+	//			for (persCyclePointIdx = persCycleIdx->begin(); persCyclePointIdx != persCycleIdx->end(); ++persCyclePointIdx) {
+	//				outfile << (*persCyclePointIdx) << " ";
+	//			}
+	//			outfile << std::endl;
+	//		}
+	//	}
+	//}
+	//outfile.close();
+}
+
 
 
 extern "C" {
@@ -315,7 +215,6 @@ extern "C" {
 
 
 
-
 	void ripsArbit(int* dimInput, double* maxInput, int* printInput)
 	{
 		bool printstatus=printInput[0];
@@ -404,124 +303,146 @@ extern "C" {
 }
 
 
-	// [[Rcpp::export]]
-	double Bottleneck(const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2) {
-		return bottleneck_distance(read_diagram(Diag1), read_diagram(Diag2)); return bottleneck_distance(read_diagram(Diag1), read_diagram(Diag2));
-	}
+
+// [[Rcpp::export]]
+double Bottleneck(
+		const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2) {
+	return bottleneck_distance(RcppToDionysus< PersistenceDiagram<> >(Diag1),
+			RcppToDionysus< PersistenceDiagram<> >(Diag2));
+}
 
 
-	// [[Rcpp::export]]
-	double Wasserstein(const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2, const int p) {
-		return wasserstein_distance(read_diagram(Diag1), read_diagram(Diag2), p);
-	}
+
+// [[Rcpp::export]]
+double Wasserstein(const Rcpp::NumericMatrix& Diag1,
+		const Rcpp::NumericMatrix& Diag2, const int p) {
+	return wasserstein_distance(RcppToDionysus< PersistenceDiagram<> >(Diag1),
+			RcppToDionysus< PersistenceDiagram<> >(Diag2), p);
+}
 
 
-	// KDE function on a Grid
-	// [[Rcpp::export]]
-	Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const Rcpp::NumericVector& weight, const bool printProgress){
-		const double pi = 3.141592653589793;
-		const unsigned dimension = Grid.ncol();
-		const unsigned gridNum = Grid.nrow();
-		const double den = pow(h, (int)dimension) * pow(2 * pi, dimension / 2.0);
-		Rcpp::NumericVector kdeValue(gridNum);
 
-		int counter = 0;
-		const int totalCount = gridNum;
-		int percentageFloor = 0;
+// KDE function on a Grid
+// [[Rcpp::export]]
+Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X,
+		const Rcpp::NumericMatrix& Grid, const double h,
+		const Rcpp::NumericVector& weight, const bool printProgress) {
+	const double pi = 3.141592653589793;
+	const unsigned dimension = Grid.ncol();
+	const unsigned gridNum = Grid.nrow();
+	const double den = pow(h, (int)dimension) * pow(2 * pi, dimension / 2.0);
+	Rcpp::NumericVector kdeValue(gridNum);
 
-		if (printProgress) {
-			printProgressFrame(Rprintf);
+	int counter = 0;
+	const int totalCount = gridNum;
+	int percentageFloor = 0;
 
-			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-				kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight) / den;
-						
-				//printProgress
-				printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
-			}
-			Rprintf("\n");
-
-		} else { //no printProgress
-			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-				kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight) / den;
-			}
-		}
-
-		return (kdeValue);
-	}
-
-
-   	// kernel Dist function on a Grid
-	// [[Rcpp::export]]
-	Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X, const Rcpp::NumericMatrix& Grid, const double h, const Rcpp::NumericVector& weight, const bool printProgress){
-		const unsigned sampleNum = X.nrow();
-		const unsigned gridNum = Grid.nrow();
-		// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
-		double first = 0.0;
-		const double second = 1.0;
-		double third;
-		Rcpp::NumericVector kdeDistValue(gridNum);
-
-		int counter = 0;
-		const int totalCount = sampleNum + gridNum;
-		int percentageFloor = 0;
-
-		if (printProgress)
-		{
-			printProgressFrame(Rprintf);
-
-			for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
-				first += oneKernel(matrixRow< std::vector< double > >(X, sampleIdx), X, h, weight);
-
-				// printProgress
-				printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
-			}
-			first /= sampleNum;
-
-			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-				third = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight);
-				kdeDistValue[gridIdx] = std::sqrt(first + second - 2 * third);
-
-				// printProgress
-				printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
-			}
-			Rprintf("\n");		
-
-		} else { //no printProgress
-			for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
-				first += oneKernel(matrixRow< std::vector< double > >(X, sampleIdx), X, h, weight);
-			}
-			first /= sampleNum;
-
-			for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-				third = oneKernel(matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight);
-				// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
-				kdeDistValue[gridIdx] = std::sqrt(first + second - 2 * third);
-			}
-   		}
-
-		return (kdeDistValue);
-	}
-
-
-	// distance to measure function on a Grid
-	// [[Rcpp::export]]
-	Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex, const Rcpp::NumericMatrix& knnDistance, const Rcpp::NumericVector& weight, const double weightBound) {
-		const unsigned gridNum = knnIndex.nrow();
-		double distanceTemp, weightTemp, weightSumTemp;
-		Rcpp::NumericVector dtmValue(gridNum, 0.0);
+	if (printProgress) {
+		printProgressFrame(Rprintf);
 
 		for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-			weightSumTemp = 0.0;
-			for (unsigned kIdx = 0; weightSumTemp < weightBound; ++kIdx) {
-				distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
-				weightTemp = std::min(weight[knnIndex[gridIdx + kIdx * gridNum] - 1], weightBound - weightSumTemp);
-				weightSumTemp += weightTemp;
-				dtmValue[gridIdx] += distanceTemp * distanceTemp * weightTemp;
-			}
-			dtmValue[gridIdx] = std::sqrt(dtmValue[gridIdx] / weightBound);
+			kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(
+					Grid, gridIdx), X, h, weight) / den;
+						
+			//printProgress
+			printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
 		}
-		return (dtmValue);
+		Rprintf("\n");
+
+	} else { //no printProgress
+		for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+			kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(
+					Grid, gridIdx), X, h, weight) / den;
+		}
 	}
+
+	return (kdeValue);
+}
+
+
+
+// kernel Dist function on a Grid
+// [[Rcpp::export]]
+Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X,
+		const Rcpp::NumericMatrix& Grid, const double h,
+		const Rcpp::NumericVector& weight, const bool printProgress) {
+	const unsigned sampleNum = X.nrow();
+	const unsigned gridNum = Grid.nrow();
+	// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
+	double first = 0.0;
+	const double second = 1.0;
+	double third;
+	Rcpp::NumericVector kdeDistValue(gridNum);
+
+	int counter = 0;
+	const int totalCount = sampleNum + gridNum;
+	int percentageFloor = 0;
+
+	if (printProgress)
+	{
+		printProgressFrame(Rprintf);
+
+		for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
+			first += oneKernel(
+					matrixRow< std::vector< double > >(X, sampleIdx), X, h, weight);
+
+			// printProgress
+			printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
+		}
+		first /= sampleNum;
+
+		for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+			third = oneKernel(
+					matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight);
+			kdeDistValue[gridIdx] = std::sqrt(first + second - 2 * third);
+
+			// printProgress
+			printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
+		}
+		Rprintf("\n");		
+
+	} else { //no printProgress
+		for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
+			first += oneKernel(
+					matrixRow< std::vector< double > >(X, sampleIdx), X, h, weight);
+		}
+		first /= sampleNum;
+
+		for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+			third = oneKernel(
+					matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight);
+			// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
+			kdeDistValue[gridIdx] = std::sqrt(first + second - 2 * third);
+		}
+	}
+
+	return (kdeDistValue);
+}
+
+
+
+// distance to measure function on a Grid
+// [[Rcpp::export]]
+Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
+		const Rcpp::NumericMatrix& knnDistance,
+		const Rcpp::NumericVector& weight, const double weightBound) {
+	const unsigned gridNum = knnIndex.nrow();
+	double distanceTemp, weightTemp, weightSumTemp;
+	Rcpp::NumericVector dtmValue(gridNum, 0.0);
+
+	for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+		weightSumTemp = 0.0;
+		for (unsigned kIdx = 0; weightSumTemp < weightBound; ++kIdx) {
+			distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
+			weightTemp = std::min(weight[knnIndex[gridIdx + kIdx * gridNum] - 1],
+					weightBound - weightSumTemp);
+			weightSumTemp += weightTemp;
+			dtmValue[gridIdx] += distanceTemp * distanceTemp * weightTemp;
+		}
+		dtmValue[gridIdx] = std::sqrt(dtmValue[gridIdx] / weightBound);
+	}
+	return (dtmValue);
+}
 
 
 	extern "C" {
