@@ -1,3 +1,10 @@
+### TDA: version 1.4
+- Fixed bugs
+- Rcpp is used in gridDiag, bottleneck & wasserstein distance, kde, kernel distance, and dtm
+- kde, kernel distance, and dtm have weighted version
+- bootstrapBand, bootstrapDiagram, and maxPersistence can do weighted bootstrap
+- parallel option is possible in bootstrapDiagram
+
 ### TDA: version 1.3
 - Fixed bugs (memory leak in GUDHI, "1.#INF" code in Windows)
 - gridDiag now returns also location of representative cycles
