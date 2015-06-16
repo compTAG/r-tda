@@ -20,13 +20,13 @@
   *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
   */
 
-#ifndef GUDHI_IO_H
-#define GUDHI_IO_H
+#ifndef GUDHI_READER_UTILS_H
+#define GUDHI_READER_UTILS_H
 
 #include <iostream>
 #include <fstream>
 #include <boost/graph/adjacency_list.hpp>
-#include "graph_simplicial_complex.h"
+#include "gudhi/graph_simplicial_complex.h"
 
 /**
  * \brief Read a set of points to turn it
@@ -107,7 +107,7 @@ read_graph ( std::string file_name )
   }
   in_.close();
 
-  if(max_h+1 != vertices.size()) 
+  if((size_t)(max_h+1) != vertices.size())
     { std::cerr << "Error: vertices must be labeled from 0 to n-1 \n"; }
 
   Graph_t skel_graph(edges.begin(),edges.end(),edges_fil.begin(),vertices.size());
@@ -139,12 +139,13 @@ bool read_simplex ( std::istream                 & in_
                   , std::vector< Vertex_handle > & simplex
                   , Filtration_value             & fil )
 {
-  int dim;
+  int dim=0;
   if(!(in_ >> dim)) return false;
   Vertex_handle v;
-  for(int i=0; i<dim+1; ++i) 
+  for(int i=0; i<dim+1; ++i)
   { in_ >> v; simplex.push_back(v); }
   in_ >> fil;
+  in_.ignore((std::numeric_limits<std::streamsize>::max)(), '\n'); // ignore until the carriage return
   return true;
 }
 
@@ -177,4 +178,4 @@ bool read_hasse_simplex ( std::istream                 & in_
   return true;
 }
 
-#endif // GUDHI_IO_H
+#endif // GUDHI_READER_UTILS_H
