@@ -1,7 +1,7 @@
 #include <R.h>
 #include <R_ext/Print.h>
 
-#include <gudhi/io.h>
+#include <gudhi/reader_utils.h>
 #include <gudhi/graph_simplicial_complex.h>
 #include <gudhi/distance_functions.h>
 #include <gudhi/Simplex_tree.h>
