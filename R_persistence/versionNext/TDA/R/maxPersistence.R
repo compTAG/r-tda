@@ -18,13 +18,16 @@ function(FUN, parameters, X, lim, by, maxdimension = length(lim) / 2 - 1,
   if (length(lim) %% 2 != 0) {
     stop("lim should be either a matrix or a vector of even elements")
   }
+  tryCatch(by <- as.double(by), error = function(e) {
+      stop("by should be numeric")})
+  if (min(by) <= 0) {
+    stop("by should be positive")
+  }
   if (2 * NCOL(X) != length(lim)) {
     stop("dimension of X does not match with lim")
   }
-  tryCatch(by <- as.double(by), error = function(e) {
-      stop("by should be numeric")})
-  if ((length(by) != 1 && length(by) != NCOL(X)) || min(by) <= 0) {
-    stop("by should be either a positive number or a positive vector of length equals dimension of grid")
+  if (length(by) != 1 && length(by) != NCOL(X)) {
+    stop("by should be either a number or a vector of length equals dimension of grid")
   }
   tryCatch(maxdimension <- as.double(maxdimension), error = function(e) {
       stop("maxdimension should be numeric")})
@@ -100,12 +103,12 @@ function(FUN, parameters, X, lim, by, maxdimension = length(lim) / 2 - 1,
   for (i in seq(along = parameters)){
 
     if (is.null(weight)) {
-      Diag <- gridDiag(X = X, FUN = FUN, lim = lim, by = by,
+      Diag <- gridDiag(X = X, FUN = FUN, lim = lim, by = by, FUNvalues = NULL,
           maxdimension = maxdimension, sublevel = sublevel, library = library,
           location = FALSE, printProgress = FALSE, diagLimit = NULL,
           parameters[i])[["diagram"]]
     } else {
-      Diag <- gridDiag(X = X, FUN = FUN, lim = lim, by = by,
+      Diag <- gridDiag(X = X, FUN = FUN, lim = lim, by = by, FUNvalues = NULL,
           maxdimension = maxdimension, sublevel = sublevel, library = library,
           location = FALSE, printProgress = FALSE, diagLimit = NULL,
           weight = weight, parameters[i])[["diagram"]]
