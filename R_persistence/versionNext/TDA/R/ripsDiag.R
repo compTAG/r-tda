@@ -23,8 +23,6 @@ function(X, maxdimension, maxscale, dist="euclidean", library="GUDHI", printProg
 		}
 	} else if (dist=="arbitrary"){
 		Diag=ripsArbitDiag(X,maxdimension,maxscale, printProgress)
-	} else if (dist=="alphashape"){
-		Diag=ripsAlphaDiag(X,maxdimension,maxscale, library,printProgress)
 	} else stop ("dist should be 'euclidean' or 'arbitrary'")
 
 	return(Diag)
