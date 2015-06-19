@@ -1,7 +1,8 @@
 import(FNN, igraph, parallel, scales)
 importFrom(Rcpp, evalCpp)
 
-export(	bootstrapBand,
+export( alphaDiag,
+	bootstrapBand,
 	bootstrapDiagram,
 	bottleneck,
 	circleUnif,
