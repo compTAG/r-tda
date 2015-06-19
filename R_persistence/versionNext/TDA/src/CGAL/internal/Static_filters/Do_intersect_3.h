@@ -192,22 +192,22 @@ public:
     F f1bis = (t1 - t1) - (t1 - t1);
     F f2 = f1*f1;
     F f3 = f2 - f2;
-    std::cerr << "epsilons:\n"
-              << "  degre " << f1.degree() << ": " <<  f1.error() << "\n"
-              << "  degre " << f1bis.degree() << ": " <<  f1bis.error() << "\n"
-              << "  degre " << f2.degree() << ": " <<  f2.error() << "\n"
-              << "  degre " << f3.degree() << ": " <<  f3.error() << "\n";
+    //std::cerr << "epsilons:\n"
+    //          << "  degre " << f1.degree() << ": " <<  f1.error() << "\n"
+    //          << "  degre " << f1bis.degree() << ": " <<  f1bis.error() << "\n"
+    //          << "  degre " << f2.degree() << ": " <<  f2.error() << "\n"
+    //          << "  degre " << f3.degree() << ": " <<  f3.error() << "\n";
       
     double err = f.error();
     err += err * 2 *  F::ulp(); // Correction due to "eps * m * m".  Do we need 2 ?
-    std::cerr << "*** epsilon for Do_intersect_3(Bbox_3, Segment_3) = "
-              << err << std::endl;
-    std::cerr << "\n"
-              << "Now for underflow/overflows...\n"
-              << "        min_double/eps = " 
-              << std::numeric_limits<double>::min() / err << std::endl
-              << "  sqrt(min_double/eps) = "
-              << CGAL::sqrt(std::numeric_limits<double>::min() / err) << std::endl;
+    //std::cerr << "*** epsilon for Do_intersect_3(Bbox_3, Segment_3) = "
+    //          << err << std::endl;
+    //std::cerr << "\n"
+    //          << "Now for underflow/overflows...\n"
+    //          << "        min_double/eps = " 
+    //          << std::numeric_limits<double>::min() / err << std::endl
+    //          << "  sqrt(min_double/eps) = "
+    //          << CGAL::sqrt(std::numeric_limits<double>::min() / err) << std::endl;
     return err;
   }
 

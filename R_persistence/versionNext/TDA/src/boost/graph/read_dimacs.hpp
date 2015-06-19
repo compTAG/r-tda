@@ -236,8 +236,8 @@ int read_dimacs_max_flow_internal(Graph& g,
         boost::tie(e1, in1) = add_edge(verts[tail], verts[head], g);
         boost::tie(e2, in2) = add_edge(verts[head], verts[tail], g);
         if (!in1 || !in2) {
-          std::cerr << "unable to add edge (" << head << "," << tail << ")"
-                    << std::endl;
+          //std::cerr << "unable to add edge (" << head << "," << tail << ")"
+          //          << std::endl;
           return -1;
         }
         capacity[e1] = cap;

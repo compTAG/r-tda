@@ -6317,15 +6317,15 @@ Triangulation_3<GT,Tds,Lds>::
 is_valid(bool verbose, int level) const
 {
   if ( ! _tds.is_valid(verbose,level) ) {
-    if (verbose)
-        std::cerr << "invalid data structure" << std::endl;
+    //if (verbose)
+    //    std::cerr << "invalid data structure" << std::endl;
     CGAL_triangulation_assertion(false);
     return false;
   }
 
   if ( infinite_vertex() == Vertex_handle() ) {
-    if (verbose)
-        std::cerr << "no infinite vertex" << std::endl;
+    //if (verbose)
+    //    std::cerr << "no infinite vertex" << std::endl;
     CGAL_triangulation_assertion(false);
     return false;
   }
@@ -6353,8 +6353,8 @@ is_valid(bool verbose, int level) const
       break;
     }
   }
-  if (verbose)
-      std::cerr << "valid triangulation" << std::endl;
+  //if (verbose)
+  //    std::cerr << "valid triangulation" << std::endl;
   return true;
 }
 
@@ -6364,19 +6364,19 @@ Triangulation_3<GT,Tds,Lds>::
 is_valid(Cell_handle c, bool verbose, int level) const
 {
   if ( ! _tds.is_valid(c,verbose,level) ) {
-    if (verbose) {
-      std::cerr << "combinatorially invalid cell";
-      for (int i=0; i <= dimension(); i++ )
-        std::cerr << c->vertex(i)->point() << ", ";
-      std::cerr << std::endl;
-    }
+    //if (verbose) {
+    //  std::cerr << "combinatorially invalid cell";
+    //  for (int i=0; i <= dimension(); i++ )
+    //    std::cerr << c->vertex(i)->point() << ", ";
+    //  std::cerr << std::endl;
+    //}
     CGAL_triangulation_assertion(false);
     return false;
   }
   if ( ! is_infinite(c) )
     is_valid_finite(c, verbose, level);
-  if (verbose)
-      std::cerr << "geometrically valid cell" << std::endl;
+  //if (verbose)
+  //    std::cerr << "geometrically valid cell" << std::endl;
   return true;
 }
 
@@ -6393,12 +6393,12 @@ is_valid_finite(Cell_handle c, bool verbose, int) const
                        c->vertex(1)->point(),
                        c->vertex(2)->point(),
                        c->vertex(3)->point()) != POSITIVE ) {
-        if (verbose)
-            std::cerr << "badly oriented cell "
-                      << c->vertex(0)->point() << ", "
-                      << c->vertex(1)->point() << ", "
-                      << c->vertex(2)->point() << ", "
-                      << c->vertex(3)->point() << std::endl;
+        //if (verbose)
+        //    std::cerr << "badly oriented cell "
+        //              << c->vertex(0)->point() << ", "
+        //              << c->vertex(1)->point() << ", "
+        //              << c->vertex(2)->point() << ", "
+        //              << c->vertex(3)->point() << std::endl;
         CGAL_triangulation_assertion(false);
         return false;
       }
@@ -6409,11 +6409,11 @@ is_valid_finite(Cell_handle c, bool verbose, int) const
         if (coplanar_orientation(c->vertex(0)->point(),
                                  c->vertex(1)->point(),
                                  c->vertex(2)->point()) != POSITIVE) {
-          if (verbose)
-              std::cerr << "badly oriented face "
-                        << c->vertex(0)->point() << ", "
-                        << c->vertex(1)->point() << ", "
-                        << c->vertex(2)->point() << std::endl;
+          //if (verbose)
+          //    std::cerr << "badly oriented face "
+          //              << c->vertex(0)->point() << ", "
+          //              << c->vertex(1)->point() << ", "
+          //              << c->vertex(2)->point() << std::endl;
           CGAL_triangulation_assertion(false);
           return false;
         }
@@ -6428,13 +6428,13 @@ is_valid_finite(Cell_handle c, bool verbose, int) const
       if ( ! is_infinite(v) )
       {
         if ( collinear_position(p0, p1, v->point()) != MIDDLE ) {
-          if (verbose)
-              std::cerr << "badly oriented edge "
-                        << p0 << ", " << p1 << std::endl
-                        << "with neighbor 0"
-                        << c->neighbor(0)->vertex(1-c->neighbor(0)->index(c))
-                                         ->point()
-                        << ", " << v->point() << std::endl;
+          //if (verbose)
+          //    std::cerr << "badly oriented edge "
+          //              << p0 << ", " << p1 << std::endl
+          //              << "with neighbor 0"
+          //              << c->neighbor(0)->vertex(1-c->neighbor(0)->index(c))
+          //                               ->point()
+          //              << ", " << v->point() << std::endl;
           CGAL_triangulation_assertion(false);
           return false;
         }
@@ -6444,13 +6444,13 @@ is_valid_finite(Cell_handle c, bool verbose, int) const
       if ( ! is_infinite(v) )
       {
         if ( collinear_position(p1, p0, v->point()) != MIDDLE ) {
-          if (verbose)
-              std::cerr << "badly oriented edge "
-                        << p0 << ", " << p1 << std::endl
-                        << "with neighbor 1"
-                        << c->neighbor(1)->vertex(1-c->neighbor(1)->index(c))
-                                         ->point()
-                        << ", " << v->point() << std::endl;
+          //if (verbose)
+          //    std::cerr << "badly oriented edge "
+          //              << p0 << ", " << p1 << std::endl
+          //              << "with neighbor 1"
+          //              << c->neighbor(1)->vertex(1-c->neighbor(1)->index(c))
+          //                               ->point()
+          //              << ", " << v->point() << std::endl;
           CGAL_triangulation_assertion(false);
           return false;
         }

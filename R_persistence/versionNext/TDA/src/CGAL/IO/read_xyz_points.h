@@ -82,7 +82,7 @@ read_xyz_points_and_normals(
 
   if(!stream)
   {
-    std::cerr << "Error: cannot open file" << std::endl;
+    //std::cerr << "Error: cannot open file" << std::endl;
     return false;
   }
 
@@ -124,7 +124,7 @@ read_xyz_points_and_normals(
               if(iss  >> ny >> nz){
                 normal = Vector(nx,ny,nz);
               } else {
-                std::cerr << "Error line " << lineNumber << " of file" << std::endl;
+                //std::cerr << "Error line " << lineNumber << " of file" << std::endl;
                 return false;
               }
             }
@@ -148,7 +148,7 @@ read_xyz_points_and_normals(
     }
     else // if wrong file format
     {
-      std::cerr << "Error line " << lineNumber << " of file" << std::endl;
+      //std::cerr << "Error line " << lineNumber << " of file" << std::endl;
       return false;
     }
   }

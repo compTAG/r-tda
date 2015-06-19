@@ -76,7 +76,7 @@ write_off_points_and_normals(
 
   if(!stream)
   {
-    std::cerr << "Error: cannot open file" << std::endl;
+    //std::cerr << "Error: cannot open file" << std::endl;
     return false;
   }
 
@@ -185,7 +185,7 @@ write_off_points(
 
   if(!stream)
   {
-    std::cerr << "Error: cannot open file" << std::endl;
+    //std::cerr << "Error: cannot open file" << std::endl;
     return false;
   }
 
