@@ -104,15 +104,15 @@ public:
 	typename P2::result_type res2 = p2(a1.second);
 	if (! cmp(res1, res2))
 	{
-	    std::cerr << "Kernel_checker error : " << res1 << " != " << res2
-		      << " for the inputs : " << std::endl;
-	    std::cerr << a1.first << std::endl;
-	    std::cerr << a1.second << std::endl;
-            std::cerr << "functor first kernel : "
-		      << typeid(p1).name() << std::endl;
-            std::cerr << "functor second kernel: "
-		      << typeid(p2).name() << std::endl;
-	    std::cerr << CGAL_PRETTY_FUNCTION << std::endl;
+	    //std::cerr << "Kernel_checker error : " << res1 << " != " << res2
+		   //   << " for the inputs : " << std::endl;
+	    //std::cerr << a1.first << std::endl;
+	    //std::cerr << a1.second << std::endl;
+     //       std::cerr << "functor first kernel : "
+		   //   << typeid(p1).name() << std::endl;
+     //       std::cerr << "functor second kernel: "
+		   //   << typeid(p2).name() << std::endl;
+	    //std::cerr << CGAL_PRETTY_FUNCTION << std::endl;
 	    CGAL_kernel_assertion(false);
 	}
 	return pair_maker(res1, res2);
@@ -126,17 +126,17 @@ public:
 	typename P2::result_type res2 = p2(a1.second, a2.second);
 	if (! cmp(res1, res2))
 	{
-	    std::cerr << "Kernel_checker error : " << res1 << " != " << res2
-		      << " for the inputs : " << std::endl;
-	    std::cerr << a1.first << std::endl;
-	    std::cerr << a1.second << std::endl;
-	    std::cerr << a2.first << std::endl;
-	    std::cerr << a2.second << std::endl;
-            std::cerr << "functor first kernel : "
-		      << typeid(p1).name() << std::endl;
-            std::cerr << "functor second kernel: "
-		      << typeid(p2).name() << std::endl;
-	    std::cerr << CGAL_PRETTY_FUNCTION << std::endl;
+	    //std::cerr << "Kernel_checker error : " << res1 << " != " << res2
+		   //   << " for the inputs : " << std::endl;
+	    //std::cerr << a1.first << std::endl;
+	    //std::cerr << a1.second << std::endl;
+	    //std::cerr << a2.first << std::endl;
+	    //std::cerr << a2.second << std::endl;
+     //       std::cerr << "functor first kernel : "
+		   //   << typeid(p1).name() << std::endl;
+     //       std::cerr << "functor second kernel: "
+		   //   << typeid(p2).name() << std::endl;
+	    //std::cerr << CGAL_PRETTY_FUNCTION << std::endl;
 	    CGAL_kernel_assertion(false);
 	}
 	return pair_maker(res1, res2);
@@ -150,19 +150,19 @@ public:
 	typename P2::result_type res2 = p2(a1.second, a2.second, a3.second);
 	if (! cmp(res1, res2))
 	{
-	    std::cerr << "Kernel_checker error : " << res1 << " != " << res2
-		      << " for the inputs : " << std::endl;
-	    std::cerr << a1.first << std::endl;
-	    std::cerr << a1.second << std::endl;
-	    std::cerr << a2.first << std::endl;
-	    std::cerr << a2.second << std::endl;
-	    std::cerr << a3.first << std::endl;
-	    std::cerr << a3.second << std::endl;
-            std::cerr << "functor first kernel : "
-		      << typeid(p1).name() << std::endl;
-            std::cerr << "functor second kernel: "
-		      << typeid(p2).name() << std::endl;
-	    std::cerr << CGAL_PRETTY_FUNCTION << std::endl;
+	    //std::cerr << "Kernel_checker error : " << res1 << " != " << res2
+		   //   << " for the inputs : " << std::endl;
+	    //std::cerr << a1.first << std::endl;
+	    //std::cerr << a1.second << std::endl;
+	    //std::cerr << a2.first << std::endl;
+	    //std::cerr << a2.second << std::endl;
+	    //std::cerr << a3.first << std::endl;
+	    //std::cerr << a3.second << std::endl;
+     //       std::cerr << "functor first kernel : "
+		   //   << typeid(p1).name() << std::endl;
+     //       std::cerr << "functor second kernel: "
+		   //   << typeid(p2).name() << std::endl;
+	    //std::cerr << CGAL_PRETTY_FUNCTION << std::endl;
 	    CGAL_kernel_assertion(false);
 	}
 	return pair_maker(res1, res2);
@@ -178,21 +178,21 @@ public:
                                            a3.second, a4.second);
 	if (! cmp(res1, res2))
 	{
-	    std::cerr << "Kernel_checker error : " << res1 << " != " << res2
-		      << " for the inputs : " << std::endl;
-	    std::cerr << a1.first << std::endl;
-	    std::cerr << a1.second << std::endl;
-	    std::cerr << a2.first << std::endl;
-	    std::cerr << a2.second << std::endl;
-	    std::cerr << a3.first << std::endl;
-	    std::cerr << a3.second << std::endl;
-	    std::cerr << a4.first << std::endl;
-	    std::cerr << a4.second << std::endl;
-            std::cerr << "functor first kernel : "
-		      << typeid(p1).name() << std::endl;
-            std::cerr << "functor second kernel: "
-		      << typeid(p2).name() << std::endl;
-	    std::cerr << CGAL_PRETTY_FUNCTION << std::endl;
+	    //std::cerr << "Kernel_checker error : " << res1 << " != " << res2
+		   //   << " for the inputs : " << std::endl;
+	    //std::cerr << a1.first << std::endl;
+	    //std::cerr << a1.second << std::endl;
+	    //std::cerr << a2.first << std::endl;
+	    //std::cerr << a2.second << std::endl;
+	    //std::cerr << a3.first << std::endl;
+	    //std::cerr << a3.second << std::endl;
+	    //std::cerr << a4.first << std::endl;
+	    //std::cerr << a4.second << std::endl;
+     //       std::cerr << "functor first kernel : "
+		   //   << typeid(p1).name() << std::endl;
+     //       std::cerr << "functor second kernel: "
+		   //   << typeid(p2).name() << std::endl;
+	    //std::cerr << CGAL_PRETTY_FUNCTION << std::endl;
 	    CGAL_kernel_assertion(false);
 	}
 	return pair_maker(res1, res2);
@@ -209,23 +209,23 @@ public:
                                            a3.second, a4.second, a5.second);
 	if (! cmp(res1, res2))
 	{
-	    std::cerr << "Kernel_checker error : " << res1 << " != " << res2
-		      << " for the inputs : " << std::endl;
-	    std::cerr << a1.first << std::endl;
-	    std::cerr << a1.second << std::endl;
-	    std::cerr << a2.first << std::endl;
-	    std::cerr << a2.second << std::endl;
-	    std::cerr << a3.first << std::endl;
-	    std::cerr << a3.second << std::endl;
-	    std::cerr << a4.first << std::endl;
-	    std::cerr << a4.second << std::endl;
-	    std::cerr << a5.first << std::endl;
-	    std::cerr << a5.second << std::endl;
-            std::cerr << "functor first kernel : "
-		      << typeid(p1).name() << std::endl;
-            std::cerr << "functor second kernel: "
-		      << typeid(p2).name() << std::endl;
-	    std::cerr << CGAL_PRETTY_FUNCTION << std::endl;
+	    //std::cerr << "Kernel_checker error : " << res1 << " != " << res2
+		   //   << " for the inputs : " << std::endl;
+	    //std::cerr << a1.first << std::endl;
+	    //std::cerr << a1.second << std::endl;
+	    //std::cerr << a2.first << std::endl;
+	    //std::cerr << a2.second << std::endl;
+	    //std::cerr << a3.first << std::endl;
+	    //std::cerr << a3.second << std::endl;
+	    //std::cerr << a4.first << std::endl;
+	    //std::cerr << a4.second << std::endl;
+	    //std::cerr << a5.first << std::endl;
+	    //std::cerr << a5.second << std::endl;
+     //       std::cerr << "functor first kernel : "
+		   //   << typeid(p1).name() << std::endl;
+     //       std::cerr << "functor second kernel: "
+		   //   << typeid(p2).name() << std::endl;
+	    //std::cerr << CGAL_PRETTY_FUNCTION << std::endl;
 	    CGAL_kernel_assertion(false);
 	}
 	return pair_maker(res1, res2);

@@ -86,8 +86,8 @@ struct Profile_counter
 
     ~Profile_counter()
     {
-        std::cerr << "[CGAL::Profile_counter] "
-                  << std::setw(10) << i << " " << s << std::endl;
+        //std::cerr << "[CGAL::Profile_counter] "
+        //          << std::setw(10) << i << " " << s << std::endl;
     }
 
 private:
@@ -130,15 +130,15 @@ public:
         unsigned total=0;
         for (Counters::const_iterator it=counters.begin(), end=counters.end();
              it != end; ++it) {
-            std::cerr << "[CGAL::Profile_histogram_counter] " << s;
-            std::cerr << " [ " << std::setw(10) << it->first << " : "
-                               << std::setw(10) << it->second << " ]"
-                               << std::endl;
+            //std::cerr << "[CGAL::Profile_histogram_counter] " << s;
+            //std::cerr << " [ " << std::setw(10) << it->first << " : "
+            //                   << std::setw(10) << it->second << " ]"
+            //                   << std::endl;
             total += it->second;
         }
-        std::cerr << "[CGAL::Profile_histogram_counter] " << s;
-        std::cerr << " [ " << std::setw(10) << "Total" << " : "
-                           << std::setw(10) << total << " ]" << std::endl;
+        //std::cerr << "[CGAL::Profile_histogram_counter] " << s;
+        //std::cerr << " [ " << std::setw(10) << "Total" << " : "
+        //                   << std::setw(10) << total << " ]" << std::endl;
     }
 
 private:
@@ -161,9 +161,9 @@ struct Profile_branch_counter
 
     ~Profile_branch_counter()
     {
-        std::cerr << "[CGAL::Profile_branch_counter] "
-                  << std::setw(10) << j << " / "
-                  << std::setw(10) << i << " " << s << std::endl;
+        //std::cerr << "[CGAL::Profile_branch_counter] "
+        //          << std::setw(10) << j << " / "
+        //          << std::setw(10) << i << " " << s << std::endl;
     }
 
 private:
@@ -191,10 +191,10 @@ struct Profile_branch_counter_3
 
     ~Profile_branch_counter_3()
     {
-        std::cerr << "[CGAL::Profile_branch_counter_3] "
-                  << std::setw(10) << k << " / "
-                  << std::setw(10) << j << " / "
-                  << std::setw(10) << i << " " << s << std::endl;
+        //std::cerr << "[CGAL::Profile_branch_counter_3] "
+        //          << std::setw(10) << k << " / "
+        //          << std::setw(10) << j << " / "
+        //          << std::setw(10) << i << " " << s << std::endl;
     }
 
 private:

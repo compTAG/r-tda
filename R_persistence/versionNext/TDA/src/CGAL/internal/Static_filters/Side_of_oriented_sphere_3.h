@@ -173,7 +173,7 @@ public:
     double err = det.error();
     err += err * 3 * F::ulp(); // Correction due to "eps * maxx * ...".
 
-    std::cerr << "*** epsilon for Side_of_oriented_sphere_3 = " << err << std::endl;
+    //std::cerr << "*** epsilon for Side_of_oriented_sphere_3 = " << err << std::endl;
     return err;
   }
 };

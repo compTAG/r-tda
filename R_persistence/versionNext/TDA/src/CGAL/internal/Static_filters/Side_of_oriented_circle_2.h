@@ -124,7 +124,7 @@ public:
     double err = det.error();
     err += err * 3 * F::ulp(); // Correction due to "eps * maxx * maxy...".
 
-    std::cerr << "*** epsilon for Side_of_oriented_circle_2 = " << err << std::endl;
+    //std::cerr << "*** epsilon for Side_of_oriented_circle_2 = " << err << std::endl;
     return err;
   }
 };

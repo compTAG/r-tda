@@ -43,10 +43,10 @@ generic_copy_OFF( File_scanner_OFF& scanner,
     // to `out' in the format provided by `writer'.
     if ( ! in) {
         if ( scanner.verbose()) {
-            std::cerr << " " << std::endl;
-            std::cerr << "generic_copy_OFF(): "
-                         "input error: file format is not in OFF."
-                      << std::endl;
+            //std::cerr << " " << std::endl;
+            //std::cerr << "generic_copy_OFF(): "
+            //             "input error: file format is not in OFF."
+            //          << std::endl;
         }
         return;
     }

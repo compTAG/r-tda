@@ -81,7 +81,7 @@ read_off_points_and_normals(
 
   if(!stream)
   {
-    std::cerr << "Error: cannot open file" << std::endl;
+    //std::cerr << "Error: cannot open file" << std::endl;
     return false;
   }
 
@@ -105,7 +105,7 @@ read_off_points_and_normals(
         || (signature != "OFF" && signature != "NOFF") )
       {
         // if wrong file format
-        std::cerr << "Incorrect file format line " << lineNumber << " of file" << std::endl;
+        //std::cerr << "Incorrect file format line " << lineNumber << " of file" << std::endl;
         return false;
       }
     }
@@ -115,7 +115,7 @@ read_off_points_and_normals(
     {
       if ( !(iss >> pointsCount >> facesCount >> edgesCount) )
       {
-        std::cerr << "Error line " << lineNumber << " of file" << std::endl;
+        //std::cerr << "Error line " << lineNumber << " of file" << std::endl;
         return false;
       }
     }
@@ -137,7 +137,7 @@ read_off_points_and_normals(
           if(iss  >> ny >> nz){
             normal = Vector(nx,ny,nz);
           } else {
-            std::cerr << "Error line " << lineNumber << " of file" << std::endl;
+            //std::cerr << "Error line " << lineNumber << " of file" << std::endl;
             return false;
           }
         }

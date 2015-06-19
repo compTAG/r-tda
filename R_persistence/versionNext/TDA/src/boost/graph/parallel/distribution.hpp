@@ -383,8 +383,8 @@ struct twod_block_cyclic
     // Compute the position of the start of the block (globally)
     SizeType block_start = block_num * block_rows * block_columns;
 
-    std::cerr << "Block " << block_num << " starts at index " << block_start
-              << std::endl;
+    //std::cerr << "Block " << block_num << " starts at index " << block_start
+    //          << std::endl;
 
     // Compute the row and column of this block
     SizeType block_row = block_num / (data_columns_per_row / block_columns);
@@ -393,16 +393,16 @@ struct twod_block_cyclic
     SizeType row_in_block = block_offset / block_columns;
     SizeType col_in_block = block_offset % block_columns;
 
-    std::cerr << "Local index " << i << " is in block at row " << block_row
-              << ", column " << block_col << ", in-block row " << row_in_block
-              << ", in-block col " << col_in_block << std::endl;
+    //std::cerr << "Local index " << i << " is in block at row " << block_row
+    //          << ", column " << block_col << ", in-block row " << row_in_block
+    //          << ", in-block col " << col_in_block << std::endl;
 
     SizeType result = block_row * block_rows + block_col * block_columns
                     + row_in_block * block_rows + col_in_block;
 
 
-    std::cerr << "global(" << i << "@" << id << ") = " << result 
-              << " =? " << local(result) << std::endl;
+    //std::cerr << "global(" << i << "@" << id << ") = " << result 
+    //          << " =? " << local(result) << std::endl;
     BOOST_ASSERT(i == local(result));
     return result;
   }

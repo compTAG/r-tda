@@ -706,10 +706,12 @@ Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
 	      filtration_max = filtr;
 	    }
 	    simplex_tree.insert(the_simplex_tree, filtr);
-	    if (the_alpha_value_iterator != the_alpha_values.end())
-	      ++the_alpha_value_iterator;
-	    else
-	      std::cout << "This shall not happen" << std::endl;
+		if (the_alpha_value_iterator != the_alpha_values.end()) {
+		  ++the_alpha_value_iterator;
+		}
+		else {
+		  //std::cout << "This shall not happen" << std::endl;
+		}
 	  }
 	  simplex_tree.set_filtration(filtration_max);
 	  simplex_tree.set_num_simplices(count_vertices + count_edges + count_facets + count_cells);

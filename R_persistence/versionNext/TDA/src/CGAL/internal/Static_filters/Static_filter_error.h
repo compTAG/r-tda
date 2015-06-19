@@ -127,7 +127,7 @@ struct Static_filter_error
   bool operator< (const Sfe &f) const
   {
       Sfe e = *this + f;
-      std::cerr << "Static error is : " << e.error() << std::endl;
+      //std::cerr << "Static error is : " << e.error() << std::endl;
       CGAL_error();
       return false;
   }
