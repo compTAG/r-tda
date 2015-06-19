@@ -398,8 +398,10 @@ class Simplex_tree {
    */
   template<class RandomAccessVertexRange>
   Simplex_handle find(const RandomAccessVertexRange & s) {
+#ifdef DEBUG_TRACES
     if (s.begin() == s.end())
       std::cerr << "Empty simplex \n";
+#endif
 
     sort(s.begin(), s.end());
 

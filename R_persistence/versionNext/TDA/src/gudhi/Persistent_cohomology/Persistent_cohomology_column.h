@@ -102,8 +102,10 @@ class Persistent_cohomology_column : public boost::intrusive::set_base_hook<
   Persistent_cohomology_column(Persistent_cohomology_column const &other)
       : col_(),
         class_key_(other.class_key_) {
+#ifdef DEBUG_TRACES
     if (!other.col_.empty())
       std::cerr << "Copying a non-empty column.\n";
+#endif
   }
 
   /** \brief Returns true iff the column is null.*/
