@@ -43,7 +43,9 @@ read_pointsG ( std::string file_name
 {  
   std::ifstream in_file (file_name.c_str(),std::ios::in);
   if(!in_file.is_open()) {
+#ifdef DEBUG_TRACES
     std::cerr << "Unable to open file " << file_name << std::endl;
+#endif
     return;}
 
   std::string line;
@@ -74,7 +76,9 @@ inline Graph_t
 read_graph ( std::string file_name )
 {
   std::ifstream in_ (file_name.c_str(),std::ios::in);
+#ifdef DEBUG_TRACES
   if(!in_.is_open()) { std::cerr << "Unable to open file " << file_name << std::endl; }
+#endif
 
   std::vector< Edge_t >                       edges;
   std::vector< Filtration_value >             edges_fil;
@@ -107,8 +111,10 @@ read_graph ( std::string file_name )
   }
   in_.close();
 
+#ifdef DEBUG_TRACES
   if((size_t)(max_h+1) != vertices.size())
     { std::cerr << "Error: vertices must be labeled from 0 to n-1 \n"; }
+#endif
 
   Graph_t skel_graph(edges.begin(),edges.end(),edges_fil.begin(),vertices.size());
   auto vertex_prop = boost::get(vertex_filtration_t(),skel_graph);
