@@ -1,5 +1,5 @@
 gridDiag <-
-function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1, sublevel = TRUE,
+function(X, FUN, lim, by, maxdimension = NCOL(X) - 1, sublevel = TRUE,
          library = "Dionysus", location = FALSE, printProgress = FALSE,
          diagLimit = NULL, ...) {
 
