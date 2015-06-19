@@ -44,7 +44,7 @@ an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the n
 }
 }
 \references{
-Clement Maria, "GUDHI, Simplicial Complexes and Persistent Homology Packages". https://project.inria.fr/gudhi/software/.
+Jean-Daniel Boissonnat, Marc Glisse, Clement Maria, Vincent Rouvreau, "GUDHI, Simplicial Complexes and Persistent Homology Packages". https://project.inria.fr/gudhi/software/.
 
 Dmitriy Morozov, "Dionysus, a C++ library for computing persistent homology". http://www.mrzv.org/software/dionysus/
 
@@ -53,11 +53,10 @@ Herbert Edelsbrunner and John Harer (2010), Computational topology: an introduct
 Brittany Fasy, Fabrizio Lecci, Alessandro Rinaldo, Larry Wasserman, Sivaraman Balakrishnan, and Aarti Singh. (2013), "Statistical Inference For Persistent Homology", (arXiv:1303.7117). To appear, Annals of Statistics.
 }
 \author{
-Brittany T. Fasy, Fabrizio Lecci and Clement Maria
+Brittany T. Fasy, Fabrizio Lecci, and Clement Maria
 }
 \seealso{
-\code{\link{summary.diagram}}, \code{\link{plot.diagram}},
-\code{\link{gridDiag}}
+\code{\link{summary.diagram}}, \code{\link{plot.diagram}}, \code{\link{alphaDiag}}, \code{\link{gridDiag}}
 }
 \examples{
 ## EXAMPLE 1: rips diagram for circles (euclidean distance)
