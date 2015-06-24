@@ -338,6 +338,7 @@ Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X,
 	const unsigned dimension = Grid.ncol();
 	const unsigned gridNum = Grid.nrow();
 	const double den = pow(h, (int)dimension) * pow(2 * pi, dimension / 2.0);
+	Rcpp::NumericVector kdeValue;
 	int counter = 0, percentageFloor = 0;
 	int totalCount = gridNum;
 
@@ -345,9 +346,17 @@ Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X,
 		printProgressFrame(Rprintf);
 	}
 
-	Rcpp::NumericVector kdeValue = computeGaussOuter< Rcpp::NumericVector >(
-			X, Grid, h, weight, printProgress, Rprintf, counter, totalCount,
-			percentageFloor);
+	if (dimension <= 1) {
+		kdeValue = computeKernel< Rcpp::NumericVector >(
+				X, Grid, h, weight, printProgress, Rprintf, counter, totalCount,
+				percentageFloor);
+	}
+	else {
+		kdeValue = computeGaussOuter< Rcpp::NumericVector >(
+				X, Grid, h, weight, printProgress, Rprintf, counter, totalCount,
+				percentageFloor);
+
+	}
 
 	for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
 		kdeValue[gridIdx] /= den;
@@ -369,6 +378,7 @@ Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X,
 		const Rcpp::NumericVector& weight, const bool printProgress) {
 
 	const unsigned sampleNum = X.nrow();
+	const unsigned dimension = Grid.ncol();
 	const unsigned gridNum = Grid.nrow();
 	// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
 	std::vector< double > firstValue;
@@ -387,9 +397,16 @@ Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X,
 			X, X, h, weight, printProgress, Rprintf, counter, totalCount,
 			percentageFloor);
 
-	thirdValue = computeGaussOuter< std::vector< double > >(
-			X, Grid, h, weight, printProgress, Rprintf, counter, totalCount,
-			percentageFloor);
+	if (dimension <= 1) {
+		thirdValue = computeKernel< std::vector< double > >(
+				X, Grid, h, weight, printProgress, Rprintf, counter, totalCount,
+				percentageFloor);
+	}
+	else {
+		thirdValue = computeGaussOuter< std::vector< double > >(
+				X, Grid, h, weight, printProgress, Rprintf, counter, totalCount,
+				percentageFloor);
+	}
 
 	if (weight.size() == 1) {
 		firstmean = std::accumulate(firstValue.begin(), firstValue.end(), 0.0) / sampleNum;
