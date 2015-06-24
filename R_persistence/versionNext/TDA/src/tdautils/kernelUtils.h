@@ -14,6 +14,31 @@ void WriteMat(double*XX, int *pNN, int *pDD, int i, int d, double input){
 }
 
 
+// print frame of progress
+template <typename Print>
+inline void printProgressFrame(Print print) {
+
+	print("0   10   20   30   40   50   60   70   80   90   100");
+	print("\n");
+	print("|----|----|----|----|----|----|----|----|----|----|\n");
+	print("*");
+}
+
+
+// print progress amount
+template <typename Print>
+inline void printProgressAmount(Print print, int& counter, const int totalCount, int& percentageFloor) {
+
+	int progressAmount = std::floor((100 * (++counter) / totalCount - percentageFloor) / 2);
+	if (progressAmount > 0) {
+		for (int progressIdx = 1; progressIdx <= progressAmount; ++progressIdx) {
+			print("*");
+			percentageFloor += 2;
+		}
+	}
+}
+
+
 // get row of matrix
 template <typename RealVector, typename RealMatrix>
 inline RealVector matrixRow(const RealMatrix& X, const unsigned rowIdx) {
@@ -265,29 +290,4 @@ inline RealVector1 computeGaussOuter(const RealMatrix1& X,
 			printProgress, print, counter, totalCount, percentageFloor);
 
 	return gaussValue;
-}
-
-
-// print frame of progress
-template <typename Print>
-inline void printProgressFrame(Print print) {
-
-	print("0   10   20   30   40   50   60   70   80   90   100");
-	print("\n");
-	print("|----|----|----|----|----|----|----|----|----|----|\n");
-	print("*");
-}
-
-
-// print progress amount
-template <typename Print>
-inline void printProgressAmount(Print print, int& counter, const int totalCount, int& percentageFloor) {
-
-	int progressAmount = std::floor((100 * (++counter) / totalCount - percentageFloor) / 2);
-	if (progressAmount > 0) {
-		for (int progressIdx = 1; progressIdx <= progressAmount; ++progressIdx) {
-			print("*");
-			percentageFloor += 2;
-		}
-	}
 }
