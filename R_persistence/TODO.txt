@@ -2,3 +2,14 @@ TODO
 - (all) study .Call() and Rcpp
 - (all) think about the implementation of filtration proposed in section 3.2 of bobrowski
 - (all) add more statistcal summaries, eg: distribution of Betti numbers, of birth times, of death times, of persistence values
+- adding born time to the points, where points are not born in the same time (or implementing power distance)
+- implementing intensity plots / persistence images
+- getting simplicial complex as input, boundary matrix and representative cycle as output
+- Jeff's paper: power distance construction for kernel density
+- implement vine / vineyard
+- (Jessi's request) getting KK as vector
+- separating C++ files
+- using Doxygen in code
+- how to do todo-list
+- taking *.obj file as an input
+- allow cubical complex
