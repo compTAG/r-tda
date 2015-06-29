@@ -1,0 +1,6 @@
+PKG_CXXFLAGS= -I . -DBOOST_DISABLE_THREADS
+
+## We want C++11
+CXX_STD = CXX11
+
+all: $(SHLIB)

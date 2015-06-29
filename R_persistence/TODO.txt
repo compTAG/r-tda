@@ -1,0 +1,4 @@
+TODO
+- (all) study .Call() and Rcpp
+- (all) think about the implementation of filtration proposed in section 3.2 of bobrowski
+- (all) add more statistcal summaries, eg: distribution of Betti numbers, of birth times, of death times, of persistence values
