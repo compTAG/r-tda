@@ -921,8 +921,8 @@ CGAL_Kernel_obj(Point_3)
 #undef CGAL_Kernel_obj
 
   
-  std::cerr << "object_cast inside Lazy_construction_rep::operator() failed. It needs more else if's (#2)" << std::endl;
-  std::cerr << "dynamic type of the Object : " << eto.type().name() << std::endl;
+  //std::cerr << "object_cast inside Lazy_construction_rep::operator() failed. It needs more else if's (#2)" << std::endl;
+  //std::cerr << "dynamic type of the Object : " << eto.type().name() << std::endl;
 
   return Object();
 }
@@ -1222,7 +1222,7 @@ public:
 
 #include <CGAL/Kernel/interface_macros.h>
 
-        std::cerr << "we need  more casts" << std::endl;
+        //std::cerr << "we need  more casts" << std::endl;
       }
 
     } catch (Uncertain_conversion_exception) {
@@ -1301,8 +1301,8 @@ public:
 
 #include <CGAL/Kernel/interface_macros.h>
 
-      std::cerr << "object_cast inside Lazy_construction_rep::operator() failed. It needs more else if's (#1)" << std::endl;
-      std::cerr << "dynamic type of the Object : " << lo.approx().type().name() << std::endl;
+      //std::cerr << "object_cast inside Lazy_construction_rep::operator() failed. It needs more else if's (#1)" << std::endl;
+      //std::cerr << "dynamic type of the Object : " << lo.approx().type().name() << std::endl;
 
     } catch (Uncertain_conversion_exception) {
       CGAL_BRANCH_PROFILER_BRANCH(tmp);
@@ -1355,8 +1355,8 @@ CGAL_Kernel_obj(Point_2)
 CGAL_Kernel_obj(Point_3)  
 #undef CGAL_Kernel_obj
 
-      std::cerr << "object_cast inside Lazy_construction_rep::operator() failed. It needs more else if's (#1)" << std::endl;
-      std::cerr << "dynamic type of the Object : " << lo.approx().type().name() << std::endl;
+      //std::cerr << "object_cast inside Lazy_construction_rep::operator() failed. It needs more else if's (#1)" << std::endl;
+      //std::cerr << "dynamic type of the Object : " << lo.approx().type().name() << std::endl;
 
     } catch (Uncertain_conversion_exception) {
       CGAL_BRANCH_PROFILER_BRANCH(tmp);
@@ -1388,8 +1388,8 @@ CGAL_Kernel_obj(Point_3)
 
 #include <CGAL/Kernel/interface_macros.h>
 
-      std::cerr << "object_cast inside Lazy_construction_rep::operator() failed. It needs more else if's (#1)" << std::endl;
-      std::cerr << "dynamic type of the Object : " << lo.approx().type().name() << std::endl;
+      //std::cerr << "object_cast inside Lazy_construction_rep::operator() failed. It needs more else if's (#1)" << std::endl;
+      //std::cerr << "dynamic type of the Object : " << lo.approx().type().name() << std::endl;
 
     } catch (Uncertain_conversion_exception) {
       CGAL_BRANCH_PROFILER_BRANCH(tmp);

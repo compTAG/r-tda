@@ -124,9 +124,9 @@ public:
     Vertex_iterator  vertices_begin() { return Vertex_iterator( *this); }
     Facet_iterator   facets_begin() {
         if ( m_vcnt != m_vertices) {
-            std::cerr << "error: Generic_writer: wrong number of "
-                         "vertices written, " << m_vcnt << " instead of "
-                      << m_vertices << "." << std::endl;
+            //std::cerr << "error: Generic_writer: wrong number of "
+            //             "vertices written, " << m_vcnt << " instead of "
+            //          << m_vertices << "." << std::endl;
             m_writer.out().clear( std::ios::badbit);
         }
         m_writer.write_facet_header();
@@ -144,8 +144,8 @@ public:
     }
     void write_facet_index( std::size_t i) {
         if ( m_fcnt > m_facets) {
-            std::cerr << "error: Generic_writer: too many facets written."
-                      << std::endl;
+            //std::cerr << "error: Generic_writer: too many facets written."
+            //          << std::endl;
             m_writer.out().clear( std::ios::badbit);
         }
         if ( m_icnt == 0) {

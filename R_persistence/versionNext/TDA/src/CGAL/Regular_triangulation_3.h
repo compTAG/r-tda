@@ -2061,8 +2061,8 @@ dual(Cell_handle c) const
     is_valid(bool verbose, int level) const
   {
     if ( ! Tr_Base::is_valid(verbose,level) ) {
-      if (verbose)
-        std::cerr << "invalid base triangulation" << std::endl;
+      //if (verbose)
+      //  std::cerr << "invalid base triangulation" << std::endl;
       CGAL_triangulation_assertion(false);
       return false;
     }
@@ -2079,8 +2079,8 @@ dual(Cell_handle c) const
                   (it,
                   it->neighbor(i)->vertex(it->neighbor(i)->index(it))->point())
                   == ON_BOUNDED_SIDE ) {
-                    if (verbose)
-                      std::cerr << "non-empty sphere " << std::endl;
+                    //if (verbose)
+                    //  std::cerr << "non-empty sphere " << std::endl;
                     CGAL_triangulation_assertion(false);
                     return false;
                 }
@@ -2103,8 +2103,8 @@ dual(Cell_handle c) const
                   vertex( (((*it).first)->neighbor(i))
                   ->index((*it).first) )->point() )
                   == ON_BOUNDED_SIDE ) {
-                    if (verbose)
-                      std::cerr << "non-empty circle " << std::endl;
+                    //if (verbose)
+                    //  std::cerr << "non-empty circle " << std::endl;
                     CGAL_triangulation_assertion(false);
                     return false;
                 }
@@ -2127,8 +2127,8 @@ dual(Cell_handle c) const
                   vertex( (((*it).first)->neighbor(i))
                   ->index((*it).first) )->point() )
                   == ON_BOUNDED_SIDE ) {
-                    if (verbose)
-                      std::cerr << "non-empty edge " << std::endl;
+                    //if (verbose)
+                    //  std::cerr << "non-empty edge " << std::endl;
                     CGAL_triangulation_assertion(false);
                     return false;
                 }
@@ -2138,8 +2138,8 @@ dual(Cell_handle c) const
         break;
       }
     }
-    if (verbose)
-      std::cerr << "valid Regular triangulation" << std::endl;
+    //if (verbose)
+    //  std::cerr << "valid Regular triangulation" << std::endl;
     return true;
   }
 

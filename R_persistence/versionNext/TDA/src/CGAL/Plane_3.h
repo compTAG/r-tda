@@ -267,8 +267,8 @@ operator>>(std::istream &is, Plane_3<R> &p)
         read(is, d);
         break;
     default:
-        std::cerr << "" << std::endl;
-        std::cerr << "Stream must be in ascii or binary mode" << std::endl;
+        //std::cerr << "" << std::endl;
+        //std::cerr << "Stream must be in ascii or binary mode" << std::endl;
         break;
     }
     if (is)

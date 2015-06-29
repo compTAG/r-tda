@@ -53,6 +53,7 @@ class Multi_field {
   /* Initialize the multi-field. The generation of prime numbers might fail with
    * a very small probability.*/
   void init(uint16_t min_prime, uint16_t max_prime) {
+#ifdef DEBUG_TRACES
     if (max_prime < 2) {
       std::cerr << "There is no prime less than " << max_prime << std::endl;
     }
@@ -60,6 +61,7 @@ class Multi_field {
       std::cerr << "No prime in [" << min_prime << ":" << max_prime << "]"
           << std::endl;
     }
+#endif
     // fill the list of prime numbers
     uint16_t curr_prime = min_prime;
     mpz_t tmp_prime;

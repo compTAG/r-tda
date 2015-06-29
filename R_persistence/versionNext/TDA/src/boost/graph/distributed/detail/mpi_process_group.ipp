@@ -416,8 +416,8 @@ array_receive_impl(int source, int tag, T* values, std::size_t& n) const
   std::size_t num_sent;
   in >> num_sent;
   if (num_sent > n)
-    std::cerr << "ERROR: Have " << num_sent << " items but only space for "
-              << n << " items\n";
+    //std::cerr << "ERROR: Have " << num_sent << " items but only space for "
+    //          << n << " items\n";
 
   for (std::size_t i = 0; i < num_sent; ++i)
     in >> values[i];

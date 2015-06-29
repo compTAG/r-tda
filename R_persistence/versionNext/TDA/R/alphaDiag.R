@@ -1,14 +1,29 @@
-ripsAlphaDiag <-
-function(X,maxdimension, maxscale, library="GUDHI", printProgress=FALSE){
+alphaDiag <-
+function(X, maxdimension = NCOL(X) - 1, maxscale, library = "GUDHI",
+         printProgress = FALSE) {
 
-	if (library=="gudhi" || library=="Gudhi") library="GUDHI"
-	if (library!="GUDHI") stop("library should be 'GUDHI'")   
-
-	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be a matrix of coordinates") 
-	if (!is.vector(maxdimension) || length(maxdimension)!=1) stop("maxdimension should be an integer")
-	if (!is.vector(maxscale) || length(maxscale)!=1) stop("maxscale should be a number")
-	if (!is.logical(printProgress)) stop("printProgress should be logical")
-
+	if (!is.numeric(X) && !is.data.frame(X)) {
+		stop("X should be a matrix of coordinates")
+	}
+	if (library == "gudhi" || library == "Gudhi") {
+		library <- "GUDHI"
+	}
+	if (library != "GUDHI") {
+		stop("library should be 'GUDHI'")
+	}
+  tryCatch(maxdimension <- as.double(maxdimension), error = function(e) {
+      stop("maxdimension should be numeric")})
+  if (length(maxdimension) != 1 || maxdimension < 0) {
+    stop("maxdimnsion should be a nonnegative integer")
+  }
+  tryCatch(maxscale <- as.double(maxscale), error = function(e) {
+      stop("maxscale should be numeric")})
+  if (length(maxscale) != 1 || maxscale < 0) {
+    stop("maxscale should be a nonnegative integer")
+  }
+  if (!is.logical(printProgress)) {
+    stop("printProgress should be logical")
+  }
 
 	if (library=="GUDHI")
 	{
@@ -26,21 +41,14 @@ function(X,maxdimension, maxscale, library="GUDHI", printProgress=FALSE){
 	                                       as.double(diagram),
 	                                       as.integer(printProgress),
 	                                       dup=FALSE, package="TDA")
-		print("1")
 		## GUDHI in windows has a problem: instead of Inf writes 1.#INF
 		## here we manually fix the problem
 		Diag=read.csv("outputTDA.txt", sep=" ", header=F)
-		print("2")
 		attributes(Diag[,3])$levels=c(attributes(Diag[,3])$levels, "Inf")
-		print("3")
 		change=which(Diag[,3]=="1.#INF")
-		print("4")
 		Diag[change,3]="Inf"
-		print("5")
 		Diag[,3]=as.numeric(as.character(Diag[,3]))
-		print("6")
 		Diag=as.matrix(Diag)
-		print("7")
 	}
 	
 		N=dim(Diag)[1]

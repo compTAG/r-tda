@@ -180,7 +180,7 @@ public:
                               t1, t1, t1); // Full det
     double err = det.error();
     err += err * 2 * F::ulp(); // Correction due to "eps * maxx * maxy...".
-    std::cerr << "*** epsilon for Orientation_3 = " << err << std::endl;
+    //std::cerr << "*** epsilon for Orientation_3 = " << err << std::endl;
     return err;
   }
 

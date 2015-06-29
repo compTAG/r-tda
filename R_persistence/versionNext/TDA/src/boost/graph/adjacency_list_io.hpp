@@ -155,7 +155,7 @@ struct GraphParser
                                                 nodes.push_back( add_vertex(vp, *graph) );
                                         }
                                         else
-                                                std::cerr<<"read vertex, parse error at line"<<numLine<<std::endl;
+                                                //std::cerr<<"read vertex, parse error at line"<<numLine<<std::endl;
                                 }
                                 else if( state == PARSE_EDGE ) {
                                         int source, target;
@@ -168,7 +168,7 @@ struct GraphParser
                                                 add_edge(nodes[source], nodes[target], ep, *graph);
                                         }
                                         else
-                                                std::cerr<<"read edge, parse error at line"<<numLine<<std::endl;
+                                                //std::cerr<<"read edge, parse error at line"<<numLine<<std::endl;
                                 }
                                 else { // state == PARSE_NUM_NODES
                                         int n;

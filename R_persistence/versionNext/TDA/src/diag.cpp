@@ -42,6 +42,7 @@ Rcpp::List GridDiag(const Rcpp::NumericVector& FUNvalues,
 		const Rcpp::IntegerVector& gridDim, const int maxdimension,
 		const std::string& decomposition, const std::string& library,
 		const bool location, const bool printProgress) {
+
 #ifdef LOGGING
 	//rlog::RLogInit(argc, argv);
 
@@ -310,6 +311,7 @@ extern "C" {
 // [[Rcpp::export]]
 double Bottleneck(
 		const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2) {
+
 	return bottleneck_distance(RcppToDionysus< PersistenceDiagram<> >(Diag1),
 			RcppToDionysus< PersistenceDiagram<> >(Diag2));
 }
@@ -319,6 +321,7 @@ double Bottleneck(
 // [[Rcpp::export]]
 double Wasserstein(const Rcpp::NumericMatrix& Diag1,
 		const Rcpp::NumericMatrix& Diag2, const int p) {
+
 	return wasserstein_distance(RcppToDionysus< PersistenceDiagram<> >(Diag1),
 			RcppToDionysus< PersistenceDiagram<> >(Diag2), p);
 }
@@ -330,36 +333,40 @@ double Wasserstein(const Rcpp::NumericMatrix& Diag1,
 Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X,
 		const Rcpp::NumericMatrix& Grid, const double h,
 		const Rcpp::NumericVector& weight, const bool printProgress) {
+
 	const double pi = 3.141592653589793;
 	const unsigned dimension = Grid.ncol();
 	const unsigned gridNum = Grid.nrow();
 	const double den = pow(h, (int)dimension) * pow(2 * pi, dimension / 2.0);
-	Rcpp::NumericVector kdeValue(gridNum);
-
-	int counter = 0;
-	const int totalCount = gridNum;
-	int percentageFloor = 0;
+	Rcpp::NumericVector kdeValue;
+	int counter = 0, percentageFloor = 0;
+	int totalCount = gridNum;
 
 	if (printProgress) {
 		printProgressFrame(Rprintf);
-
-		for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-			kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(
-					Grid, gridIdx), X, h, weight) / den;
-						
-			//printProgress
-			printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
-		}
-		Rprintf("\n");
-
-	} else { //no printProgress
-		for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-			kdeValue[gridIdx] = oneKernel(matrixRow< std::vector< double > >(
-					Grid, gridIdx), X, h, weight) / den;
-		}
 	}
 
-	return (kdeValue);
+	if (dimension <= 1) {
+		kdeValue = computeKernel< Rcpp::NumericVector >(
+				X, Grid, h, weight, printProgress, Rprintf, counter, totalCount,
+				percentageFloor);
+	}
+	else {
+		kdeValue = computeGaussOuter< Rcpp::NumericVector >(
+				X, Grid, h, weight, printProgress, Rprintf, counter, totalCount,
+				percentageFloor);
+
+	}
+
+	for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+		kdeValue[gridIdx] /= den;
+	}
+
+	if (printProgress) {
+		Rprintf("\n");
+	}
+
+	return kdeValue;
 }
 
 
@@ -369,57 +376,56 @@ Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X,
 Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X,
 		const Rcpp::NumericMatrix& Grid, const double h,
 		const Rcpp::NumericVector& weight, const bool printProgress) {
+
 	const unsigned sampleNum = X.nrow();
+	const unsigned dimension = Grid.ncol();
 	const unsigned gridNum = Grid.nrow();
 	// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
-	double first = 0.0;
+	std::vector< double > firstValue;
 	const double second = 1.0;
-	double third;
+	std::vector< double > thirdValue;
+	double firstmean;
 	Rcpp::NumericVector kdeDistValue(gridNum);
+	int counter = 0, percentageFloor = 0;
+	int totalCount = sampleNum + gridNum;
 
-	int counter = 0;
-	const int totalCount = sampleNum + gridNum;
-	int percentageFloor = 0;
-
-	if (printProgress)
-	{
+	if (printProgress) {
 		printProgressFrame(Rprintf);
-
-		for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
-			first += oneKernel(
-					matrixRow< std::vector< double > >(X, sampleIdx), X, h, weight);
-
-			// printProgress
-			printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
-		}
-		first /= sampleNum;
-
-		for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-			third = oneKernel(
-					matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight);
-			kdeDistValue[gridIdx] = std::sqrt(first + second - 2 * third);
-
-			// printProgress
-			printProgressAmount(Rprintf, counter, totalCount, percentageFloor);
-		}
-		Rprintf("\n");		
-
-	} else { //no printProgress
-		for (unsigned sampleIdx = 0; sampleIdx < sampleNum; ++sampleIdx) {
-			first += oneKernel(
-					matrixRow< std::vector< double > >(X, sampleIdx), X, h, weight);
-		}
-		first /= sampleNum;
-
-		for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-			third = oneKernel(
-					matrixRow< std::vector< double > >(Grid, gridIdx), X, h, weight);
-			// first = sum K_h(X_i, X_j), second = K_h(x, x), third = sum K_h(x, X_i)
-			kdeDistValue[gridIdx] = std::sqrt(first + second - 2 * third);
-		}
 	}
 
-	return (kdeDistValue);
+	firstValue = computeKernel< std::vector< double > >(
+			X, X, h, weight, printProgress, Rprintf, counter, totalCount,
+			percentageFloor);
+
+	if (dimension <= 1) {
+		thirdValue = computeKernel< std::vector< double > >(
+				X, Grid, h, weight, printProgress, Rprintf, counter, totalCount,
+				percentageFloor);
+	}
+	else {
+		thirdValue = computeGaussOuter< std::vector< double > >(
+				X, Grid, h, weight, printProgress, Rprintf, counter, totalCount,
+				percentageFloor);
+	}
+
+	if (weight.size() == 1) {
+		firstmean = std::accumulate(firstValue.begin(), firstValue.end(), 0.0) / sampleNum;
+	}
+	else {
+		firstmean = std::inner_product(
+				firstValue.begin(), firstValue.end(), weight.begin(), 0.0) / 
+				std::accumulate(weight.begin(), weight.end(), 0.0);
+	}
+
+	for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+		kdeDistValue[gridIdx] = std::sqrt(firstmean + second - 2 * thirdValue[gridIdx]);
+	}
+
+	if (printProgress) {
+		Rprintf("\n");
+	}
+
+	return kdeDistValue;
 }
 
 
@@ -429,6 +435,7 @@ Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X,
 Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
 		const Rcpp::NumericMatrix& knnDistance,
 		const Rcpp::NumericVector& weight, const double weightBound) {
+
 	const unsigned gridNum = knnIndex.nrow();
 	double distanceTemp, weightTemp, weightSumTemp;
 	Rcpp::NumericVector dtmValue(gridNum, 0.0);
@@ -706,10 +713,12 @@ Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
 	      filtration_max = filtr;
 	    }
 	    simplex_tree.insert(the_simplex_tree, filtr);
-	    if (the_alpha_value_iterator != the_alpha_values.end())
-	      ++the_alpha_value_iterator;
-	    else
-	      std::cout << "This shall not happen" << std::endl;
+		if (the_alpha_value_iterator != the_alpha_values.end()) {
+		  ++the_alpha_value_iterator;
+		}
+		else {
+		  //std::cout << "This shall not happen" << std::endl;
+		}
 	  }
 	  simplex_tree.set_filtration(filtration_max);
 	  simplex_tree.set_num_simplices(count_vertices + count_edges + count_facets + count_cells);

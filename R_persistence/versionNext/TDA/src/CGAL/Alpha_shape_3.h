@@ -1855,44 +1855,44 @@ template <class Dt,class EACT>
 void 
 Alpha_shape_3<Dt,EACT>::print_maps() const
 {
-  typename Alpha_cell_map::const_iterator cit ;
-  typename Alpha_facet_map::const_iterator fit ;
-  typename Alpha_edge_map::const_iterator eit ;
-  typename Alpha_vertex_map::const_iterator vit;
+  //typename Alpha_cell_map::const_iterator cit ;
+  //typename Alpha_facet_map::const_iterator fit ;
+  //typename Alpha_edge_map::const_iterator eit ;
+  //typename Alpha_vertex_map::const_iterator vit;
 
-  std::cerr << "size of cell map " << alpha_cell_map.size() 
-	    <<   std::endl;
-  std::cerr << "size of facet map " << alpha_min_facet_map.size() <<
-    std::endl;
-  std::cerr << "size of edge map " << alpha_min_edge_map.size() <<
-    std::endl;
-  std::cerr << "size of vertex map " << alpha_min_vertex_map.size() <<
-    std::endl;
-  std::cerr << std::endl;
-  std::cerr << "alpha_cell_map " << std::endl;
-  for(cit = alpha_cell_map.begin();
-      cit != alpha_cell_map.end(); ++cit) {
-    std::cerr << cit->first << std::endl;
-  }
-  std::cerr << std::endl;
-  std::cerr << "alpha_min_facet_map " << std::endl;
-  for(fit = alpha_min_facet_map.begin();
-      fit != alpha_min_facet_map.end(); ++fit) {
-    std::cerr << fit->first << std::endl;
-  }
-  std::cerr << std::endl;
-  std::cerr << "alpha_min_edge_map " << std::endl;
-  for(eit = alpha_min_edge_map.begin();
-      eit != alpha_min_edge_map.end(); ++eit) {
-    std::cerr << eit->first << std::endl;
-  }
-  std::cerr << std::endl;
-  std::cerr << "alpha_min_vertex_map " << std::endl;
-  for(vit = alpha_min_vertex_map.begin();
-      vit != alpha_min_vertex_map.end(); ++vit) {
-    std::cerr << vit->first << std::endl;
-  }
-  std::cerr << std::endl;
+  //std::cerr << "size of cell map " << alpha_cell_map.size() 
+	 //   <<   std::endl;
+  //std::cerr << "size of facet map " << alpha_min_facet_map.size() <<
+  //  std::endl;
+  //std::cerr << "size of edge map " << alpha_min_edge_map.size() <<
+  //  std::endl;
+  //std::cerr << "size of vertex map " << alpha_min_vertex_map.size() <<
+  //  std::endl;
+  //std::cerr << std::endl;
+  //std::cerr << "alpha_cell_map " << std::endl;
+  //for(cit = alpha_cell_map.begin();
+  //    cit != alpha_cell_map.end(); ++cit) {
+  //  std::cerr << cit->first << std::endl;
+  //}
+  //std::cerr << std::endl;
+  //std::cerr << "alpha_min_facet_map " << std::endl;
+  //for(fit = alpha_min_facet_map.begin();
+  //    fit != alpha_min_facet_map.end(); ++fit) {
+  //  std::cerr << fit->first << std::endl;
+  //}
+  //std::cerr << std::endl;
+  //std::cerr << "alpha_min_edge_map " << std::endl;
+  //for(eit = alpha_min_edge_map.begin();
+  //    eit != alpha_min_edge_map.end(); ++eit) {
+  //  std::cerr << eit->first << std::endl;
+  //}
+  //std::cerr << std::endl;
+  //std::cerr << "alpha_min_vertex_map " << std::endl;
+  //for(vit = alpha_min_vertex_map.begin();
+  //    vit != alpha_min_vertex_map.end(); ++vit) {
+  //  std::cerr << vit->first << std::endl;
+  //}
+  //std::cerr << std::endl;
 }
 
 
@@ -1900,35 +1900,35 @@ template <class Dt,class EACT>
 void 
 Alpha_shape_3<Dt,EACT>::print_alphas() const
 {
-  std::cerr << std::endl;
-  std::cerr << " alpha values of facets" << std::endl;
-  for(Finite_facets_iterator fit = finite_facets_begin();
-      fit != finite_facets_end();
-      ++fit) {
-    Alpha_status_iterator as = fit->first->get_facet_status(fit->second);
-    print_alpha_status(*as);
-  }
-  std::cerr << std::endl;
-  std::cerr << " alpha values of edges " << std::endl;
-  if (get_mode() == GENERAL) {
-    for(Finite_edges_iterator eit = finite_edges_begin();
-	eit != finite_edges_end();
-	++eit) {
-      Vertex_handle_pair 
-	vhp = make_vertex_handle_pair(eit->first->vertex(eit->second),
-				      eit->first->vertex(eit->third));
-      Alpha_status_iterator as = edge_alpha_map.find(vhp)->second;
-      print_alpha_status(*as);
-    }
-  }
-  std::cerr << std::endl;
-  std::cerr << " alpha values of vertices " << std::endl;
-  for(Finite_vertices_iterator vit = finite_vertices_begin();
-      vit != finite_vertices_end();
-      ++vit) {
-     Alpha_status*  as = vit->get_alpha_status();
-     print_alpha_status(*as);
-  }
+ // std::cerr << std::endl;
+ // std::cerr << " alpha values of facets" << std::endl;
+ // for(Finite_facets_iterator fit = finite_facets_begin();
+ //     fit != finite_facets_end();
+ //     ++fit) {
+ //   Alpha_status_iterator as = fit->first->get_facet_status(fit->second);
+ //   print_alpha_status(*as);
+ // }
+ // std::cerr << std::endl;
+ // std::cerr << " alpha values of edges " << std::endl;
+ // if (get_mode() == GENERAL) {
+ //   for(Finite_edges_iterator eit = finite_edges_begin();
+	//eit != finite_edges_end();
+	//++eit) {
+ //     Vertex_handle_pair 
+	//vhp = make_vertex_handle_pair(eit->first->vertex(eit->second),
+	//			      eit->first->vertex(eit->third));
+ //     Alpha_status_iterator as = edge_alpha_map.find(vhp)->second;
+ //     print_alpha_status(*as);
+ //   }
+ // }
+ // std::cerr << std::endl;
+ // std::cerr << " alpha values of vertices " << std::endl;
+ // for(Finite_vertices_iterator vit = finite_vertices_begin();
+ //     vit != finite_vertices_end();
+ //     ++vit) {
+ //    Alpha_status*  as = vit->get_alpha_status();
+ //    print_alpha_status(*as);
+ // }
 
 }
 
@@ -1936,14 +1936,14 @@ template <class Dt,class EACT>
 void 
 Alpha_shape_3<Dt,EACT>::print_alpha_status(const Alpha_status& as) const
 {
-  if ( get_mode() == GENERAL &&  as.is_Gabriel())
-  std::cerr << as.alpha_min() ;
-  else std::cerr <<  "---   " ;
-  std::cerr << "\t";
-  std::cerr <<  as.alpha_mid()  << "\t";
-  if(as.is_on_chull()) std::cerr <<  "---   ";
-  else   std::cerr << as.alpha_max();
-  std::cerr << std::endl;
+  //if ( get_mode() == GENERAL &&  as.is_Gabriel())
+  //std::cerr << as.alpha_min() ;
+  //else std::cerr <<  "---   " ;
+  //std::cerr << "\t";
+  //std::cerr <<  as.alpha_mid()  << "\t";
+  //if(as.is_on_chull()) std::cerr <<  "---   ";
+  //else   std::cerr << as.alpha_max();
+  //std::cerr << std::endl;
 }
 
 } //namespace CGAL

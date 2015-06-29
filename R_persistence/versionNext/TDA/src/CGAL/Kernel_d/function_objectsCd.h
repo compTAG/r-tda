@@ -460,7 +460,7 @@ public:
 			Orientation o = ori_(first, last);
 			if( COPLANAR == o )
             {
-                std::cerr << "\nAffine base is flat (it should have positive orientation) !!";
+                //std::cerr << "\nAffine base is flat (it should have positive orientation) !!";
                 //return ON_ORIENTED_BOUNDARY;
             }
 			CGAL_assertion( o == POSITIVE );
