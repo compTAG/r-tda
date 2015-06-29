@@ -286,8 +286,8 @@ std::istream &operator>>(std::istream &is, Color& col)
         read(is, b);
         break;
     default:
-        std::cerr << "" << std::endl;
-        std::cerr << "Stream must be in ascii or binary mode" << std::endl;
+        //std::cerr << "" << std::endl;
+        //std::cerr << "Stream must be in ascii or binary mode" << std::endl;
         break;
     }
     col = Color((unsigned char)r,(unsigned char)g,(unsigned char)b);

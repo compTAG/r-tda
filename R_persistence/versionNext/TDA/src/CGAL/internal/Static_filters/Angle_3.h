@@ -148,16 +148,16 @@ public:
       
     double err = f.error();
     err += err * 2 * F::ulp(); // Correction due to "eps * m * m ".
-    std::cerr << "*** epsilon for Angle_3(Point_3, Point_3, Point_3) = "
-              << err << std::endl;
-    std::cerr << "\n"
-              << "Now for underflow/overflows...\n"
-              << "       min_double/eps  = " 
-              << std::numeric_limits<double>::min() / err << std::endl
-              << "  sqrt(min_double/eps) = "
-              << CGAL::sqrt(std::numeric_limits<double>::min() / err) << std::endl
-              << "    sqrt(max_double/3) = "
-              << CGAL::sqrt(std::numeric_limits<double>::max() / 3) << std::endl;
+    //std::cerr << "*** epsilon for Angle_3(Point_3, Point_3, Point_3) = "
+    //          << err << std::endl;
+    //std::cerr << "\n"
+    //          << "Now for underflow/overflows...\n"
+    //          << "       min_double/eps  = " 
+    //          << std::numeric_limits<double>::min() / err << std::endl
+    //          << "  sqrt(min_double/eps) = "
+    //          << CGAL::sqrt(std::numeric_limits<double>::min() / err) << std::endl
+    //          << "    sqrt(max_double/3) = "
+    //          << CGAL::sqrt(std::numeric_limits<double>::max() / 3) << std::endl;
     return err;
   }
 

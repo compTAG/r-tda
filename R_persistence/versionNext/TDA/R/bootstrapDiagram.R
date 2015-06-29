@@ -15,13 +15,16 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
   if (length(lim) %% 2 != 0) {
     stop("lim should be either a matrix or a vector of even elements")
   }
+  tryCatch(by <- as.double(by), error = function(e) {
+      stop("by should be numeric")})
+  if (min(by) <= 0) {
+    stop("by should be positive")
+  }
   if (2 * NCOL(X) != length(lim)) {
     stop("dimension of X does not match with lim")
   }
-  tryCatch(by <- as.double(by), error = function(e) {
-      stop("by should be numeric")})
-  if ((length(by) != 1 && length(by) != NCOL(X)) || min(by) <= 0) {
-    stop("by should be either a positive number or a positive vector of length equals dimension of grid")
+  if (length(by) != 1 && length(by) != NCOL(X)) {
+    stop("by should be either a number or a vector of length equals dimension of grid")
   }
   tryCatch(maxdimension <- as.double(maxdimension), error = function(e) {
       stop("maxdimension should be numeric")})
@@ -76,7 +79,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
   maxdimension <- min(maxdimension, NCOL(X) - 1)
 
   if (is.null(weight)) {
-    Diag <- gridDiag(X = X, FUN = FUN, lim = lim, by = by,
+    Diag <- gridDiag(X = X, FUN = FUN, lim = lim, by = by, FUNvalues = NULL,
         maxdimension = maxdimension, sublevel = sublevel, library = library,
         location = FALSE, printProgress = FALSE, diagLimit = NULL, ...
       )[["diagram"]]
@@ -84,9 +87,9 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
       boostFUN <- function(i) {
         I <- sample(NROW(X), replace = TRUE, size = NROW(X))
         Diag1 <- gridDiag(X = X[I, , drop = FALSE], FUN = FUN, lim = lim,
-            by = by, maxdimension = maxdimension, sublevel = sublevel,
-            library = library, location = FALSE, printProgress = FALSE,
-            diagLimit = NULL, ...)[["diagram"]]
+            by = by, FUNvalues = NULL, maxdimension = maxdimension,
+            sublevel = sublevel, library = library, location = FALSE,
+            printProgress = FALSE, diagLimit = NULL, ...)[["diagram"]]
         width1 <- wasserstein(Diag, Diag1, p = p, dimension = dimension)
         if (printProgress) {
           cat(i," ")
@@ -97,9 +100,9 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
       boostFUN <- function(i) {
         I <- sample(NROW(X), replace = TRUE, size = NROW(X))
         Diag1 <- gridDiag(X = X[I, , drop = FALSE], FUN = FUN, lim = lim,
-            by = by, maxdimension = maxdimension, sublevel = sublevel,
-            library = library, location = FALSE, printProgress = FALSE,
-            diagLimit = NULL, ...)[["diagram"]]
+            by = by, FUNvalues = NULL, maxdimension = maxdimension,
+            sublevel = sublevel, library = library, location = FALSE,
+            printProgress = FALSE, diagLimit = NULL, ...)[["diagram"]]
         width1 <- bottleneck(Diag, Diag1, dimension = dimension)
         if (printProgress) {
           cat(i," ")
@@ -109,7 +112,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
     }
 
   } else {
-    Diag <- gridDiag(X = X, FUN = FUN, lim = lim, by = by,
+    Diag <- gridDiag(X = X, FUN = FUN, lim = lim, by = by, FUNvalues = NULL,
         maxdimension = maxdimension, sublevel = sublevel, library = library,
         location = FALSE, printProgress = FALSE, diagLimit = NULL,
         weight = weight, ...)[["diagram"]]
@@ -117,7 +120,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
       boostFUN <- function(i) {
         weightBoost <- rMultinom(size = sum(weight), prob = weight)
         Diag1 <- gridDiag(X = X, FUN = FUN, lim = lim, by = by,
-            maxdimension = maxdimension, sublevel = sublevel,
+            FUNvalues = NULL, maxdimension = maxdimension, sublevel = sublevel,
             library = library, location = FALSE, printProgress = FALSE,
             diagLimit = NULL, weight = weightBoost, ...)[["diagram"]]
         width1 <- wasserstein(Diag, Diag1, p = p, dimension = dimension)
@@ -130,7 +133,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
       boostFUN <- function(i) {
         weightBoost <- rMultinom(size = sum(weight), prob = weight)
         Diag1 <- gridDiag(X = X, FUN = FUN, lim = lim, by = by, 
-            maxdimension = maxdimension, sublevel = sublevel,
+            FUNvalues = NULL, maxdimension = maxdimension, sublevel = sublevel,
             library = library, location = FALSE, printProgress = FALSE,
             diagLimit = NULL, weight = weightBoost, ...)[["diagram"]]
         width1 <- bottleneck(Diag, Diag1, dimension = dimension)

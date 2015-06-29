@@ -223,8 +223,8 @@ extract(std::istream& is, Point_2<R>& p, const Cartesian_tag&)
         read(is, y);
         break;
     default:
-        std::cerr << "" << std::endl;
-        std::cerr << "Stream must be in ascii or binary mode" << std::endl;
+        //std::cerr << "" << std::endl;
+        //std::cerr << "Stream must be in ascii or binary mode" << std::endl;
         break;
     }
     if (is)
@@ -249,8 +249,8 @@ extract(std::istream& is, Point_2<R>& p, const Homogeneous_tag&)
         read(is, hw);
         break;
     default:
-        std::cerr << "" << std::endl;
-        std::cerr << "Stream must be in ascii or binary mode" << std::endl;
+        //std::cerr << "" << std::endl;
+        //std::cerr << "Stream must be in ascii or binary mode" << std::endl;
         break;
   }
   if (is)

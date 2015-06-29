@@ -402,11 +402,11 @@ public:
 
     if( m_in.fail()) {
       if ( verbose()) {
-        std::cerr << " " << std::endl;
-        std::cerr << "File_scanner_OFF::" << std::endl;
-        std::cerr << "scan_facet_vertex_index(): input error:  "
-          "cannot read OFF file beyond facet "
-                  << current_facet << "." << std::endl;
+        //std::cerr << " " << std::endl;
+        //std::cerr << "File_scanner_OFF::" << std::endl;
+        //std::cerr << "scan_facet_vertex_index(): input error:  "
+        //  "cannot read OFF file beyond facet "
+        //          << current_facet << "." << std::endl;
       }
       set_off_header( false);
       return;
@@ -417,12 +417,12 @@ public:
     if(error || (index >= size_of_vertices())) {
       m_in.clear( std::ios::failbit);
       if ( verbose()) {
-        std::cerr << " " << std::endl;
-        std::cerr << "File_scanner_OFF::" << std::endl;
-        std::cerr << "scan_facet_vertex_index(): input error: "
-          "facet " << current_facet << ": vertex index "
-                  << index + index_offset() << ": is out of range."
-                  << std::endl;
+        //std::cerr << " " << std::endl;
+        //std::cerr << "File_scanner_OFF::" << std::endl;
+        //std::cerr << "scan_facet_vertex_index(): input error: "
+        //  "facet " << current_facet << ": vertex index "
+        //          << index + index_offset() << ": is out of range."
+        //          << std::endl;
       }
       set_off_header( false);
       return;

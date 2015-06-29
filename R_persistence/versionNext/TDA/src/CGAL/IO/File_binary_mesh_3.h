@@ -56,9 +56,9 @@ bool load_binary_file(std::istream& is, C3T3& c3t3)
   std::getline(is, s);
   if(s != "") {
     if(s != std::string(" ") + CGAL::Get_io_signature<C3T3>()()) {
-      std::cerr << "load_binary_file:"
-                << "\n  expected format: " << CGAL::Get_io_signature<C3T3>()()
-                << "\n       got format:" << s << std::endl;
+      //std::cerr << "load_binary_file:"
+      //          << "\n  expected format: " << CGAL::Get_io_signature<C3T3>()()
+      //          << "\n       got format:" << s << std::endl;
       return false;
     }
   }

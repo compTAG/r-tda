@@ -62,10 +62,10 @@ Polyhedron_scan_OFF<HDS>:: operator()( HDS& target) {
     File_scanner_OFF scanner( m_in, m_file_header.verbose());
     if ( ! m_in) {
         if ( scanner.verbose()) {
-            std::cerr << " " << std::endl;
-            std::cerr << "Polyhedron_scan_OFF<HDS>::" << std::endl;
-            std::cerr << "operator(): input error: file format is not in "
-                         "OFF." << std::endl;
+            //std::cerr << " " << std::endl;
+            //std::cerr << "Polyhedron_scan_OFF<HDS>::" << std::endl;
+            //std::cerr << "operator(): input error: file format is not in "
+            //             "OFF." << std::endl;
         }
         return;
     }
@@ -100,10 +100,10 @@ Polyhedron_scan_OFF<HDS>:: operator()( HDS& target) {
         scanner.scan_facet( no, i);
         if( ! m_in || B.error() || no < 3) {
             if ( scanner.verbose()) {
-                std::cerr << " " << std::endl;
-                std::cerr << "Polyhedron_scan_OFF<Traits>::" << std::endl;
-                std::cerr << "operator()(): input error: facet " << i
-                     << " has less than 3 vertices." << std::endl;
+                //std::cerr << " " << std::endl;
+                //std::cerr << "Polyhedron_scan_OFF<Traits>::" << std::endl;
+                //std::cerr << "operator()(): input error: facet " << i
+                //     << " has less than 3 vertices." << std::endl;
             }
             B.rollback();
             m_in.clear( std::ios::badbit);
@@ -125,11 +125,11 @@ Polyhedron_scan_OFF<HDS>:: operator()( HDS& target) {
     if ( B.check_unconnected_vertices()) {
         if ( ! B.remove_unconnected_vertices()) {
             if ( scanner.verbose()) {
-                std::cerr << " " << std::endl;
-                std::cerr << "Polyhedron_scan_OFF<Traits>::" << std::endl;
-                std::cerr << "operator()(): input error: cannot "
-                             "successfully remove isolated vertices."
-                          << std::endl;
+                //std::cerr << " " << std::endl;
+                //std::cerr << "Polyhedron_scan_OFF<Traits>::" << std::endl;
+                //std::cerr << "operator()(): input error: cannot "
+                //             "successfully remove isolated vertices."
+                //          << std::endl;
             }
             B.rollback();
             m_in.clear( std::ios::badbit);

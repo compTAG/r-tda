@@ -196,8 +196,8 @@ extract(std::istream& is, Direction_3<R>& d, const Cartesian_tag&)
       read(is, z);
       break;
     default:
-      std::cerr << "" << std::endl;
-      std::cerr << "Stream must be in ascii or binary mode" << std::endl;
+      //std::cerr << "" << std::endl;
+      //std::cerr << "Stream must be in ascii or binary mode" << std::endl;
       break;
   }
   if (is)
@@ -221,8 +221,8 @@ extract(std::istream& is, Direction_3<R>& d, const Homogeneous_tag&)
         read(is, z);
         break;
     default:
-        std::cerr << "" << std::endl;
-        std::cerr << "Stream must be in ascii or binary mode" << std::endl;
+        //std::cerr << "" << std::endl;
+        //std::cerr << "Stream must be in ascii or binary mode" << std::endl;
         break;
   }
   if (is)

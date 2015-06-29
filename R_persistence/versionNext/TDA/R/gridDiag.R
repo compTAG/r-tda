@@ -1,26 +1,44 @@
 gridDiag <-
-function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1, sublevel = TRUE,
-         library = "Dionysus", location = FALSE, printProgress = FALSE,
-         diagLimit = NULL, ...) {
+function(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
+         maxdimension = max(NCOL(X), length(dim(FUNvalues))) - 1,
+         sublevel = TRUE, library = "Dionysus", location = FALSE,
+         printProgress = FALSE, diagLimit = NULL, ...) {
 
-  if (!is.numeric(X) && !is.data.frame(X)) {
-    stop("X should be a matrix of coordinates")
+  if (!xor(is.null(X) || is.null(FUN) || is.null(lim) || is.null(by),
+      is.null(FUNvalues))) {
+    stop("either values of X, FUN, lim, and by should be set, or a value of FUNvalues should be set, but not both")
   }
-  if (!is.function(FUN)) {
-    stop("FUN should be a function")
+  if (!is.null(X) && !is.null(FUN)) {
+    if (!is.numeric(X) && !is.data.frame(X)) {
+      stop("X should be a matrix of coordinates")
+    }
+    if (!is.function(FUN)) {
+      stop("FUN should be a function")
+    }
   }
-  tryCatch(lim <- as.double(lim), error = function(e) {
-      stop("lim should be numeric")})
-  if (length(lim) %% 2 != 0) {
-    stop("lim should be either a matrix or a vector of even elements")
+  if (!is.null(lim) && !is.null(by)) {
+    tryCatch(lim <- as.double(lim), error = function(e) {
+        stop("lim should be numeric")})
+    if (length(lim) %% 2 != 0) {
+      stop("lim should be either a matrix or a vector of even length")
+    }
+    tryCatch(by <- as.double(by), error = function(e) {
+        stop("by should be numeric")})
+    if (min(by) <= 0) {
+      stop("by should be positive")
+    }
   }
-  if (2 * NCOL(X) != length(lim)) {
-    stop("dimension of X does not match with lim")
+  if (!is.null(X) && !is.null(FUN) && !is.null(lim) && !is.null(by)) {
+    if (2 * NCOL(X) != length(lim)) {
+      stop("dimension of X does not match with lim")
+    }
+    if (length(by) != 1 && length(by) != NCOL(X)) {
+      stop("by should be either a number or a vector of length equals dimension of grid")
+    }
   }
-  tryCatch(by <- as.double(by), error = function(e) {
-      stop("by should be numeric")})
-  if ((length(by) != 1 && length(by) != NCOL(X)) || min(by) <= 0) {
-    stop("by should be either a positive number or a positive vector of length equals dimension of grid")
+  if (!is.null(FUNvalues)) {
+    tryCatch(FUNvalues <- as.array(FUNvalues), error = function(e) {
+        stop("FUNvalues should be an array")})
   }
   tryCatch(maxdimension <- as.double(maxdimension), error = function(e) {
       stop("maxdimension should be numeric")})
@@ -50,18 +68,23 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1, sublevel = TRUE,
     stop("diagLimit should be a positive number")
   }
 
-  X <- as.matrix(X)
-  maxdimension <- min(maxdimension, NCOL(X) - 1)
+  if (is.null(FUNvalues)) {
+    X <- as.matrix(X)
+    maxdimension <- min(maxdimension, NCOL(X) - 1)
+    Grid <- gridBy(lim = lim, by = by)
+    FUNvalues <- FUN(X, Grid[["grid"]], ...)
+    gridDim <- Grid[["dim"]]    
+  } else {
+    gridDim <- dim(FUNvalues)
+  }
 
-  Grid <- gridBy(lim = lim, by = by)
-  FUNvalues <- FUN(X, Grid[["grid"]], ...)
-  gridDim <- Grid[["dim"]]    
+  maxdimension <- length(gridDim) - 1
   if (sublevel == FALSE) {
     FUNvalues <- -FUNvalues
   }
 
   # compute persistence diagram of function values over a grid
-  if (ncol(X) <= 3) {
+  if (length(gridDim) <= 3) {
     gridOut <- GridDiag(FUNvalues = FUNvalues, gridDim = as.integer(gridDim),
         maxdimension = as.integer(maxdimension), decomposition = "5tetrahedra",
         library = library, location = location, printProgress = printProgress)
