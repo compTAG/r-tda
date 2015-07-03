@@ -1,25 +1,14 @@
 alphaDiag <-
-function(X, maxdimension = NCOL(X) - 1, maxscale, library = "GUDHI",
-         printProgress = FALSE) {
+function(X, library = "GUDHI", printProgress = FALSE) {
 
-	if (!is.numeric(X) && !is.data.frame(X)) {
-		stop("X should be a matrix of coordinates")
-	}
-	if (library == "gudhi" || library == "Gudhi") {
-		library <- "GUDHI"
-	}
-	if (library != "GUDHI") {
-		stop("library should be 'GUDHI'")
-	}
-  tryCatch(maxdimension <- as.double(maxdimension), error = function(e) {
-      stop("maxdimension should be numeric")})
-  if (length(maxdimension) != 1 || maxdimension < 0) {
-    stop("maxdimnsion should be a nonnegative integer")
+  if (!is.numeric(X) && !is.data.frame(X)) {
+    stop("X should be a matrix of coordinates")
   }
-  tryCatch(maxscale <- as.double(maxscale), error = function(e) {
-      stop("maxscale should be numeric")})
-  if (length(maxscale) != 1 || maxscale < 0) {
-    stop("maxscale should be a nonnegative integer")
+  if (library == "gudhi" || library == "Gudhi") {
+    library <- "GUDHI"
+  }
+  if (library != "GUDHI") {
+    stop("library should be 'GUDHI'")
   }
   if (!is.logical(printProgress)) {
     stop("printProgress should be logical")
@@ -36,8 +25,7 @@ function(X, maxdimension = NCOL(X) - 1, maxscale, library = "GUDHI",
 		out=.C("alphashape_persistence_diagram_GUDHI", as.double(points),
 	                                       as.integer(dim),
 	                                       as.integer(num_points),
-	                                       as.double(maxscale),
-	                                       as.integer(maxdimension),
+	                                       NCOL(X) - 1,
 	                                       as.double(diagram),
 	                                       as.integer(printProgress),
 	                                       dup=FALSE, package="TDA")
@@ -59,15 +47,19 @@ function(X, maxdimension = NCOL(X) - 1, maxscale, library = "GUDHI",
 		#remove points with lifetime=0
 		if (!is.null(remove)) Diag=Diag[-remove,]  
 		## change Inf values to maxscale
-		Diag[which(Diag[,3]==Inf),3]=maxscale	
+		#Diag[which(Diag[,3]==Inf),3]=maxscale	
 
 		colnames(Diag)=c("dimension","Birth", "Death")
 		
 		if (class(Diag)!="matrix") Diag=t(Diag) #in the case there is only 1 point
 		
 		class(Diag)="diagram"
-		attributes(Diag)$maxdimension=maxdimension
-		attributes(Diag)$scale=c(0, maxscale)
+		#attributes(Diag)$maxdimension=maxdimension
+		#attributes(Diag)$scale=c(0, maxscale)
+  attributes(Diag)[["maxdimension"]] <- max(Diag[, 1])
+  nonInf <- which(Diag[, 2] != Inf & Diag[, 3] != Inf)
+  attributes(Diag)[["scale"]] <-
+      c(min(Diag[nonInf, 2:3]), max(Diag[nonInf, 2:3]))
 		attributes(Diag)$call=match.call()
 			
 		return(list("diagram"=Diag))

@@ -590,7 +590,6 @@ Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
 	  * @param[in]  dim             embedding dimension
 	  * @param[in]  num_points      number of points. The input point * must be a
 	  *                             pointer toward num_points*dim double exactly.
-	  * @param[in]  rips_threshold  threshold for the Rips complex
 	  * @param[in]  max_complex_dim maximal dimension of the Rips complex
 	  * @param[in]  diagram         where to output the diagram. The format must be dimension birth death.
 	  * @param[in]  max_num_bars    write the max_num_pairs most persistent pairs of the
@@ -602,16 +601,15 @@ Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
 	alphashape_persistence_diagram_GUDHI( double * points          //points to some memory space
 							, int    * dim
 							, int    * num_points
-							, double * rips_threshold
 							, int    * max_complex_dim
 							, double * diagram         //points to some memory space
 							, int    * printInput)
 
 	{
 
-	  int coeff_field_characteristic=*max_complex_dim;
+	  int coeff_field_characteristic = 2;
 
-	  float min_persistence = *rips_threshold;
+	  float min_persistence = 0.0;
 
 	  // Read points from file
 	  bool printstatus=printInput[0];
