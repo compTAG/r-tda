@@ -1,6 +1,6 @@
 ripsDiag <-
 function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
-         printProgress = FALSE) {
+         location = FALSE, printProgress = FALSE) {
 
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
@@ -39,16 +39,41 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   if (dist == "arbitrary") {
     library <- "Dionysus"
   }
-  # in 32bit architectures Dionysus L2 doesn't work
-  if (dist == "euclidean" && library == "Dionysus") {
-    dist <- "arbitrary"
-    X <- as.matrix(dist(X))
-  }
 
   max_num_pairs <- 5000  # to be added as an option
 
-  ripsOut <- RipsDiag(X = X, maxdimension = maxdimension, maxscale = maxscale,
-      dist = dist, library = library, printProgress = printProgress)
+  # in 32bit architectures Dionysus L2 doesn't work
+  #ripsOut <- RipsDiag(X = X, maxdimension = maxdimension,
+  #    maxscale = maxscale, dist = dist, library = library,
+  #    location = location, printProgress = printProgress)
+  if (dist == "euclidean" && library == "Dionysus") {
+    ripsOut <- RipsDiag(X = as.matrix(dist(X)), maxdimension = maxdimension,
+        maxscale = maxscale, dist = "arbitrary", library = library,
+        location = location, printProgress = printProgress)
+  } else {
+    ripsOut <- RipsDiag(X = X, maxdimension = maxdimension,
+        maxscale = maxscale, dist = dist, library = library,
+        location = location, printProgress = printProgress)
+  }
+
+
+  if (location == TRUE) {
+    if (dist == "euclidean") {
+      BirthLocation <- X[ripsOut[[2]][, 1], ]
+      DeathLocation <- X[ripsOut[[2]][, 2], ]
+      if (library == "Dionysus")
+      {
+        CycleLocation <- lapply(ripsOut[[3]], function(c) {X[c, ]})
+      }
+    } else {
+      BirthLocation <- ripsOut[[2]][, 1]
+      DeathLocation <- ripsOut[[2]][, 2]
+      if (library == "Dionysus")
+      {
+        CycleLocation <- ripsOut[[3]]
+      }
+    }
+  }
 
   Diag <- ripsOut[[1]]
   if (NROW(Diag) > 0) {
@@ -61,6 +86,13 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   attributes(Diag)[["maxdimension"]] <- max(Diag[, 1])
   attributes(Diag)[["scale"]] <- c(0, maxscale)
   attributes(Diag)$call <- match.call()
-  out <- list("diagram" = Diag)
+  if (location == FALSE || library == "GUDHI")
+  {
+    out <- list("diagram" = Diag)
+  } else
+  {
+    out <- list("diagram" = Diag, "birthLocation" = BirthLocation,
+        "deathLocation" = DeathLocation, "cycleLocation" = CycleLocation)
+  }
   return (out)
 }

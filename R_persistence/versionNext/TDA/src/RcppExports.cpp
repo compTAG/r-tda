@@ -92,8 +92,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // RipsDiag
-Rcpp::List RipsDiag(const Rcpp::NumericMatrix& X, const int maxdimension, const double maxscale, const std::string& dist, const std::string& library, const bool printProgress);
-RcppExport SEXP TDA_RipsDiag(SEXP XSEXP, SEXP maxdimensionSEXP, SEXP maxscaleSEXP, SEXP distSEXP, SEXP librarySEXP, SEXP printProgressSEXP) {
+Rcpp::List RipsDiag(const Rcpp::NumericMatrix& X, const int maxdimension, const double maxscale, const std::string& dist, const std::string& library, const bool location, const bool printProgress);
+RcppExport SEXP TDA_RipsDiag(SEXP XSEXP, SEXP maxdimensionSEXP, SEXP maxscaleSEXP, SEXP distSEXP, SEXP librarySEXP, SEXP locationSEXP, SEXP printProgressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -102,8 +102,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const double >::type maxscale(maxscaleSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type dist(distSEXP);
     Rcpp::traits::input_parameter< const std::string& >::type library(librarySEXP);
+    Rcpp::traits::input_parameter< const bool >::type location(locationSEXP);
     Rcpp::traits::input_parameter< const bool >::type printProgress(printProgressSEXP);
-    __result = Rcpp::wrap(RipsDiag(X, maxdimension, maxscale, dist, library, printProgress));
+    __result = Rcpp::wrap(RipsDiag(X, maxdimension, maxscale, dist, library, location, printProgress));
     return __result;
 END_RCPP
 }

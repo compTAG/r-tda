@@ -96,6 +96,7 @@ inline Rcpp::List
 RipsDiagL2Dionysus(const RealMatrix & X 
                  , const int          maxdimension
                  , const double       maxscale
+                 , const bool         location
 	             , const bool         printProgress
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
@@ -121,8 +122,8 @@ RipsDiagL2Dionysus(const RealMatrix & X
 	f.sort(Generator::Comparison(distances));
 
 	// Compute the persistence diagram of the complex
-	computePersistenceDionysus< PersistenceR >(
-			f, size, maxdimension, Rcpp::NumericVector(), false, printProgress,
+	computePersistenceDionysus< PersistenceR >(f, size, maxdimension,
+			Rcpp::NumericVector(X.nrow()), location, printProgress,
 			persDgm, persLoc, persCycle);
 
 	// Output persistent diagram
@@ -139,6 +140,7 @@ inline Rcpp::List
 RipsDiagArbitDionysus(const RealMatrix & X
                     , const int          maxdimension
                     , const double       maxscale
+                    , const bool         location
                     , const bool         printProgress
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
@@ -158,15 +160,14 @@ RipsDiagArbitDionysus(const RealMatrix & X
 
 	if (printProgress) {
 		Rprintf("# Generated complex of size: %d \n", f.size());
-		//std::cout << "# Generated complex of size: " << f.size() << std::endl;
 	}
 
 	// Sort the simplices with respect to distance 
 	f.sort(GeneratorA::Comparison(distances));
 
 	// Compute the persistence diagram of the complex
-	computePersistenceDionysus< PersistenceR >(
-			f, size, maxdimension, Rcpp::NumericVector(), false, printProgress,
+	computePersistenceDionysus< PersistenceR >(f, size, maxdimension,
+			Rcpp::NumericVector(X.nrow()), location, printProgress,
 			persDgm, persLoc, persCycle);
 
 	// Output persistent diagram
@@ -416,16 +417,19 @@ RipsDiag(const Rcpp::NumericMatrix & X
        , const double                maxscale
        , const std::string         & dist
        , const std::string         & library
+       , const bool                  location
        , const bool                  printProgress
 	) {
 	if (library[0] == 'G') {
 		return RipsDiagGUDHI(X, maxdimension, maxscale, printProgress);
 	}
 	if (dist[0] == 'e') {
-		return RipsDiagL2Dionysus(X, maxdimension, maxscale, printProgress);
+		return RipsDiagL2Dionysus(X, maxdimension, maxscale,
+				location, printProgress);
 	}
 	else {
-		return RipsDiagArbitDionysus(X, maxdimension, maxscale, printProgress);
+		return RipsDiagArbitDionysus(X, maxdimension, maxscale,
+				location, printProgress);
 	}
 }
 
