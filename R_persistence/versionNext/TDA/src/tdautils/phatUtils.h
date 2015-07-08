@@ -19,9 +19,10 @@
 
 
 
-template<typename Flt, typename RealVector>
-void persistentPairsPhat(Flt f, int maxdimension, const RealVector& FUNvalues,
-		const bool location, const bool printProgress,
+template< typename Fltr, typename RealVector >
+void computePersistencePhat(Fltr f, const unsigned maxdimension,
+		const RealVector& FUNvalues, const bool location,
+		const bool printProgress,
 		std::vector< std::vector< std::vector< double > > >& persDgm,
 		std::vector< std::vector< std::vector< unsigned int > > >& persLoc) {
 	Timer persistence_timer;
@@ -35,7 +36,7 @@ void persistentPairsPhat(Flt f, int maxdimension, const RealVector& FUNvalues,
 	phat::index size_of_simplex_map = 0;
 	simplex_map_inv.resize(f.size());
 	boundary_matrix.set_num_cols(f.size());
-	for (Fltr::Index it = f.begin(); it != f.end(); ++it) {
+	for (typename Fltr::Index it = f.begin(); it != f.end(); ++it) {
 		phat::column boundary_indices;
 		const Smplx& c = f.simplex(it);
 		for(Smplx::BoundaryIterator bit = c.boundary_begin();

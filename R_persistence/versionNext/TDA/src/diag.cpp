@@ -51,6 +51,10 @@ Rcpp::List GridDiag(const Rcpp::NumericVector& FUNvalues,
 	//stdoutLog.subscribeTo(RLOG_CHANNEL("topology/vineyard"));
 #endif
 
+	std::vector< std::vector< std::vector< double > > > persDgm;
+	std::vector< std::vector< std::vector< unsigned > > > persLoc;
+	std::vector< std::vector< std::set< unsigned > > > persCycle;
+
 	Fltr f;
 
 	// Generate simplicial complex from function values and grid
@@ -64,20 +68,17 @@ Rcpp::List GridDiag(const Rcpp::NumericVector& FUNvalues,
 		Rprintf("# Generated complex of size: %d \n", f.size());
 	}
 
-	// Sort simplicial complex
+	// Sort the simplices with respect to function values
 	f.sort(Smplx::DataComparison());
 
-	// Compute persistent homology from sorted simplicial complex
-	std::vector< std::vector< std::vector< double > > > persDgm;
-	std::vector< std::vector< std::vector< unsigned > > > persLoc;
-	std::vector< std::vector< std::set< unsigned > > > persCycle;
-
+	// Compute the persistence diagram of the complex
 	if (library[0] == 'D') {
-		persistentPairsDionysus(f, maxdimension, FUNvalues, location,
-				printProgress, persDgm, persLoc, persCycle);
+		computePersistenceDionysus< Persistence >(f, Smplx::DataEvaluator(),
+				maxdimension, FUNvalues, location, printProgress,
+				persDgm, persLoc, persCycle);
 	}
 	if (library[0] == 'P') {
-		 persistentPairsPhat(f, maxdimension, FUNvalues, location,
+		 computePersistencePhat(f, maxdimension, FUNvalues, location,
 			 printProgress, persDgm, persLoc);
 	}
 
@@ -86,224 +87,97 @@ Rcpp::List GridDiag(const Rcpp::NumericVector& FUNvalues,
 		concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
 		concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
 		StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
-
-
-	//// Output persistent diagram
-	//std::ofstream outfile;
-	//outfile.open("outputTDA.txt");
-	//for (int dgmsIdx = 0; dgmsIdx <= maxdimension; ++dgmsIdx)
-	//{
-	//	outfile << dgmsIdx << std::endl;
-	//	std::vector< std::vector< double > >::const_iterator persdgmIdx;
-	//	for (persdgmIdx = persDgm[dgmsIdx].begin(); persdgmIdx != persDgm[dgmsIdx].end(); ++persdgmIdx) {
-	//		outfile << (*persdgmIdx)[0] << " " << (*persdgmIdx)[1] << std::endl;
-	//	}
-	//	outfile << std::endl;
-	//}
-	//if (location)
-	//{
-	//	outfile << "Location" << std::endl;
-	//	for (int dgmsIdx = 0; dgmsIdx <= maxdimension; ++dgmsIdx) {
-	//		std::vector< std::vector< unsigned int > >::const_iterator persLocIdx;
-	//		for (persLocIdx = persLoc[dgmsIdx].begin(); persLocIdx != persLoc[dgmsIdx].end(); ++persLocIdx) {
-	//			outfile << (*persLocIdx)[0] << " " << (*persLocIdx)[1] << std::endl;
-	//		}
-	//	}
-
-	//	outfile << std::endl << "Cycle" << std::endl;
-	//	for (int dgmsIdx = 0; dgmsIdx <= maxdimension; ++dgmsIdx) {
-	//		std::vector< std::set< unsigned int > >::const_iterator persCycleIdx;
-	//		std::set< unsigned int >::const_iterator persCyclePointIdx;
-	//		for (persCycleIdx = persCycle[dgmsIdx].begin(); persCycleIdx != persCycle[dgmsIdx].end(); ++persCycleIdx) {
-	//			for (persCyclePointIdx = persCycleIdx->begin(); persCyclePointIdx != persCycleIdx->end(); ++persCyclePointIdx) {
-	//				outfile << (*persCyclePointIdx) << " ";
-	//			}
-	//			outfile << std::endl;
-	//		}
-	//	}
-	//}
-	//outfile.close();
 }
 
 
 
-extern "C" {
-
-	void rips(int* dimInput, double* maxInput, int* printInput)
-	{
-		bool printstatus=printInput[0];
-		Dimension               skeleton;
-		DistanceType            max_distance;
-		std::string             infilename, diagram_name;
-		
-		infilename = "inputTDA.txt";
-		diagram_name="outputTDA.txt";
-		skeleton= dimInput[0];
-		max_distance= maxInput[0];
-		
-		std::ofstream           diagram_out(diagram_name.c_str());
-		
-		/*if (printstatus){
-			Rprintf("Diagram %s \n", diagram_name.c_str());
-			//std::cout << "Diagram:         " << diagram_name << std::endl;
-		}*/
-		PointContainer          points;
-		read_points(infilename, points);
-
-		PairDistances           distances(points);
-		Generator               rips(distances);
-		Generator::Evaluator    size(distances);
-		FltrR                    f;
+Rcpp::List
+RipsDiagL2Dionysus(const int    maxdimension
+                 , const double maxscale
+	             , const bool printProgress
+	) {
+	std::vector< std::vector< std::vector< double > > > persDgm;
+	std::vector< std::vector< std::vector< unsigned > > > persLoc;
+	std::vector< std::vector< std::set< unsigned > > > persCycle;
 	
-		// Generate 2-skeleton of the Rips complex for epsilon = 50
-		rips.generate(skeleton, max_distance, make_push_back_functor(f));
-		if (printstatus){
-			Rprintf("# Generated complex of size: %d \n", f.size());
-			//std::cout << "# Generated complex of size: " << f.size() << std::endl;
-		}
-		// Generate filtration with respect to distance and compute its persistence
-		f.sort(Generator::Comparison(distances));
+	std::string             infilename;
+		
+	infilename = "inputTDA.txt";		
 
-		Timer persistence_timer; persistence_timer.start();
-		PersistenceR p(f);
-		p.pair_simplices(printstatus);
-		persistence_timer.stop();
+	PointContainer points;
+	read_points(infilename, points);
 
-	#if 1
-		// Output cycles
-		PersistenceR::SimplexMap<FltrR>   m = p.make_simplex_map(f);
-		for (PersistenceR::iterator cur = p.begin(); cur != p.end(); ++cur)
-		{
-//			const PersistenceR::Cycle& cycle = cur->cycle;
+	PairDistances           distances(points);
+	Generator               rips(distances);
+	Generator::Evaluator    size(distances);
+	FltrR                   f;
 
-			if (!cur->sign())        // only negative simplices have non-empty cycles
-			{
-				PersistenceR::OrderIndex birth = cur->pair;      // the cycle that cur killed was born when we added birth (another simplex)
+	// Generate 2-skeleton of the Rips complex for epsilon = 50
+	rips.generate(maxdimension + 1, maxscale, make_push_back_functor(f));
 
-				const SmplxR& b = m[birth];
-				const SmplxR& d = m[cur];
-			
-				// if (b.dimension() != 1) continue;
-				// std::cout << "Pair: (" << size(b) << ", " << size(d) << ")" << std::endl;
-				if (b.dimension() >= skeleton) continue;
-				diagram_out << b.dimension() << " " << size(b) << " " << size(d) << std::endl;
-			} else if (cur->unpaired())    // positive could be unpaired
-			{
-				const SmplxR& b = m[cur];
-				// if (b.dimension() != 1) continue;
-			
-				// std::cout << "Unpaired birth: " << size(b) << std::endl;
-				// cycle = cur->chain;      // TODO
-				if (b.dimension() >= skeleton) continue;
-				diagram_out << b.dimension() << " " << size(b) << " inf" << std::endl;
-			}
-
-			// Iterate over the cycle
-			// for (PersistenceR::Cycle::const_iterator si =  cycle.begin();
-			//                                                          si != cycle.end();     ++si)
-			// {
-			//     const SmplxR& s = m[*si];
-			//     //std::cout << s.dimension() << std::endl;
-			//     const SmplxR::VertexContainer& vertices = s.vertices();          // std::vector<Vertex> where Vertex = Distances::IndexType
-			//     AssertMsg(vertices.size() == s.dimension() + 1, "dimension of a simplex is one less than the number of its vertices");
-			//     std::cout << vertices[0] << " " << vertices[1] << std::endl;
-			// }
-		}
-	#endif
-	
-		if (printstatus){	
-			persistence_timer.check("# Persistence timer");
-		}
-
+	if (printProgress) {
+		Rprintf("# Generated complex of size: %d \n", f.size());
 	}
 
+	// Sort the simplices with respect to distance 
+	f.sort(Generator::Comparison(distances));
+
+	// Compute the persistence diagram of the complex
+	computePersistenceDionysus< PersistenceR >(
+			f, size, maxdimension, Rcpp::NumericVector(), false, printProgress,
+			persDgm, persLoc, persCycle);
+
+	// Output persistent diagram
+	return Rcpp::List::create(
+			concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
+			concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
+			StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
+}
 
 
-	void ripsArbit(int* dimInput, double* maxInput, int* printInput)
-	{
-		bool printstatus=printInput[0];
-		Dimension               skeleton;
-		DistanceTypeA            max_distance;
-		std::string             infilename, diagram_name;
 
-		infilename = "inputTDA.txt";
-		diagram_name="outputTDA.txt";
-		skeleton= dimInput[0];
-		max_distance= maxInput[0];
-		
-		std::ofstream           diagram_out(diagram_name.c_str());
-		/*if (printstatus){
-			Rprintf("Diagram %s \n", diagram_name.c_str());			
-			//std::cout << "Diagram:         " << diagram_name << std::endl;
-		}*/
-		PointContainer          points;
-		read_points2(infilename, points);
+Rcpp::List
+RipsDiagArbitDionysus(const int maxdimension
+                    , const double maxscale
+                    , const bool printProgress
+	) {
+	std::vector< std::vector< std::vector< double > > > persDgm;
+	std::vector< std::vector< std::vector< unsigned > > > persLoc;
+	std::vector< std::vector< std::set< unsigned > > > persCycle;
 
-		PairDistancesA           distances(points);
-		GeneratorA               rips(distances);
-		GeneratorA::Evaluator    size(distances);
-		FltrRA                    f;
-	
-		// Generate 2-skeleton of the Rips complex for epsilon = 50
-		rips.generate(skeleton, max_distance, make_push_back_functor(f));
-		if (printstatus){
-			Rprintf("# Generated complex of size: %d \n", f.size());
-			//std::cout << "# Generated complex of size: " << f.size() << std::endl;
-		}
-		// Generate filtration with respect to distance and compute its persistence
-		f.sort(GeneratorA::Comparison(distances));
+	std::string             infilename;
 
-		Timer persistence_timer; persistence_timer.start();
-		PersistenceR p(f);
-		p.pair_simplices(printstatus);
-		persistence_timer.stop();
+	infilename = "inputTDA.txt";
 
-	#if 1
-		// Output cycles
-		PersistenceR::SimplexMap<FltrRA>   m = p.make_simplex_map(f);
-		for (PersistenceR::iterator cur = p.begin(); cur != p.end(); ++cur)
-		{
-//			const PersistenceR::Cycle& cycle = cur->cycle;
+	PointContainer points;
+	read_points2(infilename, points);
 
-			if (!cur->sign())        // only negative simplices have non-empty cycles
-			{
-				PersistenceR::OrderIndex birth = cur->pair;      // the cycle that cur killed was born when we added birth (another simplex)
+	PairDistancesA           distances(points);
+	GeneratorA               rips(distances);
+	GeneratorA::Evaluator    size(distances);
+	FltrRA                   f;
 
-				const SmplxRA& b = m[birth];
-				const SmplxRA& d = m[cur];
-			
-				// if (b.dimension() != 1) continue;
-				// std::cout << "Pair: (" << size(b) << ", " << size(d) << ")" << std::endl;
-				if (b.dimension() >= skeleton) continue;
-				diagram_out << b.dimension() << " " << size(b) << " " << size(d) << std::endl;
-			} else if (cur->unpaired())    // positive could be unpaired
-			{
-				const SmplxRA& b = m[cur];
-				// if (b.dimension() != 1) continue;
-			
-				// std::cout << "Unpaired birth: " << size(b) << std::endl;
-				// cycle = cur->chain;      // TODO
-				if (b.dimension() >= skeleton) continue;
-				diagram_out << b.dimension() << " " << size(b) << " inf" << std::endl;
-			}
+	// Generate 2-skeleton of the Rips complex for epsilon = 50
+	rips.generate(maxdimension + 1, maxscale, make_push_back_functor(f));
 
-			// Iterate over the cycle
-			// for (PersistenceR::Cycle::const_iterator si =  cycle.begin();
-			//                                                          si != cycle.end();     ++si)
-			// {
-			//     const SmplxRA& s = m[*si];
-			//     //std::cout << s.dimension() << std::endl;
-			//     const SmplxR::VertexContainer& vertices = s.vertices();          // std::vector<Vertex> where Vertex = Distances::IndexType
-			//     AssertMsg(vertices.size() == s.dimension() + 1, "dimension of a simplex is one less than the number of its vertices");
-			//     std::cout << vertices[0] << " " << vertices[1] << std::endl;
-			// }
-		}
-	#endif
-		if (printstatus){	
-			persistence_timer.check("# Persistence timer");
-		}
+	if (printProgress) {
+		Rprintf("# Generated complex of size: %d \n", f.size());
+		//std::cout << "# Generated complex of size: " << f.size() << std::endl;
 	}
 
+	// Sort the simplices with respect to distance 
+	f.sort(GeneratorA::Comparison(distances));
+
+	// Compute the persistence diagram of the complex
+	computePersistenceDionysus< PersistenceR >(
+			f, size, maxdimension, Rcpp::NumericVector(), false, printProgress,
+			persDgm, persLoc, persCycle);
+
+	// Output persistent diagram
+	return Rcpp::List::create(
+			concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
+			concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
+			StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
 }
 
 
@@ -455,130 +329,160 @@ Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
 }
 
 
-	extern "C" {
 
-	// GUDHI RIPS
-	/** \brief Interface for R code, construct the persistence diagram 
-	  * of the Rips complex constructed on the input set of points.
-	  *
-	  * @param[out] void            every function called by R must return void
-	  * @param[in]  point           pointer toward the coordinates of all points. Format 
-	  *                             must be X11 X12 ... X1d X21 X22 ... X2d X31 ...
-	  * @param[in]  dim             embedding dimension 
-	  * @param[in]  num_points      number of points. The input point * must be a 
-	  *                             pointer toward num_points*dim double exactly.
-	  * @param[in]  rips_threshold  threshold for the Rips complex
-	  * @param[in]  max_complex_dim maximal dimension of the Rips complex
-	  * @param[in]  diagram         where to output the diagram. The format must be dimension birth death.
-	  * @param[in]  max_num_bars    write the max_num_pairs most persistent pairs of the
-	  *                             diagram. diagram must point to enough memory space for
-	  *                             3*max_num_pairs double. If there is not enough pairs in the diagram,
-	  *                             write nothing after.
-	  */
-	void 
-	rips_persistence_diagram_GUDHI( double * points          //points to some memory space
-							, int    * dim
-							, int    * num_points
-							, double * rips_threshold
-							, int    * max_complex_dim
-							, double * diagram         //points to some memory space
-							, int    * printInput)
+// RipsDiag in GUDHI
+/** \brief Interface for R code, construct the persistence diagram
+* of the Rips complex constructed on the input set of points.
+*
+* @param[out] void            every function called by R must return void
+* @param[in]  point           pointer toward the coordinates of all points. Format
+*                             must be X11 X12 ... X1d X21 X22 ... X2d X31 ...
+* @param[in]  dim             embedding dimension
+* @param[in]  num_points      number of points. The input point * must be a
+*                             pointer toward num_points*dim double exactly.
+* @param[in]  rips_threshold  threshold for the Rips complex
+* @param[in]  max_complex_dim maximal dimension of the Rips complex
+* @param[in]  diagram         where to output the diagram. The format must be dimension birth death.
+* @param[in]  max_num_bars    write the max_num_pairs most persistent pairs of the
+*                             diagram. diagram must point to enough memory space for
+*                             3*max_num_pairs double. If there is not enough pairs in the diagram,
+*                             write nothing after.
+*/
+Rcpp::List
+RipsDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory space
+            , const int                   maxdimension
+            , const double                maxscale
+            , const bool                  printProgress
+	) {
+	std::vector< std::vector< std::vector< double > > > persDgm;
+	std::vector< std::vector< std::vector< unsigned > > > persLoc;
+	std::vector< std::vector< std::set< unsigned > > > persCycle;
 
-	{
-	  bool printstatus=printInput[0];  
-	  std::string diagram_name="outputTDA.txt";
+	// Turn the input points into a range of points
+	typedef std::vector< double > Point_t;
+	std::vector< Point_t > point_set =
+			RcppToStl< std::vector< Point_t > >(X);
 
 
-	  // Turn the input points into a range of points
-	  typedef std::vector<double> Point_t;
-	  std::vector< Point_t > point_set(*num_points, Point_t(*dim));
-	  double * curr_coordinate = points;
-	  for(int i = 0; i < *num_points; ++i) {
-		for(int j = 0; j < *dim; ++j) {
-		  point_set[i][j] = *curr_coordinate;
-		  ++curr_coordinate;
-		}
-	  }
 	// Compute the proximity graph of the points
-	  Graph_t prox_graph = compute_proximity_graph( point_set, *rips_threshold
-												  , euclidean_distance<Point_t> );
+	Graph_t prox_graph = compute_proximity_graph(point_set, maxscale
+		, euclidean_distance<Point_t>);
 
 	// Construct the Rips complex in a Simplex Tree
-	// Construct the Rips complex in a Simplex Tree
-	  Gudhi::Simplex_tree<> st;        
-	  st.insert_graph(prox_graph); // insert the proximity graph in the simplex tree
-	  st.expansion( *max_complex_dim ); // expand the graph until dimension dim_max
+	Gudhi::Simplex_tree<> st;
+	st.insert_graph(prox_graph); // insert the proximity graph in the simplex tree
+	st.expansion(maxdimension + 1); // expand the graph until dimension dim_max
 
-		if (printstatus){
-			Rprintf("# Generated complex of size: %d \n", st.num_simplices());
-			// std::cout << st.num_simplices() << " simplices \n";
-		}
+	if (printProgress) {
+		Rprintf("# Generated complex of size: %d \n", st.num_simplices());
+		// std::cout << st.num_simplices() << " simplices \n";
+	}
 
 	// Sort the simplices in the order of the filtration
-	  st.initialize_filtration();
+	st.initialize_filtration();
 
 	// Compute the persistence diagram of the complex
-	  int p = 2; //characteristic of the coefficient field for homology
-	  double min_persistence = 0; //minimal length for persistent intervals
-	  Gudhi::persistent_cohomology::Persistent_cohomology< Gudhi::Simplex_tree<>, Gudhi::persistent_cohomology::Field_Zp > pcoh( st );
-	  pcoh.init_coefficients( p ); //initilizes the coefficient field for homology
-	  pcoh.compute_persistent_cohomology( min_persistence ); //compute persistent homology
+	int p = 2; //characteristic of the coefficient field for homology
+	double min_persistence = 0; //minimal length for persistent intervals
+	computePersistenceGUDHI(st, p, min_persistence, maxdimension, persDgm);
 
-	// write diagram on the output file
-	  pcoh.write_output_diagram(diagram_name);
-	
-	// or write the most persistent points in diagram (max_num_bars should be an input) 
-	//  pcoh.most_persistent_bars(diagram, *max_num_bars);
+	// Output persistent diagram
+	return Rcpp::List::create(
+			concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
+			concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
+			StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
+}
+
+
+
+// RipsDiag
+/** \brief Interface for R code, construct the persistence diagram
+* of the Rips complex constructed on the input set of points.
+*
+* @param[out] void            every function called by R must return void
+* @param[in]  point           pointer toward the coordinates of all points. Format
+*                             must be X11 X12 ... X1d X21 X22 ... X2d X31 ...
+* @param[in]  dim             embedding dimension
+* @param[in]  num_points      number of points. The input point * must be a
+*                             pointer toward num_points*dim double exactly.
+* @param[in]  rips_threshold  threshold for the Rips complex
+* @param[in]  max_complex_dim maximal dimension of the Rips complex
+* @param[in]  diagram         where to output the diagram. The format must be dimension birth death.
+* @param[in]  max_num_bars    write the max_num_pairs most persistent pairs of the
+*                             diagram. diagram must point to enough memory space for
+*                             3*max_num_pairs double. If there is not enough pairs in the diagram,
+*                             write nothing after.
+*/
+// [[Rcpp::export]]
+Rcpp::List
+RipsDiag(const Rcpp::NumericMatrix & X
+       , const int                   maxdimension
+       , const double                maxscale
+       , const std::string         & dist
+       , const std::string         & library
+       , const bool                  printProgress
+	) {
+	if (library[0] == 'G') {
+		return RipsDiagGUDHI(X, maxdimension, maxscale, printProgress);
 	}
+	if (dist[0] == 'e') {
+		return RipsDiagL2Dionysus(maxdimension, maxscale, printProgress);
+	}
+	else {
+		return RipsDiagArbitDionysus(maxdimension, maxscale, printProgress);
+	}
+}
 
 
 
-	//---------------------------------------------------------------------------------------------------------------------
-	// gudhi type definition
-	typedef Gudhi::Simplex_tree<>::Vertex_handle Simplex_tree_vertex;
-	typedef std::map<Alpha_shape_3::Vertex_handle, Simplex_tree_vertex > Alpha_shape_simplex_tree_map;
-	typedef std::pair<Alpha_shape_3::Vertex_handle, Simplex_tree_vertex> Alpha_shape_simplex_tree_pair;
-	typedef std::vector< Simplex_tree_vertex > Simplex_tree_vector_vertex;
+//---------------------------------------------------------------------------------------------------------------------
+// gudhi type definition
+typedef Gudhi::Simplex_tree<>::Vertex_handle Simplex_tree_vertex;
+typedef std::map<Alpha_shape_3::Vertex_handle, Simplex_tree_vertex > Alpha_shape_simplex_tree_map;
+typedef std::pair<Alpha_shape_3::Vertex_handle, Simplex_tree_vertex> Alpha_shape_simplex_tree_pair;
+typedef std::vector< Simplex_tree_vertex > Simplex_tree_vector_vertex;
 
-	Vertex_list fromCell (const Cell_handle& ch)
+Vertex_list fromCell(const Cell_handle& ch)
+{
+	Vertex_list the_list;
+	for (auto i = 0; i < 4; i++)
 	{
-	  Vertex_list the_list;
-	  for (auto i = 0; i < 4; i++)
-	  {
-	    the_list.push_back(ch->vertex(i));
-	  }
-	  return the_list;
+		the_list.push_back(ch->vertex(i));
 	}
-	Vertex_list fromFacet (const Facet& fct)
+	return the_list;
+}
+Vertex_list fromFacet(const Facet& fct)
+{
+	Vertex_list the_list;
+	for (auto i = 0; i < 4; i++)
 	{
-	  Vertex_list the_list;
-	  for (auto i = 0; i < 4; i++)
-	  {
-	    if (fct.second != i)
-	    {
-	      the_list.push_back(fct.first->vertex(i));
-	    }
-	  }
-	  return the_list;
+		if (fct.second != i)
+		{
+			the_list.push_back(fct.first->vertex(i));
+		}
 	}
-	Vertex_list fromEdge (const Edge_3& edg)
+	return the_list;
+}
+Vertex_list fromEdge(const Edge_3& edg)
+{
+	Vertex_list the_list;
+	for (auto i = 0; i < 4; i++)
 	{
-	  Vertex_list the_list;
-	  for (auto i = 0; i < 4; i++)
-	  {
-	    if ((edg.second == i) ||(edg.third == i))
-	    {
-	      the_list.push_back(edg.first->vertex(i));
-	    }
-	  }
-	  return the_list;
+		if ((edg.second == i) || (edg.third == i))
+		{
+			the_list.push_back(edg.first->vertex(i));
+		}
 	}
-	Vertex_list fromVertex (const Alpha_shape_3::Vertex_handle& vh)
-	{
-	  Vertex_list the_list;
-	  the_list.push_back(vh);
-	  return the_list;
-	}
+	return the_list;
+}
+Vertex_list fromVertex(const Alpha_shape_3::Vertex_handle& vh)
+{
+	Vertex_list the_list;
+	the_list.push_back(vh);
+	return the_list;
+}
+
+
 
 	// GUDHI RIPS
 	/** \brief Interface for R code, construct the persistence diagram
@@ -597,34 +501,23 @@ Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
 	  *                             3*max_num_pairs double. If there is not enough pairs in the diagram,
 	  *                             write nothing after.
 	  */
-	void
-	alphashape_persistence_diagram_GUDHI( double * points          //points to some memory space
-							, int    * dim
-							, int    * num_points
-							, int    * max_complex_dim
-							, double * diagram         //points to some memory space
-							, int    * printInput)
-
-	{
+// [[Rcpp::export]]
+Rcpp::List
+AlphaDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory space
+             , const bool                  printProgress
+	) {
+	std::vector< std::vector< std::vector< double > > > persDgm;
+	std::vector< std::vector< std::vector< unsigned > > > persLoc;
+	std::vector< std::vector< std::set< unsigned > > > persCycle;
 
 	  int coeff_field_characteristic = 2;
 
 	  float min_persistence = 0.0;
 
-	  // Read points from file
-	  bool printstatus=printInput[0];
-	  std::string diagram_name="outputTDA.txt";
 
 
 	  // Turn the input points into a range of points
-	  std::list<Point_3> lp;
-	  double * curr_coordinate = points;
-	  for(int i = 0; i < *num_points; ++i) {
-	    Point_3 p(*curr_coordinate, *(curr_coordinate+1), *(curr_coordinate+2));
-		lp.push_back(p);
-		curr_coordinate+=3;
-
-	  }
+	  std::list<Point_3> lp = RcppToStlPoint3< std::list<Point_3> >(X);
 
 
 	  // alpha shape construction from points. CGAL has a strange behavior in REGULARIZED mode.
@@ -741,15 +634,14 @@ Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
 	  simplex_tree.initialize_filtration();
 
 	  //std::cout << "Simplex_tree dim: " << simplex_tree.dimension() << std::endl;
-	  // Compute the persistence diagram of the complex
-	  Gudhi::persistent_cohomology::Persistent_cohomology< Gudhi::Simplex_tree<>, Gudhi::persistent_cohomology::Field_Zp > pcoh( simplex_tree );
-	  pcoh.init_coefficients( coeff_field_characteristic ); //initializes the coefficient field for homology
 
-	  pcoh.compute_persistent_cohomology( (Filtration_value)min_persistence );
+	// Compute the persistence diagram of the complex
+	computePersistenceGUDHI(simplex_tree, coeff_field_characteristic,
+			min_persistence, 2, persDgm);
 
-	  pcoh.write_output_diagram(diagram_name);
-	}
-
-
-} //end extern
-
+	// Output persistent diagram
+	return Rcpp::List::create(
+			concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
+			concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
+			StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
+}

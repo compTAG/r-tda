@@ -12,6 +12,37 @@ inline PersistenceDiagram RcppToDionysus(const RcppMatrix& rcppMatrix) {
 
 
 
+template< typename StlMatrix, typename RcppMatrix >
+inline StlMatrix RcppToStl(const RcppMatrix& rcppMatrix) {
+
+	const unsigned rowNum = rcppMatrix.nrow();
+	const unsigned colNum = rcppMatrix.ncol();
+	StlMatrix stlMatrix(rowNum, typename StlMatrix::value_type(colNum));
+	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
+		for (unsigned colIdx = 0; colIdx < colNum; ++colIdx) {
+			stlMatrix[rowIdx][colIdx] = rcppMatrix[rowIdx + colIdx * rowNum];
+		}
+	}
+	return stlMatrix;
+}
+
+
+
+template< typename StlPoint3List, typename RcppMatrix >
+inline StlPoint3List RcppToStlPoint3(const RcppMatrix& rcppMatrix) {
+
+	const unsigned rowNum = rcppMatrix.nrow();
+	StlPoint3List stlPoint3List;
+	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
+		stlPoint3List.push_back(
+				typename StlPoint3List::value_type(rcppMatrix[rowIdx],
+					rcppMatrix[rowIdx + rowNum], rcppMatrix[rowIdx + 2 * rowNum]));
+	}
+	return stlPoint3List;
+}
+
+
+
 template<typename RcppMatrix, typename StlMatrix>
 inline RcppMatrix concatStlToRcpp(const std::vector< StlMatrix >& stlMatrices,
 		bool includeIndex, unsigned colNum) {
