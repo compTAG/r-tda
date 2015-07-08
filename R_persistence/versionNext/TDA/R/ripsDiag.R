@@ -36,23 +36,13 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
 
   X <- as.matrix(X)
 
-  # in 32bit architectures Dionysus doesn't work
-  #write.table(X, "inputTDA.txt", row.names = FALSE, col.names = FALSE,
-  #    sep = " ")
-  if (dist == "euclidean" && library == "Dionysus") {
-    write.table(as.matrix(dist(X)), "inputTDA.txt", row.names = FALSE,
-        col.names = FALSE, sep = " ")
-  } else {
-    write.table(X, "inputTDA.txt", row.names = FALSE, col.names = FALSE,
-        sep = " ")
-  }
-
   if (dist == "arbitrary") {
     library <- "Dionysus"
   }
   # in 32bit architectures Dionysus L2 doesn't work
   if (dist == "euclidean" && library == "Dionysus") {
     dist <- "arbitrary"
+    X <- as.matrix(dist(X))
   }
 
   max_num_pairs <- 5000  # to be added as an option
