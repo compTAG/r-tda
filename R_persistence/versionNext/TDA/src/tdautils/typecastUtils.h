@@ -13,17 +13,33 @@ inline PersistenceDiagram RcppToDionysus(const RcppMatrix& rcppMatrix) {
 
 
 template< typename StlMatrix, typename RcppMatrix >
-inline StlMatrix RcppToStl(const RcppMatrix& rcppMatrix) {
+inline StlMatrix RcppToStl(const RcppMatrix& rcppMatrix,
+		bool is_row_names = false) {
 
 	const unsigned rowNum = rcppMatrix.nrow();
 	const unsigned colNum = rcppMatrix.ncol();
-	StlMatrix stlMatrix(rowNum, typename StlMatrix::value_type(colNum));
-	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
-		for (unsigned colIdx = 0; colIdx < colNum; ++colIdx) {
-			stlMatrix[rowIdx][colIdx] = rcppMatrix[rowIdx + colIdx * rowNum];
+	if (is_row_names) {
+		StlMatrix stlMatrix(rowNum, typename StlMatrix::value_type(colNum + 1));
+		for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
+			stlMatrix[rowIdx][0] = rowIdx + 1;
 		}
+		for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
+			for (unsigned colIdx = 0; colIdx < colNum; ++colIdx) {
+				stlMatrix[rowIdx][colIdx + 1] = rcppMatrix[rowIdx + colIdx * rowNum];
+			}
+		}
+		return stlMatrix;
 	}
-	return stlMatrix;
+	else {
+		StlMatrix stlMatrix(rowNum, typename StlMatrix::value_type(colNum));
+		for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
+			for (unsigned colIdx = 0; colIdx < colNum; ++colIdx) {
+				stlMatrix[rowIdx][colIdx] = rcppMatrix[rowIdx + colIdx * rowNum];
+			}
+		}
+		return stlMatrix;
+	}
+	
 }
 
 

@@ -91,21 +91,19 @@ Rcpp::List GridDiag(const Rcpp::NumericVector& FUNvalues,
 
 
 
-Rcpp::List
-RipsDiagL2Dionysus(const int    maxdimension
-                 , const double maxscale
-	             , const bool printProgress
+template< typename RealMatrix >
+inline Rcpp::List
+RipsDiagL2Dionysus(const RealMatrix & X 
+                 , const int          maxdimension
+                 , const double       maxscale
+	             , const bool         printProgress
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;
 	std::vector< std::vector< std::set< unsigned > > > persCycle;
 	
-	std::string             infilename;
-		
-	infilename = "inputTDA.txt";		
-
-	PointContainer points;
-	read_points(infilename, points);
+	PointContainer points = RcppToStl< PointContainer >(X);
+	//read_points(infilename, points);
 
 	PairDistances           distances(points);
 	Generator               rips(distances);
@@ -136,21 +134,19 @@ RipsDiagL2Dionysus(const int    maxdimension
 
 
 
-Rcpp::List
-RipsDiagArbitDionysus(const int maxdimension
-                    , const double maxscale
-                    , const bool printProgress
+template< typename RealMatrix >
+inline Rcpp::List
+RipsDiagArbitDionysus(const RealMatrix & X
+                    , const int          maxdimension
+                    , const double       maxscale
+                    , const bool         printProgress
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;
 	std::vector< std::vector< std::set< unsigned > > > persCycle;
 
-	std::string             infilename;
-
-	infilename = "inputTDA.txt";
-
-	PointContainer points;
-	read_points2(infilename, points);
+	PointContainer points = RcppToStl< PointContainer >(X, true);
+	//read_points2(infilename, points);
 
 	PairDistancesA           distances(points);
 	GeneratorA               rips(distances);
@@ -348,7 +344,7 @@ Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
 *                             3*max_num_pairs double. If there is not enough pairs in the diagram,
 *                             write nothing after.
 */
-Rcpp::List
+inline Rcpp::List
 RipsDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory space
             , const int                   maxdimension
             , const double                maxscale
@@ -426,10 +422,10 @@ RipsDiag(const Rcpp::NumericMatrix & X
 		return RipsDiagGUDHI(X, maxdimension, maxscale, printProgress);
 	}
 	if (dist[0] == 'e') {
-		return RipsDiagL2Dionysus(maxdimension, maxscale, printProgress);
+		return RipsDiagL2Dionysus(X, maxdimension, maxscale, printProgress);
 	}
 	else {
-		return RipsDiagArbitDionysus(maxdimension, maxscale, printProgress);
+		return RipsDiagArbitDionysus(X, maxdimension, maxscale, printProgress);
 	}
 }
 
