@@ -25,8 +25,8 @@ Dtm <- function(knnIndex, knnDistance, weight, weightBound) {
     .Call('TDA_Dtm', PACKAGE = 'TDA', knnIndex, knnDistance, weight, weightBound)
 }
 
-RipsDiag <- function(X, maxdimension, maxscale, dist, library, printProgress) {
-    .Call('TDA_RipsDiag', PACKAGE = 'TDA', X, maxdimension, maxscale, dist, library, printProgress)
+RipsDiag <- function(X, maxdimension, maxscale, dist, library, location, printProgress) {
+    .Call('TDA_RipsDiag', PACKAGE = 'TDA', X, maxdimension, maxscale, dist, library, location, printProgress)
 }
 
 AlphaDiagGUDHI <- function(X, printProgress) {
