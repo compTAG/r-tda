@@ -78,8 +78,8 @@ Rcpp::List GridDiag(const Rcpp::NumericVector& FUNvalues,
 				persDgm, persLoc, persCycle);
 	}
 	if (library[0] == 'P') {
-		 computePersistencePhat(f, maxdimension, FUNvalues, location,
-			 printProgress, persDgm, persLoc);
+		 computePersistencePhat(f, Smplx::DataEvaluator(), maxdimension,
+				FUNvalues, location, printProgress, persDgm, persLoc);
 	}
 
 	// Output persistent diagram
@@ -93,11 +93,12 @@ Rcpp::List GridDiag(const Rcpp::NumericVector& FUNvalues,
 
 template< typename RealMatrix >
 inline Rcpp::List
-RipsDiagL2Dionysus(const RealMatrix & X 
-                 , const int          maxdimension
-                 , const double       maxscale
-                 , const bool         location
-	             , const bool         printProgress
+RipsDiagL2DionysusPhat(const RealMatrix  & X 
+                     , const int           maxdimension
+                     , const double        maxscale
+                     , const std::string & library
+                     , const bool          location
+	                 , const bool          printProgress
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;
@@ -122,9 +123,16 @@ RipsDiagL2Dionysus(const RealMatrix & X
 	f.sort(Generator::Comparison(distances));
 
 	// Compute the persistence diagram of the complex
-	computePersistenceDionysus< PersistenceR >(f, size, maxdimension,
-			Rcpp::NumericVector(X.nrow()), location, printProgress,
-			persDgm, persLoc, persCycle);
+	if (library[0] == 'D') {
+		computePersistenceDionysus< PersistenceR >(f, size, maxdimension,
+				Rcpp::NumericVector(X.nrow()), location, printProgress,
+				persDgm, persLoc, persCycle);
+	}
+	if (library[0] == 'P') {
+		computePersistencePhat(f, size, maxdimension,
+				Rcpp::NumericVector(X.nrow()), location, printProgress,
+				persDgm, persLoc);
+	}
 
 	// Output persistent diagram
 	return Rcpp::List::create(
@@ -137,11 +145,12 @@ RipsDiagL2Dionysus(const RealMatrix & X
 
 template< typename RealMatrix >
 inline Rcpp::List
-RipsDiagArbitDionysus(const RealMatrix & X
-                    , const int          maxdimension
-                    , const double       maxscale
-                    , const bool         location
-                    , const bool         printProgress
+RipsDiagArbitDionysusPhat(const RealMatrix  & X
+                        , const int           maxdimension
+                        , const double        maxscale
+                        , const std::string & library
+                        , const bool          location
+                        , const bool          printProgress
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;
@@ -166,9 +175,16 @@ RipsDiagArbitDionysus(const RealMatrix & X
 	f.sort(GeneratorA::Comparison(distances));
 
 	// Compute the persistence diagram of the complex
-	computePersistenceDionysus< PersistenceR >(f, size, maxdimension,
-			Rcpp::NumericVector(X.nrow()), location, printProgress,
-			persDgm, persLoc, persCycle);
+	if (library[0] == 'D') {
+		computePersistenceDionysus< PersistenceR >(f, size, maxdimension,
+				Rcpp::NumericVector(X.nrow()), location, printProgress,
+				persDgm, persLoc, persCycle);
+	}
+	if (library[0] == 'P') {
+		computePersistencePhat(f, size, maxdimension,
+				Rcpp::NumericVector(X.nrow()), location, printProgress,
+				persDgm, persLoc);
+	}
 
 	// Output persistent diagram
 	return Rcpp::List::create(
@@ -424,11 +440,11 @@ RipsDiag(const Rcpp::NumericMatrix & X
 		return RipsDiagGUDHI(X, maxdimension, maxscale, printProgress);
 	}
 	if (dist[0] == 'e') {
-		return RipsDiagL2Dionysus(X, maxdimension, maxscale,
+		return RipsDiagL2DionysusPhat(X, maxdimension, maxscale, library,
 				location, printProgress);
 	}
 	else {
-		return RipsDiagArbitDionysus(X, maxdimension, maxscale,
+		return RipsDiagArbitDionysusPhat(X, maxdimension, maxscale, library,
 				location, printProgress);
 	}
 }

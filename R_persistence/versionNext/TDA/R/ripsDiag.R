@@ -18,35 +18,35 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   if (dist != "euclidean" && dist != "arbitrary") {
     stop ("dist should be either 'euclidean' or 'arbitrary'")
   }
-  if (library == "dionysus" || library == "DIONYSUS") {
-    library <- "Dionysus"
-  }
   if (library == "gudhi" || library == "Gudhi") {
     library <- "GUDHI"
   }
-  if (library != "Dionysus" && library != "GUDHI") {
-    stop("library should be either 'Dionysus' or 'GUDHI'")
-  }
-  if (dist == "arbitrary") {
+  if (library == "dionysus" || library == "DIONYSUS") {
     library <- "Dionysus"
+  }
+  if (library == "phat" || library == "Phat") {
+    library <- "PHAT"
+  }
+  if (library != "GUDHI" && library != "Dionysus" && library != "PHAT") {
+    stop("library should be a string: either 'GUDHI, 'Dionysus', or 'PHAT'")
   }
   if (!is.logical(printProgress)) {
     stop("printProgress should be logical")
   }
 
-  X <- as.matrix(X)
-
-  if (dist == "arbitrary") {
+  if (dist == "arbitrary" && library == "GUDHI") {
     library <- "Dionysus"
   }
 
+  X <- as.matrix(X)
+
   max_num_pairs <- 5000  # to be added as an option
 
-  # in 32bit architectures Dionysus L2 doesn't work
+  # in 32bit architectures Dionysus/PHAT L2 doesn't work
   #ripsOut <- RipsDiag(X = X, maxdimension = maxdimension,
   #    maxscale = maxscale, dist = dist, library = library,
   #    location = location, printProgress = printProgress)
-  if (dist == "euclidean" && library == "Dionysus") {
+  if (dist == "euclidean" && library != "GUDHI") {
     ripsOut <- RipsDiag(X = as.matrix(dist(X)), maxdimension = maxdimension,
         maxscale = maxscale, dist = "arbitrary", library = library,
         location = location, printProgress = printProgress)
@@ -55,7 +55,6 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
         maxscale = maxscale, dist = dist, library = library,
         location = location, printProgress = printProgress)
   }
-
 
   if (location == TRUE) {
     if (dist == "euclidean") {
@@ -89,6 +88,10 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   if (location == FALSE || library == "GUDHI")
   {
     out <- list("diagram" = Diag)
+  } else if (library == "PHAT")
+  {
+    out <- list("diagram" = Diag, "birthLocation" = BirthLocation,
+        "deathLocation" = DeathLocation)
   } else
   {
     out <- list("diagram" = Diag, "birthLocation" = BirthLocation,
