@@ -188,6 +188,7 @@ void computePersistenceDionysus(Fltr f, const Evaluator& evaluator,
 
 	persistence_timer.stop();
 
+	// Save persistent diagram
 	typename Persistence::template SimplexMap< Fltr >
 			m = p.make_simplex_map(f);
 	initDiagrams(persDgm, p.begin(), p.end(), evaluator, m, maxdimension);
@@ -242,6 +243,7 @@ void computePersistenceDionysus(Fltr f, const Evaluator& evaluator,
 //	}
 //#endif
 
+	// trace back birth & death simplex
 	if (location) {
 		initLocations< typename Fltr::Simplex >
 				(persLoc, persCycle, p, evaluator, m, maxdimension, FUNvalues);
