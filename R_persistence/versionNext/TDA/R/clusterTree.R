@@ -26,7 +26,7 @@ function(X, k, h=NULL, density="knn", dist="euclidean", d=NULL, Nlambda=100, pri
 	
 	## Compute density estimator: knn or kde
 	if (density=="knn" && dist=="euclidean"){
-		knnInfo=get.knn(X, k=k, algorithm="kd_tree")
+    knnInfo <- FNN::get.knn(X, k = k, algorithm = "kd_tree")
 		for(i in 1:n){
 			adjMat[i, knnInfo$nn.index[i,] ]=1
 		}
@@ -42,7 +42,7 @@ function(X, k, h=NULL, density="knn", dist="euclidean", d=NULL, Nlambda=100, pri
 		v.d=pi^(d/2) /gamma(d/2+1)		
 		hat.f=k/(n*v.d*r.k^d)	
 	} else if (density=="kde"){	#kde estimate
-		knnInfo=get.knn(X, k=k, algorithm="kd_tree")
+		knnInfo <- FNN::get.knn(X, k = k, algorithm = "kd_tree")
 		for(i in 1:n){
 			adjMat[i, knnInfo$nn.index[i,] ]=1
 		}
@@ -53,7 +53,7 @@ function(X, k, h=NULL, density="knn", dist="euclidean", d=NULL, Nlambda=100, pri
 	ord.hat.f=order(hat.f)
 
 	# starting graph	
-	G=graph.adjacency(adjMat, mode="undirected")	  ## could be changed to directed
+  G <- igraph::graph.adjacency(adjMat, mode = "undirected")	  ## could be changed to directed
 	
 	# Lambda grid
 	Lambda=hat.f[ord.hat.f]
@@ -82,7 +82,7 @@ function(X, k, h=NULL, density="knn", dist="euclidean", d=NULL, Nlambda=100, pri
 		exclude=setdiff(1:n,present)  # points with density less than lambda
 		NewExcluded=setdiff(exclude,OldExcluded)   # the new excluded point  
 		G[NewExcluded, present]=FALSE     # remove edges of the new excluded point
-		clust=clusters(G)
+    clust <- igraph::clusters(G)
 		CLUSTERS[[j]]=list("no"=clust$no,"mem"=clust$mem, "present"=present, "exclude"=exclude)		
 
 		if (printProgress && floor((100*j/Nlambda-percentageFloor)/2)>0)

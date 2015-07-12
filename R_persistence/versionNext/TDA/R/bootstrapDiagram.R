@@ -83,7 +83,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
         maxdimension = maxdimension, sublevel = sublevel, library = library,
         location = FALSE, printProgress = FALSE, diagLimit = NULL, ...
       )[["diagram"]]
-    if (distance=="wasserstein") {
+    if (distance == "wasserstein") {
       boostFUN <- function(i) {
         I <- sample(NROW(X), replace = TRUE, size = NROW(X))
         Diag1 <- gridDiag(X = X[I, , drop = FALSE], FUN = FUN, lim = lim,
@@ -116,7 +116,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
         maxdimension = maxdimension, sublevel = sublevel, library = library,
         location = FALSE, printProgress = FALSE, diagLimit = NULL,
         weight = weight, ...)[["diagram"]]
-    if (distance=="wasserstein") {
+    if (distance == "wasserstein") {
       boostFUN <- function(i) {
         weightBoost <- rMultinom(size = sum(weight), prob = weight)
         Diag1 <- gridDiag(X = X, FUN = FUN, lim = lim, by = by,
@@ -146,9 +146,9 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
   }
 
   if (parallel) {
-    boostLapply = mclapply
+    boostLapply <- parallel::mclapply
   } else {
-    boostLapply = lapply
+    boostLapply <- lapply
   }
 
   if (printProgress) {

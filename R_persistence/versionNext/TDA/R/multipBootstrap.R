@@ -13,8 +13,11 @@ function(Y, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
 	MeanLand=apply(Y, 2, mean)
 	Gstar=rep(NA,B)
 
-     if (parallel) {boostLapply=mclapply
-     	} else boostLapply=lapply
+  if (parallel) {
+    boostLapply <- parallel::mclapply
+  } else {
+    boostLapply <- lapply
+  }
 
     if (printProgress) cat("Bootstrap: ")
 	

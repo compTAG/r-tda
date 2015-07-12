@@ -58,7 +58,7 @@ function(X, FUN, Grid, B = 30, alpha = 0.05, parallel = FALSE,
     }
   }
   if (parallel) {
-    boostLapply <- mclapply
+    boostLapply <- parallel::mclapply
   } else {
     boostLapply <- lapply
   }

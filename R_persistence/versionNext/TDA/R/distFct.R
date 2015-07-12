@@ -6,7 +6,7 @@ function(X, Grid){
 		
 	X=as.matrix(X) 
 	Grid=as.matrix(Grid)
-	distances=knnx.dist(X, Grid, k=1, algorithm=c("kd_tree"))	
+  distances <- FNN::knnx.dist(X, Grid, k = 1, algorithm = c("kd_tree"))	
 	dOut=as.vector(distances)
 	return(dOut)
 }
