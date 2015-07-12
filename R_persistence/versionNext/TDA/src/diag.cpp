@@ -32,17 +32,34 @@
 
 
 
-/**
- * grid function by Brittany T. Fasy
- * modified by Jisu Kim for
- * arbitrary dimension & using memory as an input & setting maximum dimension.
- */
-// [[Rcpp::export]]
-Rcpp::List GridDiag(const Rcpp::NumericVector& FUNvalues,
-		const Rcpp::IntegerVector& gridDim, const int maxdimension,
-		const std::string& decomposition, const std::string& library,
-		const bool location, const bool printProgress) {
-
+// GridDiag by Brittany T. Fasy
+// modified by Jisu Kim for
+// arbitrary dimension & using memory as an input & setting maximum dimension.
+/** \brief Interface for R code, construct the persistence diagram
+  * of sublevel/superlevel sets of a function evaluated over a grid of points
+  *
+  * @param[out] Rcpp::List     A list
+  * @param[in]  FUNvalues      A vector of length m1*...*md of function values over grid
+  * @param[in]  gridDim        A vector (m1, ..., md),
+  *                            where mi is number of grid points in ith dimension
+  * @param[in]  maxdimension   Max dimension of the homological features to be computed.
+  *                            This equals (maximal dimension of the Rips complex) - 1
+  * @param[in]  decomposition  Either "5tetrahedra" or "barycenter"
+  * @param[in]  library        Either "Dionysus" or "PHAT"
+  * @param[in]  location       Are location of birth point, death point,
+  *                            and representative cycles returned?
+  * @param[in]  printProgress  Is progress printed?
+  */
+ // [[Rcpp::export]]
+Rcpp::List
+GridDiag(const Rcpp::NumericVector & FUNvalues
+       , const Rcpp::IntegerVector & gridDim
+       , const int                   maxdimension
+       , const std::string         & decomposition
+       , const std::string         & library
+       , const bool                  location
+       , const bool                  printProgress
+	) {
 #ifdef LOGGING
 	//rlog::RLogInit(argc, argv);
 
@@ -91,6 +108,20 @@ Rcpp::List GridDiag(const Rcpp::NumericVector& FUNvalues,
 
 
 
+// RipsDiag for L2 distance in Dionysus or PHAT
+/** \brief Interface for R code, construct the persistence diagram
+  * of the Rips complex constructed on the input set of points.
+  *
+  * @param[out] Rcpp::List     A list
+  * @param[in]  X              An nxd matrix of coordinates,
+  * @param[in]  maxdimension   Max dimension of the homological features to be computed.
+  *                            This equals (maximal dimension of the Rips complex) - 1
+  * @param[in]  maxscale       Threshold for the Rips complex
+  * @param[in]  library        Either "Dionysus" or "PHAT"
+  * @param[in]  location       Are location of birth point, death point,
+  *                            and representative cycles returned?
+  * @param[in]  printProgress  Is progress printed?
+  */
 template< typename RealMatrix >
 inline Rcpp::List
 RipsDiagL2DionysusPhat(const RealMatrix  & X 
@@ -143,6 +174,20 @@ RipsDiagL2DionysusPhat(const RealMatrix  & X
 
 
 
+// RipsDiag for arbitrary distance in Dionysus or PHAT
+/** \brief Interface for R code, construct the persistence diagram
+  * of the Rips complex constructed on the input set of points.
+  *
+  * @param[out] Rcpp::List     A list
+  * @param[in]  X              An nxn matrix of distances of points
+  * @param[in]  maxdimension   Max dimension of the homological features to be computed.
+  *                            This equals (maximal dimension of the Rips complex) - 1
+  * @param[in]  maxscale       Threshold for the Rips complex
+  * @param[in]  library        Either "Dionysus" or "PHAT"
+  * @param[in]  location       Are location of birth point, death point,
+  *                            and representative cycles returned?
+  * @param[in]  printProgress  Is progress printed?
+  */
 template< typename RealMatrix >
 inline Rcpp::List
 RipsDiagArbitDionysusPhat(const RealMatrix  & X
@@ -196,9 +241,10 @@ RipsDiagArbitDionysusPhat(const RealMatrix  & X
 
 
 // [[Rcpp::export]]
-double Bottleneck(
-		const Rcpp::NumericMatrix& Diag1, const Rcpp::NumericMatrix& Diag2) {
-
+double
+Bottleneck(const Rcpp::NumericMatrix & Diag1
+         , const Rcpp::NumericMatrix & Diag2
+	) {
 	return bottleneck_distance(RcppToDionysus< PersistenceDiagram<> >(Diag1),
 			RcppToDionysus< PersistenceDiagram<> >(Diag2));
 }
@@ -206,9 +252,11 @@ double Bottleneck(
 
 
 // [[Rcpp::export]]
-double Wasserstein(const Rcpp::NumericMatrix& Diag1,
-		const Rcpp::NumericMatrix& Diag2, const int p) {
-
+double
+Wasserstein(const Rcpp::NumericMatrix & Diag1
+          , const Rcpp::NumericMatrix & Diag2
+          , const int                   p
+	) {
 	return wasserstein_distance(RcppToDionysus< PersistenceDiagram<> >(Diag1),
 			RcppToDionysus< PersistenceDiagram<> >(Diag2), p);
 }
@@ -217,10 +265,13 @@ double Wasserstein(const Rcpp::NumericMatrix& Diag1,
 
 // KDE function on a Grid
 // [[Rcpp::export]]
-Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X,
-		const Rcpp::NumericMatrix& Grid, const double h,
-		const Rcpp::NumericVector& weight, const bool printProgress) {
-
+Rcpp::NumericVector
+Kde(const Rcpp::NumericMatrix & X
+  , const Rcpp::NumericMatrix & Grid
+  , const double                h
+  , const Rcpp::NumericVector & weight
+  , const bool                  printProgress
+	) {
 	const double pi = 3.141592653589793;
 	const unsigned dimension = Grid.ncol();
 	const unsigned gridNum = Grid.nrow();
@@ -260,10 +311,13 @@ Rcpp::NumericVector Kde(const Rcpp::NumericMatrix& X,
 
 // kernel Dist function on a Grid
 // [[Rcpp::export]]
-Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X,
-		const Rcpp::NumericMatrix& Grid, const double h,
-		const Rcpp::NumericVector& weight, const bool printProgress) {
-
+Rcpp::NumericVector
+KdeDist(const Rcpp::NumericMatrix & X
+      , const Rcpp::NumericMatrix & Grid
+      , const double                h
+      , const Rcpp::NumericVector & weight
+      , const bool printProgress
+	) {
 	const unsigned sampleNum = X.nrow();
 	const unsigned dimension = Grid.ncol();
 	const unsigned gridNum = Grid.nrow();
@@ -319,10 +373,12 @@ Rcpp::NumericVector KdeDist(const Rcpp::NumericMatrix& X,
 
 // distance to measure function on a Grid
 // [[Rcpp::export]]
-Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
-		const Rcpp::NumericMatrix& knnDistance,
-		const Rcpp::NumericVector& weight, const double weightBound) {
-
+Rcpp::NumericVector
+Dtm(const Rcpp::NumericMatrix & knnIndex
+  , const Rcpp::NumericMatrix& knnDistance
+  , const Rcpp::NumericVector& weight
+  , const double weightBound
+	) {
 	const unsigned gridNum = knnIndex.nrow();
 	double distanceTemp, weightTemp, weightSumTemp;
 	Rcpp::NumericVector dtmValue(gridNum, 0.0);
@@ -345,22 +401,20 @@ Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnIndex,
 
 // RipsDiag in GUDHI
 /** \brief Interface for R code, construct the persistence diagram
-* of the Rips complex constructed on the input set of points.
-*
-* @param[out] void            every function called by R must return void
-* @param[in]  point           pointer toward the coordinates of all points. Format
-*                             must be X11 X12 ... X1d X21 X22 ... X2d X31 ...
-* @param[in]  dim             embedding dimension
-* @param[in]  num_points      number of points. The input point * must be a
-*                             pointer toward num_points*dim double exactly.
-* @param[in]  rips_threshold  threshold for the Rips complex
-* @param[in]  max_complex_dim maximal dimension of the Rips complex
-* @param[in]  diagram         where to output the diagram. The format must be dimension birth death.
-* @param[in]  max_num_bars    write the max_num_pairs most persistent pairs of the
-*                             diagram. diagram must point to enough memory space for
-*                             3*max_num_pairs double. If there is not enough pairs in the diagram,
-*                             write nothing after.
-*/
+  * of the Rips complex constructed on the input set of points.
+  *
+  * @param[out] Rcpp::List     A list
+  * @param[in]  X              Either an nxd matrix of coordinates,
+  *                            or an nxn matrix of distances of points
+  * @param[in]  maxdimension   Max dimension of the homological features to be computed.
+  *                            This equals (maximal dimension of the Rips complex) - 1
+  * @param[in]  maxscale       Threshold for the Rips complex
+  * @param[in]  printProgress  Is progress printed?
+  * @param[in]  max_num_bars   Write the max_num_pairs most persistent pairs of the
+  *                            diagram. Diagram must point to enough memory space for
+  *                            3*max_num_pairs double. If there is not enough pairs in the diagram,
+  *                            write nothing after.
+  */
 inline Rcpp::List
 RipsDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory space
             , const int                   maxdimension
@@ -388,7 +442,6 @@ RipsDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory spa
 
 	if (printProgress) {
 		Rprintf("# Generated complex of size: %d \n", st.num_simplices());
-		// std::cout << st.num_simplices() << " simplices \n";
 	}
 
 	// Sort the simplices in the order of the filtration
@@ -410,22 +463,25 @@ RipsDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory spa
 
 // RipsDiag
 /** \brief Interface for R code, construct the persistence diagram
-* of the Rips complex constructed on the input set of points.
-*
-* @param[out] void            every function called by R must return void
-* @param[in]  point           pointer toward the coordinates of all points. Format
-*                             must be X11 X12 ... X1d X21 X22 ... X2d X31 ...
-* @param[in]  dim             embedding dimension
-* @param[in]  num_points      number of points. The input point * must be a
-*                             pointer toward num_points*dim double exactly.
-* @param[in]  rips_threshold  threshold for the Rips complex
-* @param[in]  max_complex_dim maximal dimension of the Rips complex
-* @param[in]  diagram         where to output the diagram. The format must be dimension birth death.
-* @param[in]  max_num_bars    write the max_num_pairs most persistent pairs of the
-*                             diagram. diagram must point to enough memory space for
-*                             3*max_num_pairs double. If there is not enough pairs in the diagram,
-*                             write nothing after.
-*/
+  * of the Rips complex constructed on the input set of points.
+  *
+  * @param[out] Rcpp::List     A list
+  * @param[in]  X              Either an nxd matrix of coordinates,
+  *                            or an nxn matrix of distances of points
+  * @param[in]  maxdimension   Max dimension of the homological features to be computed.
+  *                            This equals (maximal dimension of the Rips complex) - 1
+  * @param[in]  maxscale       Threshold for the Rips complex
+  * @param[in]  dist           "euclidean" for Euclidean distance,
+  *                            "arbitrary" for an arbitrary distance
+  * @param[in]  library        Either "GUDHI", "Dionysus", or "PHAT"
+  * @param[in]  location       Are location of birth point, death point,
+  *                            and representative cycles returned?
+  * @param[in]  printProgress  Is progress printed?
+  * @param[in]  max_num_bars   Write the max_num_pairs most persistent pairs of the
+  *                            diagram. Diagram must point to enough memory space for
+  *                            3*max_num_pairs double. If there is not enough pairs in the diagram,
+  *                            write nothing after.
+  */
 // [[Rcpp::export]]
 Rcpp::List
 RipsDiag(const Rcpp::NumericMatrix & X
@@ -500,23 +556,14 @@ Vertex_list fromVertex(const Alpha_shape_3::Vertex_handle& vh)
 
 
 
-	// GUDHI RIPS
-	/** \brief Interface for R code, construct the persistence diagram
-	  * of the Rips complex constructed on the input set of points.
-	  *
-	  * @param[out] void            every function called by R must return void
-	  * @param[in]  point           pointer toward the coordinates of all points. Format
-	  *                             must be X11 X12 ... X1d X21 X22 ... X2d X31 ...
-	  * @param[in]  dim             embedding dimension
-	  * @param[in]  num_points      number of points. The input point * must be a
-	  *                             pointer toward num_points*dim double exactly.
-	  * @param[in]  max_complex_dim maximal dimension of the Rips complex
-	  * @param[in]  diagram         where to output the diagram. The format must be dimension birth death.
-	  * @param[in]  max_num_bars    write the max_num_pairs most persistent pairs of the
-	  *                             diagram. diagram must point to enough memory space for
-	  *                             3*max_num_pairs double. If there is not enough pairs in the diagram,
-	  *                             write nothing after.
-	  */
+// AlphaDiag in GUDHI
+/** \brief Interface for R code, construct the persistence diagram
+  * of the Rips complex constructed on the input set of points.
+  *
+  * @param[out] Rcpp::List     A list
+  * @param[in]  X              An nx3 matrix of coordinates,
+  * @param[in]  printProgress  Is progress printed?
+  */
 // [[Rcpp::export]]
 Rcpp::List
 AlphaDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory space
@@ -631,6 +678,9 @@ AlphaDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory sp
 	  simplex_tree.set_num_simplices(count_vertices + count_edges + count_facets + count_cells);
 	  simplex_tree.set_dimension(dim_max);
 
+	  if (printProgress) {
+		  Rprintf("# Generated complex of size: %d \n", simplex_tree.num_simplices());
+	  }
 	  /*std::cout << "vertices \t\t" << count_vertices << std::endl;
 	  std::cout << "edges \t\t"    << count_edges << std::endl;
 	  std::cout << "facets \t\t"   << count_facets << std::endl;
