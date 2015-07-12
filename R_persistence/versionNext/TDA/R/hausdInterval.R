@@ -8,27 +8,34 @@ function(X, m, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
      if (!is.logical(parallel)) stop("parallel should be logical")
      if (!is.logical(printProgress)) stop("printProgress should be logical")
 
-     X=as.matrix(X)
-     n = nrow(X)
-     width = rep(0,B)
-     if (parallel) {boostLapply=mclapply
-     	} else boostLapply=lapply
+  X <- as.matrix(X)
+  n <- nrow(X)
+  width <- rep(0,B)
+  if (parallel) {
+    boostLapply <- parallel::mclapply
+  } else {
+    boostLapply <- lapply
+  }
 
+  if (printProgress) {
+    cat("Subsampling: ")
+  }
+  width <- boostLapply(1:B, FUN = function(i) {
+      I <- sample(1:n, replace = FALSE, size = m)
+      Y <- as.matrix(X[I,])
+      LL <- max(FNN::knnx.dist(Y, X, k = 1, algorithm = "kd_tree"))
+      if (printProgress) {
+        cat(i," ")
+      }
+     	return(LL)
+    })
+  if (printProgress) {
+    cat("\n")
+  }
+  width <- unlist(width)
+	width <- 2 * quantile(width, 1 - alpha)
 
-     if (printProgress) cat("Subsampling: ")
-     width=boostLapply(1:B, FUN=function(i){
-          I = sample(1:n,replace=FALSE,size=m)
-          Y = as.matrix(X[I,])
-          LL = max(knnx.dist(Y, X, k=1, algorithm="kd_tree"))
-          if (printProgress) cat(i," ")
-     	  return(LL)
-     	}
-     	)
-     if (printProgress) cat("\n")
-     width=unlist(width)
-	 width = 2*quantile(width,1-alpha)
-     
-     out=width
-          
-     return(out)
+  out <- width
+
+  return(out)
 }

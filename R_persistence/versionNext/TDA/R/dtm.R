@@ -24,7 +24,7 @@ function(X, Grid, m0, weight = 1) {
   if (length(weight) == 1) {
     X <- as.matrix(X) 
     k0 <- ceiling(m0 * NROW(X))
-    distances <- knnx.dist(X, as.matrix(Grid), k = k0,
+    distances <- FNN::knnx.dist(X, as.matrix(Grid), k = k0,
         algorithm = c("kd_tree"))
     return (sqrt(apply(distances^2, 1, sum)/k0))
 
@@ -41,7 +41,7 @@ function(X, Grid, m0, weight = 1) {
         break
       }
     }
-    indexDistance <- get.knnx(X0, as.matrix(Grid), k = k0,
+    indexDistance <- FNN::get.knnx(X0, as.matrix(Grid), k = k0,
         algorithm = c("kd_tree"))
     return (Dtm(knnIndex = indexDistance[["nn.index"]],
         knnDistance = indexDistance[["nn.dist"]], weight = weight0,
