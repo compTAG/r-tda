@@ -1,4 +1,3 @@
-import(FNN, igraph, parallel, scales)
 importFrom(Rcpp, evalCpp)
 
 export( alphaDiag,
