@@ -71,11 +71,11 @@ function(x, diagLim=NULL, dimension=NULL, col=NULL, rotated=FALSE, barcode=FALSE
 
 		Bmax = max(right)
 		Bmin = min(left)
-		plot(c(Bmin,Bmax),c(1,n+1), type="n", xlab="", ylab="", 
-		xlim=c(Bmin,Bmax),ylim=c(0,n+1),
-		xaxt="n", yaxt="n", ...)
-		axis(1)
-		title(xlab="time", line=lab.line)
+    graphics::plot(c(Bmin, Bmax), c(1, n + 1), type = "n", xlab = "",
+        ylab = "", xlim = c(Bmin, Bmax), ylim = c(0, n + 1), xaxt = "n",
+        yaxt = "n", ...)
+    graphics::axis(1)
+    graphics::title(xlab = "time", line = lab.line)
 		
 		lwid=rep(2,n)
 		ltype=rep(1,n)
@@ -88,39 +88,64 @@ function(x, diagLim=NULL, dimension=NULL, col=NULL, rotated=FALSE, barcode=FALSE
 			}
 		}
 		
-		segments(left,1:n,right,1:n, lwd=lwid, lty=ltype, col=col)
+    graphics::segments(left, 1:n, right, 1:n, lwd = lwid, lty = ltype,
+        col = col)
 		
 			
 	} else{  ### diagram plot
 
 		if (rotated==TRUE){
 
-			if (add==FALSE) plot(0, 0,type="n", axes=F, xlim=diagLim, ylim=diagLim, xlab=" ", ylab=" ", ...)
-			if (!is.null(band)) 	polygon(c(0,diagLim[2]+1, diagLim[2]+1,0),c(0,0,band,band),col=colorBand, lwd=1.5, border=colorBorder)
+      if (add == FALSE) {
+        graphics::plot(0, 0,type = "n", axes = FALSE, xlim = diagLim,
+            ylim = diagLim, xlab = " ", ylab = " ", ...)
+      }
+      if (!is.null(band)) {
+        graphics::polygon(c(0, diagLim[2] + 1, diagLim[2] + 1, 0),
+            c(0, 0, band, band), col = colorBand, lwd = 1.5,
+            border = colorBorder)
+      }
 
-			points((x[,2]+x[,3])/2, (x[,3]-x[,2])/2 ,col=col,pch=symb,lwd=2,cex=1)
+      graphics::points((x[, 2] + x[, 3]) / 2, (x[, 3]-x[, 2]) / 2, col = col,
+          pch = symb, lwd = 2, cex = 1)
 		} else{
 
-			if (add==FALSE) plot(0, 0,type="n", axes=F, xlim=diagLim, ylim=diagLim, xlab=" ", ylab=" ", ...)
-			if (!is.null(band)) 	polygon(c(diagLim[1]-1,diagLim[2]+1,diagLim[2]+1,diagLim[1]-1),c(diagLim[1]-1,diagLim[2]+1, diagLim[2]+1+band,diagLim[1]-1+band),col=colorBand, lwd=1.5, border=colorBorder)
+      if (add == FALSE) {
+        graphics::plot(0, 0, type = "n", axes = FALSE, xlim = diagLim,
+            ylim = diagLim, xlab = " ", ylab = " ", ...)
+      }
+      if (!is.null(band)) {
+        graphics::polygon(
+            c(diagLim[1] - 1, diagLim[2] + 1, diagLim[2] + 1, diagLim[1] - 1),
+            c(diagLim[1] - 1,diagLim[2] + 1, diagLim[2] + 1 + band,
+                diagLim[1] - 1 + band),
+            col = colorBand, lwd = 1.5, border = colorBorder)
+      }
 
-
-			points(x[,2],x[,3],pch=symb,lwd=2, cex=1, col=col)
-			abline(0,1)
+      graphics::points(x[, 2], x[, 3], pch = symb, lwd = 2, cex = 1, col = col)
+      graphics::abline(0, 1)
 		}
 		
 		if (add==FALSE){
-			axis(1)
-			axis(2)
+      graphics::axis(1)
+      graphics::axis(2)
 			if (sublevel) {
-				if (!rotated){
-					title(main="", xlab="Birth", ylab="Death", line=lab.line)
-				}else title(main="", ylab="(Death-Birth)/2", xlab="(Death+Birth)/2",line=lab.line)
+        if (!rotated) {
+          graphics::title(main = "", xlab = "Birth", ylab = "Death",
+              line = lab.line)
+        } else {
+          graphics::title(main = "", ylab = "(Death-Birth)/2",
+              xlab = "(Death+Birth)/2", line = lab.line)
+        }
 			} 
 			if (!sublevel) {
-				if (!rotated){
-					title(main="", xlab="Death", ylab="Birth", line=lab.line)
-				}else title(main="", ylab="(Birth-Death)/2", xlab="(Death+Birth)/2", line=lab.line)
+        if (!rotated) {
+          graphics::title(main = "", xlab = "Death", ylab = "Birth",
+              line = lab.line)
+        } else {
+          graphics::title(main = "", ylab = "(Birth-Death)/2",
+              xlab = "(Death+Birth)/2", line = lab.line)
+        }
 			} 
 		}
 	}

@@ -158,7 +158,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
   if (printProgress) {
     cat("\n")
   }
-  width <- quantile(unlist(width), 1 - alpha)
+  width <- stats::quantile(unlist(width), 1 - alpha)
 
   return (width)
 }

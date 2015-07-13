@@ -8,13 +8,13 @@ function(n,a,c){
 	n=floor(n)
 	theta=NULL
 	while (length(theta)<n){
-		xvec=runif(1,0,2*pi)
-		yvec=runif(1,0,1/pi)
+    xvec <- stats::runif(1, 0, 2 * pi)
+    yvec <- stats::runif(1, 0, 1 / pi)
 		fx=(1+(a/c)*cos(xvec))/(2*pi)
 		if (yvec<fx) theta=c(theta, xvec)
 	}
 
-	phi=runif(n,0,2*pi)
+  phi <- stats::runif(n, 0, 2 * pi)
 	x=(c+a*cos(theta))*cos(phi)
 	y=(c+a*cos(theta))*sin(phi)
 	z=a*sin(theta)

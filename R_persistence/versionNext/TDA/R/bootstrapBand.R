@@ -70,7 +70,7 @@ function(X, FUN, Grid, B = 30, alpha = 0.05, parallel = FALSE,
   if (printProgress) {
     cat("\n")
   }
-  width <- quantile(unlist(width), 1 - alpha)
+  width <- stats::quantile(unlist(width), 1 - alpha)
      
   UPband <- ff + width
   LOWband <- ff - width

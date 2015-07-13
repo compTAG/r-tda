@@ -33,13 +33,14 @@ function(x, type="lambda",color=NULL, add=FALSE, ...){
 	Ylim=c(min(bottom[which(!is.na(bottom))]), max(top[which(!is.na(top))]))
 	
 	if (!add){
-		plot(c(0,0),c(Ylim[1],Ylim[2]), type="n", xlim=c(0,1), ylab=type, xlab="", axes=F, ...)
-		axis(1)
-		axis(2, at=AT, labels=labels)
+    graphics::plot(c(0, 0), c(Ylim[1], Ylim[2]), type = "n", xlim = c(0, 1),
+        ylab = type, xlab = "", axes = FALSE, ...)
+    graphics::axis(1)
+    graphics::axis(2, at = AT, labels = labels)
 	}
 	#vertical lines
 	if (is.null(color)) color=id
-	segments(base,bottom,base,top, col=color, lwd=3)
+  graphics::segments(base, bottom, base, top, col = color, lwd = 3)
 
 	## now the horizontal lines
 	if (length(sons)>0){	
@@ -47,7 +48,8 @@ function(x, type="lambda",color=NULL, add=FALSE, ...){
 			if (!is.null(sons[[i]]) && length(sons[[i]]>0) && !is.na(sons[[i]])){
 				x=c(min(base[sons[[i]]]) , max(base[sons[[i]]]) )
 				y=bottom[sons[[i]][1]]
-				segments(x[1],y,x[2],y, lwd=3, col=ifelse(is.null(color),1,color))
+        graphics::segments(x[1], y, x[2], y, lwd = 3,
+            col = ifelse(is.null(color), 1, color))
 			}	
 		}
 	}
