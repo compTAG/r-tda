@@ -6,8 +6,8 @@ Date: 2014-12-22
 Author: Brittany T. Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria, Vincent Rouvreau
 Maintainer: Jisu Kim <jisuk1@andrew.cmu.edu>
 Description: This package provides tools for the statistical analysis of persistent homology and for density clustering.
-Depends: R (>= 3.1.0), FNN, igraph, parallel, scales
+Depends: R (>= 3.1.0)
 Repository: CRAN
 License: GPL-3
-Imports: Rcpp (>= 0.11.0)
+Imports: FNN, igraph, parallel, scales, Rcpp (>= 0.11.0)
 LinkingTo: Rcpp
