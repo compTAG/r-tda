@@ -22,7 +22,7 @@ function(Y, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
     if (printProgress) cat("Bootstrap: ")
 	
 	width=boostLapply(1:B, FUN=function(i){ 
-			xi=rnorm(n)
+      xi <- stats::rnorm(n)
 			BootLand=xi* (Y- matrix(MeanLand, nrow=n, ncol=Nseq, byrow=T))
 			Gstar=max(abs( apply(BootLand, 2, sum)/sqrt(n)  )) 
 	        if (printProgress) cat(i," ")
@@ -31,7 +31,7 @@ function(Y, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
 	
     if (printProgress) cat("\n")
 	width=unlist(width)
-	width = quantile(width,1-alpha) /sqrt(n)
+  width <- stats::quantile(width, 1 - alpha) / sqrt(n)
 	
 	UPband1=MeanLand+width
 	LOWband1=MeanLand-width

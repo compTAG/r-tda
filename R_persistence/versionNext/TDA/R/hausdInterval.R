@@ -33,7 +33,7 @@ function(X, m, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
     cat("\n")
   }
   width <- unlist(width)
-	width <- 2 * quantile(width, 1 - alpha)
+	width <- 2 * stats::quantile(width, 1 - alpha)
 
   out <- width
 
