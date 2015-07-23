@@ -17,14 +17,10 @@ function(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
     }
   }
   if (!is.null(lim) && !is.null(by)) {
-    tryCatch(lim <- as.double(lim), error = function(e) {
-        stop("lim should be numeric")})
-    if (length(lim) %% 2 != 0) {
-      stop("lim should be either a matrix or a vector of even length")
+    if (!is.numeric(lim) || length(lim) %% 2 != 0) {
+      stop("lim should be either a numeric matrix or a numeric vector of even length")
     }
-    tryCatch(by <- as.double(by), error = function(e) {
-        stop("by should be numeric")})
-    if (min(by) <= 0) {
+    if (!is.numeric(by) || any(by <= 0)) {
       stop("by should be positive")
     }
   }
@@ -37,12 +33,12 @@ function(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
     }
   }
   if (!is.null(FUNvalues)) {
-    tryCatch(FUNvalues <- as.array(FUNvalues), error = function(e) {
-        stop("FUNvalues should be an array")})
+    if (!is.numeric(FUNvalues) && !is.data.frame(FUNvalues)) {
+      stop("FUNvalues should be an array")
+    }
   }
-  tryCatch(maxdimension <- as.double(maxdimension), error = function(e) {
-      stop("maxdimension should be numeric")})
-  if (length(maxdimension) != 1 || maxdimension < 0) {
+  if (!is.numeric(maxdimension) || length(maxdimension) != 1 ||
+      maxdimension < 0) {
     stop("maxdimnsion should be a nonnegative integer")
   }
   if (!is.logical(sublevel)) {
@@ -63,7 +59,7 @@ function(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
   if (!is.logical(printProgress)) {
     stop("printProgress should be logical")
   }
-  if ((!is.vector(diagLimit) || length(diagLimit) != 1) &&
+  if ((!is.numeric(diagLimit) || length(diagLimit) != 1) &&
       !is.null(diagLimit)) {
     stop("diagLimit should be a positive number")
   }
@@ -75,6 +71,11 @@ function(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
     FUNvalues <- FUN(X, Grid[["grid"]], ...)
     gridDim <- Grid[["dim"]]    
   } else {
+    if (is.data.frame(FUNvalues)) {
+      FUNvalues <- as.matrix(FUNvalues)
+    } else {
+      FUNvalues <- as.array(FUNvalues)
+    }
     gridDim <- dim(FUNvalues)
   }
 

@@ -1,13 +1,27 @@
 clusterTree <-
 function(X, k, h=NULL, density="knn", dist="euclidean", d=NULL, Nlambda=100, printProgress=FALSE){
 	
-	if (!is.numeric(X) && !is.data.frame(X)) stop("X should be an n by d matrix of coordinates")
-	if (!is.vector(k) || length(k)!=1) stop("k should be an number")
-	if (!is.null(h) && (!is.vector(h) || length(h)!=1)) stop("h should be a real value")
-	if (!is.null(Nlambda) && (!is.vector(Nlambda) || length(Nlambda)!=1)) stop("Nlambda should be a number")
-	if (!is.logical(printProgress)) stop("printProgress should be logical")
-	if (density=="kde" && dist!="euclidean") stop("kde is only possible with dist='euclidean' ")
-	if (!is.null(d) && (!is.vector(d) || length(d)!=1)) stop("d should be a number")
+  if (!is.numeric(X) && !is.data.frame(X)) {
+    stop("X should be an n by d matrix of coordinates")
+  }
+  if (!is.numeric(k) || length(k) != 1 || k < 1) {
+    stop("k should be a positive integer")
+  }
+  if (!is.null(h) && (!is.numeric(h) || length(h) != 1)) {
+    stop("h should be a real value")
+  }
+  if (!is.null(Nlambda) && (!is.numeric(Nlambda) || length(Nlambda) != 1)) {
+    stop("Nlambda should be a number")
+  }
+  if (!is.logical(printProgress)) {
+    stop("printProgress should be logical")
+  }
+  if (density == "kde" && dist != "euclidean") {
+    stop("kde is only possible with dist = 'euclidean' ")
+  }
+  if (!is.null(d) && (!is.numeric(d) || length(d) != 1)) {
+    stop("d should be a number")
+  }
 				
 	if (dist=="euclidean"){ 
 		n=dim(X)[1]

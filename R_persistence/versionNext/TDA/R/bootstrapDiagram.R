@@ -10,14 +10,10 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
   if (class(FUN) != "function") {
     stop("FUN should be function")
   }
-  tryCatch(lim <- as.double(lim), error = function(e) {
-      stop("lim should be numeric")})
-  if (length(lim) %% 2 != 0) {
-    stop("lim should be either a matrix or a vector of even elements")
+  if (!is.numeric(lim) || length(lim) %% 2 != 0) {
+    stop("lim should be either a numeric matrix or a numeric vector of even elements")
   }
-  tryCatch(by <- as.double(by), error = function(e) {
-      stop("by should be numeric")})
-  if (min(by) <= 0) {
+  if (!is.numeric(by) || any(by <= 0)) {
     stop("by should be positive")
   }
   if (2 * NCOL(X) != length(lim)) {
@@ -26,9 +22,8 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
   if (length(by) != 1 && length(by) != NCOL(X)) {
     stop("by should be either a number or a vector of length equals dimension of grid")
   }
-  tryCatch(maxdimension <- as.double(maxdimension), error = function(e) {
-      stop("maxdimension should be numeric")})
-  if (length(maxdimension) != 1 || maxdimension < 0) {
+  if (!is.numeric(maxdimension) ||
+      length(maxdimension) != 1 || maxdimension < 0) {
     stop("maxdimnsion should be a nonnegative integer")
   }
   if (!is.logical(sublevel)) {
@@ -43,35 +38,30 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
   if (library != "Dionysus" && library != "PHAT") {
     stop("library should be a string: either 'Dionysus' or 'PHAT'")
   }
-  tryCatch(B <- as.double(B), error = function(e) {
-      stop("B should be numeric")})
-  if (length(B) != 1 || B < 1) {
+  if (!is.numeric(B) || length(B) != 1 || B < 1) {
     stop("B should be a positive integer")
   }
-  tryCatch(alpha <- as.double(alpha), error = function(e) {
-      stop("alpha should be numeric")})
-  if (alpha < 0 || alpha > 1) {
+  if (!is.numeric(alpha) || length(alpha) != 1 || alpha < 0 || alpha > 1) {
     stop("alpha should be a number between 0 and 1")
   }
   if (distance != "wasserstein" && distance != "bottleneck") {
     stop("distance should be a string: either 'bottleneck' or 'wasserstein'")
   }
-  tryCatch(dimension <- as.double(dimension), error = function(e) {
-      stop("dimension should be numeric")})
-  if (min(dimension) < 0 || max(dimension) > maxdimension) {
+  if (!is.numeric(dimension) ||
+      any(dimension < 0 || dimension > maxdimension)) {
     stop("dimension should be a integer or a vector of integer, with the range between 0 and maxdimension")
   }
-  tryCatch(p <- as.double(p), error = function(e) {
-      stop("p should be numeric")})
-  if (length(p) != 1 || p < 1) {
+  if (!is.numeric(p) || length(p) != 1 || p < 1) {
     stop("p should be a positive integer")
   }
-     # if (!is.logical(parallel)) stop("parallel should be logical")
+  if (!is.logical(parallel)) {
+    stop("parallel should be logical")
+  }
   if (!is.logical(printProgress)) {
     stop("printProgress should be logical")
   }
-  if (((length(weight) != 1 && length(weight) != NROW(X)) ||
-      !is.numeric(weight)) && !is.null(weight)) {
+  if (!is.null(weight) && (!is.numeric(weight) ||
+      (length(weight) != 1 && length(weight) != NROW(X)))) {
     stop("weight should be either NULL, a number, or a vector of length equals the number of sample")
   }
 
