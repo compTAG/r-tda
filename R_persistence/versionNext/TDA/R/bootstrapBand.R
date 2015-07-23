@@ -11,14 +11,10 @@ function(X, FUN, Grid, B = 30, alpha = 0.05, parallel = FALSE,
   if (!is.numeric(Grid) && !is.data.frame(Grid)) {
     stop("Grid should be a matrix of coordinates")
   }
-  tryCatch(B <- as.double(B), error = function(e) {
-      stop("B should be numeric")})
-  if (length(B) != 1 || B < 1) {
+  if (!is.numeric(B) || length(B) != 1 || B < 1) {
     stop("B should be a positive integer")
   }
-  tryCatch(alpha <- as.double(alpha), error = function(e) {
-      stop("alpha should be numeric")})
-  if (alpha < 0 || alpha > 1) {
+  if (!is.numeric(alpha) || length(alpha) != 1 || alpha < 0 || alpha > 1) {
     stop("alpha should be a number between 0 and 1")
   }
   if (!is.logical(parallel)) {
@@ -27,8 +23,8 @@ function(X, FUN, Grid, B = 30, alpha = 0.05, parallel = FALSE,
   if (!is.logical(printProgress)) {
     stop("printProgress should be logical")
   }
-  if (((length(weight) != 1 && length(weight) != NROW(X)) ||
-      !is.numeric(weight)) && !is.null(weight)) {
+  if (!is.null(weight) && (!is.numeric(weight) ||
+      (length(weight) != 1 && length(weight) != NROW(X)))) {
     stop("weight should be either NULL, a number, or a vector of length equals the number of sample")
   }
 

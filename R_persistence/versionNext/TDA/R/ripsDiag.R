@@ -5,14 +5,11 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
   }
-  tryCatch(maxdimension <- as.double(maxdimension), error = function(e) {
-      stop("maxdimension should be numeric")})
-  if (length(maxdimension) != 1 || maxdimension < 0) {
+  if (!is.numeric(maxdimension) ||
+      length(maxdimension) != 1 || maxdimension < 0) {
     stop("maxdimnsion should be a nonnegative integer")
   }
-  tryCatch(maxscale <- as.double(maxscale), error = function(e) {
-      stop("maxscale should be numeric")})
-  if (length(maxscale) != 1) {
+  if (!is.numeric(maxscale) || length(maxscale) != 1) {
     stop("maxscale should be a number")
   }
   if (dist != "euclidean" && dist != "arbitrary") {

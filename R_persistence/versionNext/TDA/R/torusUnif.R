@@ -1,9 +1,15 @@
 torusUnif<-
 function(n,a,c){
 
-	if (!is.vector(n) || length(n)!=1 || !is.numeric(n)) stop("n should be a integer")	
-	if (!is.vector(a) || length(a)!=1) stop("a should be a number")	
-	if (!is.vector(c) || length(c)!=1) stop("c should be a number")	
+  if (!is.numeric(n) || length(n) != 1 || n < 0) {
+    stop("n should be a nonnegative integer")
+  }
+  if (!is.numeric(a) || length(a) != 1 || a < 0) {
+    stop("a should be a nonnegative number")
+  }
+  if (!is.numeric(c) || length(c) != 1 || c < 0) {
+    stop("c should be a nonnegative number")
+  }
 
 	n=floor(n)
 	theta=NULL

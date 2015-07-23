@@ -10,13 +10,11 @@ function(X, Grid, m0, weight = 1) {
   if (NCOL(X) != NCOL(Grid)) {
     stop("dimensions of X and Grid do not match")
   }
-  tryCatch(m0 <- as.double(m0), error = function(e) {
-      stop("m0 should be numeric")})
-  if (length(m0) != 1 || m0 < 0 || m0 > 1) {
+  if (!is.numeric(m0) || length(m0) != 1 || m0 < 0 || m0 > 1) {
     stop("m0 should be a number between 0 and 1")
   }
-  if ((length(weight) != 1 && length(weight) != NROW(X)) ||
-      !is.numeric(weight)) {
+  if (!is.numeric(weight) || 
+      (length(weight) != 1 && length(weight) != NROW(X))) {
     stop("weight should be either a number or a vector of length equals the number of sample")
   }
 

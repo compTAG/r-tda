@@ -1,14 +1,29 @@
 plot.diagram <-
 function(x, diagLim=NULL, dimension=NULL, col=NULL, rotated=FALSE, barcode=FALSE, band=NULL, lab.line=2.2, colorBand="pink", colorBorder=NA, add=FALSE,...){
 
-    if (class(x)!="diagram" && class(x)!="matrix" && !is.data.frame(x) )  
-    	stop("x should be a diagram, or a P by 3 matrix")
-	if (!is.null(diagLim) && (!is.vector(diagLim) || length(diagLim)!=2) ) stop("diagLim should be a vector of length 2")
-	if (!is.null(dimension) && (!is.vector(dimension) || length(dimension)!=1) ) stop("dimension should be an integer")
-     if (!is.logical(rotated)) stop("rotated should be logical")
-     if (!is.logical(barcode)) stop("barcode should be logical")
-	if (!is.null(band) && (!is.vector(band) || length(band)!=1) ) stop("band should be a  number")
-     if (!is.logical(add)) stop("add should be logical")
+  if ((class(x) != "diagram" && class(x) != "matrix" && !is.data.frame(x)) ||
+      NCOL(x) != 3) {
+    stop("x should be a diagram, or a P by 3 matrix")
+  }
+  if (!is.null(diagLim) && (!is.numeric(diagLim) || length(diagLim) != 2)) {
+    stop("diagLim should be a vector of length 2")
+  }
+  if (!is.null(dimension) && (!is.numeric(dimension) ||
+      length(dimension) != 1 || any(dimension < 0))) {
+    stop("dimension should be a nonnegative integer")
+  }
+  if (!is.logical(rotated)) {
+    stop("rotated should be logical")
+  }
+  if (!is.logical(barcode)) {
+    stop("barcode should be logical")
+  }
+  if (!is.null(band) && (!is.numeric(band) || length(band) != 1)) {
+    stop("band should be a number")
+  }
+  if (!is.logical(add)) {
+    stop("add should be logical")
+  }
 
 	################################################
 	if (is.null(diagLim) && class(x)=="diagram"){

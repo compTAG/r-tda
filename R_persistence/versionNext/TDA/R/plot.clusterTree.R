@@ -1,8 +1,12 @@
 plot.clusterTree <-
 function(x, type="lambda",color=NULL, add=FALSE, ...){
 	
-	if (class(x)!="clusterTree") stop("Tree should be an object of class clusterTree")
-     if (!is.logical(add)) stop("add should be logical")
+  if (class(x) != "clusterTree") {
+    stop("x should be an object of class clusterTree")
+  }
+  if (!is.logical(add)) {
+    stop("add should be logical")
+  }
 	
 	id=x$id
 	base=x$Xbase
