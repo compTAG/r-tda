@@ -25,7 +25,7 @@ dtm(X, Grid, m0, weight = 1)
 }
 \arguments{
   \item{X}{
-	an \eqn{n} by \eqn{d} matrix of coordinates of points used to construct the uniform empirical measure for the distance to measure, where \eqn{n} is the number of points and \eqn{d} is the dimension.
+  an \eqn{n} by \eqn{d} matrix of coordinates of points used to construct the uniform empirical measure for the distance to measure, where \eqn{n} is the number of points and \eqn{d} is the dimension.
 }
   \item{Grid}{
 an \eqn{m} by \eqn{d} matrix of coordinates, where \eqn{m} is the number of points in \code{Grid}.
@@ -46,7 +46,7 @@ See Definition 3.2 of the reference for a formal definition of the "distance to 
 \references{
 Frederic Chazal, David Cohen-Steiner, and Quentin Merigot. "Geometric inference for probability measures." Foundations of Computational Mathematics 11.6 (2011): 733-751.
 
-Chazal F, Fasy BT, Lecci F, Michel B, Rinaldo A, Wasserman L (2014). "Robust Topological Inference: Distance-To-a-Measure and Kernel Distance." Technical Report.	
+Chazal F, Fasy BT, Lecci F, Michel B, Rinaldo A, Wasserman L (2014). "Robust Topological Inference: Distance-To-a-Measure and Kernel Distance." Technical Report. 
 }
 \author{
 Jisu Kim, Fabrizio Lecci
@@ -56,18 +56,18 @@ Jisu Kim, Fabrizio Lecci
 }
 \examples{
 ## Generate Data from the unit circle
-n = 300
-X = circleUnif(n)
+n <- 300
+X <- circleUnif(n)
 
 ## Construct a grid of points over which we evaluate the function
-by=0.065
-Xseq=seq(-1.6, 1.6, by=by)
-Yseq=seq(-1.7, 1.7, by=by)
-Grid=expand.grid(Xseq,Yseq)
+by <- 0.065
+Xseq <- seq(-1.6, 1.6, by = by)
+Yseq <- seq(-1.7, 1.7, by = by)
+Grid <- expand.grid(Xseq, Yseq)
 
 ## distance to measure
-m0=0.1
-DTM=dtm(X, Grid, m0)
+m0 <- 0.1
+DTM <- dtm(X, Grid, m0)
 }
 \keyword{nonparametric}
 
