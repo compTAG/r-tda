@@ -1,14 +1,18 @@
 wasserstein <-
-function(Diag1, Diag2, p = 1, dimension = 1){
+function(Diag1, Diag2, p = 1, dimension = 1) {
 
-  if (class(Diag1) != "diagram" && class(Diag1) != "matrix" && !is.data.frame(Diag1))
+  if (class(Diag1) != "diagram" && class(Diag1) != "matrix" && !is.data.frame(Diag1)) {
     stop("Diag1 should be a diagram or a matrix")
-  if (class(Diag2) != "diagram" && class(Diag2) != "matrix" && !is.data.frame(Diag1))
+  }
+  if (class(Diag2) != "diagram" && class(Diag2) != "matrix" && !is.data.frame(Diag1)) {
     stop("Diag2 should be a diagram or a matrix")
-  if (!is.vector(p) || length(p) != 1 || p < 1)
+  }
+  if (!is.vector(p) || length(p) != 1 || p < 1) {
     stop("p should be a positive integer")
-  if (!is.vector(dimension) || !all(dimension >= 0))
+  }
+  if (!is.vector(dimension) || !all(dimension >= 0)) {
     stop("dimension should be a nonnegative integer or a vector of nonnegative integer")
+  }
 
   wassersteinDistance <- rep(0, length(dimension))
   for (dimIdx in seq(along = dimension)) {

@@ -11,9 +11,9 @@ function(X, Grid){
     stop("dimension of X does not match with dimension of Grid")
   }
 		
-	X=as.matrix(X) 
-	Grid=as.matrix(Grid)
+  X <- as.matrix(X) 
+  Grid <- as.matrix(Grid)
   distances <- FNN::knnx.dist(X, Grid, k = 1, algorithm = c("kd_tree"))	
-	dOut=as.vector(distances)
+  dOut <- as.vector(distances)
 	return(dOut)
 }

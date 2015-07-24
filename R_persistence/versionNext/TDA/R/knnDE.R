@@ -11,10 +11,10 @@ function(X, Grid, k){
     stop("k should be a positive integer")
   }
 
-	d=ncol(X)
-	n=nrow(X)
+	d <- ncol(X)
+	n <- nrow(X)
   r.k <- apply(FNN::knnx.dist(X, Grid, k = k, algorithm = "kd_tree"), 1, max)
-	v.d=pi^(d/2) /gamma(d/2+1)
-	out=k/(n*v.d*r.k^d)	
+	v.d <- pi^(d/2) /gamma(d/2+1)
+	out <- k / (n * v.d * r.k ^ d)	
 	return(out)
 }

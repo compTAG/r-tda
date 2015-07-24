@@ -1,4 +1,4 @@
 print.maxPersistence <-
-function(x, ...){
+function(x, ...) {
 	print(x)	
 }

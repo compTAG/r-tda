@@ -1,5 +1,5 @@
 clusterTree <-
-function(X, k, h=NULL, density="knn", dist="euclidean", d=NULL, Nlambda=100, printProgress=FALSE){
+function(X, k, h = NULL, density = "knn", dist = "euclidean", d = NULL, Nlambda = 100, printProgress = FALSE) {
 	
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be an n by d matrix of coordinates")
@@ -10,58 +10,64 @@ function(X, k, h=NULL, density="knn", dist="euclidean", d=NULL, Nlambda=100, pri
   if (!is.null(h) && (!is.numeric(h) || length(h) != 1)) {
     stop("h should be a real value")
   }
+  if (density != "knn" && density != "kde") {
+    stop("density should be a string: either 'knn' or 'kde'")
+  }
+  if (dist != "euclidean" && dist != "arbitrary") {
+    stop("dist should be a string: either 'euclidean' or 'arbitrary'")
+  }
+  if (density == "kde" && dist != "euclidean") {
+    stop("kde is only possible with dist = 'euclidean'")
+  }
   if (!is.null(Nlambda) && (!is.numeric(Nlambda) || length(Nlambda) != 1)) {
     stop("Nlambda should be a number")
   }
   if (!is.logical(printProgress)) {
     stop("printProgress should be logical")
   }
-  if (density == "kde" && dist != "euclidean") {
-    stop("kde is only possible with dist = 'euclidean' ")
-  }
   if (!is.null(d) && (!is.numeric(d) || length(d) != 1)) {
     stop("d should be a number")
   }
 				
-	if (dist=="euclidean"){ 
-		n=dim(X)[1]
-		d=dim(X)[2]
-	} else if (dist=="arbitrary") { 
-		n=dim(X)[1]
-		if (is.null(d)) d=1
-		distMat=X
-	} else {
-		stop("Wrong dist")
-	}
+  if (dist == "euclidean") { 
+    n <- dim(X)[1]
+    d <- dim(X)[2]
+  } else if (dist == "arbitrary") { 
+    n <- dim(X)[1]
+    if (is.null(d)) {
+      d <- 1
+    }
+    distMat <- X
+  }
 	
 	
 	## start adjacency matrix
-	adjMat=diag(n)
+  adjMat <- diag(n)
 	
 	## Compute density estimator: knn or kde
-	if (density=="knn" && dist=="euclidean"){
+  if (density == "knn" && dist == "euclidean") {
     knnInfo <- FNN::get.knn(X, k = k, algorithm = "kd_tree")
-		for(i in 1:n){
-			adjMat[i, knnInfo$nn.index[i,] ]=1
-		}
-		r.k= apply(knnInfo$nn.dist, 1, max)		
-		v.d=pi^(d/2) /gamma(d/2+1)
-		hat.f=k/(n*v.d*r.k^d)	
-	} else if (density=="knn" && dist=="arbitrary"){
-		orderMat=apply(distMat,2,order)[2:(k+1),]
-		for(i in 1:n){
-			adjMat[i,orderMat[,i]]=1		
-		}		
-		r.k=apply( apply(X,2,sort)[2:(k+1),], 2, max)
-		v.d=pi^(d/2) /gamma(d/2+1)		
-		hat.f=k/(n*v.d*r.k^d)	
-	} else if (density=="kde"){	#kde estimate
-		knnInfo <- FNN::get.knn(X, k = k, algorithm = "kd_tree")
-		for(i in 1:n){
-			adjMat[i, knnInfo$nn.index[i,] ]=1
-		}
-		hat.f=kde(X,X,h)	
-	} else stop("Wrong density")
+    for(i in 1:n) {
+      adjMat[i, knnInfo[["nn.index"]][i, ]] <- 1
+    }
+    r.k <-  apply(knnInfo[["nn.dist"]], 1, max)		
+    v.d <- pi ^ (d / 2) / gamma(d / 2 + 1)
+    hat.f <- k / (n * v.d * r.k ^ d)	
+  } else if (density == "knn" && dist == "arbitrary") {
+    orderMat <- apply(distMat, 2, order)[2:(k+1), ]
+		for(i in 1:n) {
+      adjMat[i, orderMat[, i]] <- 1		
+    }
+    r.k <- apply(apply(X, 2, sort)[2:(k+1), ], 2, max)
+    v.d <- pi ^ (d / 2) / gamma(d / 2 + 1)
+    hat.f <- k / (n * v.d * r.k ^ d)	
+  } else if (density == "kde") {  #kde estimate
+    knnInfo <- FNN::get.knn(X, k = k, algorithm = "kd_tree")
+    for(i in 1:n) {
+      adjMat[i, knnInfo[["nn.index"]][i, ]] <- 1
+    }
+    hat.f <- kde(X, X, h)	
+  }
 	
 	# ordered value of the density
 	ord.hat.f=order(hat.f)
