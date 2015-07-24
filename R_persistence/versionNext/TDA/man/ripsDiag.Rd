@@ -3,11 +3,11 @@
 \alias{ripsDiag}
 
 \title{
-Rips Persistence Diagram
+  Rips Persistence Diagram
 }
 
 \description{
-This function computes the persistence diagram of the Rips filtration built on top of a point cloud.
+  This function computes the persistence diagram of the Rips filtration built on top of a point cloud.
 }
 
 \usage{
@@ -34,7 +34,7 @@ ripsDiag(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   }
 
   \item{library}{
-	  If \code{dist = 'euclidean'}, the user can compute the Rips persistence diagram using either the library 'GUDHI', 'Dionysus', or 'PHAT'. If \code{dist = 'arbitrary'}, the user can compute the Rips persistence diagram using either the library 'Dionysus' or 'PHAT'. Default is 'GUDHI' if \code{dist = 'euclidean'}, and 'Dionysus' if \code{dist == 'arbitrary'}. When 'GUDHI' is used for \code{dist = 'arbitrary'}, 'Dionysus' is implicitly used.
+    If \code{dist = 'euclidean'}, the user can compute the Rips persistence diagram using either the library 'GUDHI', 'Dionysus', or 'PHAT'. If \code{dist = 'arbitrary'}, the user can compute the Rips persistence diagram using either the library 'Dionysus' or 'PHAT'. Default is 'GUDHI' if \code{dist = 'euclidean'}, and 'Dionysus' if \code{dist == 'arbitrary'}. When 'GUDHI' is used for \code{dist = 'arbitrary'}, 'Dionysus' is implicitly used.
   }
 
   \item{location}{
@@ -73,13 +73,13 @@ ripsDiag(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
 }
 
 \references{
-Jean-Daniel Boissonnat, Marc Glisse, Clement Maria, Vincent Rouvreau, "GUDHI, Simplicial Complexes and Persistent Homology Packages". https://project.inria.fr/gudhi/software/.
+  Jean-Daniel Boissonnat, Marc Glisse, Clement Maria, Vincent Rouvreau, "GUDHI, Simplicial Complexes and Persistent Homology Packages". https://project.inria.fr/gudhi/software/.
 
-Dmitriy Morozov, "Dionysus, a C++ library for computing persistent homology". http://www.mrzv.org/software/dionysus/
+  Dmitriy Morozov, "Dionysus, a C++ library for computing persistent homology". http://www.mrzv.org/software/dionysus/
 
-Herbert Edelsbrunner and John Harer (2010), Computational topology: an introduction. American Mathematical Society.
+  Herbert Edelsbrunner and John Harer (2010), Computational topology: an introduction. American Mathematical Society.
 
-Brittany Fasy, Fabrizio Lecci, Alessandro Rinaldo, Larry Wasserman, Sivaraman Balakrishnan, and Aarti Singh. (2013), "Statistical Inference For Persistent Homology", (arXiv:1303.7117). To appear, Annals of Statistics.
+  Brittany Fasy, Fabrizio Lecci, Alessandro Rinaldo, Larry Wasserman, Sivaraman Balakrishnan, and Aarti Singh. (2013), "Statistical Inference For Persistent Homology", (arXiv:1303.7117). To appear, Annals of Statistics.
 }
 
 \author{
@@ -111,4 +111,3 @@ DiagTri <- ripsDiag(distX, maxdimension, maxscale, dist = "arbitrary",
 print(DiagTri[["diagram"]])
 }
 \keyword{methods}
-

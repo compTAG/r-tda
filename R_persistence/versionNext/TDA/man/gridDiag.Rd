@@ -3,11 +3,11 @@
 \alias{gridDiag}
 
 \title{
-Persistence Diagram of a function over a Grid
+  Persistence Diagram of a function over a Grid
 }
 
 \description{
-\code{gridDiag} computes the Persistence Diagram of a filtration of sublevel sets (or superlevel sets) of a function evaluated over a grid of points in arbitrary dimension \code{d}.
+  \code{gridDiag} computes the Persistence Diagram of a filtration of sublevel sets (or superlevel sets) of a function evaluated over a grid of points in arbitrary dimension \code{d}.
 }
 
 \usage{
@@ -55,15 +55,15 @@ gridDiag(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
   }
 
   \item{printProgress}{
-	  if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
+    if \code{TRUE} a progress bar is printed. Default is \code{FALSE}.
   }
 
   \item{diagLimit}{
-	  a number that replaces \code{Inf} (if \code{sublevel} is \code{TRUE}) or \code{-Inf} (if \code{sublevel} is \code{FALSE}) in the Death value of the most persistent connected component. Deafult is \code{NULL} and the max/min of the function is used.
+    a number that replaces \code{Inf} (if \code{sublevel} is \code{TRUE}) or \code{-Inf} (if \code{sublevel} is \code{FALSE}) in the Death value of the most persistent connected component. Deafult is \code{NULL} and the max/min of the function is used.
   }
 
   \item{...}{
-	additional parameters for the function \code{FUN}.
+    additional parameters for the function \code{FUN}.
   }
 }
 
@@ -116,37 +116,39 @@ gridDiag(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
 ## Distance Function Diagram and Kernel Density Diagram
 
 # input data
-n = 300
-XX = circleUnif(n)
+n <- 300
+XX <- circleUnif(n)
 
 ## Ranges of the grid
-Xlim=c(-1.8,1.8)
-Ylim=c(-1.6,1.6)
-lim=cbind(Xlim, Ylim)
-by=0.05
+Xlim <- c(-1.8, 1.8)
+Ylim <- c(-1.6, 1.6)
+lim <- cbind(Xlim, Ylim)
+by <- 0.05
 
-h = .3  #bandwidth for the function kde
+h <- .3  #bandwidth for the function kde
 
 #Distance Function Diagram of the sublevel sets
-Diag1=gridDiag(XX,distFct, lim=lim, by=by, sublevel=TRUE, printProgress=TRUE) 
+Diag1 <- gridDiag(XX, distFct, lim = lim, by = by, sublevel = TRUE,
+                  printProgress = TRUE) 
 
 #Kernel Density Diagram of the superlevel sets
-Diag2=gridDiag(XX, kde, lim=lim, by=by, sublevel=FALSE, location=TRUE, printProgress=TRUE, h=h) 
+Diag2 <- gridDiag(XX, kde, lim = lim, by = by, sublevel = FALSE,
+                  location = TRUE, printProgress = TRUE, h = h) 
 #plot
-par(mfrow=c(2,2))
-plot(XX,cex=0.5, pch=19)
-title(main="Data")
-plot(Diag1$diagram)
-title(main="Distance Function Diagram")
-plot(Diag2$diagram)
-title(main="Density Persistence Diagram")
-one=which(Diag2$diag[,1]==1)
-plot(XX, col=2, main="Representative loop of grid points")
-for (i in 1:length(one))
+par(mfrow = c(2, 2))
+plot(XX, cex = 0.5, pch = 19)
+title(main = "Data")
+plot(Diag1[["diagram"]])
+title(main = "Distance Function Diagram")
+plot(Diag2[["diagram"]])
+title(main = "Density Persistence Diagram")
+one <- which(Diag2[["diag"]][, 1] == 1)
+plot(XX, col = 2, main = "Representative loop of grid points")
+for (i in seq(along = one))
 {
-	points(Diag2$birth[one[i],], pch=15, cex=3, col=i)
-	points(Diag2$death[one[i],], pch=17, cex=3, col=i)
-	points(Diag2$cycleLocation[[one[i]]], pch=19, cex=1, col=i)
+  points(Diag2[["birth"]][one[i], ], pch = 15, cex = 3, col = i)
+  points(Diag2[["death"]][one[i], ], pch = 17, cex = 3, col = i)
+  points(Diag2[["cycleLocation"]][[one[i]]], pch = 19, cex = 1, col = i)
 }
 }
 
