@@ -16,29 +16,33 @@ function(Diag, dimension = 1, KK = 1,
     stop("tseq should be numeric")
   }
     
-    isNA=length(which(Diag[, 1] == dimension))
-    if (isNA==0) return(rep(0, length(tseq))) #in case there are no features with dimension "dimension"
+  isNA <- length(which(Diag[, 1] == dimension))
+  if (isNA == 0) {
+    return(rep(0, length(tseq))) #in case there are no features with dimension "dimension"
+  }
     	
-	Diag=Diag[which(Diag[,1]==dimension),]
-	if (class(Diag)!="matrix") Diag=t(Diag) #in the case there is only 1 point
+	Diag <- Diag[which(Diag[,1] == dimension), ]
+	if (class(Diag)!="matrix") {
+    Diag <- t(Diag) #in the case there is only 1 point
+  }
 	
-	Npoints=nrow(Diag)
+	Npoints <- nrow(Diag)
 
-    fab = matrix(NA, nrow = length(tseq), ncol = Npoints)
-    lambda = numeric()
-    for (j in 1:Npoints) {    
-        fab[,j]=sapply(1:length(tseq), FUN=function(i){
-        	max(min(tseq[i] - Diag[j, 2], Diag[j,3] - tseq[i]), 0)        	    
-        })        
+  fab <- matrix(NA, nrow = length(tseq), ncol = Npoints)
+  lambda <- numeric()
+  for (j in seq_len(Npoints)) {    
+    fab[, j]  <- sapply(seq(along = tseq), FUN = function(i) {
+        max(min(tseq[i] - Diag[j, 2], Diag[j, 3] - tseq[i]), 0)
+      })
     }
-    lambda=sapply(1:length(tseq),  FUN=function(i){
-    	sort(fab[i, ], decreasing = TRUE)[KK]  	
-    })
+    lambda <- sapply(seq(along = tseq), FUN = function(i) {
+        sort(fab[i, ], decreasing = TRUE)[KK]
+      })
   lambda[is.na(lambda)] <- 0
   if (length(KK) == 1) {
     lambda <- matrix(lambda)
   } else {
     lambda <- t(lambda)
   }
-    return(lambda)
+  return(lambda)
 }

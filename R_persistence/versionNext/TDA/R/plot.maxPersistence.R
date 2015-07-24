@@ -1,20 +1,20 @@
-plot.maxPersistence<-
-function(x, features="dimension", colorBand="pink", colorBorder=NA , ...){
+plot.maxPersistence <-
+function(x, features = "dimension", colorBand = "pink", colorBorder = NA, ...) {
 	
-	parameter=x$parameters
-	Pers=x$Persistence
-	eps=x$bands
-	Kseq=length(parameter)
-	maxPers=0
-	for (k in 1:Kseq){
-		maxPers=max(maxPers, Pers[[k]][,2])	
+	parameter <- x[["parameters"]]
+	Pers <- x[["Persistence"]]
+	eps <- x[["bands"]]
+	Kseq <- length(parameter)
+	maxPers <- 0
+	for (k in seq_len(Kseq)) {
+		maxPers <- max(maxPers, Pers[[k]][, 2])	
 	}
 
-	if (x$bandFUN=="bootstrapBand" || features=="all")
+	if (x[["bandFUN"]] == "bootstrapBand" || features == "all")
 	{
-		dimension=NULL	
+		dimension <- NULL
 	} else {
-		dimension=x$dimension	
+		dimension <- x[["dimension"]]
 	}
 
   graphics::plot(parameter, rep(maxPers, Kseq), type = "n",
@@ -23,31 +23,39 @@ function(x, features="dimension", colorBand="pink", colorBorder=NA , ...){
   graphics::axis(1)
   graphics::axis(2)
 	
-	eps=pmin(eps, rep(1.1*maxPers/2, length(eps)) )
+	eps <- pmin(eps, rep(1.1 * maxPers / 2, length(eps)))
   graphics::polygon(c(parameter, parameter[Kseq:1]), c(2 * eps, rep(0, Kseq)),
       col = colorBand, border = colorBorder, lwd = 1.5)
 	
-	for (i in 1:Kseq){	
+	for (i in seq_len(Kseq)) {	
 		
-		if (x$bandFUN=="bootstrapBand"|| features=="all")
+		if (x[["bandFUN"]] == "bootstrapBand" || features == "all")
 		{
-			selectDimension=1:nrow(Pers[[i]])
+			selectDimension <- seq_len(nrow(Pers[[i]]))
 		} else {
-			selectDimension=which(Pers[[i]][,1]==dimension)
+			selectDimension <- which(Pers[[i]][, 1] == dimension)
 		}
 
-		symb=Pers[[i]][,1]
-		for (j in 1:length(symb)){
-			if (symb[j]==0) symb[j]=16
-			else if (symb[j]==1) symb[j]=2
-			else if (symb[j]==2) symb[j]=5
+		symb <- Pers[[i]][, 1]
+		for (j in seq(along = symb)){
+			if (symb[j] == 0) {
+        symb[j] <- 16
+      } else if (symb[j] == 1) {
+        symb[j] <- 2
+      } else if (symb[j] == 2) {
+        symb[j] <- 5
+      }
 		}
 
-		col=Pers[[i]][,1]+1						# betti0 black, betti1 red
-		for (j in 1:length(symb)){
-			if (col[j]==3) col[j]=4		# betti2 blue
-			if (symb[j]==3) col[j]=3		# betti3 green
-			}
+		col <- Pers[[i]][, 1] + 1  # betti0 black, betti1 red
+		for (j in seq(along = symb)) {
+      if (col[j] == 3) {
+        col[j] <- 4            # betti2 blue
+      }
+			if (symb[j] == 3) {
+        col[j] <- 3            # betti3 green
+      }
+    }
 
     graphics::points(rep(parameter[i], length(selectDimension)),
         Pers[[i]][selectDimension, 2], col = col[selectDimension],

@@ -1,5 +1,5 @@
 multipBootstrap <- 
-function(Y, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
+function(Y, B = 30, alpha = 0.05, parallel = FALSE, printProgress = FALSE) {
 
   if (!is.numeric(Y) || !is.matrix(Y)) {
     stop("Y should be a numeric matrix")
@@ -18,10 +18,10 @@ function(Y, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
   }
 
 
-	n = nrow(Y)
-	Nseq = ncol(Y)
-	MeanLand=apply(Y, 2, mean)
-	Gstar=rep(NA,B)
+	n <- nrow(Y)
+	Nseq <- ncol(Y)
+	MeanLand <- apply(Y, 2, mean)
+	Gstar <- rep(NA,B)
 
   if (parallel) {
     boostLapply <- parallel::mclapply
@@ -29,26 +29,33 @@ function(Y, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
     boostLapply <- lapply
   }
 
-    if (printProgress) cat("Bootstrap: ")
+  if (printProgress) {
+    cat("Bootstrap: ")
+  }
 	
-	width=boostLapply(1:B, FUN=function(i){ 
+	width <- boostLapply(seq_len(B), FUN = function(i) { 
       xi <- stats::rnorm(n)
-			BootLand=xi* (Y- matrix(MeanLand, nrow=n, ncol=Nseq, byrow=T))
-			Gstar=max(abs( apply(BootLand, 2, sum)/sqrt(n)  )) 
-	        if (printProgress) cat(i," ")
+			BootLand <-
+          xi * (Y - matrix(MeanLand, nrow = n, ncol = Nseq, byrow = TRUE))
+			Gstar <- max(abs(apply(BootLand, 2, sum)/sqrt(n))) 
+	    if (printProgress) {
+        cat(i," ")
+      }
 			return(Gstar)
 		}) 
 	
-    if (printProgress) cat("\n")
-	width=unlist(width)
+  if (printProgress) {
+    cat("\n")
+  }
+	width <- unlist(width)
   width <- stats::quantile(width, 1 - alpha) / sqrt(n)
 	
-	UPband1=MeanLand+width
-	LOWband1=MeanLand-width
-	LOWband1[which(LOWband1<0)]=0   #set negative values of lower band =0
-	Band=cbind(LOWband1, UPband1)
+	UPband1 <- MeanLand + width
+	LOWband1 <- MeanLand - width
+	LOWband1[which(LOWband1 < 0)] <- 0  #set negative values of lower band =0
+	Band <- cbind(LOWband1, UPband1)
 	
-	out=list("width"=width, "mean"=MeanLand, "band"=Band)
+	out <- list("width" = width, "mean" = MeanLand, "band" = Band)
 	
 	return(out)
 }

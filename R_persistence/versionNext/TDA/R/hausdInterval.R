@@ -1,5 +1,5 @@
 hausdInterval <- 
-function(X, m, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE){
+function(X, m, B = 30, alpha = 0.05, parallel = FALSE, printProgress = FALSE) {
      
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
