@@ -13,3 +13,7 @@ TODO
 - how to do todo-list
 - taking *.obj file as an input
 - allow cubical complex
+- landscapes: exact representation
+- landscapes: l-inf distance (or approx of ... when discretized)
+- landscapes: l-p distance (or approx of ... when discretized)
+- look into adding an interface into PB / PD landscape code
