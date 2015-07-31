@@ -28,8 +28,8 @@ function(X, library = "GUDHI", printProgress = FALSE) {
 
   X <- as.matrix(X)
 
-	if (library == "GUDHI") {
-		alphaOut <- AlphaDiagGUDHI(X = X, printProgress = printProgress)
+  if (library == "GUDHI") {
+    alphaOut <- AlphaDiagGUDHI(X = X, printProgress = printProgress)
   }
 
   Diag <- alphaOut[[1]]

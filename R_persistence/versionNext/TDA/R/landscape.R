@@ -20,13 +20,13 @@ function(Diag, dimension = 1, KK = 1,
   if (isNA == 0) {
     return(rep(0, length(tseq))) #in case there are no features with dimension "dimension"
   }
-    	
-	Diag <- Diag[which(Diag[,1] == dimension), ]
-	if (class(Diag)!="matrix") {
+      
+  Diag <- Diag[which(Diag[,1] == dimension), ]
+  if (class(Diag)!="matrix") {
     Diag <- t(Diag) #in the case there is only 1 point
   }
-	
-	Npoints <- nrow(Diag)
+  
+  Npoints <- nrow(Diag)
 
   fab <- matrix(NA, nrow = length(tseq), ncol = Npoints)
   lambda <- numeric()

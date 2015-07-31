@@ -27,7 +27,7 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
     stop("add should be logical")
   }
 
-	################################################
+  ################################################
   if (is.null(diagLim)) {
     if (class(x) == "diagram") {
       diagLim <- attributes(x)[["scale"]]
@@ -47,14 +47,14 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
   if (any(colnames(x)[3] == "Birth")) {
     sublevel <- FALSE
   }
-	
-	if (!is.null(dimension)) {
+  
+  if (!is.null(dimension)) {
     x <- x[which(x[, 1] == dimension), , drop = FALSE]
   }
-	
-	symb <- x[,1]
-	for (i in seq(along = symb)) {
-		if (symb[i] == 0) {
+  
+  symb <- x[,1]
+  for (i in seq(along = symb)) {
+    if (symb[i] == 0) {
       symb[i] <- 16
     } else if (symb[i] == 1) {
       symb[i] <- 2
@@ -65,75 +65,75 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
     }
   }
 
-	if (is.null(col)){
-		col <- x[, 1] + 1  # betti0 black, betti1 red
-		for (i in seq(along = symb)) {
-			if (symb[i] == 5) {
+  if (is.null(col)){
+    col <- x[, 1] + 1  # betti0 black, betti1 red
+    for (i in seq(along = symb)) {
+      if (symb[i] == 5) {
         col[i] <- 4    # betti2 blue
       }
-			if (symb[i] == 3) {
-        col[i] <- 3		 # betti3 green
+      if (symb[i] == 3) {
+        col[i] <- 3    # betti3 green
       }
     }
-	}
+  }
 
-	### barcode plot
-	if (barcode) {
-		if (length(col) == 1) {
+  ### barcode plot
+  if (barcode) {
+    if (length(col) == 1) {
       col <- rep(col, nrow(x))
     }
-		## first we sort the bars
-		maxD <- max(x[, 1])
-		minD <- min(x[, 1])
-		if (maxD > 0) {
-			sortedDiag <- x
-			sortedCol <- col
-			posD <- which(x[, 1] == minD)
-			lD <- 0
-			for (dd in (minD):maxD) {
-				oldlD <- lD
-				posD <- which(x[,1] == dd)
-				if (length(posD) != 0) {
-					lD <- oldlD + length(posD)				
-					sortedDiag[(oldlD + 1):(lD), ] <- x[posD, ]
-					sortedCol[(oldlD + 1):(lD)] <- col[posD]
-				}
-			}
-			x <- sortedDiag
-			col <- sortedCol
-		}	
-			
-		## now we plot the bars
-		left <- x[, 2]
-		right <- x[, 3]
-		n <- length(left)
+    ## first we sort the bars
+    maxD <- max(x[, 1])
+    minD <- min(x[, 1])
+    if (maxD > 0) {
+      sortedDiag <- x
+      sortedCol <- col
+      posD <- which(x[, 1] == minD)
+      lD <- 0
+      for (dd in (minD):maxD) {
+        oldlD <- lD
+        posD <- which(x[,1] == dd)
+        if (length(posD) != 0) {
+          lD <- oldlD + length(posD)        
+          sortedDiag[(oldlD + 1):(lD), ] <- x[posD, ]
+          sortedCol[(oldlD + 1):(lD)] <- col[posD]
+        }
+      }
+      x <- sortedDiag
+      col <- sortedCol
+    } 
+      
+    ## now we plot the bars
+    left <- x[, 2]
+    right <- x[, 3]
+    n <- length(left)
 
-		Bmax <- max(right)
-		Bmin <- min(left)
+    Bmax <- max(right)
+    Bmin <- min(left)
     graphics::plot(c(Bmin, Bmax), c(1, n + 1), type = "n", xlab = "",
         ylab = "", xlim = c(Bmin, Bmax), ylim = c(0, n + 1), xaxt = "n",
         yaxt = "n", ...)
     graphics::axis(1)
     graphics::title(xlab = "time", line = lab.line)
-		
-		lwid <- rep(2,n)
-		ltype <- rep(1,n)
-		if (!is.null(band)){
-			for(i in seq_len(n)) {
-				if ((x[i, 3] - x[i, 2]) <= band) {
-					ltype[i] <- 3
-					lwid[i] <- 1.5
-				}
-			}
-		}
-		
+    
+    lwid <- rep(2,n)
+    ltype <- rep(1,n)
+    if (!is.null(band)){
+      for(i in seq_len(n)) {
+        if ((x[i, 3] - x[i, 2]) <= band) {
+          ltype[i] <- 3
+          lwid[i] <- 1.5
+        }
+      }
+    }
+    
     graphics::segments(left, 1:n, right, 1:n, lwd = lwid, lty = ltype,
         col = col)
-		
-			
-	} else{  ### diagram plot
+    
+      
+  } else{  ### diagram plot
 
-		if (rotated == TRUE) {
+    if (rotated == TRUE) {
 
       if (add == FALSE) {
         graphics::plot(0, 0,type = "n", axes = FALSE, xlim = diagLim,
@@ -147,7 +147,7 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
 
       graphics::points((x[, 2] + x[, 3]) / 2, (x[, 3]-x[, 2]) / 2, col = col,
           pch = symb, lwd = 2, cex = 1)
-		} else{
+    } else{
 
       if (add == FALSE) {
         graphics::plot(0, 0, type = "n", axes = FALSE, xlim = diagLim,
@@ -163,12 +163,12 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
 
       graphics::points(x[, 2], x[, 3], pch = symb, lwd = 2, cex = 1, col = col)
       graphics::abline(0, 1)
-		}
-		
-		if (add==FALSE){
+    }
+    
+    if (add==FALSE){
       graphics::axis(1)
       graphics::axis(2)
-			if (sublevel) {
+      if (sublevel) {
         if (!rotated) {
           graphics::title(main = "", xlab = "Birth", ylab = "Death",
               line = lab.line)
@@ -176,8 +176,8 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
           graphics::title(main = "", ylab = "(Death-Birth)/2",
               xlab = "(Death+Birth)/2", line = lab.line)
         }
-			} 
-			if (!sublevel) {
+      } 
+      if (!sublevel) {
         if (!rotated) {
           graphics::title(main = "", xlab = "Death", ylab = "Birth",
               line = lab.line)
@@ -185,7 +185,7 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
           graphics::title(main = "", ylab = "(Birth-Death)/2",
               xlab = "(Death+Birth)/2", line = lab.line)
         }
-			} 
-		}
-	}
+      } 
+    }
+  }
 }

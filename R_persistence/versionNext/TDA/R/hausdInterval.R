@@ -39,13 +39,13 @@ function(X, m, B = 30, alpha = 0.05, parallel = FALSE, printProgress = FALSE) {
       if (printProgress) {
         cat(i," ")
       }
-     	return(LL)
+      return(LL)
     })
   if (printProgress) {
     cat("\n")
   }
   width <- unlist(width)
-	width <- 2 * stats::quantile(width, 1 - alpha)
+  width <- 2 * stats::quantile(width, 1 - alpha)
 
   out <- width
 

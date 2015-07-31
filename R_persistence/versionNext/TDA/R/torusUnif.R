@@ -11,22 +11,22 @@ function(n, a, c) {
     stop("c should be a nonnegative number")
   }
 
-	n <- floor(n)
-	theta <- NULL
-	while (length(theta) < n){
+  n <- floor(n)
+  theta <- NULL
+  while (length(theta) < n){
     xvec <- stats::runif(1, 0, 2 * pi)
     yvec <- stats::runif(1, 0, 1 / pi)
-		fx <- (1 + (a / c) * cos(xvec)) / (2 * pi)
-		if (yvec < fx) {
+    fx <- (1 + (a / c) * cos(xvec)) / (2 * pi)
+    if (yvec < fx) {
       theta <- c(theta, xvec)
     }
-	}
+  }
 
   phi <- stats::runif(n, 0, 2 * pi)
-	x <- (c + a * cos(theta)) * cos(phi)
-	y <- (c + a * cos(theta)) * sin(phi)
-	z <- a * sin(theta)
-	
-	out <- cbind(x, y, z)
-	return(out)
+  x <- (c + a * cos(theta)) * cos(phi)
+  y <- (c + a * cos(theta)) * sin(phi)
+  z <- a * sin(theta)
+  
+  out <- cbind(x, y, z)
+  return(out)
 }
