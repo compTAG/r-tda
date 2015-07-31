@@ -12,7 +12,7 @@ function(Diag, p = 1, dimension = 1,
   if (!is.numeric(p) || length(p) != 1 || any(p < 0)) {
     stop("p should be a nonnegative number")
   }
-	if (!is.numeric(tseq)) {
+  if (!is.numeric(tseq)) {
     stop("tseq should be a numeric vector")
   }
   
@@ -20,25 +20,25 @@ function(Diag, p = 1, dimension = 1,
   if (isNA == 0) {
     return(rep(0, length(tseq))) #in case there are no features with dimension "dimension"
   }
-    	
-	Diag <- Diag[which(Diag[,1] == dimension), ]
-	if (class(Diag) != "matrix") {
+      
+  Diag <- Diag[which(Diag[,1] == dimension), ]
+  if (class(Diag) != "matrix") {
     Diag <- t(Diag) #in the case there is only 1 point
   }
 
-	left <- Diag[, 2]
-	right <- Diag[, 3]
-	Npoints <- length(left)
+  left <- Diag[, 2]
+  right <- Diag[, 3]
+  Npoints <- length(left)
    
-	### Silhouette
-	w <- (right - left) ^ p
-	w <- w / sum(w)
+  ### Silhouette
+  w <- (right - left) ^ p
+  w <- w / sum(w)
    
-	ff <- rep(0, length(tseq))
+  ff <- rep(0, length(tseq))
 
-	for(i in seq_len(Npoints)) {
-		tmp <- pmax(pmin(tseq - left[i], right[i] - tseq), 0)
-		ff <- ff + tmp * w[i]
-	}
-	return(ff)
+  for(i in seq_len(Npoints)) {
+    tmp <- pmax(pmin(tseq - left[i], right[i] - tseq), 0)
+    ff <- ff + tmp * w[i]
+  }
+  return(ff)
 }
