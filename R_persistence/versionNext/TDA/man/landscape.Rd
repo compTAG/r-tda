@@ -25,7 +25,7 @@ landscape(Diag, dimension = 1, KK = 1,
   }
 
   \item{KK}{
-    the order of the landscape function. Default is 1. (First Landscape function).
+    a vector: the order of the landscape function. Default is 1. (First Landscape function).
   }
 
   \item{tseq}{
@@ -34,7 +34,7 @@ landscape(Diag, dimension = 1, KK = 1,
 }
 
 \value{
-  Returns a numeric vector of the same length of \code{tseq}, with the values of the landscape function evaluated at each point of \code{tseq}.
+  Returns a numeric matrix with the number of row as the length of \code{tseq} and the number of column as the length of \code{KK}. The value at ith row and jth column represents the value of the \code{KK[j]}-th landscape function evaluated at \code{tseq[i]}.
 }
 
 \references{

@@ -21,7 +21,7 @@ silhouette(Diag, p = 1, dimension = 1,
   }
 
   \item{p}{
-    number: the power of the weights of the silhouette function. See the definition of silhouette function, Section 5 in the reference.
+    a vector: the power of the weights of the silhouette function. See the definition of silhouette function, Section 5 in the reference.
   }
 
   \item{dimension}{
@@ -34,7 +34,7 @@ silhouette(Diag, p = 1, dimension = 1,
 }
 
 \value{
-  Returns a numeric vector of the same length of \code{tseq}, with the values of the silhouette function evaluated at the points of \code{tseq}.
+  Returns a numeric matrix of with the number of row as the length of \code{tseq} and the number of column as the length of \code{p}. The value at ith row and jth column represents the value of the \code{p[j]}-th power silhouette function evaluated at \code{tseq[i]}.
 }
 
 \references{
