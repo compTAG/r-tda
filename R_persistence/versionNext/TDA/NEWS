@@ -9,6 +9,7 @@
 - PHAT is available for ripsDiag
 - ripsDiag also returns location of representative cycles
 - column names for diagram is now c("dimension", "Birth", "Death")
+- In landscape(), KK is vectorized, and in silhouette(), p is vectorized
 
 ### TDA: version 1.3
 - Fixed bugs (memory leak in GUDHI, "1.#INF" code in Windows)
