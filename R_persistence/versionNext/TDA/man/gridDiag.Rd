@@ -80,13 +80,13 @@ gridDiag(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
     an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column stores the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc). Second and third columns are Birth and Death of the features, in case of a filtration constructed using sublevel sets (from -Inf to Inf), or Death and Birth of features, in case of a filtration constructed using superlevel sets (from Inf to -Inf).
   }
   \item{birthLocation}{
-    only if \code{location=TRUE}: a \eqn{P} by \eqn{d} matrix, where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents the location of the grid point completing the simplex that gives birth to an homological feature.
+    only if \code{location = TRUE}: a \eqn{P} by \eqn{d} matrix, where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents the location of the grid point completing the simplex that gives birth to an homological feature.
   }
   \item{deathLocation}{
-    only if \code{location=TRUE}: a \eqn{P} by \eqn{d} matrix, where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents the location of the grid point completing the simplex that kills an homological feature.
+    only if \code{location = TRUE}: a \eqn{P} by \eqn{d} matrix, where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents the location of the grid point completing the simplex that kills an homological feature.
   }
   \item{cycleLocation}{
-    only if \code{location=TRUE} and \code{library="Dionysus"}: a list of length \eqn{P}, where \eqn{P} is the number of points in the resulting persistence diagram. Each element is a \eqn{P_i} by \eqn{d} matrix and represents location of \eqn{P_i} grid points on a representative cycle of each homological feature.
+    only if \code{location = TRUE} and \code{library = "Dionysus"}: a list of length \eqn{P}, where \eqn{P} is the number of points in the resulting persistence diagram. Each element is a \eqn{P_i} by \eqn{d} matrix and represents location of \eqn{P_i} grid points on a representative cycle of each homological feature.
   }
 }
 
@@ -142,12 +142,12 @@ plot(Diag1[["diagram"]])
 title(main = "Distance Function Diagram")
 plot(Diag2[["diagram"]])
 title(main = "Density Persistence Diagram")
-one <- which(Diag2[["diag"]][, 1] == 1)
+one <- which(Diag2[["diagram"]][, 1] == 1)
 plot(XX, col = 2, main = "Representative loop of grid points")
 for (i in seq(along = one))
 {
-  points(Diag2[["birth"]][one[i], ], pch = 15, cex = 3, col = i)
-  points(Diag2[["death"]][one[i], ], pch = 17, cex = 3, col = i)
+  points(Diag2[["birthLocation"]][one[i], ], pch = 15, cex = 3, col = i)
+  points(Diag2[["deathLocation"]][one[i], ], pch = 17, cex = 3, col = i)
   points(Diag2[["cycleLocation"]][[one[i]]], pch = 19, cex = 1, col = i)
 }
 }
