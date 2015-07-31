@@ -28,16 +28,25 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
   }
 
 	################################################
-	if (is.null(diagLim) && class(x) == "diagram") {
-		diagLim <- attributes(x)[["scale"]]
-	} else if (is.null(diagLim)) {
-		diagLim <- c(min(x[, 2:3]), max(x[, 2:3]))
-	}
-	
-	sublevel <- FALSE
-	if (colnames(x)[2] == "Birth"){
-		sublevel <- TRUE	
-	}
+  if (is.null(diagLim)) {
+    if (class(x) == "diagram") {
+      diagLim <- attributes(x)[["scale"]]
+    } else if (NROW(x) > 0) {
+      diagLim <- c(min(x[, 2:3]), max(x[, 2:3]))
+    } else { # when diagram is empty
+      diagLim <- c(0,0)
+    }
+  }
+  # diagLim should be finite
+  if (any(diagLim == -Inf) || any(diagLim == Inf)) {
+    diagLim <- c(0,0)
+  }
+
+  sublevel <- TRUE
+  # use any() function to deal with when colnames(x) is NULL
+  if (any(colnames(x)[3] == "Birth")) {
+    sublevel <- FALSE
+  }
 	
 	if (!is.null(dimension)) {
     x <- x[which(x[, 1] == dimension), , drop = FALSE]
