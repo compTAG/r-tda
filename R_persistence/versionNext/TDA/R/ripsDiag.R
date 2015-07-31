@@ -43,7 +43,8 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   #ripsOut <- RipsDiag(X = X, maxdimension = maxdimension,
   #    maxscale = maxscale, dist = dist, library = library,
   #    location = location, printProgress = printProgress)
-  if (dist == "euclidean" && library != "GUDHI") {
+  if (dist == "euclidean" && library != "GUDHI" &&
+      .Machine[["sizeof.pointer"]] != 8) {
     ripsOut <- RipsDiag(X = as.matrix(dist(X)), maxdimension = maxdimension,
         maxscale = maxscale, dist = "arbitrary", library = library,
         location = location, printProgress = printProgress)
