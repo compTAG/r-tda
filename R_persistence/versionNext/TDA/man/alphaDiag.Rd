@@ -31,7 +31,7 @@ alphaDiag(X, library = "GUDHI", printProgress = FALSE)
 
 \details{
   \code{alphaDiag} constructs the alpha shape filtration, using the C++ library GUDHI.
-  Currently the point data cloud should be 3 dimension.
+  Currently the point data cloud should be 3 dimension, and only work on 64-bit R.
   See refereneces.
 }
 
