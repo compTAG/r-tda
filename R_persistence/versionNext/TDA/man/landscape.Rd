@@ -54,7 +54,7 @@ landscape(Diag, dimension = 1, KK = 1,
 \examples{
 Diag <- matrix(c(0, 0, 10, 1, 0, 3, 1, 3, 8), ncol = 3, byrow = TRUE)
 DiagLim <- 10
-colnames(Diag) <- c("dim", "Birth", "Death")
+colnames(Diag) <- c("dimension", "Birth", "Death")
 
 #persistence landscape
 tseq <- seq(0,DiagLim, length = 1000)
