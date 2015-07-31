@@ -1,4 +1,4 @@
-knnDE<-
+knnDE <-
 function(X, Grid, k){
 
   if (!is.numeric(X) && !is.data.frame(X)) {

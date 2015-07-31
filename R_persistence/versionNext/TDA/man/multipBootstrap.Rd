@@ -11,7 +11,7 @@
 }
 
 \usage{
-multipBootstrap(Y, B=30, alpha=0.05, parallel=FALSE, printProgress=FALSE)
+multipBootstrap(Y, B = 30, alpha = 0.05, parallel = FALSE, printProgress = FALSE)
 }
 
 \arguments{
@@ -80,7 +80,7 @@ tseq <- seq(0, DiagLim, length = 1000)
 Diags <- list()  #here we will store the NN rips diagrams
                  #constructed using different subsamples of mm points
 #here we'll store the landscapes
-Lands <- matrix(0,nrow = NN, ncol = length(tseq))
+Lands <- matrix(0, nrow = NN, ncol = length(tseq))
 
 for (i in seq_len(NN)){
   subXX <- XX[sample(seq_len(nn), mm), ]
@@ -94,10 +94,10 @@ alpha <- 0.05
 boot <- multipBootstrap(Lands, B, alpha)
 
 LOWband <- boot[["band"]][, 1]
-UPband <- boot[["band"]][,2]
+UPband <- boot[["band"]][, 2]
 MeanLand <- boot[["mean"]]
 
-plot(tseq, MeanLand, type = "l", lwd = 2, xlab = "", ylab="",
+plot(tseq, MeanLand, type = "l", lwd = 2, xlab = "", ylab = "",
      main = "Mean Landscape with band", ylim = c(0, 1.2))
 polygon(c(tseq, rev(tseq)), c(LOWband, rev(UPband)), col = "pink")
 lines(tseq, MeanLand, lwd = 1, col = 2)
