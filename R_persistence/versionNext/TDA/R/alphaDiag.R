@@ -1,6 +1,18 @@
 alphaDiag <-
 function(X, library = "GUDHI", printProgress = FALSE) {
 
+  # in 32bit architectures alphaDiag doesn't work
+  if (.Machine[["sizeof.pointer"]] != 8) {
+    Diag <- matrix(0, nrow = 0, ncol = 3)
+    class(Diag) <- "diagram"
+    attributes(Diag)[["maxdimension"]] <- -Inf
+    attributes(Diag)[["scale"]] <- c(Inf, -Inf)
+    attributes(Diag)[["call"]] <- match.call()
+    out <- list("diagram" = Diag)
+    cat("alphaDiag function currently only work on 64-bit R")
+    return (out)
+  }
+
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
   }
@@ -22,7 +34,7 @@ function(X, library = "GUDHI", printProgress = FALSE) {
 
   Diag <- alphaOut[[1]]
 
-  colnames(Diag) <- c("dim", "Birth", "Death")
+  colnames(Diag) <- c("dimension", "Birth", "Death")
   class(Diag) <- "diagram"
   attributes(Diag)[["maxdimension"]] <- max(Diag[, 1])
   nonInf <- which(Diag[, 2] != Inf & Diag[, 3] != Inf)
