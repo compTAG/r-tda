@@ -37,7 +37,7 @@ function(X, FUN, Grid, B = 30, alpha = 0.05, parallel = FALSE,
       bootF <- FUN(X[I, , drop = FALSE], Grid, ...)
       width1 <- max(abs(ff - bootF))
       if (printProgress) {
-        cat(i," ")
+        cat(i, " ")
       }
       return (width1)
     }
@@ -48,7 +48,7 @@ function(X, FUN, Grid, B = 30, alpha = 0.05, parallel = FALSE,
       bootF <- FUN(X[I, , drop = FALSE], Grid, weight = weightBoost, ...)
       width1 <- max(abs(ff - bootF))
       if (printProgress) {
-        cat(i," ")
+        cat(i, " ")
       }
       return (width1)
     }

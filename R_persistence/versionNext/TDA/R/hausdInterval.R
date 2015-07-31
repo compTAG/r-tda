@@ -22,7 +22,7 @@ function(X, m, B = 30, alpha = 0.05, parallel = FALSE, printProgress = FALSE) {
 
   X <- as.matrix(X)
   n <- nrow(X)
-  width <- rep(0,B)
+  width <- rep(0, B)
   if (parallel) {
     boostLapply <- parallel::mclapply
   } else {

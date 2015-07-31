@@ -82,7 +82,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
             printProgress = FALSE, diagLimit = NULL, ...)[["diagram"]]
         width1 <- wasserstein(Diag, Diag1, p = p, dimension = dimension)
         if (printProgress) {
-          cat(i," ")
+          cat(i, " ")
         }
         return(width1)
       }
@@ -95,7 +95,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
             printProgress = FALSE, diagLimit = NULL, ...)[["diagram"]]
         width1 <- bottleneck(Diag, Diag1, dimension = dimension)
         if (printProgress) {
-          cat(i," ")
+          cat(i, " ")
         }
         return(width1)
       }
@@ -115,7 +115,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
             diagLimit = NULL, weight = weightBoost, ...)[["diagram"]]
         width1 <- wasserstein(Diag, Diag1, p = p, dimension = dimension)
         if (printProgress) {
-          cat(i," ")
+          cat(i, " ")
         }
         return(width1)
       }
@@ -128,7 +128,7 @@ function(X, FUN, lim, by, maxdimension = length(lim) / 2 - 1,
             diagLimit = NULL, weight = weightBoost, ...)[["diagram"]]
         width1 <- bottleneck(Diag, Diag1, dimension = dimension)
         if (printProgress) {
-          cat(i," ")
+          cat(i, " ")
         }
         return(width1)
       }

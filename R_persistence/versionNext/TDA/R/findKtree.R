@@ -35,5 +35,5 @@ function(bb, parent, sons, compBranch, n) {
       }
     }
 
-  return(list("kappaTop"=kappaTop,"kappaBottom"=kappaBottom))
+  return(list("kappaTop" = kappaTop, "kappaBottom" = kappaBottom))
 }

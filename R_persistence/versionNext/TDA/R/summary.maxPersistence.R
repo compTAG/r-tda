@@ -1,4 +1,4 @@
-summary.maxPersistence<-
+summary.maxPersistence <-
 function(object, ...) {
   call <- attributes(object)[["call"]]
   maxNum <- max(object[["sigNumber"]])

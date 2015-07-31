@@ -82,7 +82,7 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   class(Diag) <- "diagram"
   attributes(Diag)[["maxdimension"]] <- max(Diag[, 1])
   attributes(Diag)[["scale"]] <- c(0, maxscale)
-  attributes(Diag)$call <- match.call()
+  attributes(Diag)[["call"]] <- match.call()
   if (location == FALSE || library == "GUDHI")
   {
     out <- list("diagram" = Diag)

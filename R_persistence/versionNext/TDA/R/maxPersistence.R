@@ -86,7 +86,7 @@ function(FUN, parameters, X, lim, by, maxdimension = length(lim) / 2 - 1,
     cat("|----|----|----|----|----|----|----|----|----|----|\n")
     cat("*")
   }
-  percentageFloor = 0
+  percentageFloor <- 0
 
   for (i in seq(along = parameters)){
 

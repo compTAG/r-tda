@@ -120,7 +120,7 @@ function(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
   nonInf <- which(Diag[, 2] != Inf & Diag[, 3] != Inf)
   attributes(Diag)[["scale"]] <-
     c(min(Diag[nonInf, 2:3]), max(Diag[nonInf, 2:3]))
-  attributes(Diag)$call <- match.call()
+  attributes(Diag)[["call"]] <- match.call()
   if (location == FALSE)
   {
     out <- list("diagram" = Diag)
