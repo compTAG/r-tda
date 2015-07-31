@@ -67,7 +67,7 @@ inline void initDiagrams(Diagrams& diagrams, const Iterator& bg,
 
 				const typename SimplexMap::value_type& b = m[cur];
 				const typename SimplexMap::value_type& d = m[death];
-				if (b.dimension() > maxdimension) {
+				if ((unsigned)b.dimension() > maxdimension) {
 					continue;
 				}
 				if (evaluator(b) < evaluator(d)) {
@@ -79,7 +79,7 @@ inline void initDiagrams(Diagrams& diagrams, const Iterator& bg,
 			else {    // cycles can be unpaired
 				const typename SimplexMap::value_type& b = m[cur];
 				dgmPoint[0] = evaluator(b);
-				if (b.dimension() > maxdimension) {
+				if ((unsigned)b.dimension() > maxdimension) {
 					continue;
 				}
 				dgmPoint[1] = std::numeric_limits< double >::infinity();
@@ -114,7 +114,7 @@ inline void initLocations(Locations& locations, Cycles& cycles,
 
 				const typename SimplexMap::value_type& b = m[cur];
 				const typename SimplexMap::value_type& d = m[death];
-				if (b.dimension() > maxdimension) {
+				if ((unsigned)b.dimension() > maxdimension) {
 					continue;
 				}
 				if (evaluator(b) < evaluator(d)) {
@@ -140,7 +140,7 @@ inline void initLocations(Locations& locations, Cycles& cycles,
 			}
 			else {    // cycles can be unpaired
 				const typename SimplexMap::value_type& b = m[cur];
-				if (b.dimension() > maxdimension) {
+				if ((unsigned)b.dimension() > maxdimension) {
 					continue;
 				}
 				persLocPoint[0] = getLocation(b, FUNvalues);

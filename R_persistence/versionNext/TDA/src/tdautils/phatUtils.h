@@ -37,7 +37,7 @@ inline void initDiagramsPhat(Diagrams& diagrams, const PersistencePairs& pairs,
 				simplex_map_inv[pairs.get_pair(idx).first];
 		const typename SimplexMapInv::value_type& d =
 				simplex_map_inv[pairs.get_pair(idx).second];
-		if (b.dimension() > maxdimension) {
+		if ((unsigned)b.dimension() > maxdimension) {
 			continue;
 		}
 		if (evaluator(b) < evaluator(d)) {
@@ -71,7 +71,7 @@ inline void initLocationsPhat(Locations& locations,
 			simplex_map_inv[pairs.get_pair(idx).first];
 		const typename SimplexMapInv::value_type& d =
 			simplex_map_inv[pairs.get_pair(idx).second];
-		if (b.dimension() > maxdimension) {
+		if ((unsigned)b.dimension() > maxdimension) {
 			continue;
 		}
 		if (evaluator(b) < evaluator(d)) {
