@@ -723,6 +723,23 @@ class Persistent_cohomology {
     }
   }
 
+  template< typename RealMatrix >
+  RealMatrix memory_output_diagram() {
+    RealMatrix out(persistent_pairs_.size());
+    unsigned rowIdx = 0;
+    cmp_intervals_by_length cmp(cpx_);
+    persistent_pairs_.sort(cmp);
+    for (auto pair : persistent_pairs_) {
+      out[rowIdx].resize(4);
+      out[rowIdx][0] = get<2>(pair);
+	  out[rowIdx][1] = cpx_->dimension(get<0>(pair));
+	  out[rowIdx][2] = cpx_->filtration(get<0>(pair));
+	  out[rowIdx][3] = cpx_->filtration(get<1>(pair));
+	  ++rowIdx;
+    }
+	return out;
+  }
+
  private:
   /*
    * Structure representing a cocycle.
