@@ -25,14 +25,14 @@ void computePersistenceGUDHI(SimplexTree& simplexTree,
 	pcoh.compute_persistent_cohomology(minPersistence); //compute persistent homology
 
 	
-	typename Gudhi::persistent_cohomology::Persistent_cohomology< Gudhi::Simplex_tree<>, Gudhi::persistent_cohomology::Field_Zp >::cmp_intervals_by_length cmp(pcoh.cpx_);
-	pcoh.persistent_pairs_.sort(cmp);
+	std::vector< double > dgmPoint(2);
+	std::vector< std::vector< double > > dgm = 
+		pcoh.memory_output_diagram< std::vector< std::vector< double > > >();
 	persDgm.resize(maxdimension + 1);
-	std::vector< double > persDgmPoint(2);
-	for (auto pair : pcoh.persistent_pairs_) {
-		persDgmPoint[0] = pcoh.cpx_->filtration(get<0>(pair));
-		persDgmPoint[1] = pcoh.cpx_->filtration(get<1>(pair));
-		persDgm[pcoh.cpx_->dimension(get<0>(pair))].push_back(persDgmPoint);
+	for (unsigned rowIdx = 0; rowIdx < dgm.size(); ++rowIdx) {
+		dgmPoint[0] = dgm[rowIdx][2];
+		dgmPoint[1] = dgm[rowIdx][3];
+		persDgm[dgm[rowIdx][1]].push_back(dgmPoint);
 	}
 
 	// write diagram on the output file
