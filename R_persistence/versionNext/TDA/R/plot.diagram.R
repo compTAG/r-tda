@@ -3,8 +3,8 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
          barcode = FALSE, band = NULL, lab.line = 2.2, colorBand = "pink",
          colorBorder = NA, add = FALSE, ...) {
 
-  if ((class(x) != "diagram" && class(x) != "matrix" && !is.data.frame(x)) ||
-      NCOL(x) != 3) {
+  if (((class(x) != "diagram" && class(x) != "matrix" && !is.data.frame(x)) ||
+      NCOL(x) != 3) && (!is.numeric(x) || length(x) != 3)) {
     stop("x should be a diagram, or a P by 3 matrix")
   }
   if (!is.null(diagLim) && (!is.numeric(diagLim) || length(diagLim) != 2)) {
@@ -25,6 +25,10 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
   }
   if (!is.logical(add)) {
     stop("add should be logical")
+  }
+
+  if (is.numeric(x)) {
+    x <- matrix(x, ncol = 3, dimnames = list(NULL, names(x)))
   }
 
   ################################################

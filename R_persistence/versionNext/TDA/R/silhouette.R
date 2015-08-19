@@ -2,8 +2,9 @@ silhouette <-
 function(Diag, p = 1, dimension = 1,
          tseq = seq(min(Diag[, 2:3]), max(Diag[, 2:3]), length = 500)) {
 
-  if ((class(Diag) != "diagram" && class(Diag) != "matrix" &&
-      !is.data.frame(Diag)) || NCOL(Diag) != 3) {
+  if (((class(Diag) != "diagram" && class(Diag) != "matrix" &&
+      !is.data.frame(Diag)) || NCOL(Diag) != 3) &&
+      (!is.numeric(Diag) || length(Diag) != 3)) {
     stop("Diag should be a diagram, or a P by 3 matrix")
   }
   if (!is.numeric(dimension) || length(dimension) != 1 || dimension < 0) {
@@ -14,6 +15,10 @@ function(Diag, p = 1, dimension = 1,
   }
   if (!is.numeric(tseq)) {
     stop("tseq should be a numeric vector")
+  }
+
+  if (is.numeric(Diag)) {
+    Diag <- matrix(Diag, ncol = 3, dimnames = list(NULL, names(Diag)))
   }
   
   isNA <- length(which(Diag[, 1] == dimension))
