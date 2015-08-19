@@ -1,17 +1,28 @@
 wasserstein <-
 function(Diag1, Diag2, p = 1, dimension = 1) {
 
-  if (class(Diag1) != "diagram" && class(Diag1) != "matrix" && !is.data.frame(Diag1)) {
-    stop("Diag1 should be a diagram or a matrix")
+  if (((class(Diag1) != "diagram" && class(Diag1) != "matrix" &&
+      !is.data.frame(Diag1)) || NCOL(Diag1) != 3) &&
+      (!is.numeric(Diag1) || length(Diag1) != 3)) {
+    stop("Diag1 should be a diagram, or a P by 3 matrix")
   }
-  if (class(Diag2) != "diagram" && class(Diag2) != "matrix" && !is.data.frame(Diag1)) {
-    stop("Diag2 should be a diagram or a matrix")
+  if (((class(Diag2) != "diagram" && class(Diag2) != "matrix" &&
+      !is.data.frame(Diag2)) || NCOL(Diag2) != 3) &&
+      (!is.numeric(Diag2) || length(Diag2) != 3)) {
+    stop("Diag2 should be a diagram, or a P by 3 matrix")
   }
   if (!is.vector(p) || length(p) != 1 || p < 1) {
     stop("p should be a positive integer")
   }
   if (!is.vector(dimension) || !all(dimension >= 0)) {
     stop("dimension should be a nonnegative integer or a vector of nonnegative integer")
+  }
+
+  if (is.numeric(Diag1)) {
+    Diag1 <- matrix(Diag1, ncol = 3, dimnames = list(NULL, names(Diag1)))
+  }
+  if (is.numeric(Diag2)) {
+    Diag2 <- matrix(Diag2, ncol = 3, dimnames = list(NULL, names(Diag2)))
   }
 
   wassersteinDistance <- rep(0, length(dimension))
