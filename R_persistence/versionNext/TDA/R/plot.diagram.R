@@ -55,27 +55,31 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
   if (!is.null(dimension)) {
     x <- x[which(x[, 1] == dimension), , drop = FALSE]
   }
-  
-  symb <- x[,1]
-  for (i in seq(along = symb)) {
-    if (symb[i] == 0) {
-      symb[i] <- 16
-    } else if (symb[i] == 1) {
-      symb[i] <- 2
-    } else if (symb[i] == 2) {
-      symb[i] <- 5
-    } else if (symb[i] == 5) {
-      symb[i] <- 1
+
+  if (is.null(match.call()[["pch"]])) {
+    symb <- x[, 1]
+    for (i in seq(along = symb)) {
+      if (symb[i] == 0) {
+        symb[i] <- 16
+      } else if (symb[i] == 1) {
+        symb[i] <- 2
+      } else if (symb[i] == 2) {
+        symb[i] <- 5
+      } else if (symb[i] == 5) {
+        symb[i] <- 1
+      }
     }
+  } else {
+    symb <- match.call()[["pch"]]
   }
 
   if (is.null(col)){
     col <- x[, 1] + 1  # betti0 black, betti1 red
-    for (i in seq(along = symb)) {
-      if (symb[i] == 5) {
+    for (i in seq(along = x[, 1])) {
+      if (x[i, 1] == 2) {
         col[i] <- 4    # betti2 blue
       }
-      if (symb[i] == 3) {
+      if (x[i, 1] == 3) {
         col[i] <- 3    # betti3 green
       }
     }
