@@ -6,14 +6,14 @@
 Statistical Tools for Topological Data Analysis
 }
 \description{
-This package provides some tools for Topological Data Analysis. In particular it provides functions for the statistical analysis of persistent homology and for density clustering.
+Tools for Topological Data Analysis. In particular it provides functions for the statistical analysis of persistent homology and for density clustering.
 }
 \details{
 \tabular{ll}{
 Package: \tab TDA\cr
 Type: \tab Package\cr
-Version: \tab 1.3\cr
-Date: \tab 2014-12-22\cr
+Version: \tab 1.4\cr
+Date: \tab 2015-08-20\cr
 License: \tab GPL-3 \cr
 }
 }
