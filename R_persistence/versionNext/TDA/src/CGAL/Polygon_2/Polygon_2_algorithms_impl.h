@@ -180,14 +180,14 @@ bool is_convex_2(ForwardIterator first,
 
     if (NumOrderChanges > 2) {
 #ifdef CGAL_POLYGON_DEBUG
-std::cout << "too many order changes: not convex!" << std::endl;
+//std::cout << "too many order changes: not convex!" << std::endl;
 #endif
       return false;
     }
 
     if (HasClockwiseTriples && HasCounterClockwiseTriples) {
 #ifdef CGAL_POLYGON_DEBUG
-std::cout << "polygon not locally convex!" << std::endl;
+//std::cout << "polygon not locally convex!" << std::endl;
 #endif
       return false;
     }

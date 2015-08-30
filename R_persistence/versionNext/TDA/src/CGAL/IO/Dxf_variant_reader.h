@@ -64,8 +64,8 @@ template<class CK,class Circular_arc_2, class Line_arc_2, class OutputIterator>
   
   reader(is, polygons, circles);
 
-  std::cout << "Read " << polygons.size() << " polygons, and " 
-	    << circles.size() << " circles" << std::endl;
+  //std::cout << "Read " << polygons.size() << " polygons, and " 
+	 //   << circles.size() << " circles" << std::endl;
 
 
   for(typename Circles::iterator it = circles.begin(); it != circles.end(); it++){
@@ -146,7 +146,7 @@ template<class CK,class Circular_arc_2, class Line_arc_2, class OutputIterator>
     }
     
   }
-  std::cout << " Loaded" << std::endl;
+  //std::cout << " Loaded" << std::endl;
   
   return res;
 }
