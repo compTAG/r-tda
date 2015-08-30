@@ -6,7 +6,7 @@
 Statistical Tools for Topological Data Analysis
 }
 \description{
-Tools for Topological Data Analysis. In particular it provides functions for the statistical analysis of persistent homology and for density clustering.
+Tools for Topological Data Analysis. In particular it provides functions for the statistical analysis of persistent homology and for density clustering. For that, this package provides an R interface for the efficient algorithms of the C++ libraries \pkg{GUDHI}, \pkg{Dionysus} and \pkg{PHAT}.
 }
 \details{
 \tabular{ll}{
