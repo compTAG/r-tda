@@ -40,7 +40,7 @@ std::ostream & operator<< (std::ostream& os,
   Pgn_with_holes_container res;
   pgn_set.polygons_with_holes (std::back_inserter (res));
 
-  std::cout << pgn_set.number_of_polygons_with_holes() << std::endl;
+  //std::cout << pgn_set.number_of_polygons_with_holes() << std::endl;
   std::copy(res.begin(), res.end(),
             std::ostream_iterator<Polygon_with_holes_2>(std::cout, "\n"));
   

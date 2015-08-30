@@ -247,13 +247,13 @@ Triangle_2_Triangle_2_pair<K>::intersection(
         return false;
     Pointlist_2_rec_<K> *cur;
     int i;
-    for (i=0, cur = _pointlist.first;
-         i<_pointlist.size;
-         i++, cur = cur->next) {
-      std::cout << to_double(cur->point.x()) << ' ';
-      std::cout << to_double(cur->point.y()) << ' ';
-    }
-    std::cout << std::endl;
+    //for (i=0, cur = _pointlist.first;
+    //     i<_pointlist.size;
+    //     i++, cur = cur->next) {
+    //  std::cout << to_double(cur->point.x()) << ' ';
+    //  std::cout << to_double(cur->point.y()) << ' ';
+    //}
+    //std::cout << std::endl;
     return true;
 }
 
