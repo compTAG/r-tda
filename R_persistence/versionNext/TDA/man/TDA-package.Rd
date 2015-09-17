@@ -18,9 +18,9 @@ License: \tab GPL-3 \cr
 }
 }
 \author{
-Brittany Terese Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria
+Brittany Terese Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria, Vincent Rouvreau
 
-Maintainer: Fabrizio Lecci <lecci@cmu.edu>
+Maintainer: Jisu Kim <jisuk1@andrew.cmu.edu>
 }
 \references{
 Herbert Edelsbrunner, and John Harer, (2010), "Computational topology: an introduction". American Mathematical Society.
