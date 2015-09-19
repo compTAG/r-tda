@@ -1,3 +1,6 @@
+### TDA: version 1.4.1
+- Remove alphaDiag function temporarily for installation error in Windows
+
 ### TDA: version 1.4
 - Fixed bugs
 - Rcpp is used in gridDiag, bottleneck & wasserstein distance, kde, kernel distance, dtm, ripsDiag, and alphaDiag
