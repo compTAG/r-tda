@@ -68,7 +68,7 @@ gridDiag(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
 }
 
 \details{
-  If the values of \code{X}, \code{FUN}, \code{lim}, and \code{by} are set, then \code{FUNvalues} should be \code{NULL}. In this case, \code{gridDiag} evaluates the function \code{FUN} over a grid. If the value of \code{FUNvalues} is set, then \code{X}, \code{FUN}, \code{lim}, and \code{by} should be \code{NULL}. In this case, \code{FUNvalues} is used as function values over the grid.
+  If the values of \code{X}, \code{FUN} are set, then \code{FUNvalues} should be \code{NULL}. In this case, \code{gridDiag} evaluates the function \code{FUN} over a grid. If the value of \code{FUNvalues} is set, then \code{X}, \code{FUN} should be \code{NULL}. In this case, \code{FUNvalues} is used as function values over the grid. If \code{location = TRUE}, then \code{lim}, and \code{by} should be set.
 
   Once function values are either computed or given, \code{gridDiag} constructs a filtration by triangulating the grid and considering the simplices determined by the values of the function of dimension up to \code{maxdimension+1}.
 }
