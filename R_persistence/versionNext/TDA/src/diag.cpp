@@ -70,7 +70,7 @@ GridDiag(const Rcpp::NumericVector & FUNvalues
 
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;
-	std::vector< std::vector< std::set< unsigned > > > persCycle;
+	std::vector< std::vector< std::vector< std::vector< unsigned > > > > persCycle;
 
 	Fltr f;
 
@@ -103,7 +103,7 @@ GridDiag(const Rcpp::NumericVector & FUNvalues
 	return Rcpp::List::create(
 		concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
 		concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
-		StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
+		StlToRcppMatrixList< Rcpp::List, Rcpp::NumericMatrix >(persCycle));
 }
 
 
@@ -133,7 +133,7 @@ RipsDiagL2DionysusPhat(const RealMatrix  & X
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;
-	std::vector< std::vector< std::set< unsigned > > > persCycle;
+	std::vector< std::vector< std::vector< std::vector< unsigned > > > > persCycle;
 	
 	PointContainer points = RcppToStl< PointContainer >(X);
 	//read_points(infilename, points);
@@ -169,7 +169,7 @@ RipsDiagL2DionysusPhat(const RealMatrix  & X
 	return Rcpp::List::create(
 			concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
 			concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
-			StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
+			StlToRcppMatrixList< Rcpp::List, Rcpp::NumericMatrix >(persCycle));
 }
 
 
@@ -199,7 +199,7 @@ RipsDiagArbitDionysusPhat(const RealMatrix  & X
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;
-	std::vector< std::vector< std::set< unsigned > > > persCycle;
+	std::vector< std::vector< std::vector< std::vector< unsigned > > > > persCycle;
 
 	PointContainer points = RcppToStl< PointContainer >(X, true);
 	//read_points2(infilename, points);
@@ -235,7 +235,7 @@ RipsDiagArbitDionysusPhat(const RealMatrix  & X
 	return Rcpp::List::create(
 			concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
 			concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
-			StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
+			StlToRcppMatrixList< Rcpp::List, Rcpp::NumericMatrix >(persCycle));
 }
 
 
@@ -423,7 +423,7 @@ RipsDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory spa
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;
-	std::vector< std::vector< std::set< unsigned > > > persCycle;
+	std::vector< std::vector< std::vector< std::vector< unsigned > > > > persCycle;
 
 	// Turn the input points into a range of points
 	typedef std::vector< double > Point_t;
@@ -456,7 +456,7 @@ RipsDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory spa
 	return Rcpp::List::create(
 			concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
 			concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
-			StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
+			StlToRcppMatrixList< Rcpp::List, Rcpp::NumericMatrix >(persCycle));
 }
 
 
@@ -571,7 +571,7 @@ AlphaDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory sp
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;
-	std::vector< std::vector< std::set< unsigned > > > persCycle;
+	std::vector< std::vector< std::vector< std::vector< unsigned > > > > persCycle;
 
 	  int coeff_field_characteristic = 2;
 
@@ -709,6 +709,6 @@ AlphaDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory sp
 	return Rcpp::List::create(
 			concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
 			concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
-			StlToRcppList< Rcpp::List, Rcpp::NumericVector >(persCycle));
+			StlToRcppMatrixList< Rcpp::List, Rcpp::NumericMatrix >(persCycle));
 }
 */

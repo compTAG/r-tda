@@ -58,9 +58,9 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
     if (dist == "euclidean") {
       BirthLocation <- X[ripsOut[[2]][, 1], ]
       DeathLocation <- X[ripsOut[[2]][, 2], ]
-      if (library == "Dionysus")
-      {
-        CycleLocation <- lapply(ripsOut[[3]], function(c) {X[c, ]})
+      if (library == "Dionysus") {
+        CycleLocation <- lapply(ripsOut[[3]], function(bdy) {
+            array(X[bdy, ], dim = c(dim(bdy), NCOL(X)))})
       }
     } else {
       BirthLocation <- ripsOut[[2]][, 1]
