@@ -86,7 +86,7 @@ gridDiag(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
     only if \code{location = TRUE}: a \eqn{P} by \eqn{d} matrix, where \eqn{P} is the number of points in the resulting persistence diagram. Each row represents the location of the grid point completing the simplex that kills an homological feature.
   }
   \item{cycleLocation}{
-    only if \code{location = TRUE} and \code{library = "Dionysus"}: a list of length \eqn{P}, where \eqn{P} is the number of points in the resulting persistence diagram. Each element is a \eqn{P_i} by \eqn{d} matrix and represents location of \eqn{P_i} grid points on a representative cycle of each homological feature.
+    only if \code{location = TRUE} and \code{library = "Dionysus"}: a list of length \eqn{P}, where \eqn{P} is the number of points in the resulting persistence diagram. Each element is a \eqn{P_i} by \eqn{h_i +1} by \eqn{d} array for \eqn{h_i} dimensional homological feature. It represents location of \eqn{h_i +1} vertices of \eqn{P_i} simplices, where \eqn{P_i} simplices constitutes the \eqn{h_i} dimensional homological feature.
   }
 }
 
@@ -144,11 +144,14 @@ plot(Diag2[["diagram"]])
 title(main = "Density Persistence Diagram")
 one <- which(Diag2[["diagram"]][, 1] == 1)
 plot(XX, col = 2, main = "Representative loop of grid points")
-for (i in seq(along = one))
-{
-  points(Diag2[["birthLocation"]][one[i], ], pch = 15, cex = 3, col = i)
-  points(Diag2[["deathLocation"]][one[i], ], pch = 17, cex = 3, col = i)
-  points(Diag2[["cycleLocation"]][[one[i]]], pch = 19, cex = 1, col = i)
+for (i in seq(along = one)) {
+  points(Diag2[["birthLocation"]][one[i], , drop = FALSE], pch = 15, cex = 3,
+      col = i)
+  points(Diag2[["deathLocation"]][one[i], , drop = FALSE], pch = 17, cex = 3,
+      col = i)
+  for (j in seq_len(dim(Diag2[["cycleLocation"]][[one[i]]])[1])) {
+    lines(Diag2[["cycleLocation"]][[one[i]]][j, , ], pch = 19, cex = 1, col = i)
+  }
 }
 }
 
