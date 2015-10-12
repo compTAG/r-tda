@@ -68,7 +68,7 @@ ripsDiag(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   }
 
   \item{cycleLocation}{
-    only if \code{location = TRUE} and \code{library = "Dionysus"}: if \code{dist = 'euclidean'}, then \code{cycleLocation} is a list of length \eqn{P}, where \eqn{P} is the number of points in the resulting persistence diagram. Each element is a \eqn{P_i} by \eqn{d} matrix and represents location of \eqn{P_i} data points on a representative cycle of each homological feature. If \code{dist = 'arbitrary'}, then each element is a vector of length \eqn{P_i} and represents index of \eqn{P_i} data points on a representative cycle of each homological feature. 
+    only if \code{location = TRUE} and \code{library = "Dionysus"}: if \code{dist = 'euclidean'}, then \code{cycleLocation} is a list of length \eqn{P}, where \eqn{P} is the number of points in the resulting persistence diagram. Each element is a \eqn{P_i} by \eqn{h_i +1} by \eqn{d} array for \eqn{h_i} dimensional homological feature. It represents location of \eqn{h_i +1} vertices of \eqn{P_i} simplices, where \eqn{P_i} simplices constitutes the \eqn{h_i} dimensional homological feature. If \code{dist = 'arbitrary'}, then each element is a \eqn{P_i} by \eqn{h_i +1} matrix for  for \eqn{h_i} dimensional homological feature. It represents index of \eqn{h_i +1} vertices of \eqn{P_i} simplices on a representative cycle of the \eqn{h_i} dimensional homological feature.
   }
 }
 
@@ -96,7 +96,22 @@ XX <- circleUnif(30)
 maxscale <- 5
 maxdimension <- 1
 ## note that the input XX is a point cloud
-Diag <- ripsDiag(XX, maxdimension, maxscale, printProgress = TRUE)
+Diag <- ripsDiag(XX, maxdimension, maxscale, library = "Dionysus",
+    location = TRUE, printProgress = TRUE)
+
+# plot
+layout(matrix(c(1, 3, 2, 2), 2, 2))
+plot(XX, cex = 0.5, pch = 19)
+title(main = "Data")
+plot(Diag[["diagram"]])
+title(main = "rips Diagram")
+one <- which(Diag[["diagram"]][, 1] == 1)
+plot(XX, col = 2, main = "Representative loop of data points")
+for (i in seq(along = one)) {
+  for (j in seq_len(dim(Diag[["cycleLocation"]][[one[i]]])[1])) {
+    lines(Diag[["cycleLocation"]][[one[i]]][j, , ], pch = 19, cex = 1, col = i)
+  }
+}
 
 
 ## EXAMPLE 2: rips diagram with arbitrary distance
