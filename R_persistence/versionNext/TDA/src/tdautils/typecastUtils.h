@@ -123,3 +123,48 @@ inline RcppList StlToRcppList(
 
 	return rcppList;
 }
+
+
+
+template< typename RcppList, typename RcppMatrix, typename StlVector >
+inline RcppList StlToRcppMatrixList(
+	const std::vector< std::vector< std::vector< StlVector > > >& stlArrays) {
+	unsigned listNum = 0;
+
+	typename std::vector< std::vector< std::vector< StlVector > > >::const_iterator vecsItr;
+	for (vecsItr = stlArrays.begin(); vecsItr != stlArrays.end(); ++vecsItr) {
+		listNum += vecsItr->size();
+	}
+	RcppList rcppList(listNum);
+
+	typename RcppList::iterator listItr;
+	typename std::vector< std::vector< StlVector > >::const_iterator matrixItr;
+	typename std::vector< StlVector >::const_iterator rowItr;
+	typename StlVector::const_iterator colItr;
+	unsigned rowIdx, colIdx, rowNum;
+	for (vecsItr = stlArrays.begin(), listItr = rcppList.begin();
+	vecsItr != stlArrays.end(); ++vecsItr) {
+
+		for (matrixItr = vecsItr->begin(); matrixItr != vecsItr->end();
+		++matrixItr, ++listItr) {
+			rowNum = matrixItr->size();
+			if (rowNum != 0) {
+				RcppMatrix rcppMatrix(rowNum, (*matrixItr)[0].size());
+				for (rowIdx = 0, rowItr = matrixItr->begin();
+				rowItr != matrixItr->end(); ++rowIdx, ++rowItr) {
+					for (colIdx = 0, colItr = rowItr->begin(); colItr != rowItr->end();
+					++colIdx, ++colItr) {
+						rcppMatrix[rowIdx + colIdx * rowNum] = *colItr;
+					}
+				}
+				*listItr = rcppMatrix;
+			}
+			else {
+				RcppMatrix rcppMatrix(0, 0);
+				*listItr = rcppMatrix;
+			}
+		}
+	}
+
+	return rcppList;
+}

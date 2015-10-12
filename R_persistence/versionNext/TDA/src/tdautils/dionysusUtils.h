@@ -101,7 +101,8 @@ inline void initLocations(Locations& locations, Cycles& cycles,
 	locations.resize(maxdimension + 1);
 	cycles.resize(maxdimension + 1);
 	typename Locations::value_type::value_type persLocPoint(2);
-	typename Cycles::value_type::value_type persCyclePoint;
+	typename Cycles::value_type::value_type persBdy;
+	typename Cycles::value_type::value_type::value_type persSimplex;
 	for (typename Persistence::iterator cur = p.begin(); cur != p.end(); ++cur) {
 		// positive simplices corresponds to
 		// negative simplices having non-empty cycles
@@ -123,19 +124,21 @@ inline void initLocations(Locations& locations, Cycles& cycles,
 					locations[b.dimension()].push_back(persLocPoint);
 
 					// Iterate over the cycle
-					persCyclePoint.clear();
+					persBdy.clear();
 					const typename Persistence::Cycle& cycle = death->cycle;
 					for (typename Persistence::Cycle::const_iterator
 						si = cycle.begin(); si != cycle.end(); ++si) {
+						persSimplex.clear();
 						const typename Simplex::VertexContainer&
 								vertices = m[*si].vertices();    // std::vector<Vertex> where Vertex = Distances::IndexType
 						typename Simplex::VertexContainer::const_iterator vtxItr;
 						for (vtxItr = vertices.begin(); vtxItr != vertices.end();
 						++vtxItr) {
-							persCyclePoint.insert(*vtxItr + 1);
+							persSimplex.push_back(*vtxItr + 1);
 						}
+						persBdy.push_back(persSimplex);
 					}
-					cycles[b.dimension()].push_back(persCyclePoint);
+					cycles[b.dimension()].push_back(persBdy);
 				}
 			}
 			else {    // cycles can be unpaired
@@ -149,8 +152,8 @@ inline void initLocations(Locations& locations, Cycles& cycles,
 				locations[b.dimension()].push_back(persLocPoint);
 
 				// Iterate over the cycle
-				persCyclePoint.clear();
-				cycles[b.dimension()].push_back(persCyclePoint);
+				persBdy.clear();
+				cycles[b.dimension()].push_back(persBdy);
 			}
 		}
 	}
@@ -165,7 +168,7 @@ void computePersistenceDionysus(Fltr f, const Evaluator& evaluator,
 		const bool location, const bool printProgress,
 		std::vector< std::vector< std::vector< double > > > &persDgm,
 		std::vector< std::vector< std::vector< unsigned int > > > &persLoc,
-		std::vector< std::vector< std::set< unsigned int > > >& persCycle) {
+		std::vector< std::vector< std::vector< std::vector< unsigned > > > >& persCycle) {
 
 	Timer persistence_timer;
 	persistence_timer.start();

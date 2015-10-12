@@ -111,9 +111,9 @@ function(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
   if (location == TRUE) {
     BirthLocation <- Grid[["grid"]][gridOut[[2]][, 1], ]
     DeathLocation <- Grid[["grid"]][gridOut[[2]][, 2], ]
-    if (library == "Dionysus")
-    {
-      CycleLocation <- lapply(gridOut[[3]], function(c) {Grid[["grid"]][c, ]})
+    if (library == "Dionysus") {
+      CycleLocation <- lapply(gridOut[[3]], function(bdy) {
+          array(Grid[["grid"]][bdy, ], dim = c(dim(bdy), NCOL(Grid[["grid"]])))})
     }
   }
 
