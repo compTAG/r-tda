@@ -343,4 +343,6 @@ inline bool possibly(Uncertain<bool> c);
 // But the macros need CGAL::possibly().
 #include <CGAL/Uncertain.h>
 
+#include "assertions.cpp"
+
 #endif // CGAL_ASSERTIONS_H
