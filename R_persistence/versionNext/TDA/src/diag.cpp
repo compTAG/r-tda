@@ -22,7 +22,7 @@
 #include <tdautils/gudhiUtils.h>
 
 //for CGAL
-//#include <tdautils/cgalUtils.h>
+#include <tdautils/cgalUtils.h>
 
 // for Dionysus
 #include <tdautils/dionysusUtils.h>
@@ -506,7 +506,7 @@ RipsDiag(const Rcpp::NumericMatrix & X
 }
 
 
-/*
+
 //---------------------------------------------------------------------------------------------------------------------
 // gudhi type definition
 typedef Gudhi::Simplex_tree<>::Vertex_handle Simplex_tree_vertex;
@@ -553,7 +553,7 @@ Vertex_list fromVertex(const Alpha_shape_3::Vertex_handle& vh)
 	the_list.push_back(vh);
 	return the_list;
 }
-*/
+
 
 
 // AlphaDiag in GUDHI
@@ -564,7 +564,7 @@ Vertex_list fromVertex(const Alpha_shape_3::Vertex_handle& vh)
   * @param[in]  X              An nx3 matrix of coordinates,
   * @param[in]  printProgress  Is progress printed?
   */
-/*// [[Rcpp::export]]
+// [[Rcpp::export]]
 Rcpp::List
 AlphaDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory space
              , const bool                  printProgress
@@ -711,4 +711,3 @@ AlphaDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory sp
 			concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
 			StlToRcppMatrixList< Rcpp::List, Rcpp::NumericMatrix >(persCycle));
 }
-*/
