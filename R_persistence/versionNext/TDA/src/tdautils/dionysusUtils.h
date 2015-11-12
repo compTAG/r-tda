@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cstdlib>
 
+#include <utilities/timer.h>
 
 
 template< typename Simplex >

@@ -450,7 +450,8 @@ RipsDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory spa
 	// Compute the persistence diagram of the complex
 	int p = 2; //characteristic of the coefficient field for homology
 	double min_persistence = 0; //minimal length for persistent intervals
-	computePersistenceGUDHI(st, p, min_persistence, maxdimension, persDgm);
+	computePersistenceGUDHI(st, p, min_persistence, maxdimension, persDgm,
+			printProgress);
 
 	// Output persistent diagram
 	return Rcpp::List::create(
@@ -703,7 +704,7 @@ AlphaDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory sp
 
 	// Compute the persistence diagram of the complex
 	computePersistenceGUDHI(simplex_tree, coeff_field_characteristic,
-			min_persistence, 2, persDgm);
+			min_persistence, 2, persDgm, printProgress);
 
 	// Output persistent diagram
 	return Rcpp::List::create(

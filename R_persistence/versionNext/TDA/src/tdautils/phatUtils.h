@@ -15,7 +15,7 @@
 #include <limits>
 #include <algorithm>
 
-#include <tdautils/dionysusUtils.h>
+#include <utilities/timer.h>
 
 
 template< typename Diagrams, typename PersistencePairs, typename Evaluator,
