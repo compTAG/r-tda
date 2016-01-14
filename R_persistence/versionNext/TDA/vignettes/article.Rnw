@@ -78,8 +78,8 @@
 \fvset{listparameters={\setlength{\topsep}{0pt}}}
 \renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
 
-\author{Brittany T. Fasy, Jisu Kim, Fabrizio Lecci \and Cl\'ement Maria \\ \small{In collaboration with the CMU TopStat Group}}
-\Plainauthor{Brittany Terese Fasy, Jisu Kim, Fabrizio Lecci, Cl\'ement Maria}
+\author{Brittany T. Fasy, Jisu Kim, Fabrizio Lecci, Cl\'ement Maria, \and Vincent Rouvreau \\ \small{In collaboration with the CMU TopStat Group}}
+\Plainauthor{Brittany Terese Fasy, Jisu Kim, Fabrizio Lecci, Cl\'ement Maria, Vincent Rouvreau}
 
 \title{Introduction to the \proglang{R} package \pkg{TDA}}
 \Plaintitle{Introduction to the R package TDA}
@@ -107,7 +107,7 @@ a density function and visualize it by means of a dendrogram, the cluster tree.
 \Address{
   Brittany T. Fasy\\
   Computer Science Department\\
-  Tulane University\\
+  Montana State University\\
   Email: \email{brittany.fasy@alumni.duke.edu}\\
 
   Jisu Kim\\
@@ -115,15 +115,20 @@ a density function and visualize it by means of a dendrogram, the cluster tree.
   Carnegie Mellon University\\
   Email: \email{jisuk1@andrew.cmu.edu}\\
 
-  Cl\'ement Maria\\
-  Geometrica Group\\
-  INRIA Sophia Antipolis-M\'editerran\'ee\\
-  Email: \email{clement.maria@inria.fr}\\
-
   Fabrizio Lecci\\
   Department of Statistics\\
   Carnegie Mellon University\\
   Email: \email{lecci@cmu.edu}\\
+
+  Cl\'ement Maria\\
+  School of Mathematics and Physics\\
+  The University of Queensland\\
+  Email: \email{clement.maria@inria.fr}\\
+
+  Vincent Rouvreau\\
+  GUDHI Group\\
+  INRIA Saclay\\
+  Email: \email{vincent.rouvreau@inria.fr}\\
 
   TopStat Group\\
   Carnegie Mellon University\\
