@@ -45,6 +45,8 @@ alphaDiag(X, library = "GUDHI", printProgress = FALSE)
 \references{
   Kaspar Fischer, Introduction to Alpha Shapes, http://www.cs.uu.nl/docs/vakken/ddm/texts/Delaunay/alphashapes.pdf
 
+  Herbert Edelsbrunner and Ernst P. Mucke (1994), Three-dimensional Alpha Shapes, ACM Trans. Graph.
+
   Jean-Daniel Boissonnat, Marc Glisse, Clement Maria, and Vincent Rouvreau, "GUDHI, Simplicial Complexes and Persistent Homology Packages". https://project.inria.fr/gudhi/software/.
 
   Dmitriy Morozov, Homological Illusions of Persistence and Stability, http://www.mrzv.org/publications/thesis/phd/
