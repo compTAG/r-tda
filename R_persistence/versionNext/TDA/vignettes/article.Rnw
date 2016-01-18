@@ -116,9 +116,7 @@ a density function and visualize it by means of a dendrogram, the cluster tree.
   Email: \email{jisuk1@andrew.cmu.edu}\\
 
   Fabrizio Lecci\\
-  Department of Statistics\\
-  Carnegie Mellon University\\
-  Email: \email{lecci@cmu.edu}\\
+  Email: \email{fabrizio.lecci@gmail.com}\\
 
   Cl\'ement Maria\\
   School of Mathematics and Physics\\
