@@ -1,17 +1,17 @@
-\name{alphaDiag}
+\name{alphaShapeDiag}
 
-\alias{alphaDiag}
+\alias{alphaShapeDiag}
 
 \title{
   Persistence Diagram of Alpha Shape in 3d
 }
 
 \description{
-  \code{alphaDiag} function computes the persistence diagram of the alpha shape filtration built on top of a point cloud in 3 dimension.
+  \code{alphaShapeDiag} function computes the persistence diagram of the alpha shape filtration built on top of a point cloud in 3 dimension.
 }
 
 \usage{
-alphaDiag(X, library = "GUDHI", printProgress = FALSE)
+alphaShapeDiag(X, library = "GUDHI", printProgress = FALSE)
 }
 
 \arguments{
@@ -30,13 +30,13 @@ alphaDiag(X, library = "GUDHI", printProgress = FALSE)
 }
 
 \details{
-  \code{alphaDiag} constructs the alpha shape filtration, using the C++ library GUDHI.
+  \code{alphaShapeDiag} constructs the alpha shape filtration, using the C++ library GUDHI.
   Currently the point data cloud should be 3 dimension, and only work on 64-bit R.
   See refereneces.
 }
 
 \value{
-  \code{alphaDiag} returns a list with the following elements:
+  \code{alphaShapeDiag} returns a list with the following elements:
   \item{diagram}{
     an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column stores the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc). Second and third columns are Birth and Death of the features.
   }
@@ -67,10 +67,10 @@ alphaDiag(X, library = "GUDHI", printProgress = FALSE)
 XX <- sphereUnif(n = 500, d = 2)
 
 # persistence diagram of alpha shape
-DiagAlpha <- alphaDiag(X = XX, printProgress = TRUE)
+DiagAlphaShape <- alphaShapeDiag(X = XX, printProgress = TRUE)
 
 # plot
-plot(DiagAlpha[["diagram"]])
+plot(DiagAlphaShape[["diagram"]])
 }
 
 \keyword{methods}

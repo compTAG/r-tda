@@ -1,7 +1,7 @@
-alphaDiag <-
+alphaShapeDiag <-
 function(X, library = "GUDHI", printProgress = FALSE) {
 
-  # in 32bit architectures alphaDiag doesn't work
+  # in 32bit architectures alphaShapeDiag doesn't work
   if (.Machine[["sizeof.pointer"]] != 8) {
     Diag <- matrix(0, nrow = 0, ncol = 3)
     class(Diag) <- "diagram"
@@ -9,7 +9,7 @@ function(X, library = "GUDHI", printProgress = FALSE) {
     attributes(Diag)[["scale"]] <- c(Inf, -Inf)
     attributes(Diag)[["call"]] <- match.call()
     out <- list("diagram" = Diag)
-    cat("alphaDiag function currently only work on 64-bit R")
+    cat("alphaShapeDiag function currently only work on 64-bit R")
     return (out)
   }
 
@@ -29,7 +29,7 @@ function(X, library = "GUDHI", printProgress = FALSE) {
   X <- as.matrix(X)
 
   if (library == "GUDHI") {
-    alphaOut <- AlphaDiagGUDHI(X = X, printProgress = printProgress)
+    alphaOut <- AlphaShapeDiagGUDHI(X = X, printProgress = printProgress)
   }
 
   Diag <- alphaOut[[1]]

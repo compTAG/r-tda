@@ -557,7 +557,7 @@ Vertex_list fromVertex(const Alpha_shape_3::Vertex_handle& vh)
 
 
 
-// AlphaDiag in GUDHI
+// AlphaShapeDiag in GUDHI
 /** \brief Interface for R code, construct the persistence diagram
   * of the Rips complex constructed on the input set of points.
   *
@@ -567,8 +567,8 @@ Vertex_list fromVertex(const Alpha_shape_3::Vertex_handle& vh)
   */
 // [[Rcpp::export]]
 Rcpp::List
-AlphaDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory space
-             , const bool                  printProgress
+AlphaShapeDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory space
+                  , const bool                  printProgress
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;

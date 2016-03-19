@@ -29,7 +29,7 @@ RipsDiag <- function(X, maxdimension, maxscale, dist, library, location, printPr
     .Call('TDA_RipsDiag', PACKAGE = 'TDA', X, maxdimension, maxscale, dist, library, location, printProgress)
 }
 
-AlphaDiagGUDHI <- function(X, printProgress) {
-    .Call('TDA_AlphaDiagGUDHI', PACKAGE = 'TDA', X, printProgress)
+AlphaShapeDiagGUDHI <- function(X, printProgress) {
+    .Call('TDA_AlphaShapeDiagGUDHI', PACKAGE = 'TDA', X, printProgress)
 }
 

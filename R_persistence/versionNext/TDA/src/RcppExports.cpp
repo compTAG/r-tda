@@ -108,15 +108,15 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// AlphaDiagGUDHI
-Rcpp::List AlphaDiagGUDHI(const Rcpp::NumericMatrix& X, const bool printProgress);
-RcppExport SEXP TDA_AlphaDiagGUDHI(SEXP XSEXP, SEXP printProgressSEXP) {
+// AlphaShapeDiagGUDHI
+Rcpp::List AlphaShapeDiagGUDHI(const Rcpp::NumericMatrix& X, const bool printProgress);
+RcppExport SEXP TDA_AlphaShapeDiagGUDHI(SEXP XSEXP, SEXP printProgressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type X(XSEXP);
     Rcpp::traits::input_parameter< const bool >::type printProgress(printProgressSEXP);
-    __result = Rcpp::wrap(AlphaDiagGUDHI(X, printProgress));
+    __result = Rcpp::wrap(AlphaShapeDiagGUDHI(X, printProgress));
     return __result;
 END_RCPP
 }
