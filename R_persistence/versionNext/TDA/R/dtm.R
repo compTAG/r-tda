@@ -20,11 +20,11 @@ function(X, Grid, m0, weight = 1) {
 
   # without weight
   if (length(weight) == 1) {
-    X <- as.matrix(X) 
-    k0 <- ceiling(m0 * NROW(X))
-    distances <- FNN::knnx.dist(X, as.matrix(Grid), k = k0,
+    X <- as.matrix(X)
+    weightBound <- m0 * NROW(X)
+    knnDistance <- FNN::knnx.dist(X, as.matrix(Grid), k = ceiling(weightBound),
         algorithm = c("kd_tree"))
-    return (sqrt(apply(distances^2, 1, sum)/k0))
+    return (Dtm(knnDistance = knnDistance, weightBound = weightBound))
 
   # with weight
   } else {
@@ -39,10 +39,10 @@ function(X, Grid, m0, weight = 1) {
         break
       }
     }
-    indexDistance <- FNN::get.knnx(X0, as.matrix(Grid), k = k0,
+    knnDistanceIndex <- FNN::get.knnx(X0, as.matrix(Grid), k = k0,
         algorithm = c("kd_tree"))
-    return (Dtm(knnIndex = indexDistance[["nn.index"]],
-        knnDistance = indexDistance[["nn.dist"]], weight = weight0,
-        weightBound = weightBound))
+    return (DtmWeight(knnDistance = knnDistanceIndex[["nn.dist"]],
+        weightBound = weightBound, knnIndex = knnDistanceIndex[["nn.index"]],
+        weight = weight0))
   }
 }
