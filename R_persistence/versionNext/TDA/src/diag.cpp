@@ -374,27 +374,61 @@ KdeDist(const Rcpp::NumericMatrix & X
 // distance to measure function on a Grid
 // [[Rcpp::export]]
 Rcpp::NumericVector
-Dtm(const Rcpp::NumericMatrix & knnIndex
-  , const Rcpp::NumericMatrix& knnDistance
-  , const Rcpp::NumericVector& weight
-  , const double weightBound
+Dtm(const Rcpp::NumericMatrix & knnDistance
+  , const double                weightBound
+  , const double                r
 	) {
-	const unsigned gridNum = knnIndex.nrow();
-	double distanceTemp, weightTemp, weightSumTemp;
+	const unsigned gridNum = knnDistance.nrow();
+  unsigned gridIdx, kIdx;
+  double distanceTemp;
 	Rcpp::NumericVector dtmValue(gridNum, 0.0);
+  unsigned weightSumTemp;
 
-	for (unsigned gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-		weightSumTemp = 0.0;
-		for (unsigned kIdx = 0; weightSumTemp < weightBound; ++kIdx) {
-			distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
-			weightTemp = std::min(weight[knnIndex[gridIdx + kIdx * gridNum] - 1],
-					weightBound - weightSumTemp);
-			weightSumTemp += weightTemp;
-			dtmValue[gridIdx] += distanceTemp * distanceTemp * weightTemp;
-		}
-		dtmValue[gridIdx] = std::sqrt(dtmValue[gridIdx] / weightBound);
-	}
-	return (dtmValue);
+  for (gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+    for (kIdx = 0, weightSumTemp = 0; (double)weightSumTemp < weightBound;
+        ++kIdx) {
+      distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
+      dtmValue[gridIdx] += distanceTemp * distanceTemp;
+      ++weightSumTemp;
+    }
+    dtmValue[gridIdx] += distanceTemp * distanceTemp *
+        (weightBound - (double)weightSumTemp);
+    dtmValue[gridIdx] = std::sqrt(dtmValue[gridIdx] / weightBound);
+  }
+
+  return (dtmValue);
+}
+
+
+
+// distance to measure function on a Grid, with weight
+// [[Rcpp::export]]
+Rcpp::NumericVector
+DtmWeight(const Rcpp::NumericMatrix & knnDistance
+        , const double                weightBound
+        , const double                r
+        , const Rcpp::NumericMatrix & knnIndex
+        , const Rcpp::NumericVector & weight
+  ) {
+  const unsigned gridNum = knnDistance.nrow();
+  unsigned gridIdx, kIdx;
+  double distanceTemp;
+  Rcpp::NumericVector dtmValue(gridNum, 0.0);
+  double weightTemp, weightSumTemp;
+
+  for (gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+    for (kIdx = 0, weightSumTemp = 0.0; weightSumTemp < weightBound; ++kIdx) {
+      distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
+      weightTemp = weight[knnIndex[gridIdx + kIdx * gridNum] - 1];
+      dtmValue[gridIdx] += distanceTemp * distanceTemp * weightTemp;
+      weightSumTemp += weightTemp;
+    }
+    dtmValue[gridIdx] += distanceTemp * distanceTemp *
+        (weightBound - weightSumTemp);
+    dtmValue[gridIdx] = std::sqrt(dtmValue[gridIdx] / weightBound);
+  }
+
+  return (dtmValue);
 }
 
 
