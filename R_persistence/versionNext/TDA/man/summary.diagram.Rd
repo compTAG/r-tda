@@ -9,9 +9,9 @@
 }
 
 \description{
-  \code{print.diagram} prints a persistence diagram, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc.). Second and third columns are Birth and Death of the features. 
+  The function \code{print.diagram} prints a persistence diagram, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the diagram. The first column contains the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc.). Second and third columns are Birth and Death of the features. 
 
-  \code{summary.diagram} produces basic summaries of a persistence diagrams.
+  The function \code{summary.diagram} produces basic summaries of a persistence diagrams.
 }
 
 \usage{
