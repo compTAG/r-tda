@@ -78,28 +78,30 @@ BEGIN_RCPP
 END_RCPP
 }
 // Dtm
-Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnDistance, const double weightBound);
-RcppExport SEXP TDA_Dtm(SEXP knnDistanceSEXP, SEXP weightBoundSEXP) {
+Rcpp::NumericVector Dtm(const Rcpp::NumericMatrix& knnDistance, const double weightBound, const double r);
+RcppExport SEXP TDA_Dtm(SEXP knnDistanceSEXP, SEXP weightBoundSEXP, SEXP rSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type knnDistance(knnDistanceSEXP);
     Rcpp::traits::input_parameter< const double >::type weightBound(weightBoundSEXP);
-    __result = Rcpp::wrap(Dtm(knnDistance, weightBound));
+    Rcpp::traits::input_parameter< const double >::type r(rSEXP);
+    __result = Rcpp::wrap(Dtm(knnDistance, weightBound, r));
     return __result;
 END_RCPP
 }
 // DtmWeight
-Rcpp::NumericVector DtmWeight(const Rcpp::NumericMatrix& knnDistance, const double weightBound, const Rcpp::NumericMatrix& knnIndex, const Rcpp::NumericVector& weight);
-RcppExport SEXP TDA_DtmWeight(SEXP knnDistanceSEXP, SEXP weightBoundSEXP, SEXP knnIndexSEXP, SEXP weightSEXP) {
+Rcpp::NumericVector DtmWeight(const Rcpp::NumericMatrix& knnDistance, const double weightBound, const double r, const Rcpp::NumericMatrix& knnIndex, const Rcpp::NumericVector& weight);
+RcppExport SEXP TDA_DtmWeight(SEXP knnDistanceSEXP, SEXP weightBoundSEXP, SEXP rSEXP, SEXP knnIndexSEXP, SEXP weightSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type knnDistance(knnDistanceSEXP);
     Rcpp::traits::input_parameter< const double >::type weightBound(weightBoundSEXP);
+    Rcpp::traits::input_parameter< const double >::type r(rSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type knnIndex(knnIndexSEXP);
     Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type weight(weightSEXP);
-    __result = Rcpp::wrap(DtmWeight(knnDistance, weightBound, knnIndex, weight));
+    __result = Rcpp::wrap(DtmWeight(knnDistance, weightBound, r, knnIndex, weight));
     return __result;
 END_RCPP
 }
