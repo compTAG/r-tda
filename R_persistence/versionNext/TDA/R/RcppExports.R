@@ -21,12 +21,12 @@ KdeDist <- function(X, Grid, h, weight, printProgress) {
     .Call('TDA_KdeDist', PACKAGE = 'TDA', X, Grid, h, weight, printProgress)
 }
 
-Dtm <- function(knnDistance, weightBound) {
-    .Call('TDA_Dtm', PACKAGE = 'TDA', knnDistance, weightBound)
+Dtm <- function(knnDistance, weightBound, r) {
+    .Call('TDA_Dtm', PACKAGE = 'TDA', knnDistance, weightBound, r)
 }
 
-DtmWeight <- function(knnDistance, weightBound, knnIndex, weight) {
-    .Call('TDA_DtmWeight', PACKAGE = 'TDA', knnDistance, weightBound, knnIndex, weight)
+DtmWeight <- function(knnDistance, weightBound, r, knnIndex, weight) {
+    .Call('TDA_DtmWeight', PACKAGE = 'TDA', knnDistance, weightBound, r, knnIndex, weight)
 }
 
 RipsDiag <- function(X, maxdimension, maxscale, dist, library, location, printProgress) {

@@ -384,16 +384,44 @@ Dtm(const Rcpp::NumericMatrix & knnDistance
 	Rcpp::NumericVector dtmValue(gridNum, 0.0);
   unsigned weightSumTemp;
 
-  for (gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-    for (kIdx = 0, weightSumTemp = 0; (double)weightSumTemp < weightBound;
-        ++kIdx) {
-      distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
-      dtmValue[gridIdx] += distanceTemp * distanceTemp;
-      ++weightSumTemp;
+  if (r == 2.0) {
+    for (gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+      for (kIdx = 0, weightSumTemp = 0; (double)weightSumTemp < weightBound;
+          ++kIdx) {
+        distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
+        dtmValue[gridIdx] += distanceTemp * distanceTemp;
+        ++weightSumTemp;
+      }
+      dtmValue[gridIdx] += distanceTemp * distanceTemp *
+          (weightBound - (double)weightSumTemp);
+      dtmValue[gridIdx] = std::sqrt(dtmValue[gridIdx] / weightBound);
     }
-    dtmValue[gridIdx] += distanceTemp * distanceTemp *
-        (weightBound - (double)weightSumTemp);
-    dtmValue[gridIdx] = std::sqrt(dtmValue[gridIdx] / weightBound);
+  }
+  else if (r == 1.0) {
+    for (gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+      for (kIdx = 0, weightSumTemp = 0; (double)weightSumTemp < weightBound;
+          ++kIdx) {
+        distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
+        dtmValue[gridIdx] += distanceTemp;
+        ++weightSumTemp;
+      }
+      dtmValue[gridIdx] += distanceTemp *
+          (weightBound - (double)weightSumTemp);
+      dtmValue[gridIdx] /= weightBound;
+    }
+  }
+  else {
+    for (gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+      for (kIdx = 0, weightSumTemp = 0; (double)weightSumTemp < weightBound;
+          ++kIdx) {
+        distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
+        dtmValue[gridIdx] += std::pow(distanceTemp, r);
+        ++weightSumTemp;
+      }
+      dtmValue[gridIdx] += std::pow(distanceTemp, r) *
+          (weightBound - (double)weightSumTemp);
+      dtmValue[gridIdx] = std::pow(dtmValue[gridIdx] / weightBound, 1 / r);
+    }
   }
 
   return (dtmValue);
@@ -416,16 +444,46 @@ DtmWeight(const Rcpp::NumericMatrix & knnDistance
   Rcpp::NumericVector dtmValue(gridNum, 0.0);
   double weightTemp, weightSumTemp;
 
-  for (gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
-    for (kIdx = 0, weightSumTemp = 0.0; weightSumTemp < weightBound; ++kIdx) {
-      distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
-      weightTemp = weight[knnIndex[gridIdx + kIdx * gridNum] - 1];
-      dtmValue[gridIdx] += distanceTemp * distanceTemp * weightTemp;
-      weightSumTemp += weightTemp;
+  if (r == 2.0) {
+    for (gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+      for (kIdx = 0, weightSumTemp = 0.0; weightSumTemp < weightBound;
+          ++kIdx) {
+        distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
+        weightTemp = weight[knnIndex[gridIdx + kIdx * gridNum] - 1];
+        dtmValue[gridIdx] += distanceTemp * distanceTemp * weightTemp;
+        weightSumTemp += weightTemp;
+      }
+      dtmValue[gridIdx] += distanceTemp * distanceTemp *
+          (weightBound - weightSumTemp);
+      dtmValue[gridIdx] = std::sqrt(dtmValue[gridIdx] / weightBound);
     }
-    dtmValue[gridIdx] += distanceTemp * distanceTemp *
-        (weightBound - weightSumTemp);
-    dtmValue[gridIdx] = std::sqrt(dtmValue[gridIdx] / weightBound);
+  }
+  else if (r == 1.0) {
+    for (gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+      for (kIdx = 0, weightSumTemp = 0.0; weightSumTemp < weightBound;
+          ++kIdx) {
+        distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
+        weightTemp = weight[knnIndex[gridIdx + kIdx * gridNum] - 1];
+        dtmValue[gridIdx] += distanceTemp * weightTemp;
+        weightSumTemp += weightTemp;
+      }
+      dtmValue[gridIdx] += distanceTemp * (weightBound - weightSumTemp);
+      dtmValue[gridIdx] /= weightBound;
+    }
+  }
+  else {
+    for (gridIdx = 0; gridIdx < gridNum; ++gridIdx) {
+      for (kIdx = 0, weightSumTemp = 0.0; weightSumTemp < weightBound;
+          ++kIdx) {
+        distanceTemp = knnDistance[gridIdx + kIdx * gridNum];
+        weightTemp = weight[knnIndex[gridIdx + kIdx * gridNum] - 1];
+        dtmValue[gridIdx] += std::pow(distanceTemp, r) * weightTemp;
+        weightSumTemp += weightTemp;
+      }
+      dtmValue[gridIdx] += std::pow(distanceTemp, r) *
+          (weightBound - weightSumTemp);
+      dtmValue[gridIdx] = std::pow(dtmValue[gridIdx] / weightBound, 1 / r);
+    }
   }
 
   return (dtmValue);
