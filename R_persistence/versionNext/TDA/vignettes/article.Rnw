@@ -91,7 +91,7 @@ topological information about the underlying space, such as the distance functio
 the kNN density estimator, the kernel density estimator, and the kernel distance.
 The salient topological features of the sublevel sets (or superlevel sets) of these functions
 can be quantified with persistent homology. We provide an \proglang{R} interface
-for the efficient algorithms of the \proglang{C++} libraries \href{https://project.inria.fr/gudhi/software }{\pkg{GUDHI}}, \href{http://www.mrzv.org/software/dionysus }{\pkg{Dionysus}}, and \href{https://bitbucket.org/phat-code/phat }{\pkg{PHAT}}, 
+for the efficient algorithms of the \proglang{C++} libraries \href{ https://project.inria.fr/gudhi/software }{\pkg{GUDHI}}, \href{ http://www.mrzv.org/software/dionysus }{\pkg{Dionysus}}, and \href{ https://bitbucket.org/phat-code/phat }{\pkg{PHAT}}, 
 including a function for the persistent homology of the Rips filtration, 
 and one for the persistent homology of sublevel
 sets (or superlevel sets) of arbitrary functions evaluated over a grid of points.
@@ -108,11 +108,13 @@ a density function and visualize it by means of a dendrogram, the cluster tree.
   Brittany T. Fasy\\
   Computer Science Department\\
   Montana State University\\
+  Website: \url{ http://www.cs.montana.edu/brittany/ } \\
   Email: \email{brittany.fasy@alumni.duke.edu}\\
 
   Jisu Kim\\
   Department of Statistics\\
   Carnegie Mellon University\\
+  Website: \url{ http://www.stat.cmu.edu/~jisuk/ } \\
   Email: \email{jisuk1@andrew.cmu.edu}\\
 
   Fabrizio Lecci\\
@@ -121,6 +123,7 @@ a density function and visualize it by means of a dendrogram, the cluster tree.
   Cl\'ement Maria\\
   School of Mathematics and Physics\\
   The University of Queensland\\
+  Website: \url{ http://www-sop.inria.fr/members/Clement.Maria/ } \\
   Email: \email{clement.maria@inria.fr}\\
 
   Vincent Rouvreau\\
@@ -130,7 +133,7 @@ a density function and visualize it by means of a dendrogram, the cluster tree.
 
   TopStat Group\\
   Carnegie Mellon University\\
-  Website: \url{http://www.stat.cmu.edu/topstat/} \\
+  Website: \url{ http://www.stat.cmu.edu/topstat/ } \\
   Email: \email{topstat@stat.cmu.edu}
 
 }
@@ -161,7 +164,7 @@ This information is encoded in the persistence diagram, a multiset of points in 
 %\textsf{\textbf{phom}}\footnote{
 %http://cran.r-project.org/web/packages/phom/index.html} is an R package written
 %by Andrew Tausz;
-%\textsf{\textbf{PHAT}}\footnote{https://code.google.com/p/phat/} is a C++
+%\textsf{\textbf{PHAT}}\footnote{https://bitbucket.org/phat-code/phat/} is a C++
 %library developed at the Institute of Science and Technology Austria;
 %\textsf{\textbf{Dionysus}}\footnote{http://www.mrzv.org/software/dionysus/} is
 %a
@@ -177,7 +180,7 @@ This information is encoded in the persistence diagram, a multiset of points in 
 
 This paper is devoted to the presentation of the \proglang{R} package \pkg{TDA},
 which provides a user-friendly interface for the efficient algorithms of the 
-\proglang{C++} libraries \href{https://project.inria.fr/gudhi/software }{\pkg{GUDHI}} \citep{gudhi_stpcoh}, \href{http://www.mrzv.org/software/dionysus }{\pkg{Dionysus}} \citep{dionysus_C}, and \href{https://bitbucket.org/phat-code/phat }{\pkg{PHAT}} \citep{phat_C}.
+\proglang{C++} libraries \href{ https://project.inria.fr/gudhi/software }{\pkg{GUDHI}} \citep{gudhi_stpcoh}, \href{ http://www.mrzv.org/software/dionysus }{\pkg{Dionysus}} \citep{dionysus_C}, and \href{ https://bitbucket.org/phat-code/phat }{\pkg{PHAT}} \citep{phat_C}.
 
 In Section \ref{sec:distances}, we describe how to compute some widely studied functions that, starting from a point cloud, provide some topological information about the underlying space: the distance function (\code{distFct}), the distance to a measure function (\code{dtm}), the k Nearest Neighbor density estimator (\code{knnDE}), the kernel density estimator (\code{kde}), and the kernel distance (\code{kernelDist}).
 Section \ref{sec:persistent} is devoted to the computation of persistence diagrams: the function \code{gridDiag} can be used to compute persistent homology of sublevel sets (or superlevel sets) of functions evaluated over a grid of points; the function \code{ripsDiag} returns the persistence diagram of the Rips filtration built on top of a point cloud. 
@@ -232,21 +235,23 @@ and is computed for each point of the \code{Grid} with the following code:
 distance <- distFct(X = X, Grid = Grid)
 @
 \item Given a probability measure $P$, the distance to measure (DTM) is defined for each $y \in \mathbb{R}^d$ as
-$$
-d_{m_0}(y) =\sqrt{ \frac{1}{m_0}\int_0^{m_0} ( G_y^{-1}(u))^2 du},
-$$
+\[
+d_{m0}(y) = \left(\frac{1}{m0}\int_0^{m0} ( G_y^{-1}(u))^{r} du\right)^{1/r},
+\]
 where
-$G_y(t) = P( \Vert X-y \Vert \leq t)$ and $0<m_0<1$ is a smoothing parameter. 
-The DTM can be seen as a smoothed version of the distance function.
-For more details
-see \cite{chazal2011geometric}.\\
+$G_y(t) = P( \Vert X-y \Vert \leq t)$, and $m0 \in (0,1)$ and $r \in [1,\infty)$ are tuning parameters. As \code{m0} increases, DTM function becomes smoother, so \code{m0} can be understood as a smoothing parameter. \code{r} affects less but also changes DTM function as well. The default value of \code{r} is \code{2}.
+The DTM can be seen as a smoothed version of the distance function. See \citep[Definition 3.2]{chazal2011geometric} and \citep[Equation (2)]{ChazalMM2015} for a formal definition of the "distance to measure" function.
+
 Given $X=\{x_1, \dots, x_n\}$, the empirical version of the DTM is
-$$
-\hat d_{m_0}(y) = \sqrt{ \frac{1}{k} \sum_{x_i \in N_k(y)} \Vert x_i-y \Vert^2 },
-$$
-where $k= \lceil m_0 n \rceil$ and $N_k(y)$ is the 
+\[
+\hat d_{m0}(y) = \left(\frac{1}{k} \sum_{x_i \in N_k(y)} \Vert x_i-y \Vert^{r}\right)^{1/r},
+\]
+where $k= \lceil m0 * n \rceil$ and $N_k(y)$ is the 
 set containing the $k$ nearest neighbors 
 of $y$ among $x_1, \ldots, x_n$.
+
+For more details, see \citep{chazal2011geometric} and \citep{ChazalMM2015}.
+
 The DTM is computed for each point of the \code{Grid} with the following code:
 
 <<eq3, echo=TRUE>>=
@@ -443,7 +448,7 @@ We provide an informal description of the implemented methods of persistent homo
 %%%%%%%%%%%%%%%%%%%%%%%
 In this section, we describe how to use the \code{gridDiag} function to compute the persistent homology of sublevel (and superlevel) sets of the functions described in Section \ref{sec:distances}. 
 The function \code{gridDiag} evaluates a given real valued function over a triangulated grid, constructs a filtration of simplices using the values of the function, and computes the persistent homology of the filtration. From version 1.2, \code{gridDiag} works in arbitrary dimension.
-The core of the function is written in \proglang{C++} and the user can choose to compute persistence diagrams using either the \href{http://www.mrzv.org/software/dionysus }{\pkg{Dionysus}} library or the \href{https://bitbucket.org/phat-code/phat }{\pkg{PHAT}} library.
+The core of the function is written in \proglang{C++} and the user can choose to compute persistence diagrams using either the \href{ http://www.mrzv.org/software/dionysus }{\pkg{Dionysus}} library or the \href{ https://bitbucket.org/phat-code/phat }{\pkg{PHAT}} library.
 
 The following code computes the persistent homology of the superlevel sets \linebreak (\code{sublevel = FALSE}) of the kernel density estimator (\code{FUN = kde}, \code{h = 0.3}) using the point cloud stored in the matrix~\code{X} from the previous example.
 The same code would work for the other functions defined in Section \ref{sec:distances} (it is sufficient to replace \code{kde} and its smoothing parameter \code{h} with another function and the corresponding parameter). 
@@ -527,7 +532,7 @@ The sequence of Rips complexes obtained by gradually
 increasing the radius $\varepsilon$ creates a filtration.
 
 The \code{ripsDiag} function computes the persistence diagram of the Rips filtration built on top of a point cloud.
-The user can choose to compute the Rips persistence diagram using either the \proglang{C++} library \href{https://project.inria.fr/gudhi/software }{\pkg{GUDHI}}, or \href{http://www.mrzv.org/software/dionysus }{\pkg{Dionysus}}.
+The user can choose to compute the Rips persistence diagram using either the \proglang{C++} library \href{ https://project.inria.fr/gudhi/software }{\pkg{GUDHI}}, or \href{ http://www.mrzv.org/software/dionysus }{\pkg{Dionysus}}.
 \\The following code generates 60 points from two circles:
 
 <<eq12, echo=TRUE, eval=TRUE>>=
@@ -575,7 +580,7 @@ plot(Diag[["diagram"]])
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 The {\em Alpha shape complex} $S(X,\alpha)$ is the polytope with its boundary consisting of $\alpha$-exposed simplices, where a simplex $\sigma$ is $\alpha$-exposed if there is an open ball $b$ of radius $\alpha$ such that $b \cap X = \emptyset$ and $\partial b \cap X = \sigma$. Suppose $\mathbb{R}^{d}$ is filled with ice cream, then consider scooping out the ice cream with sphere-shaped spoon of radius $\alpha$ without touching the points $X$. $S(X,\alpha)$ is the remaining polytope with straightening round surfaces. See \citep{fischer2005} and \citep{edelsbrunner1994}.
 
-The \code{alphaShapeDiag} function computes the persistence diagram of the alpha shape filtration built on top of a point cloud in 3 dimension, using the C++ library \href{https://project.inria.fr/gudhi/software }{\pkg{GUDHI}}. Currently the point data cloud should be 3 dimension, and only work on 64-bit R.
+The \code{alphaShapeDiag} function computes the persistence diagram of the alpha shape filtration built on top of a point cloud in 3 dimension, using the C++ library \href{ https://project.inria.fr/gudhi/software }{\pkg{GUDHI}}. Currently the point data cloud should be 3 dimension, and only work on 64-bit R.
 
 We first generate 500 points from a sphere:
 
@@ -610,7 +615,7 @@ plot(DiagAlphaShape[["diagram"]])
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Standard metrics for measuring the distance between two persistence diagrams are the bottleneck distance and the $p$th Wasserstein distance \citep{edelsbrunner2010computational}. 
-The \pkg{TDA} package includes the functions \code{bottleneck} and \code{wasserstein}, which are R wrappers of the functions ``bottleneck\_distance" and ``wasserstein\_distance" of the \proglang{C++} library \href{http://www.mrzv.org/software/dionysus }{\pkg{Dionysus}}.
+The \pkg{TDA} package includes the functions \code{bottleneck} and \code{wasserstein}, which are R wrappers of the functions ``bottleneck\_distance" and ``wasserstein\_distance" of the \proglang{C++} library \href{ http://www.mrzv.org/software/dionysus }{\pkg{Dionysus}}.
 
 We generate two persistence diagrams of the Rips filtrations built on top of the two (separate) circles of the previous example,
 
@@ -890,8 +895,8 @@ lines(tseq, bootLand[["mean"]], lwd = 2, col = 2)
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 An unsolved problem in topological inference is how to
-choose the smoothing parameters, for example $h$ for KDE and 
-$m_0$ for DTM.
+choose the smoothing parameters, for example \code{h} for KDE and 
+\code{m0} for DTM.
 
 \cite{chazal2014robust} suggest the following method, that we describe here for the kernel density estimator,
 but works also for the kernel distance and the distance to measure.
