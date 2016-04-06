@@ -7,7 +7,7 @@
 }
 
 \description{
-  \code{alphaShapeDiag} function computes the persistence diagram of the alpha shape filtration built on top of a point cloud in 3 dimension.
+  The function \code{alphaShapeDiag} computes the persistence diagram of the alpha shape filtration built on top of a point cloud in 3 dimension.
 }
 
 \usage{
@@ -21,37 +21,37 @@ alphaShapeDiag(X, library = "GUDHI", printProgress = FALSE)
   }
 
   \item{library}{
-    Currently only the library 'GUDHI' can be used to compute the persistence diagram.
+    Currently only the library "GUDHI" can be used to compute the persistence diagram.
   }
 
   \item{printProgress}{
-    if \code{TRUE}, a progress bar is printed. Default is \code{FALSE}.
+    if \code{TRUE}, a progress bar is printed. The default value is \code{FALSE}.
   }
 }
 
 \details{
-  \code{alphaShapeDiag} constructs the alpha shape filtration, using the C++ library GUDHI.
+  The function \code{alphaShapeDiag} constructs the alpha shape filtration, using the C++ library \href{ https://project.inria.fr/gudhi/software }{GUDHI}.
   Currently the point data cloud should be 3 dimension, and only work on 64-bit R.
   See refereneces.
 }
 
 \value{
-  \code{alphaShapeDiag} returns a list with the following elements:
+  The function \code{alphaShapeDiag} returns a list with the following elements:
   \item{diagram}{
     an object of class \code{diagram}, a \eqn{P} by 3 matrix, where \eqn{P} is the number of points in the resulting persistence diagram. The first column stores the dimension of each feature (0 for components, 1 for loops, 2 for voids, etc). Second and third columns are Birth and Death of the features.
   }
 }
 
 \references{
-  Kaspar Fischer, Introduction to Alpha Shapes, http://www.cs.uu.nl/docs/vakken/ddm/texts/Delaunay/alphashapes.pdf
+  Fischer K (2005). "Introduction to Alpha Shapes." \url{ http://www.cs.uu.nl/docs/vakken/ddm/texts/Delaunay/alphashapes.pdf }
 
-  Herbert Edelsbrunner and Ernst P. Mucke (1994), Three-dimensional Alpha Shapes, ACM Trans. Graph.
+  Edelsbrunner H, Mucke EP (1994). "Three-dimensional Alpha Shapes." ACM Trans. Graph.
 
-  Jean-Daniel Boissonnat, Marc Glisse, Clement Maria, and Vincent Rouvreau, "GUDHI, Simplicial Complexes and Persistent Homology Packages". https://project.inria.fr/gudhi/software/.
+  Maria C (2014). "GUDHI, Simplicial Complexes and Persistent Homology Packages." \url{ https://project.inria.fr/gudhi/software/ }
 
-  Dmitriy Morozov, Homological Illusions of Persistence and Stability, http://www.mrzv.org/publications/thesis/phd/
+  Morozov D (2008). "Homological Illusions of Persistence and Stability." \url{ http://www.mrzv.org/publications/thesis/phd/ }
 
-  Herbert Edelsbrunner and John Harer (2010), Computational topology: an introduction. American Mathematical Society.
+  Edelsbrunner H, Harer J (2010). "Computational topology: an introduction." American Mathematical Society.
 }
 
 \author{
