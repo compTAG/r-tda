@@ -134,3 +134,15 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// AlphaComplexDiagGUDHI
+Rcpp::List AlphaComplexDiagGUDHI(const Rcpp::NumericMatrix& X, const bool printProgress);
+RcppExport SEXP TDA_AlphaComplexDiagGUDHI(SEXP XSEXP, SEXP printProgressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< const Rcpp::NumericMatrix& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const bool >::type printProgress(printProgressSEXP);
+    __result = Rcpp::wrap(AlphaComplexDiagGUDHI(X, printProgress));
+    return __result;
+END_RCPP
+}
