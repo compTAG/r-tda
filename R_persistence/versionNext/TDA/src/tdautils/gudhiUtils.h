@@ -7,6 +7,7 @@
 #include <gudhi/Simplex_tree.h>
 #include <gudhi/Persistent_cohomology.h>
 #include <gudhi/Persistent_cohomology/Field_Zp.h>
+#include <gudhi/Alpha_complex.h>
 
 #include <utilities/timer.h>
 

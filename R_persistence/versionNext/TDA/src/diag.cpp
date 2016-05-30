@@ -759,7 +759,7 @@ AlphaShapeDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memo
 	    if (filtr > filtration_max) {
 	      filtration_max = filtr;
 	    }
-	    simplex_tree.insert(the_simplex_tree, filtr);
+	    simplex_tree.insert_simplex(the_simplex_tree, filtr);
 		if (the_alpha_value_iterator != the_alpha_values.end()) {
 		  ++the_alpha_value_iterator;
 		}
@@ -768,7 +768,6 @@ AlphaShapeDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memo
 		}
 	  }
 	  simplex_tree.set_filtration(filtration_max);
-	  simplex_tree.set_num_simplices(count_vertices + count_edges + count_facets + count_cells);
 	  simplex_tree.set_dimension(dim_max);
 
 	  if (printProgress) {
@@ -796,6 +795,63 @@ AlphaShapeDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memo
 
 	// Compute the persistence diagram of the complex
 	computePersistenceGUDHI(simplex_tree, coeff_field_characteristic,
+			min_persistence, 2, persDgm, printProgress);
+
+	// Output persistent diagram
+	return Rcpp::List::create(
+			concatStlToRcpp< Rcpp::NumericMatrix >(persDgm, true, 3),
+			concatStlToRcpp< Rcpp::NumericMatrix >(persLoc, false, 2),
+			StlToRcppMatrixList< Rcpp::List, Rcpp::NumericMatrix >(persCycle));
+}
+
+// AlphaComplexDiag in GUDHI
+/** \brief Interface for R code, construct the persistence diagram
+  * of the Rips complex constructed on the input set of points.
+  *
+  * @param[out] Rcpp::List     A list
+  * @param[in]  X              An nx3 matrix of coordinates,
+  * @param[in]  printProgress  Is progress printed?
+  */
+// [[Rcpp::export]]
+Rcpp::List
+AlphaComplexDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory space
+                  , const bool                  printProgress
+	) {
+	std::vector< std::vector< std::vector< double > > > persDgm;
+	std::vector< std::vector< std::vector< unsigned > > > persLoc;
+	std::vector< std::vector< std::vector< std::vector< unsigned > > > > persCycle;
+
+	  int coeff_field_characteristic = 2;
+
+	  float min_persistence = 0.0;
+
+          using Kernel = CGAL::Epick_d< CGAL::Dimension_tag<3> >;
+          // using Kernel = CGAL::Epick_d< CGAL::Dynamic_dimension_tag>;
+          using Point = Kernel::Point_d;
+          using Vector_of_points = std::vector<Point>;
+
+
+          // Point p(0.,0.,0.); // static
+          
+          // std::vector<double> point = {0.,0.,0.,0.,0.};
+          // Point p(point.size(), point.begin(), point.end()); // dynamic
+          
+	  // Turn the input points into a range of points
+	  std::list<Point> lp = RcppToStlPoint3< std::list<Point> >(X);
+
+	  Gudhi::alphacomplex::Alpha_complex<Kernel> alpha_complex_from_points(lp, 0.0);
+
+	  if (printProgress) {
+		  Rprintf("# Generated complex of size: %d \n", alpha_complex_from_points.num_simplices());
+	  }
+
+	  // Sort the simplices in the order of the filtration
+	  alpha_complex_from_points.initialize_filtration();
+
+	  //std::cout << "Simplex_tree dim: " << simplex_tree.dimension() << std::endl;
+
+	// Compute the persistence diagram of the complex
+	computePersistenceGUDHI(alpha_complex_from_points, coeff_field_characteristic,
 			min_persistence, 2, persDgm, printProgress);
 
 	// Output persistent diagram
