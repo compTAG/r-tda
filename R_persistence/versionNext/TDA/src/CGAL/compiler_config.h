@@ -42,6 +42,8 @@
 
 //#define CGAL_CFG_USING_BASE_MEMBER_BUG_2 1
 
+#define CGAL_HEADER_ONLY 1
+
 #define CGAL_USE_GMP 1
 
 #define CGAL_USE_MPFR 1
