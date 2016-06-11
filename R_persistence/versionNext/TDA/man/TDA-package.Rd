@@ -17,8 +17,8 @@
 \tabular{ll}{
 Package: \tab TDA\cr
 Type: \tab Package\cr
-Version: \tab 1.4.1\cr
-Date: \tab 2015-09-17\cr
+Version: \tab 1.5\cr
+Date: \tab 2016-06-11\cr
 License: \tab GPL-3 \cr
 }
 }
