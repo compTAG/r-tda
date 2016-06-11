@@ -1,4 +1,5 @@
 PKG_CXXFLAGS= -I . -DBOOST_DISABLE_THREADS -DCGAL_EIGEN3_ENABLED -frounding-math
+PKG_LIBS = -lgmp
 
 ## We want C++11
 CXX_STD = CXX11
