@@ -1,12 +1,13 @@
 alphaComplexDiag <-
-function(X, maxalphasquare, library = "GUDHI", printProgress = FALSE) {
+# function(X, maxalphasquare, library = "GUDHI", printProgress = FALSE) {
+function(X, library = "GUDHI", printProgress = FALSE) {
 
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
   }
-  if (!is.numeric(maxalphasquare) || length(maxalphasquare) != 1 || maxalphasquare < 0) {
-    stop("maxalphasquare should be a nonnegative number")
-  }
+#  if (!is.numeric(maxalphasquare) || length(maxalphasquare) != 1 || maxalphasquare < 0) {
+#    stop("maxalphasquare should be a nonnegative number")
+#  }
   if (library == "gudhi" || library == "Gudhi") {
     library <- "GUDHI"
   }
@@ -20,7 +21,8 @@ function(X, maxalphasquare, library = "GUDHI", printProgress = FALSE) {
   X <- as.matrix(X)
 
   if (library == "GUDHI") {
-    alphaOut <- AlphaComplexDiagGUDHI(X = X, maxalphasquare = maxalphasquare, printProgress = printProgress)
+#    alphaOut <- AlphaComplexDiagGUDHI(X = X, maxalphasquare = maxalphasquare, printProgress = printProgress)  
+    alphaOut <- AlphaComplexDiagGUDHI(X = X, printProgress = printProgress)
   }
 
   Diag <- alphaOut[[1]]
