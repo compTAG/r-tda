@@ -815,9 +815,8 @@ AlphaShapeDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memo
   */
 // [[Rcpp::export]]
 Rcpp::List
-AlphaComplexDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memory space
-                  , const double                maxalphasquare
-                  , const bool                  printProgress
+AlphaComplexDiagGUDHI(const Rcpp::NumericMatrix & X             //points to some memory space
+                    , const bool                  printProgress
 	) {
 	std::vector< std::vector< std::vector< double > > > persDgm;
 	std::vector< std::vector< std::vector< unsigned > > > persLoc;
@@ -833,7 +832,9 @@ AlphaComplexDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some me
 	// Turn the input points into a range of points
 	std::list<Point> lp = RcppToCGALPointD< std::list< Point > >(X);
 
-	Gudhi::alphacomplex::Alpha_complex<Kernel> alpha_complex_from_points(lp, maxalphasquare);
+	//Gudhi::alphacomplex::Alpha_complex<Kernel> alpha_complex_from_points(lp, maxalphasquare);
+  Gudhi::alphacomplex::Alpha_complex<Kernel>
+      alpha_complex_from_points(lp, std::numeric_limits<double>::infinity());
 
 	if (printProgress) {
 		Rprintf("# Generated complex of size: %d \n", alpha_complex_from_points.num_simplices());
