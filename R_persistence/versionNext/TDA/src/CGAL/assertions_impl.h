@@ -84,13 +84,13 @@ _standard_error_handler(
     if (get_static_error_behaviour() == THROW_EXCEPTION)
         return;
 #endif
-    std::cerr << "CGAL error: " << what << " violation!" << std::endl
-         << "Expression : " << expr << std::endl
-         << "File       : " << file << std::endl
-         << "Line       : " << line << std::endl
-         << "Explanation: " << msg << std::endl
-         << "Refer to the bug-reporting instructions at http://www.cgal.org/bug_report.html"
-	 << std::endl;
+  //  std::cerr << "CGAL error: " << what << " violation!" << std::endl
+  //       << "Expression : " << expr << std::endl
+  //       << "File       : " << file << std::endl
+  //       << "Line       : " << line << std::endl
+  //       << "Explanation: " << msg << std::endl
+  //       << "Refer to the bug-reporting instructions at http://www.cgal.org/bug_report.html"
+	 //<< std::endl;
 }
 
 
@@ -109,13 +109,13 @@ _standard_warning_handler( const char *,
     if (get_static_warning_behaviour() == THROW_EXCEPTION)
         return;
 #endif
-    std::cerr << "CGAL warning: check violation!" << std::endl
-         << "Expression : " << expr << std::endl
-         << "File       : " << file << std::endl
-         << "Line       : " << line << std::endl
-         << "Explanation: " << msg << std::endl
-         << "Refer to the bug-reporting instructions at http://www.cgal.org/bug_report.html"
-	 << std::endl;
+  //  std::cerr << "CGAL warning: check violation!" << std::endl
+  //       << "Expression : " << expr << std::endl
+  //       << "File       : " << file << std::endl
+  //       << "Line       : " << line << std::endl
+  //       << "Explanation: " << msg << std::endl
+  //       << "Refer to the bug-reporting instructions at http://www.cgal.org/bug_report.html"
+	 //<< std::endl;
 }
 
 #ifdef CGAL_HEADER_ONLY
