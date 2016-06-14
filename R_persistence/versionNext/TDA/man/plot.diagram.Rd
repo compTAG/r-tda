@@ -18,7 +18,7 @@
 
 \arguments{
   \item{x}{
-    an object of class \code{diagram} (as returned by the functions \code{\link{gridDiag}} and \code{\link{ripsDiag}}) or an \eqn{n} by 3 matrix, where \eqn{n} is the number of features to be plotted.
+    an object of class \code{diagram} (as returned by the functions \code{\link{alphaComplexDiag}}, \code{\link{alphaComplexDiag}}, \code{\link{gridDiag}}, or \code{\link{ripsDiag}}) or an \eqn{n} by 3 matrix, where \eqn{n} is the number of features to be plotted.
   }
 
   \item{diagLim}{
@@ -77,7 +77,7 @@
 }
 
 \seealso{
-  \code{\link{gridDiag}}, \code{\link{ripsDiag}}
+  \code{\link{alphaComplexDiag}}, \code{\link{alphaComplexDiag}}, \code{\link{gridDiag}}, \code{\link{ripsDiag}}
 }
 
 \examples{
