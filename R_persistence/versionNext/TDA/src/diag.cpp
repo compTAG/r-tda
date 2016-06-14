@@ -673,7 +673,7 @@ AlphaShapeDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some memo
 
 
 	  // Turn the input points into a range of points
-	  std::list<Point_3> lp = RcppToStlPoint3< std::list<Point_3> >(X);
+	  std::list<Point_3> lp = RcppToCGALPoint3< std::list<Point_3> >(X);
 
 
 	  // alpha shape construction from points. CGAL has a strange behavior in REGULARIZED mode.
@@ -831,7 +831,7 @@ AlphaComplexDiagGUDHI(const Rcpp::NumericMatrix & X          //points to some me
         using Point = Kernel::Point_d;
 
 	// Turn the input points into a range of points
-	std::list<Point> lp = RcppToCgalPointD< Point >(X);
+	std::list<Point> lp = RcppToCGALPointD< std::list< Point > >(X);
 
 	Gudhi::alphacomplex::Alpha_complex<Kernel> alpha_complex_from_points(lp, maxalphasquare);
 

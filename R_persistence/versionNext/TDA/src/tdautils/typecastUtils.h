@@ -44,37 +44,38 @@ inline StlMatrix RcppToStl(const RcppMatrix& rcppMatrix,
 
 
 
-template< typename StlPoint3List, typename RcppMatrix >
-inline StlPoint3List RcppToStlPoint3(const RcppMatrix& rcppMatrix) {
+template< typename CGALPoint3List, typename RcppMatrix >
+inline CGALPoint3List RcppToCGALPoint3(const RcppMatrix& rcppMatrix) {
 
 	const unsigned rowNum = rcppMatrix.nrow();
-
-	StlPoint3List stlPoint3List;
+  CGALPoint3List cGALPoint3List;
 	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
-		stlPoint3List.push_back(
-				typename StlPoint3List::value_type(rcppMatrix[rowIdx],
+    cGALPoint3List.push_back(
+				typename CGALPoint3List::value_type(rcppMatrix[rowIdx],
 					rcppMatrix[rowIdx + rowNum], rcppMatrix[rowIdx + 2 * rowNum]));
 	}
-	return stlPoint3List;
+	return cGALPoint3List;
 }
 
 
 
-template< typename CgalPointD, typename RcppMatrix >
-inline std::list<CgalPointD> RcppToCgalPointD(const RcppMatrix& rcppMatrix) {
+template< typename CGALPointDList, typename RcppMatrix >
+inline CGALPointDList RcppToCGALPointD(const RcppMatrix& rcppMatrix) {
 
-	const unsigned rowNum = rcppMatrix.nrow();
-	const unsigned colNum = rcppMatrix.ncol();
-	Rprintf("RcppToCgalPointD  row=%d col=%d \n", rowNum, colNum);
-	std::list<CgalPointD> cgalPointDList;
-	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
-		std::vector<double> point;
-		for (unsigned colIdx = 0; colIdx < colNum; ++colIdx) {
-			point.push_back(rcppMatrix[rowIdx + colIdx * rowNum]);
-		}
-		cgalPointDList.push_back(CgalPointD(point.size(), point.begin(), point.end()));
-	}
-	return cgalPointDList;
+  const unsigned rowNum = rcppMatrix.nrow();
+  const unsigned colNum = rcppMatrix.ncol();
+  CGALPointDList cGALPointDList;
+  std::vector< double > pointD(colNum);
+
+  for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
+    for (unsigned colIdx = 0; colIdx < colNum; ++colIdx) {
+      pointD[colIdx] = rcppMatrix[rowIdx + colIdx * rowNum];
+    }
+    cGALPointDList.push_back(
+        typename CGALPointDList::value_type(pointD.size(), pointD.begin(),
+          pointD.end()));
+  }
+  return cGALPointDList;
 }
 
 
