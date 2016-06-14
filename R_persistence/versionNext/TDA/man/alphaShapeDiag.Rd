@@ -31,7 +31,6 @@ alphaShapeDiag(X, library = "GUDHI", printProgress = FALSE)
 
 \details{
   The function \code{alphaShapeDiag} constructs the alpha shape filtration, using the C++ library \href{ https://project.inria.fr/gudhi/software }{GUDHI}.
-  Currently the point data cloud should be 3 dimension, and only work on 64-bit R.
   See refereneces.
 }
 
@@ -59,7 +58,7 @@ alphaShapeDiag(X, library = "GUDHI", printProgress = FALSE)
 }
 
 \seealso{
-  \code{\link{summary.diagram}}, \code{\link{plot.diagram}}, \code{\link{gridDiag}}, \code{\link{ripsDiag}}
+  \code{\link{summary.diagram}}, \code{\link{plot.diagram}}, \code{\link{alphaComplexDiag}}, \code{\link{gridDiag}}, \code{\link{ripsDiag}}
 }
 
 \examples{

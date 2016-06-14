@@ -47,7 +47,9 @@ bottleneck(Diag1, Diag2, dimension = 1)
 }
 
 \seealso{
-  \code{\link{wasserstein}}, \code{\link{ripsDiag}},  \code{\link{gridDiag}}, \code{\link{plot.diagram}}
+  \code{\link{wasserstein}},
+  \code{\link{alphaComplexDiag}}, \code{\link{alphaComplexDiag}}, \code{\link{gridDiag}}, \code{\link{ripsDiag}},
+  \code{\link{plot.diagram}}
 }
 
 \examples{

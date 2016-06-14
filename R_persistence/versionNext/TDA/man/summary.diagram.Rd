@@ -38,7 +38,8 @@
 }
 
 \seealso{
-  \code{\link{plot.diagram}}, \code{\link{gridDiag}}, \code{\link{ripsDiag}},
+  \code{\link{plot.diagram}},
+  \code{\link{alphaComplexDiag}}, \code{\link{alphaComplexDiag}}, \code{\link{gridDiag}}, \code{\link{ripsDiag}}
 }
 
 \examples{

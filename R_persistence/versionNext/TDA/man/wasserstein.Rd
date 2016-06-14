@@ -51,7 +51,8 @@
 }
 
 \seealso{
-  \code{\link{bottleneck}}, \code{\link{ripsDiag}},  \code{\link{gridDiag}},
+  \code{\link{bottleneck}},
+  \code{\link{alphaComplexDiag}}, \code{\link{alphaComplexDiag}}, \code{\link{gridDiag}}, \code{\link{ripsDiag}},
   \code{\link{plot.diagram}}
 }
 
