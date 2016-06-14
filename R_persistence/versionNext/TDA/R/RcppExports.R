@@ -37,7 +37,7 @@ AlphaShapeDiagGUDHI <- function(X, printProgress) {
     .Call('TDA_AlphaShapeDiagGUDHI', PACKAGE = 'TDA', X, printProgress)
 }
 
-AlphaComplexDiagGUDHI <- function(X, printProgress) {
-    .Call('TDA_AlphaComplexDiagGUDHI', PACKAGE = 'TDA', X, printProgress)
+AlphaComplexDiagGUDHI <- function(X, maxalphasquare, printProgress) {
+    .Call('TDA_AlphaComplexDiagGUDHI', PACKAGE = 'TDA', X, maxalphasquare, printProgress)
 }
 

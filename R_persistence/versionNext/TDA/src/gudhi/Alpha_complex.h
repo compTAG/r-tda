@@ -192,6 +192,7 @@ class Alpha_complex : public Simplex_tree<> {
   void init_from_range(const InputPointRange& points, Filtration_value max_alpha_square) {
     auto first = std::begin(points);
     auto last = std::end(points);
+
     if (first != last) {
       // point_dimension function initialization
       Point_Dimension point_dimension = kernel_.point_dimension_d_object();

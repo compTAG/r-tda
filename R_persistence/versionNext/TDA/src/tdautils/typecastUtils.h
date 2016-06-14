@@ -48,6 +48,7 @@ template< typename StlPoint3List, typename RcppMatrix >
 inline StlPoint3List RcppToStlPoint3(const RcppMatrix& rcppMatrix) {
 
 	const unsigned rowNum = rcppMatrix.nrow();
+
 	StlPoint3List stlPoint3List;
 	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
 		stlPoint3List.push_back(
@@ -55,6 +56,25 @@ inline StlPoint3List RcppToStlPoint3(const RcppMatrix& rcppMatrix) {
 					rcppMatrix[rowIdx + rowNum], rcppMatrix[rowIdx + 2 * rowNum]));
 	}
 	return stlPoint3List;
+}
+
+
+
+template< typename CgalPointD, typename RcppMatrix >
+inline std::list<CgalPointD> RcppToCgalPointD(const RcppMatrix& rcppMatrix) {
+
+	const unsigned rowNum = rcppMatrix.nrow();
+	const unsigned colNum = rcppMatrix.ncol();
+	Rprintf("RcppToCgalPointD  row=%d col=%d \n", rowNum, colNum);
+	std::list<CgalPointD> cgalPointDList;
+	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx) {
+		std::vector<double> point;
+		for (unsigned colIdx = 0; colIdx < colNum; ++colIdx) {
+			point.push_back(rcppMatrix[rowIdx + colIdx * rowNum]);
+		}
+		cgalPointDList.push_back(CgalPointD(point.size(), point.begin(), point.end()));
+	}
+	return cgalPointDList;
 }
 
 
