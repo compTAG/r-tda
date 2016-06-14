@@ -42,7 +42,7 @@ alphaShapeDiag(X, library = "GUDHI", printProgress = FALSE)
 }
 
 \references{
-  Fischer K (2005). "Introduction to Alpha Shapes." \url{ http://www.cs.uu.nl/docs/vakken/ddm/texts/Delaunay/alphashapes.pdf }
+  Fischer K (2005). "Introduction to Alpha Shapes."
 
   Edelsbrunner H, Mucke EP (1994). "Three-dimensional Alpha Shapes." ACM Trans. Graph.
 
