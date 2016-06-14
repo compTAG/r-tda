@@ -7,7 +7,7 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   }
   if (!is.numeric(maxdimension) ||
       length(maxdimension) != 1 || maxdimension < 0) {
-    stop("maxdimnsion should be a nonnegative integer")
+    stop("maxdimension should be a nonnegative integer")
   }
   if (!is.numeric(maxscale) || length(maxscale) != 1) {
     stop("maxscale should be a number")
