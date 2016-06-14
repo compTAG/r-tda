@@ -137,8 +137,10 @@ class Alpha_complex : public Simplex_tree<> {
       : triangulation_(nullptr) {
     Gudhi::Points_off_reader<Point_d> off_reader(off_file_name);
     if (!off_reader.is_valid()) {
+#ifdef DEBUG_TRACES
       std::cerr << "Alpha_complex - Unable to read file " << off_file_name << "\n";
       exit(-1);  // ----- >>
+#endif
     }
 
     init_from_range(off_reader.get_point_cloud(), max_alpha_square);
@@ -232,19 +234,27 @@ class Alpha_complex : public Simplex_tree<> {
    */
   void init(Filtration_value max_alpha_square) {
     if (triangulation_ == nullptr) {
-      std::cerr << "Alpha_complex init - Cannot init from a NULL triangulation\n";
+#ifdef DEBUG_TRACES
+      //std::cerr << "Alpha_complex init - Cannot init from a NULL triangulation\n";
+#endif
       return;  // ----- >>
     }
     if (triangulation_->number_of_vertices() < 1) {
+#ifdef DEBUG_TRACES
       std::cerr << "Alpha_complex init - Cannot init from a triangulation without vertices\n";
+#endif
       return;  // ----- >>
     }
     if (triangulation_->maximal_dimension() < 1) {
+#ifdef DEBUG_TRACES
       std::cerr << "Alpha_complex init - Cannot init from a zero-dimension triangulation\n";
+#endif
       return;  // ----- >>
     }
     if (num_vertices() > 0) {
+#ifdef DEBUG_TRACES
       std::cerr << "Alpha_complex init - Cannot init twice\n";
+#endif
       return;  // ----- >>
     }
 

@@ -743,8 +743,10 @@ class Simplex_tree {
     } else if (the_simplex.size() == 1) {
       // When reaching the end of recursivity, vector of simplices shall be empty and filled on back recursive
       if ((to_be_inserted.size() != 0) || (to_be_propagated.size() != 0)) {
+#ifdef DEBUG_TRACES
         std::cerr << "Simplex_tree::rec_insert_simplex_and_subfaces - Error vector not empty\n";
         exit(-1);
+#endif
       }
       std::vector<Vertex_handle> first_simplex(1, the_simplex.back());
       // i.e. (0,1,2) => [to_be_inserted | to_be_propagated] = [(0) | ]
@@ -752,8 +754,10 @@ class Simplex_tree {
 
       insert_result = insert_vertex_vector(first_simplex, filtration);
     } else {
+#ifdef DEBUG_TRACES
         std::cerr << "Simplex_tree::rec_insert_simplex_and_subfaces - Recursivity error\n";
         exit(-1);
+#endif
     }
     return insert_result;
   }

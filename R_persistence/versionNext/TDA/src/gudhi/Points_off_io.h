@@ -56,10 +56,10 @@ class Points_off_visitor_reader {
         num_vertices << " - num_faces=" << num_faces << " - num_edges=" << num_edges << std::endl;
 #endif  // DEBUG_TRACES
     if (num_faces > 0) {
-      std::cerr << "Points_off_visitor_reader::init faces are not taken into account from OFF file for Points.\n";
+      //std::cerr << "Points_off_visitor_reader::init faces are not taken into account from OFF file for Points.\n";
     }
     if (num_edges > 0) {
-      std::cerr << "Points_off_visitor_reader::init edges are not taken into account from OFF file for Points.\n";
+      //std::cerr << "Points_off_visitor_reader::init edges are not taken into account from OFF file for Points.\n";
     }
   }
 
@@ -152,7 +152,7 @@ class Points_off_reader {
         point_cloud = off_visitor.get_point_cloud();
       }
     } else {
-      std::cerr << "Points_off_reader::Points_off_reader could not open file " << name_file << "\n";
+      //std::cerr << "Points_off_reader::Points_off_reader could not open file " << name_file << "\n";
     }
   }
 

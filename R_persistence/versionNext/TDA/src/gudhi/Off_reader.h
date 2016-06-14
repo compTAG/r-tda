@@ -65,19 +65,19 @@ class Off_reader {
   bool read(OffVisitor& off_visitor) {
     bool success_read_off_preambule = read_off_preambule(off_visitor);
     if (!success_read_off_preambule) {
-      std::cerr << "could not read off preambule\n";
+      //std::cerr << "could not read off preambule\n";
       return false;
     }
 
     bool success_read_off_points = read_off_points(off_visitor);
     if (!success_read_off_points) {
-      std::cerr << "could not read off points\n";
+      //std::cerr << "could not read off points\n";
       return false;
     }
 
     bool success_read_off_faces = read_off_faces(off_visitor);
     if (!success_read_off_faces) {
-      std::cerr << "could not read off faces\n";
+      //std::cerr << "could not read off faces\n";
       return false;
     }
 
@@ -106,8 +106,8 @@ class Off_reader {
     bool is_noff_file = (line.find("nOFF") != std::string::npos);
 
     if (!is_off_file && !is_noff_file) {
-      std::cerr << line << std::endl;
-      std::cerr << "missing off header\n";
+      //std::cerr << line << std::endl;
+      //std::cerr << "missing off header\n";
       return false;
     }
 
@@ -116,12 +116,12 @@ class Off_reader {
     if ((is_off_file) && (!is_noff_file)) {
       off_info_.dim = 3;
       if (!(iss >> off_info_.num_vertices >> off_info_.num_faces >> off_info_.num_edges)) {
-        std::cerr << "incorrect number of vertices/faces/edges\n";
+        //std::cerr << "incorrect number of vertices/faces/edges\n";
         return false;
       }
     } else {
       if (!(iss >> off_info_.dim >> off_info_.num_vertices >> off_info_.num_faces >> off_info_.num_edges)) {
-      std::cerr << "incorrect number of vertices/faces/edges\n";
+      //std::cerr << "incorrect number of vertices/faces/edges\n";
       return false;
       }
     }
@@ -172,7 +172,7 @@ template<typename OFFVisitor>
 void read_off(const std::string& name_file_off, OFFVisitor& vis) {
   std::ifstream stream(name_file_off);
   if (!stream.is_open()) {
-    std::cerr << "could not open file \n";
+    //std::cerr << "could not open file \n";
   } else {
     Off_reader off_reader(stream);
     off_reader.read(vis);
