@@ -76,8 +76,8 @@ clusterTree(X, k, h = NULL, density = "knn", dist = "euclidean", d = NULL,
     Vector: the IDs associated to the branches of the cluster tree
   }
 
-  \item{sons}{
-    A list whose elements are the IDs of the sons of each branch, in the same order of \code{id}
+  \item{children}{
+    A list whose elements are the IDs of the children of each branch, in the same order of \code{id}
   }
 
   \item{parent}{
