@@ -380,7 +380,7 @@ Dtm(const Rcpp::NumericMatrix & knnDistance
 	) {
 	const unsigned gridNum = knnDistance.nrow();
   unsigned gridIdx, kIdx;
-  double distanceTemp;
+  double distanceTemp = 0.0;
 	Rcpp::NumericVector dtmValue(gridNum, 0.0);
   unsigned weightSumTemp;
 
@@ -440,7 +440,7 @@ DtmWeight(const Rcpp::NumericMatrix & knnDistance
   ) {
   const unsigned gridNum = knnDistance.nrow();
   unsigned gridIdx, kIdx;
-  double distanceTemp;
+  double distanceTemp = 0.0;
   Rcpp::NumericVector dtmValue(gridNum, 0.0);
   double weightTemp, weightSumTemp;
 
