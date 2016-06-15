@@ -580,17 +580,17 @@ plot(Diag[["diagram"]])
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 The {\em Alpha shape complex} $S(X,\alpha)$ is the polytope with its boundary consisting of $\alpha$-exposed simplices, where a simplex $\sigma$ is $\alpha$-exposed if there is an open ball $b$ of radius $\alpha$ such that $b \cap X = \emptyset$ and $\partial b \cap X = \sigma$. Suppose $\mathbb{R}^{d}$ is filled with ice cream, then consider scooping out the ice cream with sphere-shaped spoon of radius $\alpha$ without touching the points $X$. $S(X,\alpha)$ is the remaining polytope with straightening round surfaces. See \citep{fischer2005} and \citep{edelsbrunner1994}.
 
-The \code{alphaShapeDiag} function computes the persistence diagram of the alpha shape filtration built on top of a point cloud in 3 dimension, using the C++ library \href{ https://project.inria.fr/gudhi/software }{\pkg{GUDHI}}. Currently the point data cloud should be 3 dimension, and only work on 64-bit R.
+The \code{alphaShapeDiag} function computes the persistence diagram of the alpha shape filtration built on top of a point cloud in 3 dimension, using the C++ library \href{ https://project.inria.fr/gudhi/software }{\pkg{GUDHI}}. Currently the point data cloud should lie in 3 dimension.
 
 We first generate 500 points from a sphere:
 
-<<eqAlpha1, echo=TRUE, eval=TRUE>>=
+<<eqAlphaShape1, echo=TRUE, eval=TRUE>>=
 XX <- sphereUnif(n = 500, d = 2)
 @
 
 and the following code compute the persistence diagram of the alpha shape filtration using the point cloud \code{XX}, with printing its progress. (\code{printProgress = FALSE}). The function \code{alphaShapeDiag} returns an object of the class \code{"diagram"}.
 
-<<eqAlpha2, echo=TRUE, eval=TRUE>>=
+<<eqAlphaShape2, echo=TRUE, eval=TRUE>>=
 DiagAlphaShape <- alphaShapeDiag(X = XX, printProgress = FALSE)
 @
 
@@ -600,13 +600,13 @@ And we plot the diagram:
 \begin{figure}[h!tb]
 \setkeys{Gin}{width=2.3in, height=2.3in}
 \begin{center}
-<<eqAlpha3, echo=TRUE, eval=TRUE, fig=TRUE, height=2.8, width=2.8>>=
+<<eqAlphaShape3, echo=TRUE, eval=TRUE, fig=TRUE, height=2.8, width=2.8>>=
 plot(DiagAlphaShape[["diagram"]])
 @
 \end{center}
 \vspace{-1cm}
 \caption{Persistence diagram of Alpha shape. Black points represent connected components, red triangles represent loops, and blue diamonds represent voids.}
-\label{fig:eqAlpha3}
+\label{fig:eqAlphaShape3}
 \end{figure}
 
 
