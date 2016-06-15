@@ -11,4 +11,4 @@ Repository: CRAN
 License: GPL-3
 Imports: FNN, igraph, parallel, scales, Rcpp (>= 0.11.0)
 LinkingTo: Rcpp, RcppEigen, BH (>= 1.60.0-2)
-SystemRequirements: gmp
+SystemRequirements: C++11, gmp
