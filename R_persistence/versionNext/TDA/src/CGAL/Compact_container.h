@@ -983,13 +983,19 @@ namespace internal {
     // or a conversion from iterator to const_iterator.
     CC_iterator (const iterator &it)
     {
-      m_ptr.p = &(*it);
+      // modified by Jisu KIM, 2016-06-30
+      // '*it' can fetch NULL memory if 'it' corresponds to NULL pointer
+      //m_ptr.p = &(*it);
+      m_ptr.p = it.operator->();
     }
 
     // Same for assignment operator (otherwise MipsPro warns)
     CC_iterator & operator= (const iterator &it)
     {
-      m_ptr.p = &(*it);
+      // modified by Jisu KIM, 2016-06-30
+      // '*it' can fetch NULL memory if 'it' corresponds to NULL pointer
+      //m_ptr.p = &(*it);
+      m_ptr.p = it.operator->();
       return *this;
     }
 
