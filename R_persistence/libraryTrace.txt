@@ -1,0 +1,45 @@
+## This file is to trace back version of libraries, and modification in library files
+
+
+## libraries versions
+
+* GUDHI: 
+* Dionysus:
+* PHAT: 1.4.1
+* CGAL: 4.8
+* boost: 1.60.0 (corresponding to BH 1.60.0-2)
+* gmp: 4.2.4 (corresponding to http://win-builder.r-project.org/GPLcompliance/ )
+
+
+## modifications in libraries
+
+# CGAL
+
+* src/CGAL/Compact_container.h
+  CC_interator(const iterator &)
+  CC_iterator & operator=(const iterator &)
+  resolve reference binding to null pointer: '*it' can fetch NULL memory if 'it corresponds to NULL pointer
+
+* src/CGAL/NewKernel_d/function_objects_cartesian.h
+  struct Oriented_side
+  CS is the name of Intel CPU registers defined on Solaris
+
+
+# Dionysus
+
+* src/utilities/counter.h (and other places where Count(x) is used)
+  replace macro Count() by inline function Count()
+
+
+# gmp
+
+* src/gmpxx.h
+  added from gmp 4.2.4 (corresponding to http://win-builder.r-project.org/GPLcompliance/ )
+
+
+# GUDHI
+
+* src/gudhi/Alpha_complex.h
+  void init(Filtration_value max_alpha_square)
+  template<typename Simplex_handle> void propagate_alpha_filtration(Simplex_handle f_simplex, int decr_dim)
+  namespace of std::isnan() function is specified
