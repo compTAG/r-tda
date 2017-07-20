@@ -311,7 +311,10 @@ public:
 
   bool is_used(const_iterator ptr) const
   {
-    return (type(&*ptr)==USED);
+    // modified by Jisu KIM, 2017-04-24
+    // '*ptr' can fetch NULL memory if 'ptr' corresponds to NULL pointer
+    //return (type(&*ptr)==USED);
+	return (type(ptr.operator->()) == USED);
   }
 
   bool is_used(size_type i) const
@@ -653,7 +656,10 @@ public:
     if (cit == end())
       return true;
 
-    const_pointer c = &*cit;
+	// modified by Jisu KIM, 2017-04-24
+	// '*cit' can fetch NULL memory if 'cit' corresponds to NULL pointer
+    // const_pointer c = &*cit;
+	const_pointer c = cit.operator->();
 
     for (typename All_items::const_iterator it = all_items.begin(), itend = all_items.end();
          it != itend; ++it) {
@@ -1177,7 +1183,10 @@ namespace internal {
   template <class DSC, bool Const>
   std::size_t hash_value(const CC_iterator<DSC, Const>&  i)
   {
-    return reinterpret_cast<std::size_t>(&*i) / sizeof(typename DSC::value_type);
+    // modified by Jisu KIM, 2017-04-24
+    // '*i' can fetch NULL memory if 'i' corresponds to NULL pointer
+    // return reinterpret_cast<std::size_t>(&*i) / sizeof(typename DSC::value_type);
+	return reinterpret_cast<std::size_t>(i.operator->()) / sizeof(typename DSC::value_type);
   }
 
 } // namespace internal
@@ -1199,7 +1208,10 @@ namespace std {
 
     std::size_t operator()(const CGAL::internal::CC_iterator<DSC, Const>& i) const
     {
-      return reinterpret_cast<std::size_t>(&*i) / sizeof(typename DSC::value_type);
+      // modified by Jisu KIM, 2017-04-24
+      // '*i' can fetch NULL memory if 'i' corresponds to NULL pointer
+      // return reinterpret_cast<std::size_t>(&*i) / sizeof(typename DSC::value_type);
+	  return reinterpret_cast<std::size_t>(i.operator->()) / sizeof(typename DSC::value_type);
     }
   };
 #endif // CGAL_CFG_NO_STD_HASH

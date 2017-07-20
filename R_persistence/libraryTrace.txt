@@ -15,10 +15,42 @@
 
 # CGAL
 
+* src/CGAL/Alpha_shape_3.h
+  Alpha_shape_3<Dt,EACT>::Classification_type Alpha_shape_3<Dt,EACT>::classify(Alpha_status_const_iterator as, const NT& alpha) const
+  resolve reference binding to null pointer: '*as' can fetch NULL memory if 'as' corresponds to NULL pointer
+
 * src/CGAL/Compact_container.h
+  bool is_used(const_iterator ptr) const
+  bool owns(const_iterator cit) const
   CC_interator(const iterator &)
   CC_iterator & operator=(const iterator &)
-  resolve reference binding to null pointer: '*it' can fetch NULL memory if 'it corresponds to NULL pointer
+  std::size_t hash_value(const CC_iterator<DSC, Const>&  i)
+  std::size_t operator()(const CGAL::internal::CC_iterator<DSC, Const>& i) const
+  resolve reference binding to null pointer: '*pointer' can fetch NULL memory if 'pointer' corresponds to NULL pointer
+
+* src/CGAL/Concurrent_compact_container.h
+  bool is_used(const_iterator ptr) const
+  bool owns(const_iterator cit) const
+  static Type type(const_iterator ptr)
+  CCC_iterator (const iterator &it)
+  CCC_iterator & operator= (const iterator &it)
+  std::size_t hash_value(const CCC_iterator<CCC, Const>&  i)
+  std::size_t operator()(const CGAL::CCC_internal::CCC_iterator<CCC, Const>& i) const
+  resolve reference binding to null pointer: '*pointer' can fetch NULL memory if 'pointer' corresponds to NULL pointer
+
+* src/CGAL/TDS_full_cell_default_storage_policy.h
+  Xor_type xor_of_vertices(const int cur_dim) const
+  Vertex_handle mirror_vertex(const int i, const int cur_dim) const
+  resolve reference binding to null pointer: '*vertices_[i]' can fetch NULL memory if 'vertices_[i]' corresponds to NULL pointer
+
+* src/CGAL/Triangulation.h
+  bool is_infinite(const Vertex & v) const
+  resolve reference binding to null pointer: '*infinite_vertex()' can fetch NULL memory if 'infinite_vertex()' corresponds to NULL pointer
+
+* src/CGAL/Triangulation_ds_cell_base_3.h
+  void set_neighbor(int i, Cell_handle n)
+  void set_neighbors(Cell_handle n0, Cell_handle n1, Cell_handle n2, Cell_handle n3)
+  resolve reference binding to null pointer: '*n' can fetch NULL memory if 'n' corresponds to NULL pointer
 
 * src/CGAL/NewKernel_d/function_objects_cartesian.h
   struct Oriented_side
