@@ -24,6 +24,33 @@
   struct Oriented_side
   CS is the name of Intel CPU registers defined on Solaris
 
+* Below are changes due to updating package RcppEigen to Eigen 3.3.2:
+  https://github.com/RcppCore/RcppEigen/issues/41
+
+* src/CGAL/Sqrt_extension/Eigen_NumTraits.h
+  line 31: Add one line typedef Real Literal;.
+
+* src/CGAL/Quotient.h
+  line 860: Add one line typedef CGAL::Quotient<NT> Literal;.
+
+* src/CGAL/Mpzf.h
+  line 1136: Add one line typedef CGAL::Mpzf Literal;.
+
+* src/CGAL/MP_Float.h
+  line 889: Add one line typedef CGAL::MP_Float Literal;.
+
+* src/CGAL/Lazy_exact_nt.h
+  line 1429: Add one line typedef CGAL::Lazy_exact_nt<ET> Literal;.
+
+* src/CGAL/Interval_nt.h
+  line 1269: Add one line typedef CGAL::Interval_nt<b> Literal;.
+
+* src/CGAL/Gmpz.h
+  line 216: Add one line typedef CGAL::Gmpz Literal;.
+
+* src/CGAL/Gmpq.h
+  line 142: Add one line typedef CGAL::Gmpq Literal;.
+
 
 # Dionysus
 
