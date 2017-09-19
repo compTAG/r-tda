@@ -17,7 +17,7 @@ function(X, library = "GUDHI", printProgress = FALSE) {
   X <- as.matrix(X)
 
   if (library == "GUDHI") {
-    alphaOut <- AlphaShapeDiagGUDHI(X = X, printProgress = printProgress)
+    alphaOut <- AlphaShapeDiagGudhi(X = X, printProgress = printProgress)
   }
 
   Diag <- alphaOut[[1]]

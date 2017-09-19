@@ -29,15 +29,35 @@ DtmWeight <- function(knnDistance, weightBound, r, knnIndex, weight) {
     .Call('TDA_DtmWeight', PACKAGE = 'TDA', knnDistance, weightBound, r, knnIndex, weight)
 }
 
-RipsDiag <- function(X, maxdimension, maxscale, dist, library, location, printProgress) {
-    .Call('TDA_RipsDiag', PACKAGE = 'TDA', X, maxdimension, maxscale, dist, library, location, printProgress)
+FiltrationDiag <- function(filtration, maxdimension, library, location, printProgress) {
+    .Call('TDA_FiltrationDiag', PACKAGE = 'TDA', filtration, maxdimension, library, location, printProgress)
 }
 
-AlphaShapeDiagGUDHI <- function(X, printProgress) {
-    .Call('TDA_AlphaShapeDiagGUDHI', PACKAGE = 'TDA', X, printProgress)
+FunFiltration <- function(FUNvalues, cmplx) {
+    .Call('TDA_FunFiltration', PACKAGE = 'TDA', FUNvalues, cmplx)
 }
 
-AlphaComplexDiagGUDHI <- function(X, printProgress) {
-    .Call('TDA_AlphaComplexDiagGUDHI', PACKAGE = 'TDA', X, printProgress)
+RipsFiltration <- function(X, maxdimension, maxscale, dist, library, printProgress) {
+    .Call('TDA_RipsFiltration', PACKAGE = 'TDA', X, maxdimension, maxscale, dist, library, printProgress)
+}
+
+RipsDiag <- function(X, maxdimension, maxscale, dist, libraryFiltration, libraryDiag, location, printProgress) {
+    .Call('TDA_RipsDiag', PACKAGE = 'TDA', X, maxdimension, maxscale, dist, libraryFiltration, libraryDiag, location, printProgress)
+}
+
+AlphaShapeFiltration <- function(X, printProgress) {
+    .Call('TDA_AlphaShapeFiltration', PACKAGE = 'TDA', X, printProgress)
+}
+
+AlphaShapeDiagGudhi <- function(X, printProgress) {
+    .Call('TDA_AlphaShapeDiagGudhi', PACKAGE = 'TDA', X, printProgress)
+}
+
+AlphaComplexFiltration <- function(X, printProgress) {
+    .Call('TDA_AlphaComplexFiltration', PACKAGE = 'TDA', X, printProgress)
+}
+
+AlphaComplexDiagGudhi <- function(X, printProgress) {
+    .Call('TDA_AlphaComplexDiagGudhi', PACKAGE = 'TDA', X, printProgress)
 }
 
