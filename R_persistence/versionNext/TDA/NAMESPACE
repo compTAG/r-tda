@@ -2,7 +2,9 @@ importFrom(Rcpp, evalCpp)
 
 export(
   alphaComplexDiag,
+  alphaComplexFiltration,
   alphaShapeDiag,
+  alphaShapeFiltration,
   bootstrapBand,
   bootstrapDiagram,
   bottleneck,
@@ -10,6 +12,8 @@ export(
   clusterTree,
   distFct,
   dtm,
+  filtrationDiag,
+  funFiltration,
   gridDiag,
   hausdInterval,
   kde,
@@ -29,6 +33,7 @@ export(
   print.summary.diagram,
   print.summary.maxPersistence,
   ripsDiag,
+  ripsFiltration,
   silhouette,
   sphereUnif,
   torusUnif,

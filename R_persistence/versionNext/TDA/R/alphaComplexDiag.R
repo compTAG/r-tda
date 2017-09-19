@@ -21,8 +21,8 @@ function(X, library = "GUDHI", printProgress = FALSE) {
   X <- as.matrix(X)
 
   if (library == "GUDHI") {
-#    alphaOut <- AlphaComplexDiagGUDHI(X = X, maxalphasquare = maxalphasquare, printProgress = printProgress)  
-    alphaOut <- AlphaComplexDiagGUDHI(X = X, printProgress = printProgress)
+#    alphaOut <- AlphaComplexDiagGudhi(X = X, maxalphasquare = maxalphasquare, printProgress = printProgress)  
+    alphaOut <- AlphaComplexDiagGudhi(X = X, printProgress = printProgress)
   }
 
   Diag <- alphaOut[[1]]
