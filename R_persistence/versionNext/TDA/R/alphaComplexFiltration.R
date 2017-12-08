@@ -26,7 +26,8 @@ alphaComplexFiltration <- function(
     alphaOut <- AlphaComplexFiltration(X = X, printProgress = printProgress)
   }
 
-  out <- list("cmplx" = alphaOut[[1]], "values" = alphaOut[[2]],
-              "boundary" = alphaOut[[3]])
+  out <- list(
+      "cmplx" = alphaOut[[1]], "values" = alphaOut[[2]], "increasing" = TRUE)
+
   return (out)
 }
