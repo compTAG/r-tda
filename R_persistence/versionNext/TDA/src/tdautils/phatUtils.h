@@ -1,3 +1,6 @@
+#ifndef __PHATUTILS_H__
+#define __PHATUTILS_H__
+
 // wrapper algorithm that computes the persistence pairs of a given boundary matrix using a specified algorithm
 #include <phat/compute_persistence_pairs.h>
 
@@ -70,8 +73,9 @@ inline void initLocations(
     }
   }
 
+  // vertices range from 0 to verticesMax
   std::vector< double > verticesValues(
-      verticesMax, -std::numeric_limits< double >::infinity());
+      verticesMax + 1, -std::numeric_limits< double >::infinity());
 
   unsigned iValue = 0;
   for (typename VectorList::const_iterator iVertices = cmplx.begin();
@@ -172,3 +176,7 @@ void FiltrationDiagPhat(
 		persistence_timer.check("# Persistence timer");
 	}
 }
+
+
+
+# endif // __PHATUTILS_H__
