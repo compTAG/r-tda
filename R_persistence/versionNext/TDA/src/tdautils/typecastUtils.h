@@ -1,3 +1,12 @@
+#ifndef __TYPECASTUTILS_H__
+#define __TYPECASTUTILS_H__
+
+#include <vector>
+#include <map>
+#include <algorithm>
+
+
+
 template<typename PersistenceDiagram, typename RcppMatrix>
 inline PersistenceDiagram RcppToDionysus(const RcppMatrix& rcppMatrix) {
 	PersistenceDiagram dionysusDiagram;
@@ -8,6 +17,35 @@ inline PersistenceDiagram RcppToDionysus(const RcppMatrix& rcppMatrix) {
 				rcppMatrix[rowIdx + 0 * rowNum], rcppMatrix[rowIdx + 1 * rowNum]));
 	}
 	return dionysusDiagram;
+}
+
+
+
+template< typename StlMatrix, typename RealMatrix >
+inline StlMatrix TdaToStl(const RealMatrix & rcppMatrix,
+    const unsigned nRow, const unsigned nCol, bool is_row_names = false) {
+
+  if (is_row_names) {
+    StlMatrix stlMatrix(nRow, typename StlMatrix::value_type(nCol + 1));
+    for (unsigned rowIdx = 0; rowIdx < nRow; ++rowIdx) {
+      stlMatrix[rowIdx][0] = rowIdx + 1;
+    }
+    for (unsigned rowIdx = 0; rowIdx < nRow; ++rowIdx) {
+      for (unsigned colIdx = 0; colIdx < nCol; ++colIdx) {
+        stlMatrix[rowIdx][colIdx + 1] = rcppMatrix[rowIdx + colIdx * nRow];
+      }
+    }
+    return stlMatrix;
+  }
+  else {
+    StlMatrix stlMatrix(nRow, typename StlMatrix::value_type(nCol));
+    for (unsigned rowIdx = 0; rowIdx < nRow; ++rowIdx) {
+      for (unsigned colIdx = 0; colIdx < nCol; ++colIdx) {
+        stlMatrix[rowIdx][colIdx] = rcppMatrix[rowIdx + colIdx * nRow];
+      }
+    }
+    return stlMatrix;
+  }
 }
 
 
@@ -76,6 +114,56 @@ inline CGALPointDList RcppToCGALPointD(const RcppMatrix& rcppMatrix) {
           pointD.end()));
   }
   return cGALPointDList;
+}
+
+
+
+template< typename VertexVector, typename RcppVector, typename RcppList >
+inline std::vector< VertexVector > RcppCmplxToStl(
+    const RcppList & rcppCmplx, const int idxShift) {
+
+  const unsigned nCmplx = rcppCmplx.size();
+  std::vector< VertexVector > stlCmplx(nCmplx);
+
+  typename RcppList::const_iterator iRcppVec = rcppCmplx.begin();
+  typename std::vector< VertexVector >::iterator iStlVec = stlCmplx.begin();
+  for (; iRcppVec != rcppCmplx.end(); ++iRcppVec, ++iStlVec) {
+    RcppVector cmplxVec(*iRcppVec);
+    *iStlVec = VertexVector(cmplxVec.size());
+
+    typename RcppVector::const_iterator iRcpp = cmplxVec.begin();
+    typename VertexVector::iterator iStl = iStlVec->begin();
+    for (; iRcpp != cmplxVec.end(); ++iRcpp, ++iStl) {
+      *iStl = *iRcpp - idxShift;
+    }
+  }
+
+  return stlCmplx;
+}
+
+
+
+template< typename RcppVector, typename RcppList, typename VectorList >
+inline RcppList StlCmplxToRcpp(
+    const VectorList & stlCmplx, const int idxShift) {
+
+  const unsigned nCmplx = stlCmplx.size();
+  RcppList rcppCmplx(nCmplx);
+
+  typename VectorList::const_iterator iStlVec = stlCmplx.begin();
+  typename RcppList::iterator iRcppVec = rcppCmplx.begin();
+  for (; iStlVec != stlCmplx.end(); ++iStlVec, ++iRcppVec) {
+    RcppVector cmplxVec(iStlVec->size());
+
+    typename VectorList::value_type::const_iterator iStl = iStlVec->begin();
+    typename RcppVector::iterator iRcpp = cmplxVec.begin();
+    for (; iStl != iStlVec->end(); ++iStl, ++iRcpp) {
+      *iRcpp = *iStl + idxShift;
+    }
+    *iRcppVec = cmplxVec;
+  }
+
+  return rcppCmplx;
 }
 
 
@@ -228,6 +316,43 @@ void filtrationGudhiOne(
 
 
 // TODO : see whether 'const SimplexTree &' is possible
+template< typename IntegerVector, typename SimplexTree, typename VectorList,
+          typename RealVector >
+inline void filtrationGudhiToTda(
+    SimplexTree & smplxTree, VectorList & cmplx, RealVector & values,
+    VectorList & boundary) {
+
+  const unsigned nFltr = smplxTree.num_simplices();
+  cmplx = VectorList(nFltr);
+  values = RealVector(nFltr);
+  boundary = VectorList(nFltr);
+  typename VectorList::iterator iCmplx = cmplx.begin();
+  typename RealVector::iterator iValue = values.begin();
+  typename VectorList::iterator iBdy = boundary.begin();
+
+  const typename SimplexTree::Filtration_simplex_range & filtration =
+    smplxTree.filtration_simplex_range();
+
+  unsigned iFill = 0;
+  for (typename SimplexTree::Filtration_simplex_iterator iFltr =
+    filtration.begin(); iFltr != filtration.end();
+    ++iFltr, ++iCmplx, ++iValue, ++iBdy) {
+
+    // Below two lines are only needed for computing boundary
+    smplxTree.assign_key(*iFltr, iFill);
+    iFill++;
+
+    IntegerVector cmplxVec;
+    IntegerVector boundaryVec;
+    filtrationGudhiOne(*iFltr, smplxTree, 1, cmplxVec, *iValue, boundaryVec);
+    *iCmplx = cmplxVec;
+    *iBdy = boundaryVec;
+  }
+}
+
+
+
+// TODO : see whether 'const SimplexTree &' is possible
 template< typename RcppList, typename RcppVector, typename SimplexTree >
 inline RcppList filtrationGudhiToRcpp(SimplexTree & smplxTree) {
 
@@ -281,6 +406,33 @@ inline SimplexTree filtrationRcppToGudhi(const RcppList & rcppList) {
     for (; iRcpp != rcppVec.end(); ++iRcpp, ++iGudhi) {
       // R is 1-base, while C++ is 0-base
       *iGudhi = *iRcpp - 1;
+    }
+    smplxTree.insert_simplex(gudhiVec, *iValue);
+  }
+
+  return smplxTree;
+}
+
+
+
+template< typename IntegerVector, typename SimplexTree, typename VectorList,
+          typename RealVector >
+inline SimplexTree filtrationTdaToGudhi(
+    const VectorList & cmplx, const RealVector & values, 
+    const unsigned idxShift) {
+
+  SimplexTree smplxTree;
+
+  typename VectorList::const_iterator iCmplx = cmplx.begin();
+  typename RealVector::const_iterator iValue = values.begin();
+  for (; iCmplx != cmplx.end(); ++iCmplx, ++iValue) {
+    const IntegerVector tdaVec(*iCmplx);
+    IntegerVector gudhiVec(tdaVec.size());
+    typename IntegerVector::const_iterator iTda = tdaVec.begin();
+    typename IntegerVector::iterator iGudhi = gudhiVec.begin();
+    for (; iTda != tdaVec.end(); ++iTda, ++iGudhi) {
+      // R is 1-base, while C++ is 0-base
+      *iGudhi = *iTda - idxShift;
     }
     smplxTree.insert_simplex(gudhiVec, *iValue);
   }
@@ -394,6 +546,42 @@ inline void filtrationDionysusOne(
 
 
 
+template< typename IntegerVector, typename Filtration, typename VectorList,
+          typename RealVector >
+inline void filtrationDionysusToTda(
+    const Filtration & filtration, VectorList & cmplx, RealVector & values,
+    VectorList & boundary) {
+
+  const unsigned nFltr = filtration.size();
+  std::map< typename Filtration::Simplex, unsigned,
+      typename Filtration::Simplex::VertexComparison > simplex_map;
+  unsigned size_of_simplex_map = 0;
+
+  cmplx = VectorList(nFltr);
+  values = RealVector(nFltr);
+  boundary = VectorList(nFltr);
+  typename VectorList::iterator iCmplx = cmplx.begin();
+  typename RealVector::iterator iValue = values.begin();
+  typename VectorList::iterator iBdy = boundary.begin();
+
+  for (typename Filtration::Index it = filtration.begin();
+      it != filtration.end(); ++it, ++iCmplx, ++iValue, ++iBdy) {
+    const typename Filtration::Simplex & c = filtration.simplex(it);
+
+    IntegerVector cmplxVec;
+    IntegerVector boundaryVec;
+    filtrationDionysusOne(c, simplex_map, 1, cmplxVec, *iValue, boundaryVec);
+    *iCmplx = cmplxVec;
+    *iBdy = boundaryVec;
+
+    simplex_map.insert(typename
+        std::map< typename Filtration::Simplex, unsigned >::value_type(
+        c, size_of_simplex_map++));
+  }
+}
+
+
+
 template< typename RcppList, typename RcppVector, typename Filtration >
 inline RcppList filtrationDionysusToRcpp(const Filtration & filtration) {
 
@@ -425,6 +613,34 @@ inline RcppList filtrationDionysusToRcpp(const Filtration & filtration) {
   }
 
   return RcppList::create(cmplx, values, boundary);
+}
+
+
+
+template< typename IntegerVector, typename Filtration, typename VectorList,
+          typename RealVector >
+inline Filtration filtrationTdaToDionysus(
+    const VectorList & cmplx, const RealVector & values,
+    const unsigned idxShift) {
+
+  Filtration filtration;
+
+  typename VectorList::const_iterator iCmplx = cmplx.begin();
+  typename RealVector::const_iterator iValue = values.begin();
+  for (; iCmplx != cmplx.end(); ++iCmplx, ++iValue) {
+    const IntegerVector tdaVec(*iCmplx);
+    IntegerVector dionysusVec(tdaVec.size());
+    typename IntegerVector::const_iterator iTda = tdaVec.begin();
+    typename IntegerVector::iterator iDionysus = dionysusVec.begin();
+    for (; iTda != tdaVec.end(); ++iTda, ++iDionysus) {
+      // R is 1-base, while C++ is 0-base
+      *iDionysus = *iTda - idxShift;
+    }
+    filtration.push_back(typename Filtration::Simplex(
+        dionysusVec.begin(), dionysusVec.end(), *iValue));
+  }
+
+  return filtration;
 }
 
 
@@ -520,3 +736,7 @@ inline void filtrationDionysusToPhat(
         typename Column::value_type >::value_type(c, size_of_simplex_map++));
   }
 }
+
+
+
+# endif // __TYPECASTUTILS_H__
