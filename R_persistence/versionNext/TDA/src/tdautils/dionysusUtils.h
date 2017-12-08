@@ -3,10 +3,13 @@
 
 #include <topology/simplex.h>
 #include <string>
-#include <sstream>
-#include <cstdlib>
 
 #include <utilities/timer.h>
+
+
+
+typedef std::vector< double > Point;
+typedef std::vector< Point > PointContainer;
 
 
 
@@ -109,11 +112,11 @@ inline void initDiagrams(
 
 
 template< typename Simplex, typename Locations, typename Cycles,
-	        typename Persistence, typename Evaluator, typename SimplexMap,
-	        typename Filtration >
+          typename Persistence, typename Evaluator, typename SimplexMap,
+          typename Filtration >
 inline void initLocations(
     Locations & locations, Cycles & cycles, const Persistence & p,
-    const Evaluator& evaluator, const SimplexMap & m,
+    const Evaluator & evaluator, const SimplexMap & m,
     const unsigned maxdimension, const Filtration & filtration) {
 
 	unsigned verticesMax = 0;
@@ -125,8 +128,9 @@ inline void initLocations(
 		}
 	}
 
-	std::vector< double > verticesValues(
-      verticesMax, -std::numeric_limits< double >::infinity());
+  // vertices range from 0 to verticesMax
+  std::vector< double > verticesValues(
+      verticesMax + 1, -std::numeric_limits< double >::infinity());
 
   for (typename Filtration::Index iFltr = filtration.begin();
        iFltr != filtration.end(); ++iFltr) {
@@ -151,8 +155,10 @@ inline void initLocations(
 				// when we added death (another simplex)
 				const typename SimplexMap::key_type& death = cur->pair;
 
-				const typename SimplexMap::value_type& b = m[cur];
-				const typename SimplexMap::value_type& d = m[death];
+				//const typename SimplexMap::value_type& b = m[cur];
+				//const typename SimplexMap::value_type& d = m[death];
+        const typename Filtration::Simplex & b = m[cur];
+        const typename Filtration::Simplex & d = m[death];
 				if ((unsigned)b.dimension() > maxdimension) {
 					continue;
 				}
@@ -222,7 +228,7 @@ inline void initLocations(
  *                            3*max_num_pairs double. If there is not enough pairs in the diagram,
  *                            write nothing after.
  */
-template< typename Filtration >
+template< typename Persistence, typename Filtration >
 void FiltrationDiagDionysus(
     const Filtration                                      & filtration,
     const int                                               maxdimension,
@@ -342,16 +348,20 @@ void FiltrationDiagDionysus(
  *                            write nothing after.
  */
 template< typename Distances, typename Generator, typename Filtration,
-          typename RealMatrix >
+          typename RealMatrix, typename Print >
 inline Filtration RipsFiltrationDionysus(
     const RealMatrix & X,
+    const unsigned     nSample, 
+    const unsigned     nDim,
     const bool         is_row_names,
     const int          maxdimension,
     const double       maxscale,
-    const bool         printProgress
+    const bool         printProgress,
+    const Print      & print
 ) {
 
-  PointContainer points = RcppToStl< PointContainer >(X, is_row_names);
+  PointContainer points = TdaToStl< PointContainer >(X, nSample, nDim,
+      is_row_names);
   //read_points(infilename, points);
   //read_points2(infilename, points);
 
@@ -366,7 +376,7 @@ inline Filtration RipsFiltrationDionysus(
   rips.generate(maxdimension + 1, maxscale, functor);
 
   if (printProgress) {
-    Rprintf("# Generated complex of size: %d \n", filtration.size());
+    print("# Generated complex of size: %d \n", filtration.size());
   }
 
   // Sort the simplices with respect to comparison criteria

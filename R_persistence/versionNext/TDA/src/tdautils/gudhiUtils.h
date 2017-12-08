@@ -1,5 +1,8 @@
-#include <R.h>
-#include <R_ext/Print.h>
+#ifndef __GUDHIUTILS_H__
+#define __GUDHIUTILS_H__
+
+// #include <R.h>
+// #include <R_ext/Print.h>
 
 #include <gudhi/reader_utils.h>
 #include <gudhi/graph_simplicial_complex.h>
@@ -97,18 +100,21 @@ inline void FiltrationDiagGudhi(
  *                            3*max_num_pairs double. If there is not enough pairs in the diagram,
  *                            write nothing after.
  */
-template< typename SimplexTree, typename RealMatrix >
+template< typename SimplexTree, typename RealMatrix, typename Print >
 inline SimplexTree RipsFiltrationGudhi(
     const RealMatrix & X,          //points to some memory space
+    const unsigned     nSample,
+    const unsigned     nDim,
     const int          maxdimension,
     const double       maxscale,
-    const bool         printProgress
+    const bool         printProgress,
+    const Print      & print
 ) {
 
   // Turn the input points into a range of points
   typedef std::vector< double > Point_t;
   std::vector< Point_t > point_set =
-    RcppToStl< std::vector< Point_t > >(X);
+    TdaToStl< std::vector< Point_t > >(X, nSample, nDim);
 
 
   // Compute the proximity graph of the points
@@ -121,7 +127,7 @@ inline SimplexTree RipsFiltrationGudhi(
   st.expansion(maxdimension + 1); // expand the graph until dimension dim_max
 
   if (printProgress) {
-    Rprintf("# Generated complex of size: %d \n", st.num_simplices());
+    print("# Generated complex of size: %d \n", st.num_simplices());
   }
 
   // Sort the simplices in the order of the filtration
@@ -189,10 +195,11 @@ Vertex_list fromVertex(const Alpha_shape_3::Vertex_handle& vh)
  * @param[in]  X              An nxd matrix of coordinates
  * @param[in]  printProgress  Is progress printed?
  */
-template< typename SimplexTree, typename RealMatrix >
+template< typename SimplexTree, typename RealMatrix, typename Print >
 inline SimplexTree AlphaShapeFiltrationGudhi(
     const RealMatrix & X,
-    const bool         printProgress
+    const bool         printProgress,
+    Print            & print
 ) {
 
   // Turn the input points into a range of points
@@ -295,7 +302,7 @@ inline SimplexTree AlphaShapeFiltrationGudhi(
   simplex_tree.set_dimension(dim_max);
 
   if (printProgress) {
-    Rprintf("# Generated complex of size: %d \n", simplex_tree.num_simplices());
+    print("# Generated complex of size: %d \n", simplex_tree.num_simplices());
   }
   //std::cout << "vertices \t\t" << count_vertices << std::endl;
   //std::cout << "edges \t\t"    << count_edges << std::endl;
@@ -330,10 +337,11 @@ inline SimplexTree AlphaShapeFiltrationGudhi(
  * @param[in]  X              An nxd matrix of coordinates
  * @param[in]  printProgress  Is progress printed?
  */
-template< typename SimplexTree, typename RealMatrix >
+template< typename SimplexTree, typename RealMatrix, typename Print >
 inline SimplexTree AlphaComplexFiltrationGudhi(
     const RealMatrix & X,
-    const bool         printProgress
+    const bool         printProgress,
+    Print            & print
 ) {
 
 	using Kernel = CGAL::Epick_d< CGAL::Dynamic_dimension_tag>;
@@ -348,7 +356,7 @@ inline SimplexTree AlphaComplexFiltrationGudhi(
 		alpha_complex_from_points(lp, std::numeric_limits<double>::infinity());
 
 	if (printProgress) {
-		Rprintf("# Generated complex of size: %d \n", alpha_complex_from_points.num_simplices());
+		print("# Generated complex of size: %d \n", alpha_complex_from_points.num_simplices());
 	}
 
 	// Sort the simplices in the order of the filtration
@@ -356,3 +364,7 @@ inline SimplexTree AlphaComplexFiltrationGudhi(
 
 	return alpha_complex_from_points;
 }
+
+
+
+# endif // __GUDHIUTILS_H__
