@@ -52,7 +52,8 @@ ripsFiltration <- function(
         library = library, printProgress = printProgress)
   }
   
-  out <- list("cmplx" = ripsOut[[1]], "values" = ripsOut[[2]],
-              "boundary" = ripsOut[[3]])
+  out <- list(
+      "cmplx" = ripsOut[[1]], "values" = ripsOut[[2]], "increasing" = TRUE)
+
   return (out)
 }
