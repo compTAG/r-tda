@@ -11,8 +11,9 @@
 }
 
 \usage{
-ripsDiag(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
-         location = FALSE, printProgress = FALSE)
+ripsDiag(
+    X, maxdimension, maxscale, dist = "euclidean",
+    library = "GUDHI", location = FALSE, printProgress = FALSE)
 }
 
 \arguments{

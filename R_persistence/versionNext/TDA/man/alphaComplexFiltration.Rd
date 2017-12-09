@@ -11,7 +11,8 @@
 }
 
 \usage{
-alphaComplexFiltration(X, library = "GUDHI", printProgress = FALSE)
+alphaComplexFiltration(
+    X, library = "GUDHI", printProgress = FALSE)
 }
 
 \arguments{

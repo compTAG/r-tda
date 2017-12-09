@@ -11,8 +11,9 @@
 }
 
 \usage{
-alphaShapeDiag(X, maxdimension = NCOL(X) - 1, library = "GUDHI",
-    location = FALSE, printProgress = FALSE)
+alphaShapeDiag(
+    X, maxdimension = NCOL(X) - 1, library = "GUDHI", location = FALSE,
+    printProgress = FALSE)
 }
 
 \arguments{
