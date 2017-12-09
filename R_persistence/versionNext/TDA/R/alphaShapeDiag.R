@@ -28,7 +28,7 @@ function(X, maxdimension = NCOL(X) - 1, library = "GUDHI", location = FALSE,
     library[2] <- "PHAT"
   }
   if (library[2] != "GUDHI" && library[2] != "Dionysus" && library[2] != "PHAT") {
-    stop("library for computing persistence diagram should be a string: either 'GUDHI, 'Dionysus', or 'PHAT'")
+    stop("library for computing persistence diagram should be a string: either 'GUDHI', 'Dionysus', or 'PHAT'")
   }
   if (!is.logical(location)) {
     stop("location should be logical")
