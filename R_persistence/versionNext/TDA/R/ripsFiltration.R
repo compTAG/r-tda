@@ -22,7 +22,7 @@ ripsFiltration <- function(
     library <- "Dionysus"
   }
   if (library != "GUDHI" && library != "Dionysus") {
-    stop("library should be a string: either 'GUDHI or 'Dionysus'")
+    stop("library should be a string: either 'GUDHI' or 'Dionysus'")
   }
   if (!is.logical(printProgress)) {
     stop("printProgress should be logical")

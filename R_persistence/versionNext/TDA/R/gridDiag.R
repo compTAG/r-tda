@@ -56,7 +56,7 @@ function(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
     library <- "PHAT"
   }
   if (library != "GUDHI" && library != "Dionysus" && library != "PHAT") {
-    stop("library for computing persistence diagram should be a string: either 'GUDHI, 'Dionysus', or 'PHAT'")
+    stop("library for computing persistence diagram should be a string: either 'GUDHI', 'Dionysus', or 'PHAT'")
   }
   if (!is.logical(location)) {
     stop("location should be logical")
