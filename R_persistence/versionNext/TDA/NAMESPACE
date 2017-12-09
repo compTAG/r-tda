@@ -15,6 +15,7 @@ export(
   filtrationDiag,
   funFiltration,
   gridDiag,
+  gridFiltration,
   hausdInterval,
   kde,
   kernelDist,
