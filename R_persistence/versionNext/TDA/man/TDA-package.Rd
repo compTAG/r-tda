@@ -18,7 +18,7 @@
 Package: \tab TDA\cr
 Type: \tab Package\cr
 Version: \tab 1.6\cr
-Date: \tab 2017-12-08\cr
+Date: \tab 2017-12-09\cr
 License: \tab GPL-3 \cr
 }
 }
