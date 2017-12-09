@@ -7,7 +7,7 @@
 * Dionysus:
 * PHAT: 1.4.1
 * CGAL: 4.8
-* boost: 1.60.0 (corresponding to BH 1.60.0-2)
+* boost: 1.65.0 (corresponding to BH 1.65.0-1)
 * gmp: 4.2.4 (corresponding to http://win-builder.r-project.org/GPLcompliance/ )
 
 
