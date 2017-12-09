@@ -1,5 +1,36 @@
 filtrationDiag <- function(
-    filtration, maxdimension = max(sapply(X = filtration[[1]], FUN = length, simplify = TRUE)) - 1, library = "Dionysus", location = FALSE, printProgress = FALSE, diagLimit = NULL) {
+    filtration, maxdimension, library = "GUDHI", location = FALSE,
+    printProgress = FALSE, diagLimit = NULL) {
+
+  if (length(filtration[["cmplx"]]) != length(filtration[["values"]])) {
+    stop("The length of the simplicial complx should equals the length of the filtration values")
+  }
+  if (!is.numeric(maxdimension) ||
+      length(maxdimension) != 1 || maxdimension < 0) {
+    stop("maxdimension should be a nonnegative integer")
+  }
+  if (library == "gudhi" || library == "Gudhi") {
+    library <- "GUDHI"
+  }
+  if (library == "dionysus" || library == "DIONYSUS") {
+    library <- "Dionysus"
+  }
+  if (library == "phat" || library == "Phat") {
+    library <- "PHAT"
+  }
+  if (library != "GUDHI" && library != "Dionysus" && library != "PHAT") {
+    stop("library for computing persistence diagram should be a string: either 'GUDHI, 'Dionysus', or 'PHAT'")
+  }
+  if (!is.logical(location)) {
+    stop("location should be logical")
+  }  
+  if (!is.logical(printProgress)) {
+    stop("printProgress should be logical")
+  }  
+
+  if (filtration[["increasing"]] == FALSE) {
+    filtration[["values"]] <- -filtration[["values"]]
+  }
 
   filtrationOut <- FiltrationDiag(
       filtration = filtration, maxdimension = maxdimension, library = library,
@@ -18,7 +49,12 @@ filtrationDiag <- function(
     Diag[Diag == Inf] <- ifelse(is.null(diagLimit), Inf, diagLimit) 
   }
 
-  colnames(Diag) <- c("dimension", "Birth", "Death")
+  if (filtration[["increasing"]] == FALSE) {
+    colnames(Diag) <- c("dimension", "Death", "Birth")
+    Diag[, 2:3] <- -Diag[, 3:2]
+  } else {
+    colnames(Diag) <- c("dimension", "Birth", "Death")
+  }
 
   class(Diag) <- "diagram"
   attributes(Diag)[["maxdimension"]] <- max(Diag[, 1])
