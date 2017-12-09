@@ -13,6 +13,14 @@
 
 ## modifications in libraries
 
+# boost
+
+* src/boost/archive/codecvt_null.hpp
+  added from boost 1.60 due to bug from version >= 1.61
+
+* src/boost/serialization/singleton.hpp
+  added from boost 1.60 due to bug from version >= 1.61
+
 # CGAL
 
 * src/CGAL/Alpha_shape_3.h
