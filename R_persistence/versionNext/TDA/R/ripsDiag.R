@@ -39,6 +39,9 @@ function(X, maxdimension, maxscale, dist = "euclidean", library = "GUDHI",
   if (library[2] != "GUDHI" && library[2] != "Dionysus" && library[2] != "PHAT") {
     stop("library for computing persistence diagram should be a string: either 'GUDHI, 'Dionysus', or 'PHAT'")
   }
+  if (!is.logical(location)) {
+    stop("location should be logical")
+  }  
   if (!is.logical(printProgress)) {
     stop("printProgress should be logical")
   }
