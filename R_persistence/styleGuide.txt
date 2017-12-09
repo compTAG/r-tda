@@ -10,6 +10,7 @@ C++ Style Guide
 
 Guidelines for Rd files
 
+* In \usage{} field, do not put more than 67 characters per line, to fit margin in pdf file.
 * Read https://developer.r-project.org/Rds.html
 * Use \code{} whenever it makes sense.
 * Use \href{}{} and \url{} to provide links.

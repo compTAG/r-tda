@@ -16,7 +16,8 @@
 }
 
 \usage{
-  kde(X, Grid, h, kertype = "Gaussian", weight = 1, printProgress = FALSE)
+kde(X, Grid, h, kertype = "Gaussian", weight = 1,
+    printProgress = FALSE)
 }
 
 \arguments{

@@ -11,7 +11,8 @@
 }
 
 \usage{
-ripsFiltration(X, maxdimension, maxscale, dist = "euclidean",
+ripsFiltration(
+    X, maxdimension, maxscale, dist = "euclidean",
     library = "GUDHI", printProgress = FALSE)
 }
 

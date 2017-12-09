@@ -11,7 +11,8 @@
 }
 
 \usage{
-alphaShapeFiltration(X, library = "GUDHI", printProgress = FALSE)
+alphaShapeFiltration(
+    X, library = "GUDHI", printProgress = FALSE)
 }
 
 \arguments{

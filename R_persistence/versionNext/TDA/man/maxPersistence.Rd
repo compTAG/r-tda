@@ -17,7 +17,7 @@
 maxPersistence(
     FUN, parameters, X, lim, by,
     maxdimension = length(lim) / 2 - 1, sublevel = TRUE,
-    library = "Dionysus", B = 30, alpha = 0.05,
+    library = "GUDHI", B = 30, alpha = 0.05,
     bandFUN = "bootstrapBand", distance = "bottleneck",
     dimension = min(1, maxdimension), p = 1, parallel = FALSE,
     printProgress = FALSE, weight = NULL)

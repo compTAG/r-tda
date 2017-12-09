@@ -11,8 +11,9 @@
 }
 
 \usage{
-filtrationDiag(filtration, maxdimension, library = "GUDHI", location = FALSE,
-        printProgress = FALSE, diagLimit = NULL)
+filtrationDiag(
+    filtration, maxdimension, library = "GUDHI", location = FALSE,
+    printProgress = FALSE, diagLimit = NULL)
 }
 
 \arguments{

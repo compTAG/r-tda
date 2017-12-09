@@ -11,9 +11,10 @@
 }
 
 \usage{
-gridFiltration(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
-    maxdimension = max(NCOL(X), length(dim(FUNvalues))) - 1, sublevel = TRUE,
-    printProgress = FALSE, ...)
+gridFiltration(
+    X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
+    maxdimension = max(NCOL(X), length(dim(FUNvalues))) - 1,
+    sublevel = TRUE, printProgress = FALSE, ...)
 }
 
 \arguments{

@@ -11,10 +11,11 @@
 }
 
 \usage{
-gridDiag(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
-         maxdimension = max(NCOL(X), length(dim(FUNvalues))) - 1,
-         sublevel = TRUE, library = "GUDHI", location = FALSE,
-         printProgress = FALSE, diagLimit = NULL, ...)
+gridDiag(
+    X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
+    maxdimension = max(NCOL(X), length(dim(FUNvalues))) - 1,
+    sublevel = TRUE, library = "GUDHI", location = FALSE,
+    printProgress = FALSE, diagLimit = NULL, ...)
 }
 
 \arguments{
