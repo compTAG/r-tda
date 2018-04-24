@@ -1,3 +1,6 @@
+### TDA: version 1.6.1
+- resolved compile issue with gcc 8
+
 ### TDA: version 1.6
 - fixed bugs
 - alphaCompelxDiag and alphaShapeDiag also returns location of representative cycles
