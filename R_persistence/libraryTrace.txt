@@ -110,3 +110,7 @@
   void init(Filtration_value max_alpha_square)
   template<typename Simplex_handle> void propagate_alpha_filtration(Simplex_handle f_simplex, int decr_dim)
   namespace of std::isnan() function is specified
+
+* src/gudhi/Simplex_tree.h
+  bool rec_make_filtration_non_decreasing(Siblings * sib)
+  line 1172: added this to capture clause in lambda function
