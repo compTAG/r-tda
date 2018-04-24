@@ -1,5 +1,6 @@
 ### TDA: version 1.6.1
 - fixed bug in alphaShapeDiag to return correct location of representative cycles
+- computing filtrations returns coordinates of vertices when appropriate
 - resolved compile issue with gcc 8
 
 ### TDA: version 1.6
