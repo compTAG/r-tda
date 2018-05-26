@@ -20,6 +20,10 @@ Imports:
     igraph,
     parallel,
     scales
+Suggests:
+    testthat
+Encoding:
+    UTF-8
 LinkingTo:
     BH (>= 1.60.0-2),
     Rcpp,
