@@ -31,3 +31,4 @@ LinkingTo:
 SystemRequirements:
     C++11,
     gmp
+    mpfr
