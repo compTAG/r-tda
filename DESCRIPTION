@@ -22,7 +22,6 @@ Imports:
     scales
 Suggests:
     testthat
-    lintr
 Remotes:
     github::jimhester/lintr@fe4104a2d1c5c6ae9ad8daa79925c9d11127c142
 Encoding:
