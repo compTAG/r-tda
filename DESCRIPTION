@@ -22,6 +22,7 @@ Imports:
     scales
 Suggests:
     testthat
+    lintr
 Encoding:
     UTF-8
 LinkingTo:

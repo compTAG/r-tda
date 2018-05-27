@@ -11,7 +11,7 @@ test_that("points are 2d", {
 })
 
 test_that("points are on circle", {
-  pts <- circleUnif(n = 4, r=2.34)
-  norms <- apply(pts, MARGIN=1, FUN = norm, type = "2")
+  pts <- circleUnif(n = 4, r = 2.34)
+  norms <- apply(pts, MARGIN = 1, FUN = norm, type = "2")
   expect_equal(norms, rep(2.34, 4))
 })
