@@ -3,5 +3,6 @@ sudo: false
 cache: packages
 addons:
   apt:
+    update: true
     packages:
       - libmpfr-dev
