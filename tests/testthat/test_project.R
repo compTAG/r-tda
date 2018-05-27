@@ -1,7 +1,7 @@
 context("lints")
 
 skip_if(
-  Sys.getenv("TDA_TEST_LINT") != "true",
+  Sys.getenv("TDA_TEST_LINT") != "true" || Sys.getenv("TRAVIS") == "true",
   message = paste(
     "Lint test disabled. To run tests, \n",
     "set env variable \"TDA_TEST_LINT\" to \"true\" or \n",
