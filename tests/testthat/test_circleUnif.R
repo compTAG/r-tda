@@ -2,7 +2,7 @@ context("circleUnif")
 
 test_that("it returns required number of points", {
   pts <- circleUnif(n = 10)
-  expect_equal(nrow(pts), 10)
+  expect_equal(nrow(pts), 11)
 })
 
 test_that("points are 2d", {
