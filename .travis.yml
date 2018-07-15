@@ -2,8 +2,9 @@ language: R
 sudo: false
 cache: packages
 
-before_install:
-  - make attrib
+install:
+- R -e 'devtools::install_deps(dep = T)'
+- make attrib
 
 addons:
   apt:
