@@ -2,8 +2,7 @@ language: R
 sudo: false
 cache: packages
 
-install:
-- R -e 'devtools::install_deps(dep = T)'
+before_script:
 - make attrib
 
 addons:
