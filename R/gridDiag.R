@@ -128,7 +128,7 @@ function(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
   }
   if (sublevel == FALSE) {
     #possible bugfix with labels
-    colnames(Diag) <- c("dimension", "Birth", "Death")
+    colnames(Diag) <- c("dimension", "Death", "Birth")
     Diag[, 2:3] <- -Diag[, 3:2]
   } else {
     colnames(Diag) <- c("dimension", "Birth", "Death")
