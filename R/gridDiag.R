@@ -127,7 +127,7 @@ function(X = NULL, FUN = NULL, lim = NULL, by = NULL, FUNvalues = NULL,
     Diag[1, 3] <- ifelse(is.null(diagLimit), max(FUNvalues), diagLimit) 
   }
   if (sublevel == FALSE) {
-    colnames(Diag) <- c("dimension", "Death", "Birth")
+    colnames(Diag) <- c("dimension", "Birth", "Death")
     Diag[, 2:3] <- -Diag[, 3:2]
   } else {
     colnames(Diag) <- c("dimension", "Birth", "Death")
