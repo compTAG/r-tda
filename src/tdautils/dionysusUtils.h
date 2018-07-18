@@ -1,7 +1,14 @@
 #ifndef __DIONYSUSUTILS_H__
 #define __DIONYSUSUTILS_H__
 
-#include <topology/simplex.h>
+#include "../dionysus/dionysus/simplex.h"
+#include "../dionysus/dionysus/rips.h"
+#include "../dionysus/dionysus/filtration.h"
+#include "../dionysus/dionysus/standard-reduction.h"
+
+// swapping simplex
+//#include <topology/simplex.h>
+
 #include <string>
 
 #include <utilities/timer.h>
@@ -385,7 +392,43 @@ inline Filtration RipsFiltrationDionysus(
 
   return filtration;
 }
+/*
+template< typename Distances, typename Generator, typename Filtration,
+	typename RealMatrix, typename Print >
+inline Filtration RipsFiltrationDionysus2(
+	const RealMatrix & X,
+    const unsigned     nSample, 
+    const unsigned     nDim,
+    const bool         is_row_names,
+    const int          maxdimension,
+    const double       maxscale,
+    const bool         printProgress,
+    const Print      & print
+) {
+  // This is a Matrix of Points
+  PointContainer points = TdaToStl< PointContainer >(X, nSample, nDim, is_row_names);
+  // 
+  Distances distances(points);
+  Generator rips(distances);
+  typename Generator::Evaluator size(distances);
+  Filtration filtration;
+  EvaluatePushBack< Filtration, typename Generator::Evaluator > functor(
+      filtration, size);
 
+  // Generate maxdimension skeleton of the Rips complex
+  rips.generate(maxdimension + 1, maxscale, functor);
+
+  if (printProgress) {
+    print("# Generated complex of size: %d \n", filtration.size());
+  }
+
+  // Sort the simplices with respect to comparison criteria
+  // e.g. distance or function values
+  filtration.sort(ComparisonDataDimension< typename Filtration::Simplex >());
+
+  return filtration;
+}
+*/
 
 
 # endif // __DIONYSUSUTILS_H__
