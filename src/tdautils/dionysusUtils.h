@@ -1,10 +1,9 @@
 #ifndef __DIONYSUSUTILS_H__
 #define __DIONYSUSUTILS_H__
 
-#include "../dionysus/dionysus/simplex.h"
-#include "../dionysus/dionysus/rips.h"
-#include "../dionysus/dionysus/filtration.h"
-#include "../dionysus/dionysus/standard-reduction.h"
+#include <dionysus/simplex.h>
+#include <dionysus/rips.h>
+#include <dionysus/filtration.h>
 
 // swapping simplex
 //#include <topology/simplex.h>
