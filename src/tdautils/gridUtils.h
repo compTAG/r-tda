@@ -3,12 +3,17 @@
 
 #include <utilities/log.h>
 
-#include <topology/simplex.h>
-#include <topology/filtration.h>
-#include <topology/static-persistence.h>
-#include <topology/dynamic-persistence.h>
-#include <topology/persistence-diagram.h>
+//#include <topology/simplex.h>
+//#include <topology/filtration.h>
+//#include <topology/static-persistence.h>
+//#include <topology/dynamic-persistence.h>
+//#include <topology/persistence-diagram.h>
 #include <utilities/indirect.h>
+
+#include <dionysus/simplex.h>
+#include <dionysus/filtration.h>
+#include <dionysus/ordinary-persistence.h>
+#include <dionysus/diagram.h>
 
 #include <vector>
 #include <map>
