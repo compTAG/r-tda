@@ -4,42 +4,29 @@
 #include <topology/dynamic-persistence.h>
 #include <topology/persistence-diagram.h>
 
-//#include <geometry/l2distance.h>
-//#include <geometry/distances.h>
+#include <geometry/l2distance.h>
+#include <geometry/distances.h>
 #include <utilities/containers.h>           // for BackInsertFunctor
 #include <utilities/timer.h>
- 
+
 //dionysus2
 //#include <dionysus/rips.h>
 #include <dionysus/filtration.h>
 //#include <dionysus/ordinary-persistence.h>
-#include <dionysus/distances.h>
+//#include <dionysus/distances.h>
 //#include <dionysus/diagram.h>
 
 #include <vector>
 
-namespace d = dionysus;
 
-
-//L2 Struct is inside distances.h
-// Feels very janky
-
-// typedef     std::vector<double>                                     Point;
-// typedef     std::vector<Point>                                      PointContainer;
-
-typedef         d::PairwiseDistances<std::vector<std::vector<double>>, d::L2Distance<std::vector<double>>>           PairDistances;
+typedef         PairwiseDistances<PointContainer, L2Distance>           PairDistances;
 typedef         PairDistances::DistanceType                             DistanceType;
 typedef         PairDistances::IndexType                                VertexR;
 typedef         Rips< PairDistances, Simplex< VertexR, double > >       Generator;
 typedef         Generator::Simplex                                      SmplxR;
 typedef         Filtration<SmplxR>                                       FltrR;
-
-// Comment this test
 typedef         StaticPersistence<>                                     PersistenceR;
-
-// relabel
-//typedef         OrdinaryPersistence<>                                   PersistenceR;
-
 //typedef         DynamicPersistenceChains<>                              PersistenceR;
 typedef         PersistenceDiagram<>                                    PDgmR;
- 
+
+
