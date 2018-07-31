@@ -1,3 +1,7 @@
+### TDA: version 1.6.2
+- fixed bugs
+- updated Description with references and hyperlinks
+
 ### TDA: version 1.6.1
 - fixed bugs
 - fixed bug in alphaShapeDiag to return correct location of representative cycles
