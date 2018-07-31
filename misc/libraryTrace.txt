@@ -94,6 +94,10 @@
 
 # Dionysus
 
+* src/topology/rips.hpp
+  void bros_kerbosch(...) const (and other places where bros_kerbosch is used)
+  line 34, 56, 86, 126, 140, 162, 167, 184, 190: change 'excluded' to 'excludedNext' (where excludedNext = excluded + 1) to prevent overflow and change logic accordingly
+
 * src/utilities/counter.h (and other places where Count(x) is used)
   replace macro Count() by inline function Count()
 
