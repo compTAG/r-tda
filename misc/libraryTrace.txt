@@ -116,5 +116,8 @@
   namespace of std::isnan() function is specified
 
 * src/gudhi/Simplex_tree.h
+  Simplex_tree(Simplex_tree && old)
+  line 354-376: temporarily comment out move constructor so that copy constructor is used instead to prevent shallow move
+
   bool rec_make_filtration_non_decreasing(Siblings * sib)
-  line 1172: added this to capture clause in lambda function
+  line 1183: added this to capture clause in lambda function
