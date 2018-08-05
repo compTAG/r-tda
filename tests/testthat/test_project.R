@@ -1,6 +1,6 @@
-context("lints")
+testthat::context("lints")
 
-skip_if(
+testthat::skip_if(
   Sys.getenv("TDA_TEST_LINT") != "true" || Sys.getenv("TRAVIS") == "true",
   message = paste(
     "Lint test disabled. To run tests, \n",
@@ -9,6 +9,6 @@ skip_if(
   )
 )
 
-test_that("Package Style", {
+testthat::test_that("Package Style", {
   lintr::expect_lint_free()
 })
