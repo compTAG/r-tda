@@ -1,3 +1,8 @@
+### TDA: version 1.6.3
+- fixed bugs in alphaComplexDiag
+- added David Millman as an author
+- added tests
+
 ### TDA: version 1.6.2
 - fixed bugs
 - updated Description with references and hyperlinks
