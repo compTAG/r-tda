@@ -4,8 +4,8 @@ Title: Statistical Tools for Topological Data Analysis
 Version: 1.6.2
 Date: 2018-04-27
 Author: Brittany T. Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria,
-    Vincent Rouvreau. The included GUDHI is authored by Clement Maria,
-    Dionysus by Dmitriy Morozov, and
+    David L. Millman, Vincent Rouvreau. The included GUDHI is authored by
+	Clement Maria, Dionysus by Dmitriy Morozov, and
     PHAT by Ulrich Bauer, Michael Kerber, and Jan Reininghaus.
 Maintainer: Jisu Kim <jisuk1@andrew.cmu.edu>
 Description: Tools for the statistical analysis of persistent homology and for
