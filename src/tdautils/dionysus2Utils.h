@@ -13,41 +13,6 @@
 
 namespace d = dionysus;
 
-
-
-/*
-     * I'm going to assume that we simply pass in the persDgm, persLoc, and persCycle as they are above.
-     * I should ask Dave tomorrow what persDgm, persLoc, and persCycle are.
-     * Persistence Locations: for each diagram, there is a collection of points, and the points are "steps" 
-     * Perstistence Cycle: Birth and Death?
-     *
-     * Make example to test it
-     *
-     * ask how to get the vignette
-     * Figure out what the Filtration that gets passed in is.
-     * Want to pass in Ordinary-Persistence with a Z2Field first go
-     * 
-     * ask dave what initLocations and initDiagrams do
-     *
-     * ask dave what format the cmplx is passed in as
-     * Figure out what format Ordinary Persistence saves the persistence as
-     *
-     * Figure out what format TDA filtration is in typecast utils
-     * What is the format for TDA filtration?
-     *
-     * Figure out what <Persistence Parameter> is in FiltrationDiagDionysus
-     *      Parameter probably comes from gridUtils.h defining Persistence as static-persistence
-     *      Probably want to rename persistence2
-     * Figure out how to convert Filtration.h in D1 to D2 so the rest of the methods work.
-     * 
-     */
-    
-//Helper function for filling in persDgm
-//template< typename Diagrams, typename iterator, typename Evaluator, typename SimplexMap >
-//inline void initDiagrams;
-//Helper function for filling in persLoc and persCycle
-// inline void initLocations;
-
 // FiltrationDiag in Dionysus2
 /** \brief Construct the persistence diagram from the filtration using library
 *         Dionysus.
@@ -82,32 +47,24 @@ void FiltrationDiagDionysus2(
         std::vector< std::vector< std::vector< std::vector< unsigned > > > > & persCycle
 ) {
     
-    //Assume that Persistence that is passed in is Persistence2
-    //Calculate Persistence 
-    
+    // Assume that Persistence that is passed in is Persistence2, Filtration is Fltr2
+    // Create and Calculate Persistence
     d::Z2Field k;
-    //Persistence persistence(k);
-    //StandardReduction2 reduce(persistence);
     d::RowReduction<d::Z2Field> reduce(k);
-    // We know that the function breaks when this line is called.
     reduce(filtration);
     
     typedef decltype(reduce.persistence().pair(0)) Index;
     typedef float Value;
-    //persistence is reduced.
-    Index _ = 0;
-    // move Persistence into persDgm
-    //auto dgms = d::init_diagrams(reduce->persistence(), filtration, [&](const Smplx2& s) -> float  { return filtration.index(s); }, [](typename Persistence::Index i) { return i; });
-    
-    diagramDS::DiagramDS<float, Index> dgms(
+    // Putting persistence into diagrams data structure
+    diagramDS::DiagramDS<Value, Index> dgms(
             reduce.persistence(), 
             filtration, 
             [&](const Smplx2& s) -> float  { return filtration.index(s);}, 
             [](typename Persistence::Index i) { return i; }
         );
-    //emulate initDiagrams function from dionysusUtils
-    //will put into a function later
+    // Fill in Diagram
     persDgm.resize(dgms.getDiagrams().size());
+    Index _ = 0;
     for (auto &dgm : dgms.getDiagrams())
     {
         for (auto &pt : dgm)
@@ -122,8 +79,10 @@ void FiltrationDiagDionysus2(
         }
         _++;   
     }
-    persDgm.resize(maxdimension + 1);
-    
+    // Capping at maxdimension
+    if (persDgm.size() > maxdimension) {
+        persDgm.resize(maxdimension + 1);
+    }
 }
 
 #endif __DIONYSUS2UTILS_H__
