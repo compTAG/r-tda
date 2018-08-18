@@ -15,8 +15,11 @@ filtrationDiag <- function(
   if (library == "dionysus" || library == "DIONYSUS") {
     library <- "Dionysus"
   }
-  if (library != "GUDHI" && library != "Dionysus") {
-    stop("library for computing persistence diagram should be a string: either 'GUDHI' or 'Dionysus'")
+  if (library == "D2") {
+      library <- "D2"
+  }
+  if (library != "GUDHI" && library != "Dionysus" && library != "D2") {
+    stop("library for computing persistence diagram should be a string: either 'GUDHI' or 'Dionysus' or 'Dionysus2'")
   }
   if (!is.logical(location)) {
     stop("location should be logical")
