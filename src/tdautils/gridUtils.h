@@ -12,7 +12,9 @@
 
 #include <dionysus/simplex.h>
 #include <dionysus/filtration.h>
-#include <dionysus/ordinary-persistence.h>
+//#include <dionysus/ordinary-persistence.h>
+#include <dionysus/reduced-matrix.h>
+#include <dionysus/standard-reduction.h>
 #include <dionysus/diagram.h>
 
 #include <vector>
@@ -42,7 +44,14 @@ typedef         OffsetBeginMap<Fltr, Persistence,
                                Fltr::Index, 
                                Persistence::iterator>               FiltrationPersistenceMap;
 
-
+//dionysus2
+//needs changing
+typedef         d::Simplex<Vertex,double>                               Smplx2;
+typedef         d::Filtration<Smplx2>                                   Fltr2;
+typedef         d::Simplex<>                                            Simplex2;
+typedef         d::Filtration<Simplex2>                                 Filtration2;
+typedef         d::ReducedMatrix<d::Z2Field>                            Persistence2;
+typedef         d::StandardReduction<Persistence2>                      StandardReduction2;
 
 // add a single edge to the filtration
 template< typename VectorList >
