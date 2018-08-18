@@ -64,6 +64,12 @@ inline void filtrationDiagSorted(
         smplxTree, coeff_field_characteristic, min_persistence, maxdimension,
         printProgress, persDgm);
   }
+  else if (library[0] == 'D' && library[1] == '2') {
+    FiltrationDiagDionysus2<Persistence2,Fltr2 >(
+           filtrationTdaToDionysus2< VertexVector, Fltr2>(
+              cmplx, values, idxShift),
+          maxdimension, location, printProgress, persDgm, persLoc, persCycle); 
+  }
   else if (library[0] == 'D') {
     FiltrationDiagDionysus< Persistence >(
         filtrationTdaToDionysus< VertexVector, Fltr >(

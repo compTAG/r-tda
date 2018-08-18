@@ -664,7 +664,28 @@ inline Filtration filtrationTdaToDionysus(
   return filtration;
 }
 
-
+//Marker D2
+template< typename IntegerVector, typename Filtration, typename VectorList, 
+          typename RealVector >
+inline Filtration filtrationTdaToDionysus2(
+        const VectorList & cmplx, const RealVector & values,
+        const unsigned idxShift) {
+    Filtration filtration;
+    typename VectorList::const_iterator iCmplx = cmplx.begin();
+    typename RealVector::const_iterator iValue = values.begin();
+    for (; iCmplx != cmplx.end(); ++iCmplx, ++iValue) {
+        const IntegerVector tdaVec(*iCmplx);
+        IntegerVector dionysusVec(tdaVec.size());
+        typename IntegerVector::const_iterator iTda = tdaVec.begin();
+        typename IntegerVector::iterator iDionysus = dionysusVec.begin();
+        for (; iTda != tdaVec.end(); ++iTda, ++iDionysus) {
+            // R is 1-base, while C++ is 0-base
+            *iDionysus = *iTda - idxShift;
+        }
+        filtration.push_back(typename Filtration::Cell(dionysusVec, *iValue));
+    }
+    return filtration;
+}
 
 template< typename Filtration, typename RcppVector, typename RcppList >
 inline Filtration filtrationRcppToDionysus(const RcppList & rcppList) {
