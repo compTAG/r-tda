@@ -10,10 +10,12 @@
 #include <utilities/timer.h>
  
 //dionysus2
-//#include <dionysus/rips.h>
-#include <dionysus/filtration.h>
-//#include <dionysus/ordinary-persistence.h>
 #include <dionysus/distances.h>
+//#include <dionysus/fields/z2.h>
+//#include <dionysus/filtration.h>
+//#include <dionysus/rips.h>
+//#include <dionysus/ordinary-persistence.h>
+//#include <dionysus/standard-reduction.h>
 //#include <dionysus/diagram.h>
 
 #include <vector>
@@ -27,24 +29,17 @@ namespace d = dionysus;
 // typedef     std::vector<double>                                     Point;
 // typedef     std::vector<Point>                                      PointContainer;
 
-// Swapped out
 typedef         d::PairwiseDistances<std::vector<std::vector<double>>, d::L2Distance<std::vector<double>>>           PairDistances;
-
-//Next two lines are fine
 typedef         PairDistances::DistanceType                             DistanceType;
 typedef         PairDistances::IndexType                                VertexR;
-
-
 typedef         Rips< PairDistances, Simplex< VertexR, double > >       Generator;
 typedef         Generator::Simplex                                      SmplxR;
-typedef         Filtration<SmplxR>                                       FltrR;
-
-// Comment this test
-typedef         StaticPersistence<>                                     PersistenceR;
-
-// relabel
-//typedef         OrdinaryPersistence<>                                   PersistenceR;
-
+typedef         Filtration<SmplxR>                                      FltrR;
+//typedef         StaticPersistence<>                                     PersistenceR;
+//typedef         d::Simplex<>                                            Simplex2;
+//typedef         d::Filtration<Simplex2>                                  Filtration2;
+//typedef         d::OrdinaryPersistence<d::Z2Field>                      Persistence2;
+//typedef         d::StandardReduction<Persistence2>                      StandardReduction2;
 //typedef         DynamicPersistenceChains<>                              PersistenceR;
-typedef         PersistenceDiagram<>                                    PDgmR;
+//typedef         PersistenceDiagram<>                                    PDgmR;
  
