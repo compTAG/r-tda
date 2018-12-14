@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <tuple>
+#include <dionysus/diagram.h>
 
 namespace d = dionysus;
 

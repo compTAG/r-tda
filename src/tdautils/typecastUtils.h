@@ -602,6 +602,39 @@ inline void filtrationDionysusToTda(
 }
 
 
+template< typename IntegerVector, typename Filtration, typename VectorList,
+          typename RealVector >
+inline void filtrationDionysus2ToTda(
+    const Filtration & filtration, VectorList & cmplx, RealVector & values,
+    VectorList & boundary) {
+
+  const unsigned nFltr = filtration.size();
+  std::map< typename Filtration::Cell, unsigned,
+      typename Filtration::Cell::VertexComparison > simplex_map;
+  unsigned size_of_simplex_map = 0;
+
+  cmplx = VectorList(nFltr);
+  values = RealVector(nFltr);
+  boundary = VectorList(nFltr);
+  typename VectorList::iterator iCmplx = cmplx.begin();
+  typename RealVector::iterator iValue = values.begin();
+  typename VectorList::iterator iBdy = boundary.begin();
+
+  for (typename Filtration::Index it = filtration.begin();
+      it != filtration.end(); ++it, ++iCmplx, ++iValue, ++iBdy) {
+    const typename Filtration::Simplex & c = filtration.simplex(it);
+
+    IntegerVector cmplxVec;
+    IntegerVector boundaryVec;
+    filtrationDionysusOne(c, simplex_map, 1, cmplxVec, *iValue, boundaryVec);
+    *iCmplx = cmplxVec;
+    *iBdy = boundaryVec;
+
+    simplex_map.insert(typename
+        std::map< typename Filtration::Simplex, unsigned >::value_type(
+        c, size_of_simplex_map++));
+  }
+}
 
 template< typename RcppList, typename RcppVector, typename Filtration >
 inline RcppList filtrationDionysusToRcpp(const Filtration & filtration) {

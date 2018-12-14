@@ -14,6 +14,7 @@
 #include <tdautils/phatUtils.h>
 
 // for Rips
+#include <tdautils/ripsD2L2.h>
 #include <tdautils/ripsL2.h>
 #include <tdautils/ripsArbit.h>
 
@@ -59,10 +60,19 @@ inline void ripsFiltration(
             maxdimension, maxscale, printProgress, print);
     filtrationGudhiToTda< IntVector >(smplxTree, cmplx, values, boundary);
   }
+  
   else {
 
     if (dist[0] == 'e') {
-      // RipsDiag for L2 distance
+      // RipsDiag for L2 distance 
+      /*
+        if (library[0] == 'D' && library([1] == '2') {
+            filtrationDionysus2ToTda< IntVector >(
+                RipsFiltrationDionysus2< PairDistances2, Generator2, FltrR2 >(X, nSample,
+                    nDim, false, maxdimension, maxscale, printProgress, print),
+                cmplx, values, boundary);
+        }
+        */
       filtrationDionysusToTda< IntVector >(
           RipsFiltrationDionysus< PairDistances, Generator, FltrR >(X, nSample,
               nDim, false, maxdimension, maxscale, printProgress, print),
