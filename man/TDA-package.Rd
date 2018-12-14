@@ -17,14 +17,14 @@
 \tabular{ll}{
 Package: \tab TDA\cr
 Type: \tab Package\cr
-Version: \tab 1.6.1\cr
-Date: \tab 2018-04-24\cr
+Version: \tab 1.6.4\cr
+Date: \tab 2018-08-05\cr
 License: \tab GPL-3 \cr
 }
 }
 
 \author{
-  Brittany Terese Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria, and Vincent Rouvreau
+  Brittany Terese Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria, David L. Millman, and Vincent Rouvreau
 
   Maintainer: Jisu Kim <jisuk1@andrew.cmu.edu>
 }

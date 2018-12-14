@@ -1,4 +1,4 @@
 library(testthat)
 library(TDA)
 
-test_check("TDA", encoding = "UTF-8")
+testthat::test_check("TDA", encoding = "UTF-8")
