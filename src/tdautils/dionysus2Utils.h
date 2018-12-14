@@ -85,4 +85,47 @@ void FiltrationDiagDionysus2(
     }
 }
 
+template< typename Distances, typename Generator, typename Filtration,
+          typename RealMatrix, typename Print >
+inline Filtration RipsFiltrationDionysus2(
+    const RealMatrix & X,
+    const unsigned     nSample, 
+    const unsigned     nDim,
+    const bool         is_row_names,
+    const int          maxdimension,
+    const double       maxscale,
+    const bool         printProgress,
+    const Print      & print
+) {
+
+  PointContainer points = TdaToStl< PointContainer >(X, nSample, nDim,
+      is_row_names);
+  //lol copy paste
+  //read_points(infilename, points);
+  //read_points2(infilename, points);
+
+  Distances distances(points); //PairDistances2
+  Generator rips(distances); //Generator2
+  typename Generator::Evaluator size(distances);
+  Filtration filtration;
+  //EvaluatePushBack< Filtration, typename Generator::Evaluator > functor(filtration, size);
+  auto functor = [&filtration](Simplex2&& s) { filtration.push_back(s); };
+  // Generate maxdimension skeleton of the Rips complex
+  // rips.generate(skeleton, max_distance, [&filtration](Simplex&& s) { filtration.push_back(s); });
+  
+  rips.generate(maxdimension + 1, maxscale, functor);
+
+  if (printProgress) {
+    print("# Generated complex of size: %d \n", filtration.size());
+  }
+
+  // Sort the simplices with respect to comparison criteria
+  // e.g. distance or function values
+  // filtration.sort(ComparisonDataDimension< typename Filtration::Simplex >());
+  filtration.sort(Generator::Comparison(distances));
+
+  return filtration;
+}
+
+
 #endif __DIONYSUS2UTILS_H__
