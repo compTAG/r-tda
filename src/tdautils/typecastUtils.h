@@ -530,6 +530,36 @@ inline void filtrationGudhiToPhat(
 
 
 template< typename Simplex, typename SimplexMap, typename RealVector >
+inline void filtrationDionysus2(
+  const Simplex & c, const SimplexMap & simplex_map, const int idxShift,
+  RealVector & cmplxVec, double & value, RealVector & boundaryVec) {
+
+  const unsigned nVtx = c.dimension() + 1;
+
+  cmplxVec = RealVector(nVtx);
+  typename RealVector::iterator iCmplxVec = cmplxVec.begin();
+  //Simplex::Vertices?::const_iterator, want array from unique_ptr
+  for (auto vit = c.begin(); vit != c.end(); ++vit, ++iCmplxVec) {
+    // R is 1-base, while C++ is 0-base
+    *iCmplxVec = *vit + idxShift;
+  }
+
+  value = c.data();
+
+  // might need to change for cubical complex
+  if (nVtx > 1) {
+    boundaryVec = RealVector(nVtx);
+  }
+  typename RealVector::iterator iBdyVec = boundaryVec.begin();
+  for (typename Simplex::BoundaryIterator bit = c.boundary_begin();
+       bit != c.boundary_end(); ++bit, ++iBdyVec) {
+    // R is 1-base, while C++ is 0-base
+    *iBdyVec = simplex_map.find(*bit)->second + idxShift;
+  }
+}
+
+
+template< typename Simplex, typename SimplexMap, typename RealVector >
 inline void filtrationDionysusOne(
   const Simplex & c, const SimplexMap & simplex_map, const int idxShift,
   RealVector & cmplxVec, double & value, RealVector & boundaryVec) {
@@ -602,8 +632,14 @@ inline void filtrationDionysus2ToTda(
     VectorList & boundary) {
 
   const unsigned nFltr = filtration.size();
-  std::map< typename Filtration::Cell, unsigned,
-      typename Filtration::Cell::VertexComparison > simplex_map;
+  //auto lambda = [](typename Filtration::Cell& a,typename Filtration::Cell& b){return a < b;};
+  //template<class Filtration>
+  struct VertexComparison2
+  {
+    bool operator()(const typename Filtration::Cell& a, const typename Filtration::Cell& b) const       
+      { return a < b; }
+  };
+  std::map< typename Filtration::Cell, unsigned, VertexComparison2> simplex_map;
   unsigned size_of_simplex_map = 0;
 
   cmplx = VectorList(nFltr);
@@ -613,18 +649,18 @@ inline void filtrationDionysus2ToTda(
   typename RealVector::iterator iValue = values.begin();
   typename VectorList::iterator iBdy = boundary.begin();
 
-  for (typename Filtration::Index it = filtration.begin();
+  for (typename Filtration::OrderConstIterator it = filtration.begin();
       it != filtration.end(); ++it, ++iCmplx, ++iValue, ++iBdy) {
-    const typename Filtration::Simplex & c = filtration.simplex(it);
+    const typename Filtration::Cell & c = *it;
 
     IntegerVector cmplxVec;
     IntegerVector boundaryVec;
-    filtrationDionysusOne(c, simplex_map, 1, cmplxVec, *iValue, boundaryVec);
+    filtrationDionysus2(c, simplex_map, 1, cmplxVec, *iValue, boundaryVec);
     *iCmplx = cmplxVec;
     *iBdy = boundaryVec;
 
     simplex_map.insert(typename
-        std::map< typename Filtration::Simplex, unsigned >::value_type(
+        std::map< typename Filtration::Cell, unsigned >::value_type(
         c, size_of_simplex_map++));
   }
 }

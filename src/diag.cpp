@@ -7,6 +7,7 @@
 
 // for Rips
 #include <tdautils/ripsL2.h>
+#include <tdautils/ripsD2L2.h>
 #include <tdautils/ripsArbit.h>
 
 // for grid

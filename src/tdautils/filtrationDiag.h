@@ -15,6 +15,7 @@
 
 // for Dionysus
 #include <tdautils/dionysusUtils.h>
+#include <tdautils/dionysus2Utils.h>
 
 // for phat
 #include <tdautils/phatUtils.h>

@@ -13,6 +13,9 @@
 
 namespace d = dionysus;
 
+
+
+
 // FiltrationDiag in Dionysus2
 /** \brief Construct the persistence diagram from the filtration using library
 *         Dionysus.
@@ -85,6 +88,28 @@ void FiltrationDiagDionysus2(
     }
 }
 
+/**
+ * Class: EvaluatePushBack<Container>
+ *
+ * Push back the simplex and the evaluated value
+ */
+template< typename Container, typename Evaluator >
+class EvaluatePushBack2 {
+
+public:
+  EvaluatePushBack2(Container & argContainer, const Evaluator & argEvaluator) :
+    container(argContainer), evaluator(argEvaluator) {}
+
+  void operator()(const typename Container::value_type & argSmp) const {
+    typename Container::value_type smp(argSmp.dimension(),argSmp.begin(),argSmp.end(), evaluator(argSmp));
+    container.push_back(smp);
+  }
+
+private:
+  Container & container;
+  const Evaluator & evaluator;
+};
+
 template< typename Distances, typename Generator, typename Filtration,
           typename RealMatrix, typename Print >
 inline Filtration RipsFiltrationDionysus2(
@@ -108,11 +133,11 @@ inline Filtration RipsFiltrationDionysus2(
   Generator rips(distances); //Generator2
   typename Generator::Evaluator size(distances);
   Filtration filtration;
-  //EvaluatePushBack< Filtration, typename Generator::Evaluator > functor(filtration, size);
-  auto functor = [&filtration](Simplex2&& s) { filtration.push_back(s); };
+  EvaluatePushBack2< Filtration, typename Generator::Evaluator > functor(filtration, size);
+  //auto functor = [&filtration](typename Generator::Simplex&& s) { filtration.push_back(s); };
   // Generate maxdimension skeleton of the Rips complex
   // rips.generate(skeleton, max_distance, [&filtration](Simplex&& s) { filtration.push_back(s); });
-  
+  //   
   rips.generate(maxdimension + 1, maxscale, functor);
 
   if (printProgress) {
@@ -122,7 +147,7 @@ inline Filtration RipsFiltrationDionysus2(
   // Sort the simplices with respect to comparison criteria
   // e.g. distance or function values
   // filtration.sort(ComparisonDataDimension< typename Filtration::Simplex >());
-  filtration.sort(Generator::Comparison(distances));
+  filtration.sort(typename Generator::Comparison(distances));
 
   return filtration;
 }

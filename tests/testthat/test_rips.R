@@ -6,7 +6,7 @@ test_that("default circle example ripsFiltration", {
     maxdimension <- 1
     maxscale <- 1.5
     FltRips <- ripsFiltration(X = X, maxdimension = maxdimension,
-               maxscale = maxscale, dist = "euclidean", library = "Dionysus",
+               maxscale = maxscale, dist = "euclidean", library = "D2",
                printProgress = TRUE)
     expect_equal(FltRips$cmplx[[1]],1)
     expect_true(FltRips$increasing)
@@ -17,7 +17,7 @@ test_that("default circle example ripsFiltration", {
 test_that("One dimensional ripsFiltration in a line", {
     Y  <-  matrix(c(1,2.1,3.3,4.6,6))
     FltRips  <- ripsFiltration(X =Y, maxdimension = 1,
-                 maxscale = 1.5, dist = "euclidean", library = "Dionysus",
+                 maxscale = 1.5, dist = "euclidean", library = "D2",
                  printProgress = TRUE)
     expect_equal(FltRips$cmplx[[1]],1)
     expect_equal(FltRips$cmplx[[6]],c(1,2))

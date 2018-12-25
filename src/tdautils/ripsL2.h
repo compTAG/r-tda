@@ -1,5 +1,5 @@
 #include <topology/rips.h>
-//#include <topology/filtration.h>
+#include <topology/filtration.h>
 #include <topology/static-persistence.h>
 #include <topology/dynamic-persistence.h>
 #include <topology/persistence-diagram.h>

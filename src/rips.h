@@ -65,18 +65,19 @@ inline void ripsFiltration(
 
     if (dist[0] == 'e') {
       // RipsDiag for L2 distance 
-      /*
-        if (library[0] == 'D' && library([1] == '2') {
+      
+        if (library[0] == 'D' && library[1] == '2') {
             filtrationDionysus2ToTda< IntVector >(
                 RipsFiltrationDionysus2< PairDistances2, Generator2, FltrR2 >(X, nSample,
                     nDim, false, maxdimension, maxscale, printProgress, print),
                 cmplx, values, boundary);
         }
-        */
-      filtrationDionysusToTda< IntVector >(
-          RipsFiltrationDionysus< PairDistances, Generator, FltrR >(X, nSample,
-              nDim, false, maxdimension, maxscale, printProgress, print),
-          cmplx, values, boundary);
+        else{ 
+            filtrationDionysusToTda< IntVector >(
+              RipsFiltrationDionysus< PairDistances, Generator, FltrR >(X, nSample,
+                nDim, false, maxdimension, maxscale, printProgress, print),
+              cmplx, values, boundary);
+        }
     }
     else {
       // RipsDiag for arbitrary distance
@@ -162,11 +163,19 @@ inline void ripsDiag(
   else {
     if (dist[0] == 'e') {
       // RipsDiag for L2 distance
+      if (libraryDiag[0] == 'D' && libraryDiag[0] == '2') {
+        FiltrationDiagDionysus2<Persistence2,FltrR2>(  
+          RipsFiltrationDionysus2< PairDistances2, Generator2, FltrR2 >(X, nSample,
+            nDim, false, maxdimension, maxscale, printProgress, print),
+            maxdimension, location, printProgress, persDgm, persLoc, persCycle
+          );
+      }
+      else {
       FltrR filtration =
           RipsFiltrationDionysus< PairDistances, Generator, FltrR >(
               X, nSample, nDim, false, maxdimension, maxscale,
               printProgress, print);
-
+      
       if (libraryDiag[0] == 'D') {
         FiltrationDiagDionysus< Persistence >(
             filtration, maxdimension, location, printProgress, persDgm,
@@ -190,6 +199,7 @@ inline void ripsDiag(
         FiltrationDiagPhat(
             cmplx, values, boundary_matrix, maxdimension, location,
             printProgress, persDgm, persLoc, persCycle);
+      }
       }
     }
     else {

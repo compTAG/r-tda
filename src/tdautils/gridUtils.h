@@ -48,8 +48,6 @@ typedef         OffsetBeginMap<Fltr, Persistence,
 //needs changing
 typedef         d::Simplex<Vertex,double>                               Smplx2;
 typedef         d::Filtration<Smplx2>                                   Fltr2;
-typedef         d::Simplex<>                                            Simplex2;
-typedef         d::Filtration<Simplex2>                                 Filtration2;
 typedef         d::ReducedMatrix<d::Z2Field>                            Persistence2;
 typedef         d::StandardReduction<Persistence2>                      StandardReduction2;
 
