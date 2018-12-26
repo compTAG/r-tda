@@ -17,7 +17,7 @@
 #include <tdautils/ripsD2L2.h>
 #include <tdautils/ripsL2.h>
 #include <tdautils/ripsArbit.h>
-
+#include <tdautils/ripsD2Arbit.h>
 
 
 // ripsFiltration
@@ -80,12 +80,20 @@ inline void ripsFiltration(
         }
     }
     else {
+       
+        if (library[0] == 'D' && library[1] == '2') {
+            filtrationDionysus2ToTda< IntVector >(
+                RipsFiltrationDionysus2< PairDistances2A, Generator2A, FltrR2A >(X, nSample,
+                    nDim, true, maxdimension, maxscale, printProgress, print),
+                cmplx, values, boundary);
+        } else {
       // RipsDiag for arbitrary distance
       filtrationDionysusToTda< IntVector >(
           RipsFiltrationDionysus< PairDistancesA, GeneratorA, FltrRA >(X,
               nSample, nDim, true, maxdimension, maxscale, printProgress,
               print),
           cmplx, values, boundary);
+        }
     }
   }
 }
@@ -204,6 +212,14 @@ inline void ripsDiag(
     }
     else {
       // RipsDiag for arbitrary distance
+      
+        if (libraryDiag[0] == 'D' && libraryDiag[1] == '2') {
+           FiltrationDiagDionysus2<Persistence2,FltrR2>( 
+                RipsFiltrationDionysus2< PairDistances2A, Generator2A, FltrR2A >(X, nSample,
+                    nDim, true, maxdimension, maxscale, printProgress, print),
+               maxdimension, location, printProgress, persDgm, persLoc, persCycle);
+        } else {
+        
       FltrRA filtration =
           RipsFiltrationDionysus< PairDistancesA, GeneratorA, FltrRA >(
               X, nSample, nDim, true, maxdimension, maxscale,
@@ -233,6 +249,7 @@ inline void ripsDiag(
             cmplx, values, boundary_matrix, maxdimension, location,
             printProgress, persDgm, persLoc, persCycle);
       }
+    }
     }
   }
 }
