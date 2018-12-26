@@ -413,18 +413,14 @@ inline Filtration RipsFiltrationDionysus2(
   Filtration filtration;
   EvaluatePushBack< Filtration, typename Generator::Evaluator > functor(
       filtration, size);
-
   // Generate maxdimension skeleton of the Rips complex
   rips.generate(maxdimension + 1, maxscale, functor);
-
   if (printProgress) {
     print("# Generated complex of size: %d \n", filtration.size());
   }
-
   // Sort the simplices with respect to comparison criteria
   // e.g. distance or function values
   filtration.sort(ComparisonDataDimension< typename Filtration::Simplex >());
-
   return filtration;
 }
 */
