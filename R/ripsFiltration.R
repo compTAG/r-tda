@@ -21,7 +21,10 @@ ripsFiltration <- function(
   if (library == "dionysus" || library == "DIONYSUS") {
     library <- "Dionysus"
   }
-  if (library != "GUDHI" && library != "Dionysus") {
+  if (library == "D2") {
+      library <- "D2"
+  }
+  if (library != "GUDHI" && library != "Dionysus" && library != "D2") {
     stop("library should be a string: either 'GUDHI' or 'Dionysus'")
   }
   if (!is.logical(printProgress)) {
