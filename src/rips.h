@@ -65,7 +65,6 @@ inline void ripsFiltration(
 
     if (dist[0] == 'e') {
       // RipsDiag for L2 distance 
-      
         if (library[0] == 'D' && library[1] == '2') {
             filtrationDionysus2ToTda< IntVector >(
                 RipsFiltrationDionysus2< PairDistances2, Generator2, FltrR2 >(X, nSample,

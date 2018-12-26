@@ -13,9 +13,6 @@
 
 namespace d = dionysus;
 
-
-
-
 // FiltrationDiag in Dionysus2
 /** \brief Construct the persistence diagram from the filtration using library
 *         Dionysus.
