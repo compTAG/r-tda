@@ -1,5 +1,5 @@
 #include <topology/rips.h>
-//#include <topology/filtration.h>
+#include <topology/filtration.h>
 #include <topology/static-persistence.h>
 #include <topology/dynamic-persistence.h>
 #include <topology/persistence-diagram.h>
@@ -11,7 +11,7 @@
 
 //dionysus2
 //#include <dionysus/rips.h>
-#include <dionysus/filtration.h>
+//#include <dionysus/filtration.h>
 //#include <dionysus/ordinary-persistence.h>
 //#include <dionysus/distances.h>
 //#include <dionysus/diagram.h>

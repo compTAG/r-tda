@@ -55,6 +55,12 @@ void alphaShapeDiag(
         smplxTree, coeff_field_characteristic, min_persistence, 2,
         printProgress, persDgm);
   }
+  else if (libraryDiag[0] == 'D' && libraryDiag[1] == '2') {
+      Fltr2 filtration = filtrationGudhiToDionysus2< Fltr2 >(smplxTree);
+      FiltrationDiagDionysus2< Persistence2 >(
+        filtration, maxdimension, location, printProgress, persDgm, persLoc,
+        persCycle);
+  }
   else if (libraryDiag[0] == 'D') {
     Fltr filtration = filtrationGudhiToDionysus< Fltr >(smplxTree);
     FiltrationDiagDionysus< Persistence >(

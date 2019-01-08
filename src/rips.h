@@ -66,7 +66,7 @@ inline void ripsFiltration(
     if (dist[0] == 'e') {
       // RipsDiag for L2 distance 
         if (library[0] == 'D' && library[1] == '2') {
-            filtrationDionysus2ToTda< IntVector >(
+            filtrationDionysus2Tda< IntVector >(
                 RipsFiltrationDionysus2< PairDistances2, Generator2, FltrR2 >(X, nSample,
                     nDim, false, maxdimension, maxscale, printProgress, print),
                 cmplx, values, boundary);
@@ -81,7 +81,7 @@ inline void ripsFiltration(
     else {
        
         if (library[0] == 'D' && library[1] == '2') {
-            filtrationDionysus2ToTda< IntVector >(
+            filtrationDionysus2Tda< IntVector >(
                 RipsFiltrationDionysus2< PairDistances2A, Generator2A, FltrR2A >(X, nSample,
                     nDim, true, maxdimension, maxscale, printProgress, print),
                 cmplx, values, boundary);
@@ -150,6 +150,12 @@ inline void ripsDiag(
       FiltrationDiagGudhi(
           smplxTree, p, min_persistence, maxdimension, printProgress, persDgm);
     }
+    else if (libraryDiag[0] == 'D' && libraryDiag[1] == '2') {
+      FltrR2 filtration = filtrationGudhiToDionysus2< FltrR2 >(smplxTree);
+      FiltrationDiagDionysus2< Persistence2 >(
+          filtration, maxdimension, location, printProgress, persDgm, persLoc,
+          persCycle);
+   }
     else if (libraryDiag[0] == 'D') {
       FltrR filtration = filtrationGudhiToDionysus< FltrR >(smplxTree);
       FiltrationDiagDionysus< Persistence >(

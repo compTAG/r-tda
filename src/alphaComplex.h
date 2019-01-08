@@ -62,6 +62,12 @@ void alphaComplexDiag(
     FiltrationDiagGudhi(
         alphaCmplx, coeff_field_characteristic, min_persistence, 2,
         printProgress, persDgm);
+  } 
+  else if (libraryDiag[0] == 'D' && libraryDiag[2] == '2') {
+    Fltr2 filtration = filtrationGudhiToDionysus2< Fltr2 >(alphaCmplx);
+    FiltrationDiagDionysus2< Persistence2 >(
+        filtration, maxdimension, location, printProgress, persDgm, persLoc,
+        persCycle);
   }
   else if (libraryDiag[0] == 'D') {
     // 2018-08-04
