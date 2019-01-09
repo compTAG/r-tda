@@ -19,7 +19,29 @@ inline PersistenceDiagram RcppToDionysus(const RcppMatrix& rcppMatrix) {
 	return dionysusDiagram;
 }
 
+template<typename PersistenceDiagram, typename RcppMatrix>
+inline PersistenceDiagram RcppToDionysus2(const RcppMatrix& rcppMatrix) {
+	PersistenceDiagram dionysusDiagram;
+	const unsigned rowNum = rcppMatrix.nrow();
+	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx)
+	{
+		dionysusDiagram.push_back(typename PersistenceDiagram::Point(
+				rcppMatrix[rowIdx + 0 * rowNum], rcppMatrix[rowIdx + 1 * rowNum], d::Empty()));
+	}
+	return dionysusDiagram;
+}
 
+template<typename PairVector, typename RcppMatrix>
+inline PairVector RcppToPairVector(const RcppMatrix& rcppMatrix) {
+	PairVector dionysusDiagram;
+	const unsigned rowNum = rcppMatrix.nrow();
+	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx)
+	{
+		dionysusDiagram.push_back(std::pair<double, double>(
+				rcppMatrix[rowIdx + 0 * rowNum], rcppMatrix[rowIdx + 1 * rowNum])); 
+	}
+	return dionysusDiagram;
+}
 
 template< typename StlMatrix, typename RealMatrix >
 inline StlMatrix TdaToStl(const RealMatrix & rcppMatrix,
@@ -802,6 +824,31 @@ inline Filtration filtrationRcppToDionysus(const RcppList & rcppList) {
   return filtration;
 }
 
+template< typename Filtration, typename RcppVector, typename RcppList >
+inline Filtration filtrationRcppToDionysus2(const RcppList & rcppList) {
+
+  const RcppList rcppComplex(rcppList[0]);
+  const RcppVector rcppValue(rcppList[1]);
+  Filtration filtration;
+
+  typename RcppList::const_iterator iCmplx = rcppComplex.begin();
+  typename RcppVector::const_iterator iValue = rcppValue.begin();
+  for (; iCmplx != rcppComplex.end(); ++iCmplx, ++iValue) {
+    const RcppVector rcppVec(*iCmplx);
+    RcppVector dionysusVec(rcppVec.size());
+    typename RcppVector::const_iterator iRcpp = rcppVec.begin();
+    typename RcppVector::iterator iDionysus = dionysusVec.begin();
+    for (; iRcpp != rcppVec.end(); ++iRcpp, ++iDionysus) {
+      // R is 1-base, while C++ is 0-base
+      *iDionysus = *iRcpp - 1;
+    }
+    filtration.push_back(typename Filtration::Cell(dionysusVec.size(),
+        dionysusVec.begin(), dionysusVec.end(), *iValue));
+  }
+
+  return filtration;
+}
+
 
 template< typename SimplexTree, typename Filtration >
 inline SimplexTree filtrationDionysusToGudhi(const Filtration & filtration) {
@@ -920,7 +967,7 @@ inline void filtrationDionysusToPhat(
 
 template< typename Column, typename Dimension, typename Filtration,
           typename VectorList, typename RealVector, typename Boundary >
-inline void filtrationDionysus2Phat(
+inline void filtrationDionysus2ToPhat(
     const Filtration & filtration, VectorList & cmplx, RealVector & values,
     Boundary & boundary_matrix) {
   // use custom VertexComparison with Dionysus2

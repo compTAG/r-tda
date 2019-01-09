@@ -8,15 +8,13 @@
 #include <tdautils/gudhiUtils.h>
 
 // for Dionysus
-#include <tdautils/dionysusUtils.h>
+#include <tdautils/dionysus2Utils.h>
 
 // for phat
 #include <tdautils/phatUtils.h>
 
 // for Rips
 #include <tdautils/ripsD2L2.h>
-#include <tdautils/ripsL2.h>
-#include <tdautils/ripsArbit.h>
 #include <tdautils/ripsD2Arbit.h>
 
 
@@ -60,39 +58,22 @@ inline void ripsFiltration(
             maxdimension, maxscale, printProgress, print);
     filtrationGudhiToTda< IntVector >(smplxTree, cmplx, values, boundary);
   }
-  
   else {
 
     if (dist[0] == 'e') {
-      // RipsDiag for L2 distance 
-        if (library[0] == 'D' && library[1] == '2') {
-            filtrationDionysus2Tda< IntVector >(
-                RipsFiltrationDionysus2< PairDistances2, Generator2, FltrR2 >(X, nSample,
-                    nDim, false, maxdimension, maxscale, printProgress, print),
-                cmplx, values, boundary);
-        }
-        else{ 
-            filtrationDionysusToTda< IntVector >(
-              RipsFiltrationDionysus< PairDistances, Generator, FltrR >(X, nSample,
-                nDim, false, maxdimension, maxscale, printProgress, print),
-              cmplx, values, boundary);
-        }
+      // RipsDiag for L2 distance
+      filtrationDionysus2Tda< IntVector >(
+          RipsFiltrationDionysus2< PairDistances2, Generator2, FltrR2 >(X, nSample,
+              nDim, false, maxdimension, maxscale, printProgress, print),
+          cmplx, values, boundary);
     }
     else {
-       
-        if (library[0] == 'D' && library[1] == '2') {
-            filtrationDionysus2Tda< IntVector >(
-                RipsFiltrationDionysus2< PairDistances2A, Generator2A, FltrR2A >(X, nSample,
-                    nDim, true, maxdimension, maxscale, printProgress, print),
-                cmplx, values, boundary);
-        } else {
       // RipsDiag for arbitrary distance
-      filtrationDionysusToTda< IntVector >(
-          RipsFiltrationDionysus< PairDistancesA, GeneratorA, FltrRA >(X,
+      filtrationDionysus2Tda< IntVector >(
+          RipsFiltrationDionysus2< PairDistances2A, Generator2A, FltrR2A >(X,
               nSample, nDim, true, maxdimension, maxscale, printProgress,
               print),
           cmplx, values, boundary);
-        }
     }
   }
 }
@@ -150,15 +131,9 @@ inline void ripsDiag(
       FiltrationDiagGudhi(
           smplxTree, p, min_persistence, maxdimension, printProgress, persDgm);
     }
-    else if (libraryDiag[0] == 'D' && libraryDiag[1] == '2') {
+    else if (libraryDiag[0] == 'D') {
       FltrR2 filtration = filtrationGudhiToDionysus2< FltrR2 >(smplxTree);
       FiltrationDiagDionysus2< Persistence2 >(
-          filtration, maxdimension, location, printProgress, persDgm, persLoc,
-          persCycle);
-   }
-    else if (libraryDiag[0] == 'D') {
-      FltrR filtration = filtrationGudhiToDionysus< FltrR >(smplxTree);
-      FiltrationDiagDionysus< Persistence >(
           filtration, maxdimension, location, printProgress, persDgm, persLoc,
           persCycle);
     }
@@ -176,27 +151,19 @@ inline void ripsDiag(
   else {
     if (dist[0] == 'e') {
       // RipsDiag for L2 distance
-      if (libraryDiag[0] == 'D' && libraryDiag[0] == '2') {
-        FiltrationDiagDionysus2<Persistence2,FltrR2>(  
-          RipsFiltrationDionysus2< PairDistances2, Generator2, FltrR2 >(X, nSample,
-            nDim, false, maxdimension, maxscale, printProgress, print),
-            maxdimension, location, printProgress, persDgm, persLoc, persCycle
-          );
-      }
-      else {
-      FltrR filtration =
-          RipsFiltrationDionysus< PairDistances, Generator, FltrR >(
+      FltrR2 filtration =
+          RipsFiltrationDionysus2< PairDistances2, Generator2, FltrR2 >(
               X, nSample, nDim, false, maxdimension, maxscale,
               printProgress, print);
-      
+
       if (libraryDiag[0] == 'D') {
-        FiltrationDiagDionysus< Persistence >(
+        FiltrationDiagDionysus2< Persistence2 >(
             filtration, maxdimension, location, printProgress, persDgm,
             persLoc, persCycle);
       }
       else if (libraryDiag[0] == 'G') {
         Gudhi::Simplex_tree<> smplxTree =
-            filtrationDionysusToGudhi< Gudhi::Simplex_tree<> >(filtration);
+            filtrationDionysus2Gudhi< Gudhi::Simplex_tree<> >(filtration);
         int p = 2; //characteristic of the coefficient field for homology
         double min_persistence = 0; //minimal length for persistent intervals
         FiltrationDiagGudhi(
@@ -207,37 +174,28 @@ inline void ripsDiag(
         std::vector< phat::column > cmplx;
         std::vector< double > values;
         phat::boundary_matrix< phat::vector_vector > boundary_matrix;
-        filtrationDionysusToPhat< phat::column, phat::dimension >(
+        filtrationDionysus2ToPhat< phat::column, phat::dimension >(
             filtration, cmplx, values, boundary_matrix);
         FiltrationDiagPhat(
             cmplx, values, boundary_matrix, maxdimension, location,
             printProgress, persDgm, persLoc, persCycle);
-      }
       }
     }
     else {
       // RipsDiag for arbitrary distance
-      
-        if (libraryDiag[0] == 'D' && libraryDiag[1] == '2') {
-           FiltrationDiagDionysus2<Persistence2,FltrR2>( 
-                RipsFiltrationDionysus2< PairDistances2A, Generator2A, FltrR2A >(X, nSample,
-                    nDim, true, maxdimension, maxscale, printProgress, print),
-               maxdimension, location, printProgress, persDgm, persLoc, persCycle);
-        } else {
-        
-      FltrRA filtration =
-          RipsFiltrationDionysus< PairDistancesA, GeneratorA, FltrRA >(
+      FltrR2A filtration =
+          RipsFiltrationDionysus2< PairDistances2A, Generator2A, FltrR2A >(
               X, nSample, nDim, true, maxdimension, maxscale,
               printProgress, print);
 
       if (libraryDiag[0] == 'D') {
-        FiltrationDiagDionysus< Persistence >(
+        FiltrationDiagDionysus2< Persistence2 >(
             filtration, maxdimension, location, printProgress, persDgm,
             persLoc, persCycle);
       }
       else if (libraryDiag[0] == 'G') {
         Gudhi::Simplex_tree<> smplxTree =
-            filtrationDionysusToGudhi< Gudhi::Simplex_tree<> >(filtration);
+            filtrationDionysus2Gudhi< Gudhi::Simplex_tree<> >(filtration);
         int p = 2; //characteristic of the coefficient field for homology
         double min_persistence = 0; //minimal length for persistent intervals
         FiltrationDiagGudhi(
@@ -248,14 +206,12 @@ inline void ripsDiag(
         std::vector< phat::column > cmplx;
         std::vector< double > values;
         phat::boundary_matrix< phat::vector_vector > boundary_matrix;
-        filtrationDionysusToPhat< phat::column, phat::dimension >(
+        filtrationDionysus2ToPhat< phat::column, phat::dimension >(
             filtration, cmplx, values, boundary_matrix);
         FiltrationDiagPhat(
             cmplx, values, boundary_matrix, maxdimension, location,
             printProgress, persDgm, persLoc, persCycle);
       }
     }
-    }
   }
 }
-

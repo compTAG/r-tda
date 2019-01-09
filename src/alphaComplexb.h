@@ -8,6 +8,7 @@
 #include <tdautils/gudhiUtils.h>
 
 // for Dionysus
+#include <tdautils/dionysusUtils.h>
 #include <tdautils/dionysus2Utils.h>
 
 // for phat
@@ -17,16 +18,17 @@
 
 
 
-// AlphaShapeDiag
+// AlphaComplexDiag
 /** \brief Interface for R code, construct the persistence diagram of the alpha
- *        shape complex constructed on the input set of points.
+ *        complex constructed on the input set of points.
  *
  * @param[out] Rcpp::List     A list
  * @param[in]  X              An nx3 matrix of coordinates,
+ * @param[in]  maxalphasquare Threshold for the Alpha complex,
  * @param[in]  printProgress  Is progress printed?
  */
 template< typename RealMatrix, typename Print >
-void alphaShapeDiag(
+void alphaComplexDiag(
   const RealMatrix  & X,             //points to some memory space
   const unsigned      nSample,
   const unsigned      nDim,
@@ -37,36 +39,53 @@ void alphaShapeDiag(
   const Print       & print,
   std::vector< std::vector< std::vector< double > > > & persDgm,
   std::vector< std::vector< std::vector< unsigned > > > & persLoc,
-  std::vector< std::vector< std::vector< std::vector< unsigned > > > > & persCycle,
-  RealMatrix        & coordinates
+  std::vector< std::vector< std::vector< std::vector< unsigned > > > > & persCycle
 ) {
+
+  using Kernel = CGAL::Epick_d< CGAL::Dynamic_dimension_tag>;
+  using Point = Kernel::Point_d;
 
   int coeff_field_characteristic = 2;
 
   float min_persistence = 0.0;
 
-  Gudhi::Simplex_tree<> smplxTree =
-    AlphaShapeFiltrationGudhi< Gudhi::Simplex_tree<> >(
-      X, printProgress, print, coordinates);
+  Gudhi::Simplex_tree<> alphaCmplx =
+      AlphaComplexFiltrationGudhi< Gudhi::Simplex_tree<> >(
+          X, printProgress, print);
+
+  // 2018-08-04
+  // switching back to original code
 
   // Compute the persistence diagram of the complex
   if (libraryDiag[0] == 'G') {
+    // 2018-08-04
+    // switching back to original code
     FiltrationDiagGudhi(
-        smplxTree, coeff_field_characteristic, min_persistence, 2,
+        alphaCmplx, coeff_field_characteristic, min_persistence, 2,
         printProgress, persDgm);
-  }
-  else if (libraryDiag[0] == 'D') {
-    Fltr2 filtration = filtrationGudhiToDionysus2< Fltr2 >(smplxTree);
+  } 
+  else if (libraryDiag[0] == 'D' && libraryDiag[2] == '2') {
+    Fltr2 filtration = filtrationGudhiToDionysus2< Fltr2 >(alphaCmplx);
     FiltrationDiagDionysus2< Persistence2 >(
         filtration, maxdimension, location, printProgress, persDgm, persLoc,
         persCycle);
   }
+  else if (libraryDiag[0] == 'D') {
+    // 2018-08-04
+    // switching back to original code
+    Fltr filtration = filtrationGudhiToDionysus< Fltr >(alphaCmplx);
+    FiltrationDiagDionysus< Persistence >(
+        filtration, maxdimension, location, printProgress, persDgm, persLoc,
+        persCycle);
+  }
   else {
+    // 2018-08-04
+    // switching back to original code
     std::vector< phat::column > cmplx;
     std::vector< double > values;
     phat::boundary_matrix< phat::vector_vector > boundary_matrix;
     filtrationGudhiToPhat< phat::column, phat::dimension >(
-        smplxTree, cmplx, values, boundary_matrix);
+        alphaCmplx, cmplx, values, boundary_matrix);
     FiltrationDiagPhat(
         cmplx, values, boundary_matrix, maxdimension, location,
         printProgress, persDgm, persLoc, persCycle);

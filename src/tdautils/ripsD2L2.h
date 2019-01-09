@@ -26,7 +26,7 @@ typedef         d::PairwiseDistances<PointContainer, d::L2Distance<Point>>   Pai
 typedef         PairDistances2::DistanceType                             DistanceType2;
 typedef         PairDistances2::IndexType                                VertexR2;
 
-typedef         d::Rips< PairDistances2, d::Simplex< VertexR, double > >       Generator2;
+typedef         d::Rips< PairDistances2, d::Simplex< VertexR2, double > >       Generator2;
 typedef         Generator2::Simplex                                      SmplxR2;
 typedef         d::Filtration<SmplxR2>                                      FltrR2;
 

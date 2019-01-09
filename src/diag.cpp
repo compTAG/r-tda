@@ -6,9 +6,9 @@
 #include <Rcpp.h>
 
 // for Rips
-#include <tdautils/ripsL2.h>
+//#include <tdautils/ripsL2.h>
 #include <tdautils/ripsD2L2.h>
-#include <tdautils/ripsArbit.h>
+//#include <tdautils/ripsArbit.h>
 #include <tdautils/ripsD2Arbit.h>
 
 // for grid
@@ -23,6 +23,9 @@
 // for Dionysus
 #include <tdautils/dionysusUtils.h>
 #include <tdautils/dionysus2Utils.h>
+//#include <dionysus/wasserstein/wasserstein.h>
+#include <dionysus/bottleneck/bottleneck.h>
+
 // for phat
 #include <tdautils/phatUtils.h>
 
@@ -144,8 +147,11 @@ double
 Bottleneck(const Rcpp::NumericMatrix & Diag1
          , const Rcpp::NumericMatrix & Diag2
 	) {
-	return bottleneck_distance(RcppToDionysus< PersistenceDiagram<> >(Diag1),
-			RcppToDionysus< PersistenceDiagram<> >(Diag2));
+	//return bottleneck_distance(RcppToDionysus< PersistenceDiagram<> >(Diag1),
+	//		RcppToDionysus< PersistenceDiagram<> >(Diag2));
+    auto b = RcppToPairVector< std::vector<std::pair<double, double> > >(Diag1);
+    auto a = RcppToPairVector< std::vector<std::pair<double, double> > >(Diag2);
+    return hera::bottleneckDistExact(a,b);
 }
 
 
@@ -158,6 +164,13 @@ Wasserstein(const Rcpp::NumericMatrix & Diag1
 	) {
 	return wasserstein_distance(RcppToDionysus< PersistenceDiagram<> >(Diag1),
 			RcppToDionysus< PersistenceDiagram<> >(Diag2), p);
+    //hera::AuctionParams<double> params;
+    //params.wasserstein_power = p;
+    //return hera::wasserstein_dist(RcppToDionysus2< PDgm >(Diag1),
+    //        RcppToDionysus2< PDgm >(Diag2), params);
+    //auto b = RcppToPairVector< std::vector<std::pair<double, double> > >(Diag1);
+    //auto a = RcppToPairVector< std::vector<std::pair<double, double> > >(Diag2);
+    //return hera::wasserstein_dist(a, b, params);   
 }
 
 
