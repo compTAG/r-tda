@@ -36,6 +36,134 @@ namespace d = dionysus;
 *                            write nothing after.
 */
 
+
+/**
+ * Class: EvaluatePushBack<Container>
+ *
+ * Push back the simplex and the evaluated value
+ */
+template< typename Container, typename Evaluator >
+class EvaluatePushBack2 {
+
+public:
+  EvaluatePushBack2(Container & argContainer, const Evaluator & argEvaluator) :
+    container(argContainer), evaluator(argEvaluator) {}
+
+  void operator()(const typename Container::value_type & argSmp) const {
+    typename Container::value_type smp(argSmp.dimension(),argSmp.begin(),argSmp.end(), evaluator(argSmp));
+    container.push_back(smp);
+  }
+
+private:
+  Container & container;
+  const Evaluator & evaluator;
+};
+
+template< typename VertexList, typename Evaluator >
+unsigned getLocation(const VertexList & vertices, const Evaluator & evaluator) {
+  typename VertexList::const_iterator vertexItr;
+  unsigned vertex = *(vertices.begin());
+	for (vertexItr = vertices.begin(); vertexItr != vertices.end(); ++vertexItr) {
+		if (evaluator[*vertexItr] > evaluator[vertex]) {
+			vertex = *vertexItr;
+		}
+	}
+	return vertex + 1;
+}
+
+template< typename Simplex, typename Locations, typename Cycles,
+          typename Persistence, typename Evaluator, typename SimplexMap,
+          typename Filtration >
+inline void initLocations(
+    Locations & locations, Cycles & cycles, const Persistence & p,
+    const Evaluator & evaluator, const SimplexMap & m,
+    const unsigned maxdimension, const Filtration & filtration) {
+
+	unsigned verticesMax = 0;
+	for (typename Filtration::OrderConstIterator iFltr = filtration.begin();
+       iFltr != filtration.end(); ++iFltr) {
+		const typename Filtration::Simplex & c = *(iFltr);
+		if (c.dimension() == 0) {
+			verticesMax = std::max(verticesMax, *(c.begin()));
+		}
+	}
+
+  // vertices range from 0 to verticesMax
+  std::vector< double > verticesValues(
+      verticesMax + 1, -std::numeric_limits< double >::infinity());
+
+  for (typename Filtration::OrderConstIterator iFltr = filtration.begin();
+       iFltr != filtration.end(); ++iFltr) {
+		const typename Filtration::Cell & c = *(iFltr);
+		if(c.dimension() == 0) {
+			verticesValues[*(c.begin())] = c.data();
+		}
+	}
+
+	locations.resize(maxdimension + 1);
+	cycles.resize(maxdimension + 1);
+	typename Locations::value_type::value_type persLocPoint(2);
+	typename Cycles::value_type::value_type persBdy;
+	typename Cycles::value_type::value_type::value_type persSimplex;
+	for (typename Persistence::iterator cur = p.begin(); cur != p.end(); ++cur) {
+		// positive simplices corresponds to
+		// negative simplices having non-empty cycles
+		if (cur->sign()) {
+			// first consider that cycle is paired
+			if (!cur->unpaired()) {
+				// the cycle that was born at cur is killed 
+				// when we added death (another simplex)
+				const typename SimplexMap::key_type& death = cur->pair;
+
+				//const typename SimplexMap::value_type& b = m[cur];
+				//const typename SimplexMap::value_type& d = m[death];
+        const typename Filtration::Cell & b = m[cur];
+        const typename Filtration::Cell & d = m[death];
+				if ((unsigned)b.dimension() > maxdimension) {
+					continue;
+				}
+				if (evaluator(b) < evaluator(d)) {
+					persLocPoint[0] = getLocation(b.vertices(), verticesValues);
+					persLocPoint[1] = getLocation(d.vertices(), verticesValues);
+					locations[b.dimension()].push_back(persLocPoint);
+
+					// Iterate over the cycle
+					persBdy.clear();
+					const typename Persistence::Cycle& cycle = death->cycle;
+					for (typename Persistence::Cycle::const_iterator
+						si = cycle.begin(); si != cycle.end(); ++si) {
+						persSimplex.clear();
+						const typename Simplex::VertexContainer&
+							vertices = m[*si].vertices();    // std::vector<Vertex> where Vertex = Distances::IndexType
+						typename Simplex::VertexContainer::const_iterator vtxItr;
+						for (vtxItr = vertices.begin(); vtxItr != vertices.end();
+							++vtxItr) {
+							persSimplex.push_back(*vtxItr + 1);
+						}
+						persBdy.push_back(persSimplex);
+					}
+					cycles[b.dimension()].push_back(persBdy);
+				}
+			}
+			else {    // cycles can be unpaired
+				const typename SimplexMap::value_type& b = m[cur];
+				if ((unsigned)b.dimension() > maxdimension) {
+					continue;
+				}
+				persLocPoint[0] = getLocation(b.vertices(), verticesValues);
+				persLocPoint[1] = (unsigned)(
+            std::max_element(verticesValues.begin(), verticesValues.end())
+            - verticesValues.begin() + 1);
+				locations[b.dimension()].push_back(persLocPoint);
+
+				// Iterate over the cycle
+				persBdy.clear();
+				cycles[b.dimension()].push_back(persBdy);
+			}
+		}
+	}
+}
+
 template <typename Persistence, typename Filtration>
 void FiltrationDiagDionysus2(
         const Filtration &filtration,
@@ -75,7 +203,8 @@ void FiltrationDiagDionysus2(
             } else {
                 pt_ = {filtration[pt.birth()].data(),filtration[pt.death()].data()};
             }
-            persDgm[_].push_back(pt_);
+            if (pt_[0] != pt_[1])
+                persDgm[_].push_back(pt_);
         }
         _++;   
     }
@@ -83,30 +212,12 @@ void FiltrationDiagDionysus2(
     if (persDgm.size() > maxdimension) {
         persDgm.resize(maxdimension + 1);
     }
+    if (location) {
+    initLocations< typename Filtration::Cell >(
+        persLoc, persCycle, p, typename Filtration::Cell::DataEvaluator(),
+        m, maxdimension, filtration);
+    }
 }
-
-/**
- * Class: EvaluatePushBack<Container>
- *
- * Push back the simplex and the evaluated value
- */
-template< typename Container, typename Evaluator >
-class EvaluatePushBack2 {
-
-public:
-  EvaluatePushBack2(Container & argContainer, const Evaluator & argEvaluator) :
-    container(argContainer), evaluator(argEvaluator) {}
-
-  void operator()(const typename Container::value_type & argSmp) const {
-    typename Container::value_type smp(argSmp.dimension(),argSmp.begin(),argSmp.end(), evaluator(argSmp));
-    container.push_back(smp);
-  }
-
-private:
-  Container & container;
-  const Evaluator & evaluator;
-};
-
 template< typename Distances, typename Generator, typename Filtration,
           typename RealMatrix, typename Print >
 inline Filtration RipsFiltrationDionysus2(
