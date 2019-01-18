@@ -1,4 +1,5 @@
 ### TDA: version 1.6.5
+- fixed bugs
 - update corresponding to update from R package BH 1.69
 - added plots to examples of ripsFiltration and alphaComplexFiltration
 
