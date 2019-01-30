@@ -1,6 +1,14 @@
 kde <-
+  #'@param X an n by d matrix of coordinates used in kernel density estimation
+  #'where n is the number of points and d is the dimension
+  #'@param Grid an m by d matrix of coordinates where m is the number of points and d
+  #'is the dimension of the base grid referred to in the estimation
+  #'@param h a desired number to be used as the smoothing parameter of the Gaussian Kernel
+  #'@param kertype set by default to to use Gaussian kernel
+  #'@param weight set by default to 1, making all points in X weighted the same unless
+  #'otherwise specified
 function(X, Grid, h, kertype = "Gaussian", weight = 1, printProgress = FALSE) {
-
+  # exception handling of inputs to ensure functionality
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
   }
@@ -26,7 +34,7 @@ function(X, Grid, h, kertype = "Gaussian", weight = 1, printProgress = FALSE) {
   if (!is.logical(printProgress)) {
     stop("printProgress should be a logical variable")
   }
-
+  # utilize Kde function with inputs
   return (Kde(X = as.matrix(X), Grid = as.matrix(Grid), h = h,
       kertype = kertype, weight = weight, printProgress = printProgress))
 }
