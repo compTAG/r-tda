@@ -151,7 +151,7 @@ show_alpha_shape_faces(Geomview_stream &gv) const
      << " {appearance {}{ OFF BINARY\n"
      << number_of_points << number_of_facets << 0;
 
-  std::cout << number_of_points << " " << number_of_facets << std::endl;
+  //std::cout << number_of_points << " " << number_of_facets << std::endl;
 
   // Vertices
   typename PMapIterVector::iterator Pit, Pbegin = PIV.begin(), Pend = PIV.end();
