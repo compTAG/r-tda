@@ -77,12 +77,6 @@
   replace macro Count() by inline function Count()
 
 
-# gmp
-
-* src/gmpxx.h
-  added from gmp 4.2.4 (corresponding to http://win-builder.r-project.org/GPLcompliance/ )
-
-
 # GUDHI
 
 * src/gudhi/Alpha_complex.h
