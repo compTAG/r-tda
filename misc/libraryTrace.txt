@@ -21,6 +21,15 @@
 * src/boost/serialization/singleton.hpp
   added from boost 1.60 due to bug from version >= 1.61
 
+* src/boost/container/detail/copy_move_algo.hpp
+  added from boost 1.69 and modified due to [Wclass-memaccess] warning in debian
+  typename dtl::enable_if_memtransfer_copy_assignable<I, F, F>::type move_backward(I f, I l, F r)
+  F memmove(I f, I l, F r)
+  F memmove_n(I f, U n, F r)
+  I memmove_n_source(I f, U n, F r)
+  static_cast<void *> on the first argument when calling std::memmove( , , )
+
+
 # CGAL
 
 * src/CGAL/Alpha_shape_3.h
