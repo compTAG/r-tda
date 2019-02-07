@@ -7,7 +7,7 @@
 * Dionysus:
 * PHAT: 1.4.1
 * CGAL: 4.13
-* boost: 1.65.0 (corresponding to BH 1.65.0-1)
+* boost: 1.69.0 (corresponding to BH 1.69.0-1)
 * gmp: 4.2.4 (corresponding to http://win-builder.r-project.org/GPLcompliance/ )
 
 
@@ -15,11 +15,8 @@
 
 # boost
 
-* src/boost/archive/codecvt_null.hpp
-  added from boost 1.60 due to bug from version >= 1.61
-
-* src/boost/serialization/singleton.hpp
-  added from boost 1.60 due to bug from version >= 1.61
+* src/boost/serialization/binary_object.hpp
+  missing in R package BH
 
 * src/boost/container/detail/copy_move_algo.hpp
   added from boost 1.69 and modified due to [Wclass-memaccess] warning in debian
