@@ -99,3 +99,10 @@
 
   bool rec_make_filtration_non_decreasing(Siblings * sib)
   line 1183: added this to capture clause in lambda function
+
+* src/gudhi/Simplex_tree/Simplex_tree_node_explicit_storage.h
+  Simplex_tree_node_explicit_storage(const Simplex_tree_node_explicit_storage & stnes)
+  line 53-61: added copy constructor
+
+  Siblings * children() const
+  line 71-74: changing to const function
