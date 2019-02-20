@@ -6,8 +6,8 @@
 * GUDHI: 
 * Dionysus:
 * PHAT: 1.4.1
-* CGAL: 4.8
-* boost: 1.65.0 (corresponding to BH 1.65.0-1)
+* CGAL: 4.13
+* boost: 1.69.0 (corresponding to BH 1.69.0-1)
 * gmp: 4.2.4 (corresponding to http://win-builder.r-project.org/GPLcompliance/ )
 
 
@@ -15,11 +15,17 @@
 
 # boost
 
-* src/boost/archive/codecvt_null.hpp
-  added from boost 1.60 due to bug from version >= 1.61
+* src/boost/serialization/binary_object.hpp
+  missing in R package BH
 
-* src/boost/serialization/singleton.hpp
-  added from boost 1.60 due to bug from version >= 1.61
+* src/boost/container/detail/copy_move_algo.hpp
+  added from boost 1.69 and modified due to [Wclass-memaccess] warning in debian
+  typename dtl::enable_if_memtransfer_copy_assignable<I, F, F>::type move_backward(I f, I l, F r)
+  F memmove(I f, I l, F r)
+  F memmove_n(I f, U n, F r)
+  I memmove_n_source(I f, U n, F r)
+  static_cast<void *> on the first argument when calling std::memmove( , , )
+
 
 # CGAL
 
@@ -30,8 +36,6 @@
 * src/CGAL/Compact_container.h
   bool is_used(const_iterator ptr) const
   bool owns(const_iterator cit) const
-  CC_interator(const iterator &)
-  CC_iterator & operator=(const iterator &)
   std::size_t hash_value(const CC_iterator<DSC, Const>&  i)
   std::size_t operator()(const CGAL::internal::CC_iterator<DSC, Const>& i) const
   resolve reference binding to null pointer: '*pointer' can fetch NULL memory if 'pointer' corresponds to NULL pointer
@@ -66,30 +70,7 @@
 
 * Below are changes due to updating package RcppEigen to Eigen 3.3.2:
   https://github.com/RcppCore/RcppEigen/issues/41
-
-* src/CGAL/Sqrt_extension/Eigen_NumTraits.h
-  line 31: Add one line typedef Real Literal;.
-
-* src/CGAL/Quotient.h
-  line 860: Add one line typedef CGAL::Quotient<NT> Literal;.
-
-* src/CGAL/Mpzf.h
-  line 1136: Add one line typedef CGAL::Mpzf Literal;.
-
-* src/CGAL/MP_Float.h
-  line 889: Add one line typedef CGAL::MP_Float Literal;.
-
-* src/CGAL/Lazy_exact_nt.h
-  line 1429: Add one line typedef CGAL::Lazy_exact_nt<ET> Literal;.
-
-* src/CGAL/Interval_nt.h
-  line 1269: Add one line typedef CGAL::Interval_nt<b> Literal;.
-
-* src/CGAL/Gmpz.h
-  line 216: Add one line typedef CGAL::Gmpz Literal;.
-
-* src/CGAL/Gmpq.h
-  line 142: Add one line typedef CGAL::Gmpq Literal;.
+  - now fixed in CGAL 4.13
 
 
 # Dionysus
@@ -100,12 +81,6 @@
 
 * src/utilities/counter.h (and other places where Count(x) is used)
   replace macro Count() by inline function Count()
-
-
-# gmp
-
-* src/gmpxx.h
-  added from gmp 4.2.4 (corresponding to http://win-builder.r-project.org/GPLcompliance/ )
 
 
 # GUDHI
@@ -121,3 +96,10 @@
 
   bool rec_make_filtration_non_decreasing(Siblings * sib)
   line 1183: added this to capture clause in lambda function
+
+* src/gudhi/Simplex_tree/Simplex_tree_node_explicit_storage.h
+  Simplex_tree_node_explicit_storage(const Simplex_tree_node_explicit_storage & stnes)
+  line 53-61: added copy constructor
+
+  Siblings * children() const
+  line 71-74: changing to const function
