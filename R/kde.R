@@ -8,7 +8,6 @@ kde <-
   #'@param weight set by default to 1, making all points in X weighted the same unless
   #'otherwise specified
 function(X, Grid, h, kertype = "Gaussian", weight = 1, printProgress = FALSE) {
-  # exception handling of inputs to ensure functionality
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
   }
@@ -34,7 +33,6 @@ function(X, Grid, h, kertype = "Gaussian", weight = 1, printProgress = FALSE) {
   if (!is.logical(printProgress)) {
     stop("printProgress should be a logical variable")
   }
-  # utilize Kde function with inputs
   return (Kde(X = as.matrix(X), Grid = as.matrix(Grid), h = h,
       kertype = kertype, weight = weight, printProgress = printProgress))
 }
