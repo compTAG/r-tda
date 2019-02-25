@@ -9,31 +9,26 @@
 knnDE <-
 function(X, Grid, k){
   
-  # ensure input X is a matrix of numbers
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
   }
-  # ensure input Grid is a matrix of numbers
   if (!is.numeric(Grid) && !is.data.frame(Grid)) {
     stop("Grid should be a matrix of coordinates")
   }
-  # ensure that k is a positive integer
   if (!is.numeric(k) || length(k) != 1 || k < 1) {
     stop("k should be a positive integer")
   }
 
-  # store the number of rows and columns in input matrix X
-  # (d being the dimension and n being number of points in X)
+  # store d, the dimension of X, and n, the number of points in X
   d <- ncol(X)
   n <- nrow(X)
-  # find the Euclidean distances from k nearest neighbors using input matrix X, the query matrix
-  # Grid, a maximum number n of nearest neighbors to search, and the nearest neighbor searching
-  # algorithm ("kd_tree")
+  # find the Euclidean distances of k nearest neighbors from input matrix X and the query matrix
+  # Grid using the fast nearest neighbor searching algorithm "kd_tree"
   r.k <- apply(FNN::knnx.dist(X, Grid, k = k, algorithm = "kd_tree"), 1, max)
   # volume of the Euclidean d dimensional unit ball
   v.d <- pi^(d/2) /gamma(d/2+1)
-  # function in its final form, dividing smoothing parameter k by the number of points in X multiplied 
-  # by the volume of unit ball and the Euclidean distances from k nearest neighbors to the power of d dimensions
+  # final output incorporates smoothing parameter with volume of unit ball and euclidean k nearest neighbor
+  # distances to return output vector containing density estimators for each point in the grid
   out <- k / (n * v.d * r.k ^ d)  
   return(out)
 }
