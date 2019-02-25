@@ -22,7 +22,6 @@
 dtm <-
 function(X, Grid, m0, r = 2, weight = 1) {
 	
-  # check that parameters X and Grid are both matrices of matching dimension
   if (!is.numeric(X) && !is.data.frame(X)) {
     stop("X should be a matrix of coordinates")
   }
@@ -33,12 +32,10 @@ function(X, Grid, m0, r = 2, weight = 1) {
     stop("dimensions of X and Grid do not match")
   }
 	
-  # ensure that smoothing parameter m0 is a value between 0 and 1
   if (!is.numeric(m0) || length(m0) != 1 || m0 < 0 || m0 > 1) {
     stop("m0 should be a number between 0 and 1")
   }
 	
-  # ensure tuning parameter is a number in [1,∞)
   if (!is.numeric(r) || length(r) != 1 || r < 1) {
     stop("r should be a number greater than or equal to 1")
   }
@@ -57,7 +54,7 @@ function(X, Grid, m0, r = 2, weight = 1) {
     knnDistance <- FNN::knnx.dist(
 		data = X, query = as.matrix(Grid), k = ceiling(weightBound),
 		algorithm = c("kd_tree"))
-    # utilize embedded Dtm function to find distance to measure
+    # find dtm without considering a weight
     return (Dtm(knnDistance = knnDistance, weightBound = weightBound, r = r))
 
   # with weight
@@ -75,10 +72,10 @@ function(X, Grid, m0, r = 2, weight = 1) {
         break
       }
     }
-    # create a matrix of nearest neighbor indeces using the kd tree algorithm
+    # create a matrix of nearest neighbor indeces using the fast nearest neighbor kd tree algorithm
     knnDistanceIndex <- FNN::get.knnx(
 	    data = X0, query = as.matrix(Grid), k = k0, algorithm = c("kd_tree"))
-    # use embedded DtmWeight function
+    # find dtm with weight established
     return (DtmWeight(
 	    knnDistance = knnDistanceIndex[["nn.dist"]], weightBound = weightBound,
 		r = r, knnIndex = knnDistanceIndex[["nn.index"]], weight = weight0))
