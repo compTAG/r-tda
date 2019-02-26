@@ -1,6 +1,7 @@
+#' @title dtm
 #' @param X an n by d matrix of coordinates of points used to construct the uniform
-#'  empirical measure for the distance to measure, where n is the number of points
-#'  and d is the dimension.
+#'   empirical measure for the distance to measure, where n is the number of points
+#'   and d is the dimension.
 #'
 #' @param Grid an m by d matrix of coordinates of points where the distance to measure
 #'   is computed, where m is the number of points in Grid and d is the dimension.
