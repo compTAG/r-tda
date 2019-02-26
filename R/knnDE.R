@@ -1,8 +1,13 @@
+#' @title knnDE
+#'
 #' @param X an n by d matrix of coordinates containing points used int the
 #' density estimation, where n is the number of points and d is the dimension
+#'
 #' @param Grid an m by d matrix of coordinates, where m is the number of points
 #' in the grid and d is the dimension
+#'
 #' @param k a number used as the smoothing parameter
+#'
 #' @return a vector of length m (number of points in Grid) containing the value
 #' of the knn Density Estimator for each point in the grid
 
