@@ -38,7 +38,7 @@
 }
 
 \author{
-  Robin Belton, Emily Flanagan, Jordan Schupbach
+  Robin Belton, Emily Flanagan, Jisu Kim, Jordan Schupbach
 }
 
 \seealso{
