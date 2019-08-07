@@ -5,6 +5,7 @@ export(
   alphaComplexFiltration,
   alphaShapeDiag,
   alphaShapeFiltration,
+  animate,
   animate.ripsFilt,
   bootstrapBand,
   bootstrapDiagram,

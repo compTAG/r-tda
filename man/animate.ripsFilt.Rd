@@ -12,7 +12,7 @@
 
 \usage{
 \method{animate}{ripsFilt}(
-   filt, circles = TRUE, fn_out = "RipsFilt.gif", lout = NULL, interval = 1
+   filt, circles = TRUE, fn_out = "RipsFilt.gif", lout = NULL, interval = 1, ...)
 }
 
 \arguments{
