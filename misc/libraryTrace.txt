@@ -75,6 +75,10 @@
 
 # Dionysus
 
+* src/topology/simplex.hpp
+  Simplex<V,T> dereference() const
+  change std::bind2nd() to std::bind() with placeholders since std::bind2nd() is deprecated
+
 * src/topology/rips.hpp
   void bros_kerbosch(...) const (and other places where bros_kerbosch is used)
   line 34, 56, 86, 126, 140, 162, 167, 184, 190: change 'excluded' to 'excludedNext' (where excludedNext = excluded + 1) to prevent overflow and change logic accordingly
