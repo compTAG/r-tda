@@ -50,6 +50,14 @@
   std::size_t operator()(const CGAL::CCC_internal::CCC_iterator<CCC, Const>& i) const
   resolve reference binding to null pointer: '*pointer' can fetch NULL memory if 'pointer' corresponds to NULL pointer
 
+* src/CGAL/MP_float.h
+  MP_float(long i)
+  temporarily added to resolve type cast ambiguity of type long int
+
+* src/CGAL/Quotient.h
+  where CGAL_long(T) appears
+  temporarily added to resolve overloading ambiguity of type long int
+
 * src/CGAL/TDS_full_cell_default_storage_policy.h
   Xor_type xor_of_vertices(const int cur_dim) const
   Vertex_handle mirror_vertex(const int i, const int cur_dim) const
@@ -75,13 +83,13 @@
 
 # Dionysus
 
-* src/topology/simplex.hpp
-  Simplex<V,T> dereference() const
-  change std::bind2nd() to std::bind() with placeholders since std::bind2nd() is deprecated
-
 * src/topology/rips.hpp
   void bros_kerbosch(...) const (and other places where bros_kerbosch is used)
   line 34, 56, 86, 126, 140, 162, 167, 184, 190: change 'excluded' to 'excludedNext' (where excludedNext = excluded + 1) to prevent overflow and change logic accordingly
+
+* src/topology/simplex.hpp
+  Simplex<V,T> dereference() const
+  change std::bind2nd() to std::bind() with placeholders since std::bind2nd() is deprecated
 
 * src/utilities/counter.h (and other places where Count(x) is used)
   replace macro Count() by inline function Count()

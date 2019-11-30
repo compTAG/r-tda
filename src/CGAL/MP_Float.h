@@ -212,6 +212,14 @@ public:
     canonicalize();
   }
 
+  // 2019-11-30
+  // Temporarily added to resolve type cast ambiguity of type long int
+  MP_Float(long i)
+    : v(2), exp(0)
+  {
+    MP_Float((int) i);
+  }
+
   MP_Float(float d);
 
   MP_Float(double d);
