@@ -1,8 +1,8 @@
 Package: TDA
 Type: Package
 Title: Statistical Tools for Topological Data Analysis
-Version: 1.6.7
-Date: 2019-11-30
+Version: 1.6.8
+Date: 2019-12-01
 Author: Brittany T. Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria,
     David L. Millman, Vincent Rouvreau. The included GUDHI is authored by
 	Clement Maria, Dionysus by Dmitriy Morozov, and
