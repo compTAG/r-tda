@@ -1,3 +1,6 @@
+### TDA: version 1.6.8
+- temporarily fixed bugs
+
 ### TDA: version 1.6.7
 - temporarily fixed bug for _R_CHECK_LENGTH_1_LOGIC2_ error
 - temporarily remove testthat due to error in 32 bit windows
