@@ -1,8 +1,11 @@
 landscape <-
 function(Diag, dimension = 1, KK = 1,
          tseq = seq(min(Diag[, 2:3]), max(Diag[, 2:3]), length = 500)) {
-    
-  if (((class(Diag) != "diagram" && class(Diag) != "matrix" &&
+
+  # 2019-11-30
+  # temporary fix for _R_CHECK_LENGTH_1_LOGIC2_ ( 'length(x) = 2 > 1' in coercion to 'logical(1)' ) error
+  # if (((class(Diag) != "diagram" && class(Diag) != "matrix" &&    
+  if (((any(class(Diag) != "diagram") && any(class(Diag) != "matrix") &&
       !is.data.frame(Diag)) || NCOL(Diag) != 3) &&
       (!is.numeric(Diag) || length(Diag) != 3)) {
     stop("Diag should be a diagram, or a P by 3 matrix")
