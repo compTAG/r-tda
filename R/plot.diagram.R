@@ -6,10 +6,10 @@ function(x, diagLim = NULL, dimension = NULL, col = NULL, rotated = FALSE,
   # 2019-11-30
   # temporary fix for _R_CHECK_LENGTH_1_LOGIC2_ ( 'length(x) = 2 > 1' in coercion to 'logical(1)' ) error
   # if (((class(x) != "diagram" && class(x) != "matrix" && !is.data.frame(x)) ||
-  if (((any(class(x) != "diagram") && any(class(x) != "matrix") && !is.data.frame(x)) ||
-      NCOL(x) != 3) && (!is.numeric(x) || length(x) != 3)) {
-    stop("x should be a diagram, or a P by 3 matrix")
-  }
+  # if (((any(class(x) != "diagram") && any(class(x) != "matrix") && !is.data.frame(x)) ||
+  #     NCOL(x) != 3) && (!is.numeric(x) || length(x) != 3)) {
+  #   stop("x should be a diagram, or a P by 3 matrix")
+  # }
   if (!is.null(diagLim) && (!is.numeric(diagLim) || length(diagLim) != 2)) {
     stop("diagLim should be a vector of length 2")
   }
