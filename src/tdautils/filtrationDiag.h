@@ -1,3 +1,4 @@
+
 #ifndef __FILTRATIONDIAG_H__
 #define __FILTRATIONDIAG_H__
 
@@ -14,7 +15,7 @@
 #include <tdautils/gudhiUtils.h>
 
 // for Dionysus
-#include <tdautils/dionysusUtils.h>
+#include <tdautils/dionysus2Utils.h>
 
 // for phat
 #include <tdautils/phatUtils.h>
@@ -65,8 +66,8 @@ inline void filtrationDiagSorted(
         printProgress, persDgm);
   }
   else if (library[0] == 'D') {
-    FiltrationDiagDionysus< Persistence >(
-        filtrationTdaToDionysus< VertexVector, Fltr >(
+    FiltrationDiagDionysus2< Persistence2 >(
+        filtrationTdaToDionysus2< VertexVector, Fltr2 >(
             cmplx, values, idxShift),
         maxdimension, location, printProgress, persDgm, persLoc, persCycle);
   }
@@ -81,8 +82,8 @@ inline void filtrationDiagSorted(
     }
 
     phat::boundary_matrix< phat::vector_vector > boundary_matrix;
-    filtrationDionysusToPhat< phat::column, phat::dimension >(
-        filtrationTdaToDionysus< phat::column, Fltr >(
+    filtrationDionysus2ToPhat< phat::column, phat::dimension >(
+        filtrationTdaToDionysus2< phat::column, Fltr2 >(
             cmplxPhat, values, idxShift),
         cmplxPhat, values, boundary_matrix);
     FiltrationDiagPhat(cmplxPhat, values, boundary_matrix,

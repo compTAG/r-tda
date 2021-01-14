@@ -8,7 +8,7 @@
 #include <tdautils/gudhiUtils.h>
 
 // for Dionysus
-#include <tdautils/dionysusUtils.h>
+#include <tdautils/dionysus2Utils.h>
 
 // for phat
 #include <tdautils/phatUtils.h>
@@ -56,8 +56,8 @@ void alphaShapeDiag(
         printProgress, persDgm);
   }
   else if (libraryDiag[0] == 'D') {
-    Fltr filtration = filtrationGudhiToDionysus< Fltr >(smplxTree);
-    FiltrationDiagDionysus< Persistence >(
+    Fltr2 filtration = filtrationGudhiToDionysus2< Fltr2 >(smplxTree);
+    FiltrationDiagDionysus2< Persistence2 >(
         filtration, maxdimension, location, printProgress, persDgm, persLoc,
         persCycle);
   }

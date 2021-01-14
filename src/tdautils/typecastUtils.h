@@ -19,7 +19,29 @@ inline PersistenceDiagram RcppToDionysus(const RcppMatrix& rcppMatrix) {
 	return dionysusDiagram;
 }
 
+template<typename PersistenceDiagram, typename RcppMatrix>
+inline PersistenceDiagram RcppToDionysus2(const RcppMatrix& rcppMatrix) {
+	PersistenceDiagram dionysusDiagram;
+	const unsigned rowNum = rcppMatrix.nrow();
+	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx)
+	{
+		dionysusDiagram.push_back(typename PersistenceDiagram::Point(
+				rcppMatrix[rowIdx + 0 * rowNum], rcppMatrix[rowIdx + 1 * rowNum], d::Empty()));
+	}
+	return dionysusDiagram;
+}
 
+template<typename PairVector, typename RcppMatrix>
+inline PairVector RcppToPairVector(const RcppMatrix& rcppMatrix) {
+	PairVector dionysusDiagram;
+	const unsigned rowNum = rcppMatrix.nrow();
+	for (unsigned rowIdx = 0; rowIdx < rowNum; ++rowIdx)
+	{
+		dionysusDiagram.push_back(std::pair<double, double>(
+				rcppMatrix[rowIdx + 0 * rowNum], rcppMatrix[rowIdx + 1 * rowNum])); 
+	}
+	return dionysusDiagram;
+}
 
 template< typename StlMatrix, typename RealMatrix >
 inline StlMatrix TdaToStl(const RealMatrix & rcppMatrix,
@@ -485,6 +507,34 @@ inline Filtration filtrationGudhiToDionysus(SimplexTree & smplxTree) {
 }
 
 
+// TODO : see whether 'const SimplexTree &' is possible
+template< typename Filtration, typename SimplexTree >
+inline Filtration filtrationGudhiToDionysus2(SimplexTree & smplxTree) {
+
+  const typename SimplexTree::Filtration_simplex_range & fltrGudhi =
+      smplxTree.filtration_simplex_range();
+  Filtration fltrDionysus2;
+  unsigned iFill = 0;
+
+  for (typename SimplexTree::Filtration_simplex_iterator iSt =
+       fltrGudhi.begin(); iSt != fltrGudhi.end(); ++iSt) {
+
+    // Below two lines are only needed for computing boundary
+    smplxTree.assign_key(*iSt, iFill);
+    iFill++;
+
+    std::vector< double > cmplxVec;
+    double value;
+    std::vector< double > boundaryVec;
+    filtrationGudhiOne(*iSt, smplxTree, 0, cmplxVec, value, boundaryVec);
+
+    fltrDionysus2.push_back(typename Filtration::Cell(cmplxVec.size(),
+      cmplxVec.begin(), cmplxVec.end(), value));
+  }
+
+  return fltrDionysus2;
+}
+
 
 // TODO : see whether 'const SimplexTree &' is possible
 template< typename Column, typename Dimension, typename SimplexTree,
@@ -527,6 +577,36 @@ inline void filtrationGudhiToPhat(
   }
 }
 
+
+
+template< typename Simplex, typename SimplexMap, typename RealVector >
+inline void filtrationDionysus2(
+  const Simplex & c, const SimplexMap & simplex_map, const int idxShift,
+  RealVector & cmplxVec, double & value, RealVector & boundaryVec) {
+
+  const unsigned nVtx = c.dimension() + 1;
+
+  cmplxVec = RealVector(nVtx);
+  typename RealVector::iterator iCmplxVec = cmplxVec.begin();
+  //Simplex::Vertices?::const_iterator, want array from unique_ptr
+  for (auto vit = c.begin(); vit != c.end(); ++vit, ++iCmplxVec) {
+    // R is 1-base, while C++ is 0-base
+    *iCmplxVec = *vit + idxShift;
+  }
+
+  value = c.data();
+
+  // might need to change for cubical complex
+  if (nVtx > 1) {
+    boundaryVec = RealVector(nVtx);
+  }
+  typename RealVector::iterator iBdyVec = boundaryVec.begin();
+  for (typename Simplex::BoundaryIterator bit = c.boundary_begin();
+       bit != c.boundary_end(); ++bit, ++iBdyVec) {
+    // R is 1-base, while C++ is 0-base
+    *iBdyVec = simplex_map.find(*bit)->second + idxShift;
+  }
+}
 
 
 template< typename Simplex, typename SimplexMap, typename RealVector >
@@ -595,6 +675,45 @@ inline void filtrationDionysusToTda(
 }
 
 
+template< typename IntegerVector, typename Filtration, typename VectorList,
+          typename RealVector >
+inline void filtrationDionysus2Tda(
+    const Filtration & filtration, VectorList & cmplx, RealVector & values,
+    VectorList & boundary) {
+
+  const unsigned nFltr = filtration.size();
+  //auto lambda = [](typename Filtration::Cell& a,typename Filtration::Cell& b){return a < b;};
+  //template<class Filtration>
+  struct VertexComparison2
+  {
+    bool operator()(const typename Filtration::Cell& a, const typename Filtration::Cell& b) const       
+      { return a < b; }
+  };
+  std::map< typename Filtration::Cell, unsigned, VertexComparison2> simplex_map;
+  unsigned size_of_simplex_map = 0;
+
+  cmplx = VectorList(nFltr);
+  values = RealVector(nFltr);
+  boundary = VectorList(nFltr);
+  typename VectorList::iterator iCmplx = cmplx.begin();
+  typename RealVector::iterator iValue = values.begin();
+  typename VectorList::iterator iBdy = boundary.begin();
+
+  for (typename Filtration::OrderConstIterator it = filtration.begin();
+      it != filtration.end(); ++it, ++iCmplx, ++iValue, ++iBdy) {
+    const typename Filtration::Cell & c = *it;
+
+    IntegerVector cmplxVec;
+    IntegerVector boundaryVec;
+    filtrationDionysus2(c, simplex_map, 1, cmplxVec, *iValue, boundaryVec);
+    *iCmplx = cmplxVec;
+    *iBdy = boundaryVec;
+
+    simplex_map.insert(typename
+        std::map< typename Filtration::Cell, unsigned >::value_type(
+        c, size_of_simplex_map++));
+  }
+}
 
 template< typename RcppList, typename RcppVector, typename Filtration >
 inline RcppList filtrationDionysusToRcpp(const Filtration & filtration) {
@@ -657,7 +776,28 @@ inline Filtration filtrationTdaToDionysus(
   return filtration;
 }
 
-
+//Marker D2
+template< typename IntegerVector, typename Filtration, typename VectorList, 
+          typename RealVector >
+inline Filtration filtrationTdaToDionysus2(
+        const VectorList & cmplx, const RealVector & values,
+        const unsigned idxShift) {
+    Filtration filtration;
+    typename VectorList::const_iterator iCmplx = cmplx.begin();
+    typename RealVector::const_iterator iValue = values.begin();
+    for (; iCmplx != cmplx.end(); ++iCmplx, ++iValue) {
+        const IntegerVector tdaVec(*iCmplx);
+        IntegerVector dionysusVec(tdaVec.size());
+        typename IntegerVector::const_iterator iTda = tdaVec.begin();
+        typename IntegerVector::iterator iDionysus = dionysusVec.begin();
+        for (; iTda != tdaVec.end(); ++iTda, ++iDionysus) {
+            // R is 1-base, while C++ is 0-base
+            *iDionysus = *iTda - idxShift;
+        }
+        filtration.push_back(typename Filtration::Cell(dionysusVec, *iValue));
+    }
+    return filtration;
+}
 
 template< typename Filtration, typename RcppVector, typename RcppList >
 inline Filtration filtrationRcppToDionysus(const RcppList & rcppList) {
@@ -684,6 +824,30 @@ inline Filtration filtrationRcppToDionysus(const RcppList & rcppList) {
   return filtration;
 }
 
+template< typename Filtration, typename RcppVector, typename RcppList >
+inline Filtration filtrationRcppToDionysus2(const RcppList & rcppList) {
+
+  const RcppList rcppComplex(rcppList[0]);
+  const RcppVector rcppValue(rcppList[1]);
+  Filtration filtration;
+
+  typename RcppList::const_iterator iCmplx = rcppComplex.begin();
+  typename RcppVector::const_iterator iValue = rcppValue.begin();
+  for (; iCmplx != rcppComplex.end(); ++iCmplx, ++iValue) {
+    const RcppVector rcppVec(*iCmplx);
+    RcppVector dionysusVec(rcppVec.size());
+    typename RcppVector::const_iterator iRcpp = rcppVec.begin();
+    typename RcppVector::iterator iDionysus = dionysusVec.begin();
+    for (; iRcpp != rcppVec.end(); ++iRcpp, ++iDionysus) {
+      // R is 1-base, while C++ is 0-base
+      *iDionysus = *iRcpp - 1;
+    }
+    filtration.push_back(typename Filtration::Cell(dionysusVec.size(),
+        dionysusVec.begin(), dionysusVec.end(), *iValue));
+  }
+
+  return filtration;
+}
 
 
 template< typename SimplexTree, typename Filtration >
@@ -709,6 +873,55 @@ inline SimplexTree filtrationDionysusToGudhi(const Filtration & filtration) {
         unsigned >::value_type(c, size_of_simplex_map++));
   }
 
+  return smplxTree;
+}
+
+
+template< typename SimplexTree, typename Filtration >
+inline SimplexTree filtrationDionysus2Gudhi(const Filtration & filtration) {
+  // use custom VertexComparison with Dionysus2
+  struct VertexComparison2
+  {
+    bool operator()(const typename Filtration::Cell& a, const typename Filtration::Cell& b) const       
+      { return a < b; }
+  };
+  std::map< typename Filtration::Cell, unsigned,
+      VertexComparison2 > simplex_map;
+  unsigned size_of_simplex_map = 0;
+  SimplexTree smplxTree;
+
+  for (typename Filtration::OrderConstIterator it = filtration.begin();
+       it != filtration.end(); ++it) {
+    const typename Filtration::Cell & c = *it;
+
+    std::vector< double > cmplxVec;
+    double value;
+    std::vector< double > boundaryVec;
+
+    filtrationDionysus2(c, simplex_map, 0, cmplxVec, value, boundaryVec);
+
+    smplxTree.insert_simplex(cmplxVec, value);
+
+    simplex_map.insert(typename std::map< typename Filtration::Cell,
+        unsigned >::value_type(c, size_of_simplex_map++));
+  }
+/* template
+ *
+  for (typename Filtration::OrderConstIterator it = filtration.begin();
+      it != filtration.end(); ++it, ++iCmplx, ++iValue, ++iBdy) {
+    const typename Filtration::Cell & c = *it;
+
+    IntegerVector cmplxVec;
+    IntegerVector boundaryVec;
+    filtrationDionysus2(c, simplex_map, 1, cmplxVec, *iValue, boundaryVec);
+    *iCmplx = cmplxVec;
+    *iBdy = boundaryVec;
+
+    simplex_map.insert(typename
+        std::map< typename Filtration::Cell, unsigned >::value_type(
+        c, size_of_simplex_map++));
+  }
+*/ 
   return smplxTree;
 }
 
@@ -747,6 +960,49 @@ inline void filtrationDionysusToPhat(
     boundary_matrix.set_dim(size_of_simplex_map, dim_of_column);
 
     simplex_map.insert(typename std::map< typename Filtration::Simplex,
+        typename Column::value_type >::value_type(c, size_of_simplex_map++));
+  }
+}
+
+
+template< typename Column, typename Dimension, typename Filtration,
+          typename VectorList, typename RealVector, typename Boundary >
+inline void filtrationDionysus2ToPhat(
+    const Filtration & filtration, VectorList & cmplx, RealVector & values,
+    Boundary & boundary_matrix) {
+  // use custom VertexComparison with Dionysus2
+  struct VertexComparison2
+  {
+    bool operator()(const typename Filtration::Cell& a, const typename Filtration::Cell& b) const       
+      { return a < b; }
+  };
+  const unsigned nFltr = filtration.size();
+  std::map< typename Filtration::Cell, typename Column::value_type,
+    VertexComparison2 > simplex_map;
+  typename Column::value_type size_of_simplex_map = 0;
+
+  cmplx = VectorList(nFltr);
+  values = RealVector(nFltr);
+  boundary_matrix.set_num_cols(nFltr);
+  typename VectorList::iterator iCmplx = cmplx.begin();
+  typename RealVector::iterator iValue = values.begin();
+
+  for (typename Filtration::OrderConstIterator it = filtration.begin();
+       it != filtration.end(); ++it, ++iCmplx, ++iValue) {
+    const typename Filtration::Cell & c = *it;
+
+    Column cmplxVec;
+    Column boundary_indices;
+    filtrationDionysus2(
+        c, simplex_map, 0, cmplxVec, *iValue, boundary_indices);
+    *iCmplx = cmplxVec;
+
+    std::sort(boundary_indices.begin(), boundary_indices.end());
+    boundary_matrix.set_col(size_of_simplex_map, boundary_indices);
+    Dimension dim_of_column = c.dimension();
+    boundary_matrix.set_dim(size_of_simplex_map, dim_of_column);
+
+    simplex_map.insert(typename std::map< typename Filtration::Cell,
         typename Column::value_type >::value_type(c, size_of_simplex_map++));
   }
 }

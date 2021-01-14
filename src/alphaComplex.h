@@ -8,8 +8,7 @@
 #include <tdautils/gudhiUtils.h>
 
 // for Dionysus
-#include <tdautils/dionysusUtils.h>
-
+#include <tdautils/dionysus2Utils.h>
 // for phat
 #include <tdautils/phatUtils.h>
 
@@ -66,8 +65,8 @@ void alphaComplexDiag(
   else if (libraryDiag[0] == 'D') {
     // 2018-08-04
     // switching back to original code
-    Fltr filtration = filtrationGudhiToDionysus< Fltr >(alphaCmplx);
-    FiltrationDiagDionysus< Persistence >(
+    Fltr2 filtration = filtrationGudhiToDionysus2< Fltr2 >(alphaCmplx);
+    FiltrationDiagDionysus2< Persistence2 >(
         filtration, maxdimension, location, printProgress, persDgm, persLoc,
         persCycle);
   }

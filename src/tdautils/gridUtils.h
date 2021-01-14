@@ -3,12 +3,19 @@
 
 #include <utilities/log.h>
 
-#include <topology/simplex.h>
-#include <topology/filtration.h>
-#include <topology/static-persistence.h>
-#include <topology/dynamic-persistence.h>
+//#include <topology/simplex.h>
+//#include <topology/filtration.h>
+//#include <topology/static-persistence.h>
+//#include <topology/dynamic-persistence.h>
 #include <topology/persistence-diagram.h>
 #include <utilities/indirect.h>
+
+#include <dionysus/simplex.h>
+#include <dionysus/filtration.h>
+//#include <dionysus/ordinary-persistence.h>
+#include <dionysus/reduced-matrix.h>
+#include <dionysus/standard-reduction.h>
+#include <dionysus/diagram.h>
 
 #include <vector>
 #include <map>
@@ -22,7 +29,7 @@
 #endif
 
 
-
+/*
 typedef         unsigned                                            Vertex;
 typedef         Simplex<Vertex, double>                             Smplx;
 typedef         Smplx::VertexContainer				    VertexCont;
@@ -36,8 +43,30 @@ typedef         OffsetBeginMap<Persistence, Fltr,
 typedef         OffsetBeginMap<Fltr, Persistence,
                                Fltr::Index, 
                                Persistence::iterator>               FiltrationPersistenceMap;
+*/
+//dionysus2
+//needs changing
+//typedef         d::Simplex<Vertex,double>                               Smplx2;
+//typedef         d::Filtration<Smplx2>                                   Fltr2;
+//typedef         d::ReducedMatrix<d::Z2Field>                            Persistence2;
+//typedef         d::StandardReduction<Persistence2>                      StandardReduction2;
 
-
+typedef         unsigned                                                Vertex;
+typedef         d::Simplex<Vertex, double>                              Smplx2;
+//typedef         Smplx::VertexContainer				                VertexCont;
+typedef         std::vector<Vertex>                                     VertexVector;
+typedef         d::Filtration<Smplx2>                                   Fltr2;
+typedef         d::ReducedMatrix<d::Z2Field>                            Persistence2;
+typedef         d::StandardReduction<Persistence2>                      StandardReduction2;
+typedef         d::Diagram<double,d::Empty>                             PDgm;
+/*
+typedef         OffsetBeginMap<Persistence2, Fltr2, 
+                               Persistence2::iterator, 
+                               Fltr2::OrderConstIterator>                         PersistenceFiltrationMap;
+typedef         OffsetBeginMap<Fltr2, Persistence2,
+                               Fltr2::OrderConstIterator, 
+                               Persistence2::iterator>               FiltrationPersistenceMap;
+*/
 
 // add a single edge to the filtration
 template< typename VectorList >

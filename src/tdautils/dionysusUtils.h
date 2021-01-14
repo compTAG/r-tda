@@ -1,7 +1,13 @@
 #ifndef __DIONYSUSUTILS_H__
 #define __DIONYSUSUTILS_H__
 
-#include <topology/simplex.h>
+#include <dionysus/simplex.h>
+#include <dionysus/rips.h>
+#include <dionysus/filtration.h>
+
+// swapping simplex
+//#include <topology/simplex.h>
+
 #include <string>
 
 #include <utilities/timer.h>
@@ -385,7 +391,5 @@ inline Filtration RipsFiltrationDionysus(
 
   return filtration;
 }
-
-
 
 # endif // __DIONYSUSUTILS_H__
