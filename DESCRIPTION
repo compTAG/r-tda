@@ -1,8 +1,8 @@
 Package: TDA
 Type: Package
 Title: Statistical Tools for Topological Data Analysis
-Version: 1.7
-Date: 2019-01-26
+Version: 1.7.1
+Date: 2019-02-08
 Author: Brittany T. Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria,
     David L. Millman, Vincent Rouvreau. 
 Maintainer: Jisu Kim <jisu.kim@inria.fr>
