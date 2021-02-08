@@ -1,3 +1,6 @@
+### TDA: version 1.7.1
+- temporarily fixed [-Wclass-memaccess] warning
+
 ### TDA: version 1.7
 - update boost library corresponding to update in R package BH
 
