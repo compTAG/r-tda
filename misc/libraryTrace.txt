@@ -102,6 +102,9 @@
   template<typename Simplex_handle> void propagate_alpha_filtration(Simplex_handle f_simplex, int decr_dim)
   namespace of std::isnan() function is specified
 
+  Alpha_complex& operator= (const Alpha_complex& other)
+  temporarily cancel delete
+
 * src/gudhi/Simplex_tree.h
   Simplex_tree(Simplex_tree && old)
   line 354-376: temporarily comment out move constructor so that copy constructor is used instead to prevent shallow move
@@ -109,9 +112,63 @@
   bool rec_make_filtration_non_decreasing(Siblings * sib)
   line 1183: added this to capture clause in lambda function
 
+  void erase_temp(T1& vec, T2 first, T2 last)
+  temporarily added to fix [-Wclass-memaccess] warning
+
+  Simplex_vertex_range simplex_vertex_range(Simplex_handle sh) const
+  add const
+  
+  Boundary_simplex_range boundary_simplex_range(SimplexHandle sh) const
+  add const
+
+  void rec_copy(Siblings *sib, const Siblings * const sib_source)
+  add const
+  
+  size_t num_simplices() const
+  add const
+  
+  size_t num_simplices(const Siblings * const sib) const
+  add const
+
+  int dimension(Simplex_handle sh) const
+  add const
+
+  Siblings* self_siblings(const SimplexHandle & sh) const
+  add const
+
+  bool rec_prune_above_filtration(Siblings* sib, Filtration_value filt)
+  temporarily replace erase() by erase_temp() to fix [-Wclass-memaccess] warning
+
 * src/gudhi/Simplex_tree/Simplex_tree_node_explicit_storage.h
   Simplex_tree_node_explicit_storage(const Simplex_tree_node_explicit_storage & stnes)
   line 53-61: added copy constructor
 
   Siblings * children() const
   line 71-74: changing to const function
+  
+* src/gudhi/Simplex_tree/Simplex_tree_iterators.h
+  class Simplex_tree_simplex_vertex_iterator
+  
+  Simplex_tree_simplex_vertex_iterator(const SimplexTree * const st)
+  add const
+
+  Simplex_tree_simplex_vertex_iterator(const SimplexTree * const st, const Simplex_handle sh)
+  add const
+
+  class Simplex_tree_boundary_simplex_iterator
+  
+  Simplex_tree_boundary_simplex_iterator(const SimplexTree * const st)
+  add const
+  
+  Simplex_tree_boundary_simplex_iterator(const SimplexTree * const st, const SimplexHandle sh)
+  add const
+
+  const SimplexTree * st_
+  add const
+
+* src/gudhi/Simplex_tree/Simplex_tree_siblings.h
+  Simplex_tree_siblings(Simplex_tree_siblings * oncles, Vertex_handle parent, const Dictionary & members)
+  temporarily added to fix [-Wclass-memaccess] warning
+
+  Simplex_tree_siblings(Simplex_tree_siblings * oncles, Vertex_handle parent, const RandomAccessVertexRange & members)
+  temporarily fixed to fix [-Wclass-memaccess] warning
