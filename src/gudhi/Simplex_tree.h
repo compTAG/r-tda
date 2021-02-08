@@ -49,6 +49,33 @@
 #include <initializer_list>
 #include <algorithm>  // for std::max
 
+
+// 2021-01-29, Jisu KIM
+// temporarily fixing [-Wclass-memaccess]
+template <class T1, class T2>
+void erase_temp(T1& vec, T2 first, T2 last)
+{
+  //BOOST_ASSERT(this->priv_in_range_or_end(first));
+  //BOOST_ASSERT(this->priv_in_range_or_end(last));
+  //BOOST_ASSERT(first <= last);
+  if(first != last){
+    const auto old_end_ptr = boost::movelib::to_raw_pointer(boost::container::vector_iterator_get_ptr(vec.end()));
+    const auto first_ptr = boost::movelib::to_raw_pointer(boost::container::vector_iterator_get_ptr(first));
+    const auto last_ptr  = boost::movelib::to_raw_pointer(boost::container::vector_iterator_get_ptr(last));
+    const auto n1 = old_end_ptr - last_ptr;
+    if(last_ptr!=old_end_ptr && first_ptr && last_ptr) {
+      std::memmove(static_cast<void *>(first_ptr), last_ptr, sizeof(n1)*n1);
+    }
+    const auto new_last_ptr = first_ptr + n1;
+    const auto n2 = (old_end_ptr - new_last_ptr);
+    if(old_end_ptr == last_ptr){
+      boost::container::destroy_alloc_n(vec.get_stored_allocator(), new_last_ptr, n2);
+    }
+     //vec.resize(vec.size() - n);
+  }
+}
+
+
 namespace Gudhi {
 /** \defgroup simplex_tree Filtered Complexes
  * \author    Cl&eacute;ment Maria
@@ -281,13 +308,22 @@ class Simplex_tree {
     return filtration_vect_;
   }
 
+  // 2021-02-08, Jisu KIM
+  // temporarily fixing for taking const argument
+  Filtration_simplex_range const& filtration_simplex_range(Indexing_tag = Indexing_tag()) const {
+    return filtration_vect_;
+  }
+
   /** \brief Returns a range over the vertices of a simplex.
    *
    * The order in which the vertices are visited is the decreasing order for < on Vertex_handles,
    * which is consequenlty
    * equal to \f$(-1)^{\text{dim} \sigma}\f$ the canonical orientation on the simplex.
    */
-  Simplex_vertex_range simplex_vertex_range(Simplex_handle sh) {
+  // 2021-02-08, Jisu KIM
+  // temporarily fixing for taking const argument
+  // Simplex_vertex_range simplex_vertex_range(Simplex_handle sh) {
+  Simplex_vertex_range simplex_vertex_range(Simplex_handle sh) const {
     assert(sh != null_simplex());  // Empty simplex
     return Simplex_vertex_range(Simplex_vertex_iterator(this, sh),
                                 Simplex_vertex_iterator(this));
@@ -308,7 +344,10 @@ class Simplex_tree {
    *
    * @param[in] sh Simplex for which the boundary is computed. */
   template<class SimplexHandle>
-  Boundary_simplex_range boundary_simplex_range(SimplexHandle sh) {
+  // 2021-02-08, Jisu KIM
+  // temporarily fixing for taking const argument
+  //Boundary_simplex_range boundary_simplex_range(SimplexHandle sh) {
+  Boundary_simplex_range boundary_simplex_range(SimplexHandle sh) const {
     return Boundary_simplex_range(Boundary_simplex_iterator(this, sh),
                                   Boundary_simplex_iterator(this));
   }
@@ -337,7 +376,10 @@ class Simplex_tree {
   }
 
   /** \brief depth first search, inserts simplices when reaching a leaf. */
-  void rec_copy(Siblings *sib, Siblings *sib_source) {
+  // 2021-02-08, Jisu KIM
+  // temporarily fixing for taking const argument
+  //void rec_copy(Siblings *sib, Siblings * sib_source) {
+  void rec_copy(Siblings *sib, const Siblings * const sib_source) {
     for (auto sh = sib->members().begin(), sh_source = sib_source->members().begin();
          sh != sib->members().end(); ++sh, ++sh_source) {
       if (has_children(sh_source)) {
@@ -502,13 +544,19 @@ class Simplex_tree {
 
  public:
   /** \brief returns the number of simplices in the simplex_tree. */
-  size_t num_simplices() {
+  // 2021-02-08, Jisu KIM
+  // temporarily fixing for taking const argument
+  //size_t num_simplices() {
+  size_t num_simplices() const {
     return num_simplices(&root_);
   }
 
  private:
   /** \brief returns the number of simplices in the simplex_tree. */
-  size_t num_simplices(Siblings * sib) {
+  // 2021-02-08, Jisu KIM
+  // temporarily fixing for taking const argument
+  //size_t num_simplices(const Siblings * const sib) {
+  size_t num_simplices(const Siblings * const sib) const {
     auto sib_begin = sib->members().begin();
     auto sib_end = sib->members().end();
     size_t simplices_number = sib_end - sib_begin;
@@ -524,7 +572,10 @@ class Simplex_tree {
   /** \brief Returns the dimension of a simplex.
    *
    * Must be different from null_simplex().*/
-  int dimension(Simplex_handle sh) {
+  // 2021-02-08, Jisu KIM
+  // temporarily fixing for taking const argument
+  //int dimension(Simplex_handle sh) {
+  int dimension(Simplex_handle sh) const {
     Siblings * curr_sib = self_siblings(sh);
     int dim = 0;
     while (curr_sib != nullptr) {
@@ -791,7 +842,10 @@ class Simplex_tree {
 
   /** Returns the Siblings containing a simplex.*/
   template<class SimplexHandle>
-  Siblings* self_siblings(SimplexHandle sh) {
+  // 2021-02-08, Jisu KIM
+  // temporarily fixing for taking const argument
+  //Siblings* self_siblings(SimplexHandle sh) {
+  Siblings* self_siblings(const SimplexHandle & sh) const {
     if (sh->second.children()->parent() == sh->first)
       return sh->second.children()->oncles();
     else
@@ -1228,7 +1282,11 @@ class Simplex_tree {
       return true;
     } else {
       // Keeping some elements of siblings. Remove the others, and recurse in the remaining ones.
-      list.erase(last, list.end());
+      // 2021-01-29, Jisu KIM
+      // temporarily fixing [-Wclass-memaccess]
+      //list.erase(last, list.end());
+      erase_temp(list, last, list.end());
+
       for (auto&& simplex : list)
         if (has_children(&simplex))
           modified |= rec_prune_above_filtration(simplex.second.children(), filt);
