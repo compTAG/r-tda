@@ -19,12 +19,17 @@
   missing in R package BH
 
 * src/boost/container/detail/copy_move_algo.hpp
-  added from boost 1.69 and modified due to [Wclass-memaccess] warning in debian
+  added from R package BH 1.75.0-0 and modified due to [Wclass-memaccess] warning
   typename dtl::enable_if_memtransfer_copy_assignable<I, F, F>::type move_backward(I f, I l, F r)
   F memmove(I f, I l, F r)
   F memmove_n(I f, U n, F r)
   I memmove_n_source(I f, U n, F r)
   static_cast<void *> on the first argument when calling std::memmove( , , )
+
+* src/boost/container/vector.hpp
+  src/boost/container/flat_map.hpp
+  src/boost/container/detail/flat_tree.hpp
+  added from R package BH 175.0-0 due to [Wclass-memaccess] warning
 
 
 # CGAL
@@ -112,9 +117,6 @@
   bool rec_make_filtration_non_decreasing(Siblings * sib)
   line 1183: added this to capture clause in lambda function
 
-  void erase_temp(T1& vec, T2 first, T2 last)
-  temporarily added to fix [-Wclass-memaccess] warning
-
   Simplex_vertex_range simplex_vertex_range(Simplex_handle sh) const
   add const
   
@@ -135,9 +137,6 @@
 
   Siblings* self_siblings(const SimplexHandle & sh) const
   add const
-
-  bool rec_prune_above_filtration(Siblings* sib, Filtration_value filt)
-  temporarily replace erase() by erase_temp() to fix [-Wclass-memaccess] warning
 
 * src/gudhi/Simplex_tree/Simplex_tree_node_explicit_storage.h
   Simplex_tree_node_explicit_storage(const Simplex_tree_node_explicit_storage & stnes)
