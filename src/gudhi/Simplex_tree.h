@@ -49,33 +49,6 @@
 #include <initializer_list>
 #include <algorithm>  // for std::max
 
-
-// 2021-01-29, Jisu KIM
-// temporarily fixing [-Wclass-memaccess]
-template <class T1, class T2>
-void erase_temp(T1& vec, T2 first, T2 last)
-{
-  //BOOST_ASSERT(this->priv_in_range_or_end(first));
-  //BOOST_ASSERT(this->priv_in_range_or_end(last));
-  //BOOST_ASSERT(first <= last);
-  if(first != last){
-    const auto old_end_ptr = boost::movelib::to_raw_pointer(boost::container::vector_iterator_get_ptr(vec.end()));
-    const auto first_ptr = boost::movelib::to_raw_pointer(boost::container::vector_iterator_get_ptr(first));
-    const auto last_ptr  = boost::movelib::to_raw_pointer(boost::container::vector_iterator_get_ptr(last));
-    const auto n1 = old_end_ptr - last_ptr;
-    if(last_ptr!=old_end_ptr && first_ptr && last_ptr) {
-      std::memmove(static_cast<void *>(first_ptr), last_ptr, sizeof(n1)*n1);
-    }
-    const auto new_last_ptr = first_ptr + n1;
-    const auto n2 = (old_end_ptr - new_last_ptr);
-    if(old_end_ptr == last_ptr){
-      boost::container::destroy_alloc_n(vec.get_stored_allocator(), new_last_ptr, n2);
-    }
-     //vec.resize(vec.size() - n);
-  }
-}
-
-
 namespace Gudhi {
 /** \defgroup simplex_tree Filtered Complexes
  * \author    Cl&eacute;ment Maria
@@ -1282,10 +1255,7 @@ class Simplex_tree {
       return true;
     } else {
       // Keeping some elements of siblings. Remove the others, and recurse in the remaining ones.
-      // 2021-01-29, Jisu KIM
-      // temporarily fixing [-Wclass-memaccess]
-      //list.erase(last, list.end());
-      erase_temp(list, last, list.end());
+      list.erase(last, list.end());
 
       for (auto&& simplex : list)
         if (has_children(&simplex))
