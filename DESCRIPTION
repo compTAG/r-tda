@@ -8,8 +8,10 @@ Author: Brittany T. Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria,
     Clement Maria and Vincent Rouvreau, Dionysus by Dmitriy Morozov, and
     PHAT by Ulrich Bauer, Michael Kerber, and Jan Reininghaus. The included 
     Boost is licenced and copyrighted as
-    'Boost Software Licence' <https://www.boost.org/LICENSE_1_0.txt>. The
-    included CGAL is licenced and copyrighted as
+    'Boost Software Licence' <https://www.boost.org/LICENSE_1_0.txt>, and
+    also coming from
+    'R package BH' <https://cran.r-project.org/web/packages/BH/index.html>.
+    The included CGAL is licenced and copyrighted as
     'The CGAL Licence' <https://www.cgal.org/license.html>.
 Maintainer: Jisu Kim <jisu.kim@inria.fr>
 Description: Tools for the statistical analysis of persistent homology and for
