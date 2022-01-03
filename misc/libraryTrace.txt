@@ -7,7 +7,7 @@
 * Dionysus:
 * PHAT: 1.4.1
 * CGAL: 4.13
-* boost: 1.69.0 (corresponding to BH 1.69.0-1)
+* boost: 1.78.0 (corresponding to BH 1.78.0-0)
 * gmp: 4.2.4 (corresponding to http://win-builder.r-project.org/GPLcompliance/ )
 
 
@@ -19,17 +19,17 @@
   missing in R package BH
 
 * src/boost/container/detail/copy_move_algo.hpp
-  added from R package BH 1.75.0-0 and modified due to [Wclass-memaccess] warning
+  added from R package BH 1.78.0-0 and modified due to [Wclass-memaccess] warning
   typename dtl::enable_if_memtransfer_copy_assignable<I, F, F>::type move_backward(I f, I l, F r)
   F memmove(I f, I l, F r)
   F memmove_n(I f, U n, F r)
-  I memmove_n_source(I f, U n, F r)
+  memmove_n_source(I f, std::size_t n, F r)
   static_cast<void *> on the first argument when calling std::memmove( , , )
 
 * src/boost/container/vector.hpp
   src/boost/container/flat_map.hpp
   src/boost/container/detail/flat_tree.hpp
-  added from R package BH 175.0-0 due to [Wclass-memaccess] warning
+  added from R package BH 1.78.0-0 due to [Wclass-memaccess] warning
 
 
 # CGAL
