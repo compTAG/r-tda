@@ -1,23 +1,11 @@
-/*    This file is part of the Gudhi Library. The Gudhi library
- *    (Geometric Understanding in Higher Dimensions) is a generic C++
- *    library for computational topology.
- *
+/*    This file is part of the Gudhi Library - https://gudhi.inria.fr/ - which is released under MIT.
+ *    See file LICENSE or go to https://gudhi.inria.fr/licensing/ for full license details.
  *    Author(s):       Vincent Rouvreau
  *
- *    Copyright (C) 2015  INRIA Saclay (France)
+ *    Copyright (C) 2015 Inria
  *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *    Modification(s):
+ *      - YYYY/MM Author: Description of the modification
  */
 #ifndef POINTS_OFF_IO_H_
 #define POINTS_OFF_IO_H_
@@ -52,14 +40,14 @@ class Points_off_visitor_reader {
    */
   void init(int dim, int num_vertices, int num_faces, int num_edges) {
 #ifdef DEBUG_TRACES
-    std::cout << "Points_off_visitor_reader::init - dim=" << dim << " - num_vertices=" <<
+    std::clog << "Points_off_visitor_reader::init - dim=" << dim << " - num_vertices=" <<
         num_vertices << " - num_faces=" << num_faces << " - num_edges=" << num_edges << std::endl;
 #endif  // DEBUG_TRACES
     if (num_faces > 0) {
-      //std::cerr << "Points_off_visitor_reader::init faces are not taken into account from OFF file for Points.\n";
+      std::cerr << "Points_off_visitor_reader::init faces are not taken into account from OFF file for Points.\n";
     }
     if (num_edges > 0) {
-      //std::cerr << "Points_off_visitor_reader::init edges are not taken into account from OFF file for Points.\n";
+      std::cerr << "Points_off_visitor_reader::init edges are not taken into account from OFF file for Points.\n";
     }
   }
 
@@ -73,20 +61,19 @@ class Points_off_visitor_reader {
    * @details
    * Point_d must have a constructor with the following form:
    * 
-   * @code template<class InputIterator > Point_d::Point_d(int d, InputIterator first, InputIterator last) @endcode
+   * @code template<class InputIterator > Point_d::Point_d(InputIterator first, InputIterator last) @endcode
    * 
-   * where d is the point dimension. 		
    */
   void point(const std::vector<double>& point) {
 #ifdef DEBUG_TRACES
-    std::cout << "Points_off_visitor_reader::point ";
+    std::clog << "Points_off_visitor_reader::point ";
     for (auto coordinate : point) {
-      std::cout << coordinate << " | ";
+      std::clog << coordinate << " | ";
     }
-    std::cout << std::endl;
+    std::clog << std::endl;
 #endif  // DEBUG_TRACES
     // Fill the point cloud
-    point_cloud.push_back(Point_d(point.size(), point.begin(), point.end()));
+    point_cloud.push_back(Point_d(point.begin(), point.end()));
   }
 
   // Off_reader visitor maximal_face implementation - Only points are read
@@ -115,21 +102,21 @@ class Points_off_visitor_reader {
  * 
  * where d is the point dimension. 		
  * 
- * \section Example
+ * \section pointoffioexample Example
  *
- * This example loads points from an OFF file and builds a vector of CGAL points in dimension d.
+ * This example loads points from an OFF file and builds a vector of points (vector of double).
  * Then, it is asked to display the points.
  * 
- * \include common/CGAL_points_off_reader.cpp
+ * \include example_vector_double_points_off_reader.cpp
  * 
  * When launching:
  * 
- * \code $> ./cgaloffreader ../../data/points/alphacomplexdoc.off
+ * \code $> ./vector_double_off_reader ../../data/points/alphacomplexdoc.off
  * \endcode
  *
- * the program output is:
+ * the program outputs a file ../../data/points/alphacomplexdoc.off.txt:
  * 
- * \include common/cgaloffreader_result.txt
+ * \include vectordoubleoffreader_result.txt
  */
 template<typename Point_d>
 class Points_off_reader {
@@ -152,7 +139,7 @@ class Points_off_reader {
         point_cloud = off_visitor.get_point_cloud();
       }
     } else {
-      //std::cerr << "Points_off_reader::Points_off_reader could not open file " << name_file << "\n";
+      std::cerr << "Points_off_reader::Points_off_reader could not open file " << name_file << "\n";
     }
   }
 

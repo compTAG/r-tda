@@ -1,24 +1,11 @@
-/*    This file is part of the Gudhi Library. The Gudhi library
- *    (Geometric Understanding in Higher Dimensions) is a generic C++
- *    library for computational topology.
- *
+/*    This file is part of the Gudhi Library - https://gudhi.inria.fr/ - which is released under MIT.
+ *    See file LICENSE or go to https://gudhi.inria.fr/licensing/ for full license details.
  *    Author(s):       David Salinas
  *
- *    Copyright (C) 2014  INRIA Sophia Antipolis-Mediterranee (France)
+ *    Copyright (C) 2014 Inria
  *
- *    This program is free software: you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation, either version 3 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    You should have received a copy of the GNU General Public License
- *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
+ *    Modification(s):
+ *      - YYYY/MM Author: Description of the modification
  */
 
 
@@ -37,8 +24,7 @@ namespace Gudhi {
 
 /** \brief OFF file reader top class visitor. 
  * 
- * OFF file must be conform to format described here : 
- * http://www.geomview.org/docs/html/OFF.html
+ * OFF file must be conform to \ref FileFormatsOFF
  */
 class Off_reader {
  public:
@@ -65,19 +51,19 @@ class Off_reader {
   bool read(OffVisitor& off_visitor) {
     bool success_read_off_preambule = read_off_preambule(off_visitor);
     if (!success_read_off_preambule) {
-      //std::cerr << "could not read off preambule\n";
+      std::cerr << "could not read off preambule\n";
       return false;
     }
 
     bool success_read_off_points = read_off_points(off_visitor);
     if (!success_read_off_points) {
-      //std::cerr << "could not read off points\n";
+      std::cerr << "could not read off points\n";
       return false;
     }
 
     bool success_read_off_faces = read_off_faces(off_visitor);
     if (!success_read_off_faces) {
-      //std::cerr << "could not read off faces\n";
+      std::cerr << "could not read off faces\n";
       return false;
     }
 
@@ -105,25 +91,26 @@ class Off_reader {
     bool is_off_file = (line.find("OFF") != std::string::npos);
     bool is_noff_file = (line.find("nOFF") != std::string::npos);
 
+
+
     if (!is_off_file && !is_noff_file) {
-      //std::cerr << line << std::endl;
-      //std::cerr << "missing off header\n";
+      std::cerr << line << std::endl;
+      std::cerr << "missing off header\n";
       return false;
+    }
+
+    if (is_noff_file) {
+      // Should be on a separate line, but we accept it on the same line as the number of vertices
+      stream_ >> off_info_.dim;
+    } else {
+      off_info_.dim = 3;
     }
 
     if (!goto_next_uncomment_line(line)) return false;
     std::istringstream iss(line);
-    if ((is_off_file) && (!is_noff_file)) {
-      off_info_.dim = 3;
-      if (!(iss >> off_info_.num_vertices >> off_info_.num_faces >> off_info_.num_edges)) {
-        //std::cerr << "incorrect number of vertices/faces/edges\n";
-        return false;
-      }
-    } else {
-      if (!(iss >> off_info_.dim >> off_info_.num_vertices >> off_info_.num_faces >> off_info_.num_edges)) {
-      //std::cerr << "incorrect number of vertices/faces/edges\n";
+    if (!(iss >> off_info_.num_vertices >> off_info_.num_faces >> off_info_.num_edges)) {
+      std::cerr << "incorrect number of vertices/faces/edges\n";
       return false;
-      }
     }
     off_visitor.init(off_info_.dim, off_info_.num_vertices, off_info_.num_faces, off_info_.num_edges);
 
@@ -131,10 +118,12 @@ class Off_reader {
   }
 
   bool goto_next_uncomment_line(std::string& uncomment_line) {
-    uncomment_line.clear();
-    do
-      std::getline(stream_, uncomment_line); while (uncomment_line[0] == '%');
-    return (uncomment_line.size() > 0 && uncomment_line[0] != '%');
+    do {
+      // skip whitespace, including empty lines
+      if (!std::ifstream::sentry(stream_)) return false;
+      std::getline(stream_, uncomment_line);
+    } while (uncomment_line[0] == '#');
+    return static_cast<bool>(stream_);
   }
 
   template<typename OffVisitor>
@@ -172,7 +161,7 @@ template<typename OFFVisitor>
 void read_off(const std::string& name_file_off, OFFVisitor& vis) {
   std::ifstream stream(name_file_off);
   if (!stream.is_open()) {
-    //std::cerr << "could not open file \n";
+    std::cerr << "could not open file \n";
   } else {
     Off_reader off_reader(stream);
     off_reader.read(vis);
