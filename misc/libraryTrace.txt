@@ -39,6 +39,23 @@
   Alpha_shape_3<Dt,EACT>::Classification_type Alpha_shape_3<Dt,EACT>::classify(Alpha_status_const_iterator as, const NT& alpha) const
   resolve reference binding to null pointer: '*as' can fetch NULL memory if 'as' corresponds to NULL pointer
 
+* src/CGAL/assertions_impl.h
+  add #include <Rcpp.h> for Rcpp::stop, Rcpp::Rcerr
+  replace std::cerr by Rcpp::Rcerr
+
+  comment out due to std::cerr, abort(), exit() :
+    CGAL_INLINE_FUNCTION  void _standard_warning_handler(const char *, const char* expr, const char* file, int line, const char* msg)
+    inline Failure_function& get_static_warning_handler()
+    Failure_function _warning_handler
+    inline Failure_function& get_static_warning_handler()
+    CGAL_INLINE_FUNCTION void precondition_fail(const char* expr, const char* file, int line, const char* msg)
+    CGAL_INLINE_FUNCTION void postcondition_fail(const char* expr, const char* file, int line, const char* msg)
+    CGAL_INLINE_FUNCTION void warning_fail(const char* expr, const char* file, int line, const char* msg)
+    CGAL_INLINE_FUNCTION Failure_function set_error_handler( Failure_function handler)
+    CGAL_INLINE_FUNCTION Failure_function set_warning_handler( Failure_function handler)
+    CGAL_INLINE_FUNCTION Failure_behaviour set_error_behaviour(Failure_behaviour eb)
+    CGAL_INLINE_FUNCTION Failure_behaviour set_warning_behaviour(Failure_behaviour eb)
+
 * src/CGAL/Compact_container.h
   bool is_used(const_iterator ptr) const
   size_type index(const_iterator cit) const
@@ -94,11 +111,28 @@
 
 # GUDHI
 
-//* src/gudhi/Alpha_complex.h
+* src/gudhi/Alpha_complex.h
+  add #include <Rcpp.h> for Rcpp::Rcerr
+  replace std::cerr by Rcpp::Rcerr
+
+  auto& get_cache(SimplicialComplexForAlpha& cplx, typename SimplicialComplexForAlpha::Simplex_handle s)
+  auto radius(SimplicialComplexForAlpha& cplx, typename SimplicialComplexForAlpha::Simplex_handle s)
+  line 316, 333: remove thread_local keywrod due to causing a runtime error on 32 bit
+
+  comment out #include <gudhi/Points_off_io.h> due to Points_off_io.h having std::cerr
+  
+  comment out Alpha_complex(const std::string& off_file_name) due to std::cerr and exit
+
 //  Alpha_complex& operator= (const Alpha_complex& other)
 //  temporarily cancel delete
 
 * src/gudhi/Simplex_tree.h
+  comment out #include <gudhi/reader_utils.h> due to reader_utils.h having std::cerr
+
+  std::pair<Simplex_handle, bool> insert_simplex_and_subfaces(const InputVertexRange& Nsimplex, Filtration_value filtration = 0)
+  void siblings_expansion(Siblings * siblings, int k)
+  line 819, 1205: remove thread_local keywrod due to causing a runtime error on 32 bit
+
 //  Simplex_tree(Simplex_tree && old)
 //  line 354-376: temporarily comment out move constructor so that copy constructor is used instead to prevent shallow move
 
@@ -125,6 +159,10 @@
 
   Siblings* self_siblings(const SimplexHandle & sh) const
   add const
+
+* src/gudhi/Persistent_cohomology.h
+  void annotation_of_the_boundary(std::map<Simplex_key, Arith_element> & map_a_ds, Simplex_handle sigma, int dim_sigma)
+  line 293: remove thread_local keywrod due to causing a runtime error on 32 bit
 
 * src/gudhi/Simplex_tree/Simplex_tree_node_explicit_storage.h
 //  Simplex_tree_node_explicit_storage(const Simplex_tree_node_explicit_storage & stnes)
