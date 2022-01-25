@@ -310,7 +310,10 @@ class Alpha_complex {
       k = cache_.size();
       cplx.assign_key(s, k);
       // Using a transform_range is slower, currently.
-      thread_local std::vector<Point_d> v;
+      // 2021-01-23, Jisu KIM
+      // thread_local causes a runtime error on 32 bit
+      //thread_local std::vector<Point_d> v;
+      std::vector<Point_d> v;
       v.clear();
       for (auto vertex : cplx.simplex_vertex_range(s))
         v.push_back(get_point_(vertex));
@@ -326,7 +329,10 @@ class Alpha_complex {
     if(k!=cplx.null_key())
       return kernel_.get_squared_radius(old_cache_[k]);
     // Using a transform_range is slower, currently.
-    thread_local std::vector<Point_d> v;
+    // 2021-01-23, Jisu KIM
+    // thread_local causes a runtime error on 32 bit
+    //thread_local std::vector<Point_d> v;
+    std::vector<Point_d> v;
     v.clear();
     for (auto vertex : cplx.simplex_vertex_range(s))
       v.push_back(get_point_(vertex));

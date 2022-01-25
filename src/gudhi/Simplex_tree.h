@@ -814,7 +814,10 @@ class Simplex_tree {
     if (first == last)
       return { null_simplex(), true }; // FIXME: false would make more sense to me.
 
-    thread_local std::vector<Vertex_handle> copy;
+    // 2021-01-23, Jisu KIM
+    // thread_local causes a runtime error on 32 bit
+    //thread_local std::vector<Vertex_handle> copy;
+    std::vector<Vertex_handle> copy;
     copy.clear();
     copy.insert(copy.end(), first, last);
     std::sort(copy.begin(), copy.end());
@@ -1197,7 +1200,10 @@ class Simplex_tree {
     Dictionary_it next = siblings->members().begin();
     ++next;
 
-    thread_local std::vector<std::pair<Vertex_handle, Node> > inter;
+    // 2021-01-23, Jisu KIM
+    // thread_local causes a runtime error on 32 bit
+    //thread_local std::vector<std::pair<Vertex_handle, Node> > inter;
+    std::vector<std::pair<Vertex_handle, Node> > inter;
     for (Dictionary_it s_h = siblings->members().begin();
          s_h != siblings->members().end(); ++s_h, ++next) {
       Simplex_handle root_sh = find_vertex(s_h->first);
