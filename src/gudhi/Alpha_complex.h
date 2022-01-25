@@ -15,7 +15,9 @@
 #include <gudhi/Alpha_complex/Alpha_kernel_d.h>
 #include <gudhi/Debug_utils.h>
 // to construct Alpha_complex from a OFF file of points
-#include <gudhi/Points_off_io.h>
+// 2022-01-23, Jisu KIM
+// comment out due to Points_off_io.h having std::cerr
+//#include <gudhi/Points_off_io.h>
 
 #include <stdlib.h>
 #include <math.h>  // isnan, fmax
@@ -44,6 +46,10 @@
 #include <utility>  // std::pair
 #include <stdexcept>
 #include <numeric>  // for std::iota
+
+// 2021-01-23, Jisu KIM
+// for Rcpp::Rcerr
+#include <Rcpp.h>
 
 // Make compilation fail - required for external projects - https://github.com/GUDHI/gudhi-devel/issues/10
 #if CGAL_VERSION_NR < 1041101000
@@ -159,15 +165,17 @@ class Alpha_complex {
    *
    * @param[in] off_file_name OFF file [path and] name.
    */
-  Alpha_complex(const std::string& off_file_name) {
-    Gudhi::Points_off_reader<Point_d> off_reader(off_file_name);
-    if (!off_reader.is_valid()) {
-      std::cerr << "Alpha_complex - Unable to read file " << off_file_name << "\n";
-      exit(-1);  // ----- >>
-    }
+  // 2021-01-23, Jisu KIM
+  // comment out due to std::cerr and exit
+  //Alpha_complex(const std::string& off_file_name) {
+  //  Gudhi::Points_off_reader<Point_d> off_reader(off_file_name);
+  //  if (!off_reader.is_valid()) {
+  //    std::cerr << "Alpha_complex - Unable to read file " << off_file_name << "\n";
+  //    exit(-1);  // ----- >>
+  //  }
 
-    init_from_range(off_reader.get_point_cloud());
-  }
+  //  init_from_range(off_reader.get_point_cloud());
+  //}
 
   /** \brief Alpha_complex constructor from a list of points.
    *
@@ -228,7 +236,9 @@ class Alpha_complex {
   void init_from_range(const InputPointRange& points) {
     #if CGAL_VERSION_NR < 1050000000
     if (Is_Epeck_D<Kernel>::value)
-      std::cerr << "It is strongly advised to use a CGAL version >= 5.0 with Epeck_d Kernel for performance reasons."
+      // 2021-01-23, Jisu KIM
+      //std::cerr << "It is strongly advised to use a CGAL version >= 5.0 with Epeck_d Kernel for performance reasons."
+      Rcpp::Rcerr << "It is strongly advised to use a CGAL version >= 5.0 with Epeck_d Kernel for performance reasons."
                 << std::endl;
     #endif
 
@@ -359,15 +369,21 @@ class Alpha_complex {
     using Vector_vertex = std::vector<Vertex_handle>;
 
     if (triangulation_ == nullptr) {
-      std::cerr << "Alpha_complex cannot create_complex from a NULL triangulation\n";
+      // 2021-01-23, Jisu KIM
+      //std::cerr << "Alpha_complex cannot create_complex from a NULL triangulation\n";
+      Rcpp::Rcerr << "Alpha_complex cannot create_complex from a NULL triangulation\n";
       return false;  // ----- >>
     }
     if (triangulation_->maximal_dimension() < 1) {
-      std::cerr << "Alpha_complex cannot create_complex from a zero-dimension triangulation\n";
+      // 2021-01-23, Jisu KIM
+      //std::cerr << "Alpha_complex cannot create_complex from a zero-dimension triangulation\n";
+      Rcpp::Rcerr << "Alpha_complex cannot create_complex from a zero-dimension triangulation\n";
       return false;  // ----- >>
     }
     if (complex.num_vertices() > 0) {
-      std::cerr << "Alpha_complex create_complex - complex is not empty\n";
+      // 2021-01-23, Jisu KIM
+      //std::cerr << "Alpha_complex create_complex - complex is not empty\n";
+      Rcpp::Rcerr << "Alpha_complex create_complex - complex is not empty\n";
       return false;  // ----- >>
     }
 
