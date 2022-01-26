@@ -49,7 +49,10 @@
 // gcc's __builtin_constant_p does not like arguments with side effects. Be
 // careful not to use this macro for something that the compiler will have
 // trouble eliminating as dead code.
-# define CGAL_CST_TRUE(X) ({ bool _ugly_ = (X); __builtin_constant_p(_ugly_) && _ugly_; })
+// 2022-01-26, Jisu KIM
+// debian warning: ISO C++ forbids braced-groups within expressions [-Wpedantic]
+//# define CGAL_CST_TRUE(X) ({ bool _ugly_ = (X); __builtin_constant_p(_ugly_) && _ugly_; })
+inline bool CGAL_CST_TRUE(bool X) { return __builtin_constant_p(X) && X; }
 #else
 # define CGAL_CST_TRUE(X) false
 #endif
