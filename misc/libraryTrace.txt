@@ -69,6 +69,14 @@
   bool owns(const_iterator cit) const
   resolve reference binding to null pointer: '*pointer' can fetch NULL memory if 'pointer' corresponds to NULL pointer
 
+* src/CGAL/FPU.h
+  __m128d swap_m128d(__m128d x)
+  resolve debian warning: ISO C++ forbids compound-literals [-Wpedantic]
+
+* src/CGAL/Interval_nt.h
+  CGAL_CST_TRUE(X)
+  resolve debian warning: ISO C++ forbids braced-groups within expressions [-Wpedantic]
+
 * src/CGAL/MP_float.h
   MP_float(long i)
   temporarily added to resolve type cast ambiguity of type long int
