@@ -30,4 +30,5 @@ LinkingTo:
     RcppEigen
 SystemRequirements:
     C++14,
-    gmp
+    gmp,
+    GNU make
