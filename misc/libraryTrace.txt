@@ -94,6 +94,11 @@
   bool is_infinite(const Vertex & v) const
   resolve reference binding to null pointer: '*infinite_vertex()' can fetch NULL memory if 'infinite_vertex()' corresponds to NULL pointer
 
+* src/CGAL/Uncertain.h
+  Uncertain<bool> operator|(Uncertain<bool> a, Uncertain<bool> b)
+  Uncertain<bool> operator&(Uncertain<bool> a, Uncertain<bool> b)
+  remove bitewise '|' or '&' with boolean operands since CRAN complains them
+
 * src/CGAL/NewKernel_d/function_objects_cartesian.h
   struct Oriented_side
   CS is the name of Intel CPU registers defined on Solaris
@@ -105,9 +110,38 @@
 
 # Dionysus
 
+* src/geometry/Arbitdistance.h
+  remove std::binary_function and provide result_type since std::binary_function is deprecated in C++11 and removed in C++17
+
+* src/geometry/l2distance.h
+  remove std::binary_function and provide result_type since std::binary_function is deprecated in C++11 and removed in C++17
+
+* src/geometry/simulator.h
+  remove std::binary_function since std::binary_function is deprecated in C++11 and removed in C++17
+
+* src/geometry/weighted-cechdistance.h
+  remove std::binary_function since std::binary_function is deprecated in C++11 and removed in C++17
+
+* src/geometry/weighted-l2distance.h
+  remove std::binary_function since std::binary_function is deprecated in C++11 and removed in C++17
+
+* src/topology/dynamic-persistence.hpp
+  remove std::unary_function since std::unary_function is deprecated in C++11 and removed in C++17
+
+* src/topology/Isvineyard.h
+  remove std::unary_function and std::binary_function since std::unary_function and std::binary_function are deprecated in C++11 and removed in C++17
+
+* src/topology/Isvineyard.hpp
+  remove std::binary_function since std::binary_function is deprecated in C++11 and removed in C++17
+
+* src/topology/order.h
+  remove std::binary_function since std::binary_function is deprecated in C++11 and removed in C++17
+
 * src/topology/rips.hpp
   void bros_kerbosch(...) const (and other places where bros_kerbosch is used)
   line 34, 56, 86, 126, 140, 162, 167, 184, 190: change 'excluded' to 'excludedNext' (where excludedNext = excluded + 1) to prevent overflow and change logic accordingly
+
+  remove std::unary_function and std::binary_function since std::unary_function and std::binary_function are deprecated in C++11 and removed in C++17
 
 * src/topology/simplex.hpp
   Simplex<V,T> dereference() const
