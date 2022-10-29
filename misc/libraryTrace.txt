@@ -69,6 +69,11 @@
   bool owns(const_iterator cit) const
   resolve reference binding to null pointer: '*pointer' can fetch NULL memory if 'pointer' corresponds to NULL pointer
 
+* src/CGAL/config.h
+  #if __has_cpp_attribute(maybe_unused)
+  #if __cpp_attributes >= 200809 && __has_cpp_attribute(fallthrough)
+  resolve clang warning: clang15 regards 'maybe_unused' or 'fallthrough' as a C++17 extension [-Wc++17-attribute-extensions]
+
 * src/CGAL/FPU.h
   __m128d swap_m128d(__m128d x)
   resolve debian warning: ISO C++ forbids compound-literals [-Wpedantic]
