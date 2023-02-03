@@ -104,6 +104,12 @@
   Uncertain<bool> operator&(Uncertain<bool> a, Uncertain<bool> b)
   remove bitewise '|' or '&' with boolean operands since CRAN complains them
 
+* src/CGAL/GMP/Gmpfr_type.h
+  Gmpfr(mpfr_srcptr f)
+  Gmpfr(mpfr_srcptr f, std::float_round_style r, Gmpfr::Precision_type p=Gmpfr::get_default_precision())
+  Gmpfr(mpfr_srcptr f,Gmpfr::Precision_type p)
+  explicit type conversion from mpfr_srcptr to mpfr_ptr, to resolve [-fpermissive]
+
 * src/CGAL/NewKernel_d/function_objects_cartesian.h
   struct Oriented_side
   CS is the name of Intel CPU registers defined on Solaris
