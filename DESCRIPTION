@@ -29,6 +29,5 @@ LinkingTo:
     Rcpp,
     RcppEigen
 SystemRequirements:
-    C++14,
     gmp,
     GNU make
