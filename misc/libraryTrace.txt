@@ -7,7 +7,7 @@
 * Dionysus:
 * PHAT: 1.4.1
 * CGAL: 5.3.1
-* boost: 1.81.0 (corresponding to BH 1.81.0-1)
+* boost: 1.84.0 (corresponding to BH 1.84.0-0)
 * gmp: 4.2.4 (corresponding to http://win-builder.r-project.org/GPLcompliance/ )
 
 
@@ -154,6 +154,10 @@
 * src/topology/simplex.hpp
   Simplex<V,T> dereference() const
   change std::bind2nd() to std::bind() with placeholders since std::bind2nd() is deprecated
+
+* src/topology/static-persistence.h
+  mutable boost::progress_display show_progress;
+  progress_display in boost/progress.hpp is depricated and returns error from BH 1.84; use it from boost/timer/progress_display.hpp instead.
 
 * src/utilities/counter.h (and other places where Count(x) is used)
   replace macro Count() by inline function Count()
