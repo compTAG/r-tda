@@ -5,7 +5,7 @@ Version: 1.9
 Date: 2023-02-04
 Author: Brittany T. Fasy, Jisu Kim, Fabrizio Lecci, Clement Maria,
     David L. Millman, Vincent Rouvreau.
-Maintainer: Jisu Kim <jisu.kim@inria.fr>
+Maintainer: Jisu Kim <jkim82133@snu.ac.kr>
 Copyright: See inst/COPYRIGHTS
 Description: Tools for the statistical analysis of persistent homology and for
     density clustering. For that, this package provides an R interface for the
