@@ -25,7 +25,7 @@ Suggests:
 Encoding:
     UTF-8
 LinkingTo:
-    BH (>= 1.81.0-1),
+    BH (>= 1.87.0-1),
     Rcpp,
     RcppEigen
 SystemRequirements:
